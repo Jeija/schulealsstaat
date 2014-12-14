@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+	<title>SaEU - Konfiguration</title>
+	<script src="../jquery-2.1.1.min.js"></script>
+	<script src="../api.js"></script>
+	<script src="scripts.js"></script>
+	<link rel="stylesheet" type="text/css" href="styles.css">
+	<meta charset="utf-8"/>
+</head>
+<body>
+	<div id="heading">Master-Konfiguration</div>
+
+	<div id="content">
+	<!-- Master - Certificate -->
+	<h3>Master - Zertifikat</h3>
+	<input type="button" value="Konfiguration laden" id="loadconfig">
+	<input type="file" id="master_cert_input">
+	<hr/>
+	<table id="config"></table>
+	<hr/>
+	<table id="addprop_table">
+		<tr><th>Name</th><th>Wert</th></tr>
+		<tr>
+			<td><input type="text" id="add_key"></td>
+			<td><input type="text" id="add_value"></td>
+		</tr>
+	</table>
+	<div id="add_submit_container">
+		<input type="button" value="Hinzufügen" id="add_submit">
+	</div>
+	</div>
+</body>
+</html>

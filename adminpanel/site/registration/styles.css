@@ -1,0 +1,142 @@
+body {
+	font-family:Arial;
+	background:#bbb;
+}
+
+#webcam {
+	background-color:#000;
+	transform: rotateY(180deg);
+	-webkit-transform:rotateY(180deg);
+	-moz-transform:rotateY(180deg);
+	width:400px;
+	height:300px;
+}
+
+#webcam_shot {
+	transform: rotateY(180deg);
+	-webkit-transform:rotateY(180deg);
+	-moz-transform:rotateY(180deg);
+	background:#000;
+	width:400px;
+	height:300px;
+}
+
+#webcam_container {
+	display:inline-block;
+	position:relative;
+	background-color:#999;
+	padding-bottom:10px;
+	padding-left:10px;
+	padding-right:10px;
+	margin-top:20px;
+	margin-bottom:20px;
+	text-align:center;
+}
+
+#webcam_container #webcam_heading {
+	display:inline-block;
+}
+
+#webcam_container #webcam_heading h3 {
+	font-size:30px;
+	margin:10px 0;
+}
+
+#webcam_container input[type="button"] {
+	background:#fff;
+	border:2px solid #000;
+	border-radius:5px;
+	font-size:24px;
+	margin-top:5px;
+	width:150px;
+	transition:box-shadow 0.5s;
+}
+
+#webcam_container input[type="button"]:hover {
+	transition:box-shadow 0.5s;
+	box-shadow:0px 0px 10px #7dd;
+}
+
+#webcam_container input[type="button"]:active {
+	background:#ddd;
+}
+
+.content {
+	position:relative;
+	padding:20px;
+	background:#fff;
+	width:830px;
+	margin:0 auto;
+	font-size:18px;
+}
+
+.content h1 {
+	text-align:center;
+	margin-top:8px;
+	margin-bottom:30px;
+}
+
+select {
+	font-size:18px;
+	margin-right:-7px;
+}
+
+input[type="text"], input[type="password"] {
+	border:1px solid black;
+	padding:4px;
+	font-size:18px;
+	width:500px;
+}
+
+#send_container {
+	text-align:center;
+}
+
+#send {
+	padding:5px;
+	font-size:20px;
+	margin-top:5px;
+	width:150px;
+	vertical-align:center;
+}
+
+table td {
+	padding:5px 8px;
+}
+
+img#eu {
+	position:absolute;
+	top:10px;
+	right:10px;
+	width:100px;
+}
+
+img#hoegy {
+	position:absolute;
+	top:90px;
+	right:10px;
+	width:100px;
+}
+
+/* QR Scanner Popup */
+#webcam_popup {
+	border:4px solid black;
+	position:absolute;
+	width:400px;
+	height:400px;
+	top:calc(50% - 200px);
+	left:calc(50% - 200px);
+	background:#fff;
+}
+
+#webcam_popup #webcam_qr {
+	max-width:400px;
+	max-height:400px;
+}
+
+#hgc_preload_enter_value {
+	height:16px;
+	margin-left:10px;
+	width:200px;
+	text-align:right;
+}

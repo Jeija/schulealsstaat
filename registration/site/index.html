@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+	<title>Schule als Staat</title>
+	<script src="jquery-2.1.1.min.js"></script>
+	<script src="scripts.js"></script>
+	<link rel="stylesheet" type="text/css" href="styles.css">
+	<meta charset="utf-8"/>
+</head>
+<body>
+	<div class="content">
+	<form id="main_form">
+	<h1>Schule als EU - Registrierung</h1>
+	<img src="eu.png" id="eu">
+	<img src="hoegy.png" id="hoegy">
+
+	<table>
+	<tr><td>Vorname:</td><td><input id="firstname" type="text"></td></tr>
+	<tr><td>Nachname:</td><td><input id="lastname" type="text"></td></tr>
+
+	<tr><td>Klasse:</td><td>
+		<select id="class">
+			<option selected disabled hidden value=""></option>
+			<option value="5">5</option>
+			<option value="6">6</option>
+			<option value="7">7</option>
+			<option value="8">8</option>
+			<option value="9">9</option>
+			<option value="10">10</option>
+			<option value="ks">KS</option>
+			<option value="teacher">Lehrer</option>
+			<option value="other">Sonstige</option>
+		</select>
+
+		<select id="subclass" hidden></option>
+		</select>
+	</td></tr>
+
+	<tr id="birth_container"><td>Geburtstag:</td><td>
+		<select id="birthday" id="birthday">
+			<script type="text/javascript">
+				for (i = 1; i <= 31; i++) {
+					$('<option/>').val(i).html(i).appendTo('#birthday');
+				}
+			</script>
+		</select>
+
+		<select id="birthmonth">
+			<option value="1">Januar</option>
+			<option value="2">Februar</option>
+			<option value="3">M&auml;rz</option>
+			<option value="4">April</option>
+			<option value="5">Mai</option>
+			<option value="6">Juni</option>
+			<option value="7">Juli</option>
+			<option value="8">August</option>
+			<option value="9">September</option>
+			<option value="10">Oktober</option>
+			<option value="11">November</option>
+			<option value="12">Dezember</option>
+		</select>
+	
+		<select id="birthyear">
+			<option value="1995">1995</option>
+			<option value="1996">1996</option>
+			<option value="1997">1997</option>
+			<option value="1998">1998</option>
+			<option value="1999">1999</option>
+			<option value="2000">2000</option>
+			<option value="2001">2001</option>
+			<option value="2002">2002</option>
+			<option value="2003">2003</option>
+			<option value="2004">2004</option>
+			<option value="2005">2005</option>
+		</select>
+	
+	</table>
+
+	<div id="webcam_container">
+		<div id="webcam_heading"><h3>Webcam</h3>
+			<video autoplay="true" id="webcam"></video>
+		</div>
+		<div id="webcam_heading"><h3>Passfoto</h3>
+			<canvas id="webcam_shot"></canvas>
+		</div>
+		<br/>
+		<input type="button" id="webcam_trigger" value="Foto">
+	</div><br/>
+
+	<p>
+		Bitte merke dir das Passwort oder schreibe dir einen Passworthinweis auf. Du brauchst das Passwort um beim Projekt Geld zu &uuml;berweisen.<br/>
+		Das Passwort muss mindestes <span id="pwd_minlen"></span> Zeichen lang sein.
+	</p>
+
+	<table>
+		<tr><td>Passwort:</td><td><input id="password" type="password"></td></tr>
+		<tr><td>Passwort wiederholen:</td><td><input id="password_repeat" type="password"></td></tr>
+	</table>
+
+	<p>
+		Die erfassten Daten werden nur f&uuml;r Zwecke des Schule-als-EU-Projektes verwendet und sp&auml;testens zwei Wochen nach Projektende anonymisiert. Durch die Anmeldung erkl&auml;rst du dich / erkl&auml;ren Sie sich damit einverstanden.<br/>
+		<div id="send_container"><input type="button" id="send" value="Anmelden" /></div>
+	</p>
+	</form>
+	</div>
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+	<title>SaEU - Fehlende Personen</title>
+	<script src="../jquery-2.1.1.min.js"></script>
+	<script src="rome.min.js"></script>
+	<script src="../api.js"></script>
+	<script src="scripts.js"></script>
+	<link rel="stylesheet" type="text/css" href="rome.min.css">
+	<link rel="stylesheet" type="text/css" href="styles.css">
+	<meta charset="utf-8"/>
+</head>
+<body>
+	<div id="content">
+	<h1>Fehlende Personen</h1>
+	<table id="timerange">
+		<tr><th>Beginn</th><th>Ende</th></tr>
+		<tr><td><div id="time_begin"></td><td><div id="time_end"></td></tr>
+	</table><br/>
+	<table id="selector_table">
+		<tr>
+			<th>Anwesenheitszeit (Minuten)</th>
+			<td><input type="text" id="selector_time"></td>
+		</tr>
+		<tr>
+			<th>Klasse / Typ</th>
+			<td><input type="text" id="selector_class"></td>
+		</tr>
+		<tr>
+			<th>Nur fehlende / verspätete Schüler</th>
+			<td><input type="checkbox" id="selector_missingonly"></td>
+		</tr>
+	</table>
+	<div id="query_container"><input type="button" value="Abfrage" id="query"></div><br/>
+	<table id="studentlist"></table>
+	</div>
+
+	<!-- Checkin / Checkout Details Popup -->
+	<div id="details_popup" hidden>
+		<div id="details_heading">Details</div>
+		<table id="details"></video>
+		<div id="details_close">&#x2715;</div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,108 @@
+body {
+	font-family:Arial;
+	width:100%;
+	margin:0;
+	margin-top:70px;
+	background:#ccc;
+	font-size:18px;
+}
+
+/* General Button + Text Style */
+input[type="button"] {
+	background:#fff;
+	border:1px solid #000;
+	border-radius:3px;
+	cursor:pointer;
+	padding:5px;
+	margin:3px;
+}
+
+input[type="button"]:hover {
+	transition:border-color 0.2s;
+	background:#ccc;
+	border-color:#ccc;
+}
+
+input[type="button"]:active {
+	background:#aaa;
+}
+
+input[type="text"] {
+	background:#fff;
+	border:1px solid #000;
+	border-radius:3px;
+	padding:4px;
+}
+
+input[type="text"]:focus {
+	transition:border-color 0.2s;
+	background:#f0f0ff;
+	border-color:#acf;
+}
+
+#addprop_table {
+	display:inline-block;
+	border-collapse:collapse;
+}
+
+#addprop_table td {
+	border:1px solid #999;
+	padding:4px;
+}
+
+#addprop_table th {
+	border:1px solid #999;
+	background:#ccc;
+	padding:4px;
+}
+
+#add_submit_container {
+	display:inline-block;
+	position:relative;
+}
+
+#add_submit {
+	position:absolute;
+	top:-53px;
+	left:10px;
+	height:40px;
+	width:120px;
+}
+
+#heading {
+	position:fixed;
+	top:0;
+	left:0;
+	font-size:30px;
+	background:#000;
+	text-align:center;
+	color:#fff;
+	width:100%;
+	padding:10px;
+}
+
+#content {
+	width:800px;
+	margin:0 auto;
+	border:1px solid #000;
+	background:#fff;
+	padding:30px;
+	border-radius:3px;
+	text-align:center;
+}
+
+#config {
+	width:100%;
+	border-collapse:collapse;
+}
+
+#config th {
+	border:1px solid #999;
+	background:#ccc;
+	padding:5px;
+}
+
+#config td {
+	border:1px solid #999;
+	padding:3px 30px;
+}
