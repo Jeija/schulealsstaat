@@ -280,7 +280,7 @@ $(function() {
 	$("#profile_pwd_edit").click(function () {
 		var data = JSON.stringify({
 			qrid : current_profile.qrid,
-			password : $("profile_pwd")
+			password : $("#profile_pwd").val()
 		});
 
 		action_mastercert("password_change", data, "#profile_pwd_master_cert", function (res) {

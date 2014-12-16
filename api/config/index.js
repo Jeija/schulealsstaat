@@ -53,7 +53,11 @@ function del(key) {
 // Returns config value or alt_val if not found
 function get(key, alt_val) {
 	if (key in config)	return config[key];
-	else			return alt_val;
+	else {
+		config[key] = alt_val;
+		save();
+		return alt_val;
+	}
 }
 
 function getAll() {

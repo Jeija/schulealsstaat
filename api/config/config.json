@@ -1,3 +1,5 @@
 {
-	"transaction_tax_percent": "10"
+	"transaction_tax_percent": "10",
+	"hgc_decimal_places": 5,
+	"taxinc_qrid": "taxinc"
 }
