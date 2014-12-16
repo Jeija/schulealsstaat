@@ -87,7 +87,6 @@ module.exports = function (register){
 					st.pwdhash = crypt.hash;
 					st.pwdsalt = crypt.salt;
 					st.save();
-					console.log(data.password);
 					res.end("ok");
 				});
 			} catch(e) {
