@@ -42,10 +42,27 @@ register("spawn_money", function (arg, res, req) {
 					return;
 				}
 				st.balance = st.balance + data.amount;
-				st.save();
-				// TODO:
-				// Log transaction
-				res.end("ok");
+
+				var comment = "spawn_money";
+				if ("comment" in data) comment += " - " + data.comment;
+				var transaction = {
+					sender : config.get("magic_account", "LORD"),
+					recipient : st.qrid,
+					time : Date(),
+
+					amount_sent : data.amount,
+					amount_received : data.amount,
+					amount_tax : 0,
+					percent_tax : 0,
+					comment : comment,
+					sender_ip : req.connection.remoteAddress
+				}
+
+				db.transactions.add(transaction, function (dbtrans) {
+					st.transactions.push(dbtrans._id);
+					st.save();
+					res.end("ok");
+				});
 			});
 		} catch (e) {
 			log.err("API", "spawn_money failed " + e);
@@ -57,7 +74,7 @@ register("spawn_money", function (arg, res, req) {
 /**
  * registration_hash, master_hash --> destroy_money {
  *	amount : Number,
- *	originator : String(QR-ID),
+ *	sender : String(QR-ID),
  *	comment : String
  * }
  */
@@ -65,18 +82,37 @@ register("destroy_money", function (arg, res, req) {
 	cert.check(["registration_hash", "master_hash"], req, function () {
 		try {
 			var data = JSON.parse(arg);
-			db.students.getByQrid(data.originator, function (st) {
+			db.students.getByQrid(data.sender, function (st) {
 				if (!st) {
 					log.warn("API", "destroy_money: qrid not found,\
 						ignoring request");
 					res.end("error: QR ID not found, ignoring request");
 					return;
 				}
+
+				// Log the transaction and perform it
 				st.balance = st.balance - data.amount;
-				st.save();
-				// TODO:
-				// Log transaction
-				res.end("ok");
+
+				var comment = "spawn_money";
+				if ("comment" in data) comment += " - " + data.comment;
+				var transaction = {
+					sender : st.qrid,
+					recipient : config.get("magic_account", "LORD"),
+					time : Date(),
+
+					amount_sent : data.amount,
+					amount_received : data.amount,
+					amount_tax : 0,
+					percent_tax : 0,
+					comment : comment,
+					sender_ip : req.connection.remoteAddress
+				}
+
+				db.transactions.add(transaction, function (dbtrans) {
+					st.transactions.push(dbtrans._id);
+					st.save();
+					res.end("ok");
+				});
 			});
 		} catch (e) {
 			log.err("API", "destroy_money failed " + e);
@@ -92,8 +128,7 @@ register("destroy_money", function (arg, res, req) {
  *	recipient : String (QR-ID),
  *	Either provide:
  *	amount_sent : Number, OR amount_received : Number,
- *	comment : String(max. 300 characters),
- *	sender_ip : String (optional)
+ *	comment : String(max. 300 characters)
  * }
  *
  * response values:
@@ -190,6 +225,20 @@ register("transaction", function (arg, res) { try {
 			return;
 		}
 
+		// Pre-generate transaction DB entry
+		var transaction = {
+			sender : sender.qrid,
+			recipient : recipient.qrid,
+			time : Date(),
+
+			amount_sent : amount_sent,
+			amount_received : amount_received,
+			amount_tax : amount_tax,
+			percent_tax : tax,
+			sender_ip : req.connection.remoteAddress
+		}
+		if ("comment" in data) transaction.comment = data.comment;
+
 		// Actual transaction and collect tax income
 		sender.balance -= amount_sent;
 		recipient.balance += amount_received;
@@ -202,12 +251,16 @@ register("transaction", function (arg, res) { try {
 				tic.balance += amount_tax;
 				tic.save();
 			}
-			sender.save();
-			recipient.save();
+
+			db.transactions.add(transaction, function (dbtrans) {
+				sender.transactions.push(dbtrans._id);
+				recipient.transactions.push(dbtrans._id);
+				sender.save();
+				recipient.save();
+				res.end("ok");
+			});
 		});
 
-		// TODO: log transaction in transaction DB
-		res.end("ok");
 		log.info("BANK", "Transaction from " + sender.firstname + " "
 			+ sender.lastname + " to " + recipient.firstname + " "
 			+ recipient.lastname + ", with net value " + amount_received

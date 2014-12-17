@@ -5,25 +5,26 @@ var log = require("../logging.js");
 var studentSchema = new Schema({
 	qrid :		String,
 
-	// Personal Information (type may be teacher / school class / ...):
+	/* Personal Information (type may be teacher / school class / ...): */
 	firstname :	String,
 	lastname :	String,
 	picname :	String,
 	birth :		Date,
 	type :		String,
 
-	// Legal person / institution / ...
+	/* Legal person / institution / ... */
 	special_name :	String,
 
-	// Appearances (Checkins / Checkouts)
-	// [{type : "checkin/checkout/...", time : date}, ...]
-	appear :	Array,
+	/* Checkins, Checkouts --> Appearances */
+	// type: "checkin/checkout/...", date: server time at checkin / checkout
+	appear :	[{type : String, time : Date}],
 
-	// Financial (transaction is an Array of ObjectIds that maps to the transactions db):
-	transactions :	Array,
+	/* Finances */
+	// type: "send" or "receive", reference: to document in transactions db
+	transactions :	[Schema.Types.ObjectId],
 	balance :	Number,
 
-	// Password:
+	/* Password: */
 	pwdhash :	String,
 	pwdsalt :	String
 });

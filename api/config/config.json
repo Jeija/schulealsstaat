@@ -1,5 +1,6 @@
 {
 	"transaction_tax_percent": "10",
 	"hgc_decimal_places": 5,
-	"taxinc_qrid": "taxinc"
+	"taxinc_qrid": "taxinc",
+	"magic_account": "LORD"
 }
