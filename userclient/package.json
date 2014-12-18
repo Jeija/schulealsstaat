@@ -1,0 +1,12 @@
+{
+	"name" : "SaEU user client",
+	"main" : "./site/index.html",
+	"scripts" : {
+		"start" : "nodewebkit"
+	},
+	"window": {
+		"toolbar": false,
+		"fullscreen" : true,
+		"frame": false
+	}
+}
