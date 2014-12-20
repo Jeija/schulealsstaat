@@ -6,7 +6,6 @@
 	},
 	"window": {
 		"toolbar": false,
-		"fullscreen" : true,
 		"frame": false,
 		"width":1920,
 		"height":1080

@@ -1,4 +1,4 @@
-var ZBARCAM = "LD_PRELOAD=/usr/lib/libv4l/v4l1compat.so zbarcam --raw";
+var ZBARCAM = "zbarcam";
 var WEBCAM = "/dev/video0";
 var ZBC_FLAGS = "--prescale=640x480"
 
@@ -10,13 +10,15 @@ $(function () {
 	});
 
 	$(".qrcode_scan").click(function () {
-		var zbar = process.exec(ZBARCAM + " " + WEBCAM + " " + ZBC_FLAGS, function () {
-			console.log("terminate");
-		});
+		process.exec("killall " + ZBARCAM, function () {
+			var zbar = process.exec(ZBARCAM + " " + WEBCAM + " " + ZBC_FLAGS, function () {
+				console.log("terminate");
+			});
 
-		zbar.stdout.on("data", function (read) {
-			console.log(read);
-			zbar.kill();
+			zbar.stdout.on("data", function (read) {
+				console.log(read);
+				zbar.kill();
+			});
 		});
 	});
 });
