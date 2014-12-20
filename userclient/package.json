@@ -1,12 +1,14 @@
 {
 	"name" : "SaEU user client",
-	"main" : "./site/index.html",
+	"main" : "./site/transaction_simple/index.html",
 	"scripts" : {
 		"start" : "nodewebkit"
 	},
 	"window": {
 		"toolbar": false,
 		"fullscreen" : true,
-		"frame": false
+		"frame": false,
+		"width":1920,
+		"height":1080
 	}
 }

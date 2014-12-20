@@ -3,10 +3,37 @@
 	<title>SaEU - Überweisung</title>
 	<script src="../jquery-2.1.1.min.js"></script>
 	<script src="../api.js"></script>
+	<script src="../common.js"></script>
 	<script src="scripts.js"></script>
+	<link rel="stylesheet" type="text/css" href="../common.css">
+	<link rel="stylesheet" type="text/css" href="styles.css">
 	<meta charset="utf-8"/>
 </head>
 <body>
-	<input type="button" id="scan_qr" value="Test QR Scan">
+	<div id="header"></div>
+	<div id="description">
+		<img class="desc_hgc_logo" src="../hgc.png">
+		<div id="heading">Überweisung</div>
+Um Geld zu überweisen, müssen hier Absender, Empfänger und Betrag eingegeben werden. Abschließend muss die Transaktion noch mithilfe des Passworts bestätigt werden.
+	</div>
+	<div id="content">
+		<div class="section" id="section_sender">
+			<div class="section_heading">Absender</div>
+			<div class="by_qr">
+				<div class="subsection_heading">QR-Code-Scan</div>
+				<div class="qrcode_scan">
+					<img src="../qrcode.png"><br/>
+				</div>
+			</div>
+			<div class="or left">oder</div>
+			<div class="by_name">
+				<div class="subsection_heading">Name</div>
+			</div>
+			<div class="or right">oder</div>
+			<div class="by_qrid">
+				<div class="subsection_heading">Kontonummer</div>
+			</div>
+		</div>
+	</div>
 </body>
 </html>

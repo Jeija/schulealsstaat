@@ -1,0 +1,78 @@
+body {
+	box-shadow:inset 0 0 100px rgba(0, 0, 0, 0.5);
+	background:#555;
+	font-family:Helvetica;
+	margin:0;
+	-webkit-user-select: none;
+	cursor:default;
+}
+
+#content {
+	margin:0 auto;
+	width:75%;
+	padding:3px;
+	margin-top:15px;
+}
+
+/* Header */
+
+#header_list {
+	padding-top:10px;
+	padding-right:10%;
+	height:20px;
+}
+
+#header_list li {
+	list-style-type:none;
+	font-size:18px;
+	float:right;
+	margin-left:22px;
+	color:#fff;
+	padding-bottom:4px;
+	cursor:pointer;
+}
+
+#header_list li:hover {
+	border-bottom:3px solid #aaa;
+}
+
+#header_list li.link-selected {
+	border-bottom:3px solid #fff;
+}
+
+/* Description */
+
+#description {
+	position:relative;
+	padding:30px;
+	padding-left:25%;
+	padding-right:calc(75% - 700px);
+	color:#fff;
+	background:rgba(0, 150, 255, 0.5);
+	font-style:italic;
+	font-size:16px;
+	z-index:2;
+	overflow:hidden;
+	-webkit-transition:box-shadow 0.5s;
+}
+
+#description:hover {
+	-webkit-transition:box-shadow 0.5s;
+	box-shadow:inset 0 0 60px rgba(0, 200, 200, 0.3);
+}
+
+#description #heading {
+	font-weight:bold;
+	font-style:normal;
+	font-size:30px;
+}
+
+.desc_hgc_logo {
+	position:absolute;
+	top:0;
+	bottom:0;
+	margin:auto;
+	height:100px;
+	float:left;
+	margin-left:-120px;
+}

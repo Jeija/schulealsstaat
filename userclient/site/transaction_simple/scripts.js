@@ -5,7 +5,11 @@ var ZBC_FLAGS = "--prescale=640x480"
 var process = require("child_process");
 
 $(function () {
-	$("#scan_qr").click(function () {
+	$("#header").load("../header.html", function () {
+		$("#transaction_simple_link").addClass("link-selected");
+	});
+
+	$(".qrcode_scan").click(function () {
 		var zbar = process.exec(ZBARCAM + " " + WEBCAM + " " + ZBC_FLAGS, function () {
 			console.log("terminate");
 		});

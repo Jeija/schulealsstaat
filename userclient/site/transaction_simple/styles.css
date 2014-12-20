@@ -1,0 +1,83 @@
+/* Section */
+.section {
+	width:100%;
+	overflow:auto;
+	text-align:center;
+	clear:both;
+}
+
+.section_heading {
+	font-size:40px;
+	color:#fff;
+	margin-bottom:10px;
+	font-style:italic;
+}
+
+/* Subsection */
+.by_qr, .by_name, .by_qrid, .or {
+	height:13vw;
+	float:left;
+}
+
+.by_qr, .by_name, .by_qrid {
+	width:25%;
+}
+
+.by_qr {
+	background:#cff;
+	margin-left:calc((100% - 91%) / 2);
+}
+
+.by_name {
+	background:#ffc;
+}
+
+.by_qrid {
+	background:#fcf;
+}
+
+.or {
+	color:#fff;
+	font-style:italic;
+	line-height:13vw;
+	font-size:18px;
+	width:8%;
+}
+
+.subsection_heading {
+	font-size:2vw;
+	padding-top:3px;
+	padding-bottom:3px;
+	margin-bottom:0.5vw;
+	width:100%;
+	overflow:hidden;
+	background:rgba(0, 0, 0, 0.1);
+}
+
+.qrcode_scan {
+	display:inline-block;
+	padding:2px;
+	background:rgba(255, 255, 255, 0.3);
+	border:1px solid #aaa;
+	cursor:pointer;
+	border-radius:3px;
+	transition:background 0.2s;
+}
+
+.qrcode_scan:hover {
+	background:#fff;
+	border-color:#fff;
+	transition:background 0.2s;
+	transition:border-color 0.2s;
+}
+
+.qrcode_scan:active {
+	transition:border-color 0.2s;
+	border:3px solid #000;
+	padding:0;
+}
+
+.qrcode_scan img {
+	width:5vw;
+	margin:10px;
+}
