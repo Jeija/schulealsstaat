@@ -5,6 +5,7 @@ body {
 	margin:0;
 	-webkit-user-select: none;
 	cursor:default;
+	padding-bottom:5vw;
 }
 
 #content {
@@ -12,6 +13,11 @@ body {
 	width:75%;
 	padding:3px;
 	margin-top:15px;
+	text-align:center;
+}
+
+:focus {
+	outline: none;
 }
 
 /* Header */

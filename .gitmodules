@@ -1,0 +1,6 @@
+[submodule "adminpanel/site/QRScanJS"]
+	path = adminpanel/site/QRScanJS
+	url = git://github.com/Jeija/QRScanJS.git
+[submodule "entrycheck/site/QRScanJS"]
+	path = entrycheck/site/QRScanJS
+	url = git://github.com/Jeija/QRScanJS.git

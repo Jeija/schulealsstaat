@@ -5,9 +5,9 @@
 		"start" : "nodewebkit"
 	},
 	"window": {
-		"toolbar": false,
-		"frame": false,
-		"width":1920,
-		"height":1080
+		"toolbar": true,
+		"frame": true,
+		"width":1000,
+		"height":500
 	}
 }

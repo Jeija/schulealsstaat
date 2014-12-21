@@ -14,9 +14,10 @@
 	<div id="description">
 		<img class="desc_hgc_logo" src="../hgc.png">
 		<div id="heading">Überweisung</div>
-Um Geld zu überweisen, müssen hier Absender, Empfänger und Betrag eingegeben werden. Abschließend muss die Transaktion noch mithilfe des Passworts bestätigt werden.
+Um Geld zu überweisen, müssen hier Absender, Empfänger und Betrag eingegeben werden. Abschließend muss die Transaktion noch mithilfe des Passworts bestätigt werden. Der Betrag ist der Bruttopreis (inkl. Steuern), der Empfänger erhält den Nettopreis.
 	</div>
 	<div id="content">
+		<!-- SENDER -->
 		<div class="section" id="section_sender">
 			<div class="section_heading">Absender</div>
 			<div class="by_qr">
@@ -28,12 +29,94 @@ Um Geld zu überweisen, müssen hier Absender, Empfänger und Betrag eingegeben 
 			<div class="or left">oder</div>
 			<div class="by_name">
 				<div class="subsection_heading">Name</div>
+				<table class="name_table">
+					<tr>
+						<td>Vorname</td>
+						<td><input type="text" class="firstname"></td>
+					</tr>
+					<tr>
+						<td>Nachname</td>
+						<td><input type="text" class="lastname"></td>
+					</tr>
+					<tr>
+						<td>Klasse</td>
+						<td><input type="text" class="lastname"></td>
+					</tr>
+				</table>
+				<input type="button" class="name_ok" value="OK">
 			</div>
 			<div class="or right">oder</div>
 			<div class="by_qrid">
 				<div class="subsection_heading">Kontonummer</div>
+				<div class="qrid_explanation">
+					<img src="../qrcode.png"><br/>
+					<span class="qrid_exp_nr">Kontonummer</span>
+				</div>
+				<div class="qrid_container">
+					<input type="text" class="qrid">
+					<input type="button" class="qrid_ok" value="OK">
+				</div>
 			</div>
 		</div>
+
+		<hr/>
+
+		<!-- Receiver -->
+		<div class="section" id="section_receiver">
+			<div class="section_heading">Empfänger</div>
+			<div class="by_qr">
+				<div class="subsection_heading">QR-Code-Scan</div>
+				<div class="qrcode_scan">
+					<img src="../qrcode.png"><br/>
+				</div>
+			</div>
+			<div class="or left">oder</div>
+			<div class="by_name">
+				<div class="subsection_heading">Name</div>
+				<table class="name_table">
+					<tr>
+						<td>Vorname</td>
+						<td><input type="text" class="firstname"></td>
+					</tr>
+					<tr>
+						<td>Nachname</td>
+						<td><input type="text" class="lastname"></td>
+					</tr>
+					<tr>
+						<td>Klasse</td>
+						<td><input type="text" class="lastname"></td>
+					</tr>
+				</table>
+				<input type="button" class="name_ok" value="OK">
+			</div>
+			<div class="or right">oder</div>
+			<div class="by_qrid">
+				<div class="subsection_heading">Kontonummer</div>
+				<div class="qrid_explanation">
+					<img src="../qrcode.png"><br/>
+					<span class="qrid_exp_nr">Kontonummer</span>
+				</div>
+				<div class="qrid_container">
+					<input type="text" class="qrid">
+					<input type="button" class="qrid_ok" value="OK">
+				</div>
+			</div>
+		</div>
+
+		<hr/>
+
+		<!-- Amount -->
+		<div class="section" id="section_amount">
+			<div class="section_heading">Betrag</div>
+			<div class="amount_container">
+				<input type="text" class="amount">
+				<img class="hgc_logo_amount" src="../hgc.png">
+			</div>
+		</div>
+
+		<!-- Confirm -->
+		<input type="button" value="Abschicken" class="confirm">
+	</div>
 	</div>
 </body>
 </html>

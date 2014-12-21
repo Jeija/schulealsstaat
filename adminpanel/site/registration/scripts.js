@@ -116,7 +116,7 @@ $(function() {
 
 	$(".qrid_scan").click(function () {
 		var qrid_scan_target = $(this).parent().parent().find(".qrid_scan_target")
-		QRReader.init("#webcam_qr");
+		QRReader.init("#webcam_qr", "../QRScanJS/");
 		$("#webcam_popup").slideDown(200);
 		QRReader.scan(function (qrid) {
 			$("#webcam_popup").slideUp(200);

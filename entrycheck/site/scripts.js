@@ -34,7 +34,7 @@ function calcAge(bday) {
 }
 
 $(function() {
-	QRReader.init("#webcam")
+	QRReader.init("#webcam", "../QRScanJS/")
 	var current_qrid;
 
 	// #################### Check In / Check Out ####################
