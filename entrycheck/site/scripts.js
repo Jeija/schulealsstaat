@@ -44,20 +44,17 @@ $(function() {
 		QRReader.scan(function (qrid) {
 			$("#webcam_popup").hide();
 			current_qrid = qrid;
-			$.get(CERTNAME, function (cert) {
-				$.ajax({
-					type:	"POST",
-					url:	ACTIONURL + "ec_get_by_qrid/?data=" + qrid,
-					data:	cert,
-				}).done(function(res) {
-					var student = JSON.parse(res);
-					$("#td_name").html(student.firstname + " " + student.lastname);
-					$("#td_class").html(student.type);
-					$("#td_age").html(calcAge(student.birth));
-					$("#pass").attr("src", "");
-					$("#credentials").show();
-					showpic(student.picname);
-				});
+			var data = JSON.stringify({ qrid : qrid });
+			$.ajax({
+				url:	ACTIONURL + "student_identify/?data=" + data
+			}).done(function(res) {
+				var student = JSON.parse(res);
+				$("#td_name").html(student.firstname + " " + student.lastname);
+				$("#td_class").html(student.type);
+				$("#td_age").html(calcAge(student.birth));
+				$("#pass").attr("src", "");
+				$("#credentials").show();
+				showpic(student.picname);
 			});
 		})
 	}

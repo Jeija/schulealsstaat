@@ -7,11 +7,13 @@ var crypto = require("crypto");
 function student_public_only(st) {
 	if (!st) return null;
 	return {
+		special_name :	st.special_name,
 		firstname :	st.firstname,
 		lastname :	st.lastname,
 		picname :	st.picname,
 		birth :		st.birth,
-		type :		st.type
+		type :		st.type,
+		qrid :		st.qrid
 	};
 }
 
@@ -171,16 +173,53 @@ module.exports = function (register){
 		});
 	});
 
-	// #################### ENTRY CHECK ####################
-	register("ec_get_by_qrid", function (arg, res, req) {
-		cert.check(["ec_hash"], req, function () {
-			// arg is the qrid of the one requested student
-			db.students.getByQrid(arg, function (st) {
-				res.end(JSON.stringify(student_public_only(st)));
+	// #################### GENERAL ####################
+	/**
+	 * Identifies a single student / person by his / her public public properties:
+	 * qrid, firstname, lastname, special_name and type
+	 * If multiple matches are found, this will just return "multiple" for privacy reasons.
+	 * No certificate / password required.
+	 * At least one property (firstname, lastname, special_name, qrid or type) must be
+	 * specified to prevent DDOS-Style attacks.
+	 *
+	 * student_identify {
+	 *	firstname : String (optional),
+	 *	lastname : String (optional),
+	 *	special_name : String (optional),
+	 *	qrid : String (QR-ID, optional),
+	 *	type : String (optional)
+	 * }
+	 *
+	 * response value: JSON consisting of {
+	 *	firstname : String,
+	 *	lastname : String,
+	 *	special_name : String,
+	 *	qrid : String (QR-ID),
+	 *	type : String,
+	 *	birth : Date,
+	 *	picname : String
+	 * }
+	 */
+	register("student_identify", function (arg, res) {
+		try {
+			var data = JSON.parse(arg);
+			if (!(data.firstname || data.lastname || data.special_name || data.qrid
+				|| data.type)) {
+				res.end("error: underspecification");
+			}
+
+			db.students.getByProperties(data, function (st) {
+				if (!st) { res.end("error: not found"); return; }
+				if (st.length > 1) { res.end("multiple"); return; }
+				res.end(JSON.stringify(student_public_only(st[0])));
 			});
-		});
+		} catch (e) {
+			log.err("API", "student_identify failed " + e);
+			res.end("error: " + e);
+		}
 	});
 
+	// #################### ENTRY CHECK ####################
 	register("ec_checkin", function (arg, res, req) {
 		cert.check(["ec_hash", "admin_hash"], req, function () {
 			db.students.getByQrid(arg, function (st) {
