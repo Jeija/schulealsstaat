@@ -218,8 +218,6 @@ module.exports = function (register){
 			if (data.type)
 				data.type = new RegExp("^" + data.type + "$", "i");
 
-			console.log(data);
-
 			db.students.getByProperties(data, function (st) {
 				if (!st[0]) { res.end("error: not found"); return; }
 				if (st.length > 1) { res.end("multiple"); return; }
