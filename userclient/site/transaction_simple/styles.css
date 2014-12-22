@@ -1,15 +1,42 @@
 /* Section */
 .section {
 	width:100%;
-	overflow:auto;
+	overflow:hidden;
 	text-align:center;
 	clear:both;
+	position:relative;
+	min-height:4vw;
 }
 
 .section_heading {
 	font-size:40px;
 	color:#fff;
 	margin-bottom:10px;
+}
+
+.section_incomplete {
+	backface-visibility:hidden;
+	transition:transform 0.5s linear, height 0.5s linear;
+	transform-style: preserve-3d;
+	overflow:hidden;
+	display:block;
+}
+
+.section_complete {
+	width:50vw;
+	margin-left:calc(50% - 25vw);
+	background:#fff;
+	backface-visibility:hidden;
+	transition:transform 0.5s;
+	transform:rotateY(-180deg);
+	transform-style: preserve-3d;
+	font-size:2vw;
+	font-style:italic;
+	padding:0.5vw 3vw;
+	box-shadow:inset 0 0 8px rgba(0, 0, 0, 0.2);
+	background:#4d4d4d;
+	border-radius:5px;
+	color:#ddd;
 }
 
 hr {
@@ -102,7 +129,7 @@ hr {
 	padding:0.2vw 0.4vw;
 }
 
-.firstname, .lastname {
+.firstname, .lastname, .class {
 	width:11vw;
 	height:1.8vw;
 	font-size:1.2vw;
@@ -113,12 +140,7 @@ hr {
 	transition:background 0.3s linear;
 }
 
-.firstname:hover, .lastname:hover {
-	transition:background 0.3s linear;
-	background:#fff;
-}
-
-.firstname:focus, .lastname:focus {
+.firstname:hover, .lastname:hover, .class:hover, .firstname:focus, .lastname:focus, .class:focus {
 	transition:background 0.3s linear;
 	background:#fff;
 }
@@ -174,8 +196,17 @@ hr {
 	width:60%;
 	margin-right:5%;
 	margin-top:0.2vw;
-	height:1.6vw;
+	height:2vw;
 	font-size:1vw;
+	background:rgba(0, 0, 0, 0);
+	border:1px solid #ccc;
+	border-radius:3px;
+	transition:background 0.3s linear;
+}
+
+.qrid:hover, .qrid:focus {
+	background:#fff;
+	transition:background 0.3s linear;
 }
 
 .qrid_ok {
@@ -277,6 +308,8 @@ hr {
 	font-size:1.5vw;
 	color:#fff;
 	transition:background 0.5s linear;
+	font-family:Helvetica;
+	resize:none;
 }
 
 .comment:hover {

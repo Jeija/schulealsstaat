@@ -209,7 +209,7 @@ module.exports = function (register){
 			}
 
 			db.students.getByProperties(data, function (st) {
-				if (!st) { res.end("error: not found"); return; }
+				if (!st[0]) { res.end("error: not found"); return; }
 				if (st.length > 1) { res.end("multiple"); return; }
 				res.end(JSON.stringify(student_public_only(st[0])));
 			});
