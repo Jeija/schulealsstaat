@@ -190,6 +190,7 @@ module.exports = function (register){
 	 *	type : String (optional)
 	 * }
 	 *
+	 * firstname, lastname, special_name and type are case-insensitive
 	 * response value: JSON consisting of {
 	 *	firstname : String,
 	 *	lastname : String,
@@ -207,6 +208,17 @@ module.exports = function (register){
 				|| data.type)) {
 				res.end("error: underspecification");
 			}
+
+			if (data.special_name)
+				data.special_name = new RegExp("^" + data.special_name + "$", "i");
+			if (data.firstname)
+				data.firstname = new RegExp("^" + data.firstname + "$", "i");
+			if (data.lastname)
+				data.lastname = new RegExp("^" + data.lastname + "$", "i");
+			if (data.type)
+				data.type = new RegExp("^" + data.type + "$", "i");
+
+			console.log(data);
 
 			db.students.getByProperties(data, function (st) {
 				if (!st[0]) { res.end("error: not found"); return; }
