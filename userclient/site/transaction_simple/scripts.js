@@ -52,7 +52,9 @@ $(function () {
 		// Ask server for identification of studnet by inputs
 		action("student_identify", JSON.stringify(data), function (res) {
 			if (res == "multiple") {
-				// ambiguous data
+				$("#messagebox_msg").html("Die Eingabe ist nicht eindeutig:<br/>"
+					+ "Es gibt mehrere Personen, die auf die Kriterien passen.");
+				$("#messagebox").fadeIn();
 				return;
 			}
 
@@ -69,9 +71,17 @@ $(function () {
 					incomplete.height(0);
 				}, 300);
 			} catch (e) {
-				// Not found
+				$("#messagebox_msg").html("Konnte Person nicht finden:<br/>"
+					+ "Die angegebenen Kriterien passen auf keine Person.");
+				$("#messagebox").fadeIn();
+				return;
 				return;
 			}
 		});
+	});
+
+	/* MessageBox */
+	$("#messagebox_ok").click(function () {
+		$("#messagebox").fadeOut();
 	});
 });

@@ -195,7 +195,6 @@ hr {
 	float:left;
 	width:60%;
 	margin-right:5%;
-	margin-top:0.2vw;
 	height:2vw;
 	font-size:1vw;
 	background:rgba(0, 0, 0, 0);
@@ -353,4 +352,47 @@ hr {
 .confirm:active {
 	padding:1vw 3vw;
 	border:3px solid #aaa;
+}
+
+/* MessageBox */
+#messagebox {
+	position:fixed;
+	height:15vw;
+	width:40vw;
+	top:calc(50% - 7.5vw);
+	left:calc(50% - 20vw);
+	padding:1vw;
+	box-shadow:2px 2px 30px rgba(0, 0, 0, 0.8);
+	background-image:-webkit-linear-gradient(top, rgba(255,220,220,0.9), rgba(255,255,220,0.9));
+	border-radius:5px;
+}
+
+#messagebox_heading {
+	font-size:3vw;
+}
+
+#messagebox_ok {
+	position:fixed;
+	top:calc(50% + 5vw);
+	left:calc(50% - 3.5vw);
+	padding:0;
+	background:rgba(0, 0, 0, 0);
+	padding:calc(1vw + 1px) calc(3vw + 1px);
+	font-size:1.5vw;
+	border:1px solid #aaa;
+	border-radius:3px;
+	cursor:pointer;
+}
+
+#messagebox_ok:hover {
+	background:#ddd;
+}
+
+#messagebox_ok:active {
+	padding:1vw 3vw;
+	border:2px solid #aaa;
+}
+
+#messagebox_msg {
+	font-size:2vw;
 }
