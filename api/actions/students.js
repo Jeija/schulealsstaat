@@ -24,6 +24,14 @@ function generate_pwdhash(pwd) {
 
 module.exports = function (register){
 	// #################### ADMIN PANEL #####################
+	/**
+	 * Returns JSON of all students in DB.
+	 *
+	 * admin_hash --> students_dump <no parameters>
+	 * response value:
+	 * none (error) or dump of db.students, with all properties:
+	 * [{<student1>}, {<student2>}, ...]
+	 */
 	register("students_dump", function (arg, res, req) {
 		log.info("API", "students_dump: this may take a while");
 		cert.check(["admin_hash"], req, function () {
@@ -33,6 +41,18 @@ module.exports = function (register){
 		});
 	});
 
+	/**
+	 * Finds student by given key-value pairs in DB, also supports mongoose-style
+	 * properties like $ne, $or, ...
+	 *
+	 * admin_hash --> get_students {
+	 *	key1 : value1 (both Strings),
+	 *	key2 : value2 (both Strings)
+	 * }
+	 * response value:
+	 * none (error) or list of student that match given criteria:
+	 * [{<student1>}, {<student2>}, ...]
+	 */
 	register("get_students", function (arg, res, req) {
 		// Data contains an attribute list that may fit none, one or multiple students
 		cert.check(["admin_hash"], req, function () {
@@ -47,6 +67,21 @@ module.exports = function (register){
 		});
 	});
 
+	/**
+	 * Changes given value in student's profile entry in DB.
+	 * Student is given by his / her QR-ID, key by data.prop and new value by data.value.
+	 * Only the following properties can be changed using this function:
+	 * firstname, lastname, qrid, picname, birth, type, special_name
+	 *
+	 * admin_hash --> profile_edit {
+	 *	qrid : String (QR-ID),
+	 *	prop : String (object key),
+	 *	value : String (new value)
+	 * }
+	 *
+	 * response value:
+	 * "ok" or "error: <something>"
+	 */
 	register("profile_edit", function (arg, res, req) {
 		cert.check(["admin_hash"], req, function () {
 			try {
@@ -75,6 +110,18 @@ module.exports = function (register){
 		});
 	});
 
+	/**
+	 * Changes password of student (also, re-generates password salt).
+	 * Student is given by his / her QR-ID, the new password by data.password.
+	 *
+	 * master_hash --> password_change {
+	 *	qrid : String (QR-ID),
+	 *	password : String (Password)
+	 * }
+	 *
+	 * response value:
+	 * "ok" or "error: <something>"
+	 */
 	register("password_change", function (arg, res, req) {
 		cert.check(["master_hash"], req, function () {
 			try {
@@ -98,6 +145,16 @@ module.exports = function (register){
 		});
 	});
 
+	/**
+	 * Deletes student completely from DB, picture on webcamserver remains though.
+	 * Transactions won't be altered as well.
+	 *
+	 * master_hash --> student_delete 
+	 * parameter: String (QR-ID), no JSON
+	 *
+	 * response value:
+	 * "ok" or "error: <something>"
+	 */
 	register("student_delete", function (arg, res, req) {
 		cert.check(["master_hash"], req, function () {
 			db.students.getByQrid(arg, function (st) {

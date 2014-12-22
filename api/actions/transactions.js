@@ -29,6 +29,7 @@ module.exports = function (register) {
  *	recipient : String(QR-ID),
  *	comment : String
  * }
+ * response values: "ok" or "error: <something>"
  */
 register("spawn_money", function (arg, res, req) {
 	cert.check(["registration_hash", "master_hash"], req, function () {
@@ -77,6 +78,7 @@ register("spawn_money", function (arg, res, req) {
  *	sender : String(QR-ID),
  *	comment : String
  * }
+ * response values: "ok" or "error: <something>"
  */
 register("destroy_money", function (arg, res, req) {
 	cert.check(["registration_hash", "master_hash"], req, function () {
