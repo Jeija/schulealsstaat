@@ -23,8 +23,6 @@
 }
 
 .section_complete {
-	width:50vw;
-	margin-left:calc(50% - 25vw);
 	background:#fff;
 	backface-visibility:hidden;
 	transition:transform 0.5s;
@@ -45,6 +43,7 @@ hr {
 	border:0;
 	height:1px;
 	background-image:-webkit-linear-gradient(left, rgba(0,0,0,0), rgba(200,200,200,0.75), rgba(0,0,0,0));
+	background-image:-moz-linear-gradient(left, rgba(0,0,0,0), rgba(200,200,200,0.75), rgba(0,0,0,0));
 	margin-top:2vw;
 }
 
@@ -312,12 +311,7 @@ hr {
 	resize:none;
 }
 
-.comment:hover {
-	background:#5a5a5a;
-	transition:background 0.5s linear;
-}
-
-.comment:focus {
+.comment:hover, .comment:focus {
 	background:#5a5a5a;
 	transition:background 0.5s linear;
 }
@@ -331,9 +325,38 @@ hr {
 	font-size:1.2vw;
 }
 
+/* Password Section */
+.password_container {
+	position:relative;
+	height:5vw;
+	box-shadow:inset 0 0 8px rgba(0, 0, 0, 0.2);
+	background:#4d4d4d;
+	border-radius:5px;
+}
 
+.password {
+	width:30vw;
+	height:3vw;
+	padding:0vw;
+	background:rgba(0, 0, 0, 0);
+	border-radius:3px;
+	border:1px solid #ccc;
+	position:absolute;
+	top:0;
+	bottom:0;
+	margin:auto;
+	left:22.5vw;
+	font-size:2.5vw;
+	color:#fff;
+	transition:background 0.5s linear;
+	text-align:center;
+}
+
+.password:hover, .password:focus {
+	background:#5a5a5a;
+	transition:background 0.5s linear;
+}
 /* Confirmation button */
-
 .confirm {
 	margin-top:2vw;
 	font-size:1.5vw;
@@ -346,7 +369,19 @@ hr {
 	cursor:pointer;
 }
 
-.confirm:hover {
+.cancel {
+	margin-top:2vw;
+	font-size:1.5vw;
+	color:#fff;
+	padding:calc(1vw + 2px) calc(1vw + 2px);
+	background:rgba(0, 0, 0, 0);
+	border:1px solid #ccc;
+	border-radius:3px;
+	font-weight:bold;
+	cursor:pointer;
+}
+
+.confirm:hover, .cancel:hover {
 	background:#777;
 }
 
@@ -355,8 +390,14 @@ hr {
 	border:3px solid #aaa;
 }
 
+.cancel:active {
+	padding:1vw 1vw;
+	border:3px solid #aaa;
+}
+
 /* MessageBox */
 #messagebox {
+	z-index:2;
 	position:fixed;
 	height:15vw;
 	width:40vw;
@@ -365,6 +406,7 @@ hr {
 	padding:1vw;
 	box-shadow:2px 2px 30px rgba(0, 0, 0, 0.8);
 	background-image:-webkit-linear-gradient(top, rgba(255,220,220,0.9), rgba(255,255,220,0.9));
+	background-image:-moz-linear-gradient(top, rgba(255,220,220,0.9), rgba(255,255,220,0.9));
 	border-radius:5px;
 }
 
@@ -376,7 +418,6 @@ hr {
 	position:fixed;
 	top:calc(50% + 5vw);
 	left:calc(50% - 3.5vw);
-	padding:0;
 	background:rgba(0, 0, 0, 0);
 	padding:calc(1vw + 1px) calc(3vw + 1px);
 	font-size:1.5vw;
@@ -396,4 +437,41 @@ hr {
 
 #messagebox_msg {
 	font-size:2vw;
+}
+
+/* Success Message Box */
+#success {
+	z-index:2;
+	position:fixed;
+	height:10vw;
+	width:30vw;
+	top:calc(50% - 6vw);
+	left:calc(50% - 15vw);
+	padding:1vw;
+	box-shadow:2px 2px 30px rgba(0, 0, 0, 0.8);
+	background-image:-webkit-linear-gradient(top, rgba(220,255,220,0.9), rgba(220,255,225,0.9));
+	background-image:-moz-linear-gradient(top, rgba(220,255,220,0.9), rgba(220,255,225,0.9));
+	border-radius:5px;
+	font-size:2.5vw;
+}
+
+#success_ok {
+	position:fixed;
+	top:calc(50% + 1vw);
+	left:calc(50% - 3.5vw);
+	background:rgba(0, 0, 0, 0);
+	padding:calc(1vw + 1px) calc(3vw + 1px);
+	font-size:1.5vw;
+	border:1px solid #aaa;
+	border-radius:3px;
+	cursor:pointer;
+}
+
+#success_ok:hover {
+	background:#ddd;
+}
+
+#success_ok:active {
+	padding:1vw 3vw;
+	border:2px solid #aaa;
 }

@@ -142,9 +142,10 @@ register("destroy_money", function (arg, res, req) {
  * invalid_recipient	--> Recipient QR-ID is invalid
  * overspecified	--> Both amount_sent and amount_received are specified
  * underspecified	--> Neither amount_sent or amount_received are specified
+ * invalid_amount	--> Amount is not > 0
  * error:<something>	--> Some other error, propably with parameter
  */
-register("transaction", function (arg, res) { try {
+register("transaction", function (arg, res, req) { try {
 	var data = JSON.parse(arg);
 
 	// Tax in %, amount_tax in HGC
@@ -205,6 +206,12 @@ register("transaction", function (arg, res) { try {
 				res.end("error: invalid amount_sent");
 				return;
 			}
+
+			if (data.amount_sent <= 0) {
+				res.end("invalid_amount");
+				return;
+			}
+
 			amount_sent = HGC_round(data.amount_sent);
 			amount_received = HGC_round(amount_sent / (1 + tax / 100));
 		}
@@ -216,6 +223,12 @@ register("transaction", function (arg, res) { try {
 				res.end("error: invalid amount_received");
 				return;
 			}
+
+			if (data.amount_received <= 0) {
+				res.end("invalid_amount");
+				return;
+			}
+
 			amount_received = HGC_round(data.amount_received);
 			amount_sent = HGC_round((1 + tax / 100) * amount_received);
 		}

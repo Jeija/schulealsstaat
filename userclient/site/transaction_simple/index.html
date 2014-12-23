@@ -14,11 +14,12 @@
 	<div id="description">
 		<img class="desc_hgc_logo" src="../hgc.png">
 		<div id="heading">Überweisung</div>
-Um Geld zu überweisen, müssen hier Absender, Empfänger und Betrag eingegeben werden. Abschließend muss die Transaktion noch mithilfe des Passworts bestätigt werden. Der Betrag ist der Bruttopreis (inkl. Steuern), der Empfänger erhält den Nettopreis.
+Um Geld zu überweisen, müssen hier Absender, Empfänger und Betrag eingegeben werden. Abschließend muss die Transaktion noch mithilfe des Passworts des Absenders bestätigt werden. Der Betrag ist der Bruttopreis (inkl. Steuern), der Empfänger erhält den Nettopreis.
 	</div>
 	<div id="content">
+		<form id="form_all">
 		<!-- SENDER -->
-		<div class="section" id="section_sender">
+		<div class="section sender"">
 			<div class="section_heading">Absender</div>
 			<div class="section_incomplete">
 			<div class="by_qr">
@@ -65,8 +66,8 @@ Um Geld zu überweisen, müssen hier Absender, Empfänger und Betrag eingegeben 
 
 		<hr/>
 
-		<!-- Receiver -->
-		<div class="section" id="section_receiver">
+		<!-- Recipient -->
+		<div class="section recipient">
 			<div class="section_heading">Empfänger</div>
 			<div class="section_incomplete">
 			<div class="by_qr">
@@ -133,14 +134,32 @@ Um Geld zu überweisen, müssen hier Absender, Empfänger und Betrag eingegeben 
 			</div>
 		</div>
 
+		<hr/>
+
+		<!-- Password -->
+		<div class="section" id="section_password">
+			<div class="section_heading">Passwort</div>
+			<div class="password_container">
+				<input type="password" class="password">
+			</div>
+		</div>
+		</form>
+
 		<!-- Confirm -->
 		<input type="button" value="Abschicken" class="confirm">
+		<input type="button" value="Abbruch" class="cancel">
 
 		<!-- Error Message Box -->
 		<div id="messagebox" hidden>
 			<div id="messagebox_heading">Fehler</div>
 			<div id="messagebox_msg"></div>
 			<input type="button" value="OK" id="messagebox_ok">
+		</div>
+
+		<!-- Success Message Box -->
+		<div id="success" hidden>
+			Transaktion erfolgreich!
+			<input type="button" value="OK" id="success_ok">
 		</div>
 	</div>
 	</div>
