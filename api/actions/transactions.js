@@ -124,6 +124,38 @@ register("destroy_money", function (arg, res, req) {
 });
 
 /**
+ * get_balance {
+ *	qrid : String(QR-ID),
+ *	password : String
+ * }
+ *
+ * respone values:
+ * a Number (in String)	--> balance of the person with qrid if password was correct
+ * invalid_qrid		--> the provided qrid doesn't exist
+ * invalid_password	--> provided password was wrong
+ * error:<something>	--> Some other error, e.g. with JSON parsing
+ */
+register("get_balance", function (arg, res, req) { try {
+	var data = JSON.parse(arg);
+	db.students.getByQrid(data.qrid, function (st) {
+		if (!st) {
+			res.end("invalid_qrid");
+			return;
+		}
+
+		if(!check_password(st, data.password)) {
+			res.end("invalid_password");
+			return;
+		}
+
+		res.end(String(st.balance));
+	});
+} catch(e) {
+	log.err("API", "get_balance failed " + e);
+	res.end("error: " + e);
+}});
+
+/**
  * transaction {
  *	sender : String (QR-ID),
  *	sender_password : String,
@@ -143,7 +175,7 @@ register("destroy_money", function (arg, res, req) {
  * overspecified	--> Both amount_sent and amount_received are specified
  * underspecified	--> Neither amount_sent or amount_received are specified
  * invalid_amount	--> Amount is not > 0
- * error:<something>	--> Some other error, propably with parameter
+ * error:<something>	--> Some other error, e.g. with JSON parsing
  */
 register("transaction", function (arg, res, req) { try {
 	var data = JSON.parse(arg);

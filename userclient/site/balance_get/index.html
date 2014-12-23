@@ -1,0 +1,98 @@
+<html>
+<head>
+	<title>SaEU - Guthabenabfrage</title>
+	<script src="../jquery-2.1.1.min.js"></script>
+	<script src="../api.js"></script>
+	<script src="../common.js"></script>
+	<script src="scripts.js"></script>
+	<link rel="stylesheet" type="text/css" href="../common.css">
+	<link rel="stylesheet" type="text/css" href="styles.css">
+	<meta charset="utf-8"/>
+</head>
+<body>
+	<div id="header"></div>
+	<div id="description">
+		<img class="desc_hgc_logo" src="../hgc.png">
+		<div id="heading">Guthabenabfrage</div>
+Hier kann das aktuelle Guthaben auf dem Account abgefragt werden.
+	</div>
+	<div id="content">
+		<form id="form_all">
+		<!-- SENDER -->
+		<div class="section student"">
+			<div class="section_heading">Person</div>
+			<div class="section_incomplete">
+			<div class="by_qr">
+				<div class="subsection_heading">QR-Code-Scan</div>
+				<div class="qrcode_scan">
+					<img src="../qrcode.png"><br/>
+				</div>
+			</div>
+			<div class="or left">oder</div>
+			<div class="by_name">
+				<div class="subsection_heading">Name</div>
+				<table class="name_table">
+					<tr>
+						<td>Vorname</td>
+						<td><input type="text" class="firstname"></td>
+					</tr>
+					<tr>
+						<td>Nachname</td>
+						<td><input type="text" class="lastname"></td>
+					</tr>
+					<tr>
+						<td>Klasse</td>
+						<td><input type="text" class="class"></td>
+					</tr>
+				</table>
+				<input type="button" class="name_ok" value="OK">
+			</div>
+			<div class="or right">oder</div>
+			<div class="by_qrid">
+				<div class="subsection_heading">Kontonummer</div>
+				<div class="qrid_explanation">
+					<img src="../qrcode.png"><br/>
+					<span class="qrid_exp_nr">Kontonummer</span>
+				</div>
+				<div class="qrid_container">
+					<input type="text" class="qrid">
+					<input type="button" class="qrid_ok" value="OK">
+				</div>
+			</div>
+			</div> <!-- section_incomplete -->
+			<div class="section_complete">
+			</div> <!-- section_complete -->
+		</div>
+
+		<hr/>
+
+		<!-- Password -->
+		<div class="section" id="section_password">
+			<div class="section_heading">Passwort</div>
+			<div class="password_container">
+				<input type="password" class="password">
+			</div>
+		</div>
+		</form>
+
+		<!-- Confirm -->
+		<input type="button" value="Abfrage" class="confirm">
+		<input type="button" value="Abbruch" class="cancel">
+
+		<!-- Error Message Box -->
+		<div id="messagebox" hidden>
+			<div id="messagebox_heading">Fehler</div>
+			<div id="messagebox_msg"></div>
+			<input type="button" value="OK" id="messagebox_ok">
+		</div>
+
+		<!-- Balance Message Box -->
+		<div id="balance_box" hidden>
+			Das Guthaben beträgt:<br/>
+			<span id="balance_box_value"></span> HGC
+			<input type="button" value="OK" id="balance_box_ok">
+		</div>
+	</div>
+	</div>
+</body>
+</html>
