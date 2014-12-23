@@ -6,9 +6,9 @@ var current_sender = undefined;
 var current_recipient = undefined;
 
 handleIdentifyAnswer = function(sectionref, st) {
-	if ($(this).closest(".section_incomplete").parent(".recipient").length)
+	if ($(sectionref).closest(".section_incomplete").parent(".recipient").length)
 		current_recipient = st.qrid;
-	if ($(this).closest(".section_incomplete").parent(".sender").length)
+	if ($(sectionref).closest(".section_incomplete").parent(".sender").length)
 		current_sender = st.qrid;
 }
 
