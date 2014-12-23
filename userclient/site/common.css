@@ -8,10 +8,6 @@ body {
 	padding-bottom:5vw;
 }
 
-#header {
-	height:50px;
-}
-
 #content {
 	margin:0 auto;
 	width:75vw;
@@ -25,6 +21,16 @@ body {
 }
 
 /* Header */
+#header {
+	height:50px;
+}
+
+#header_eu {
+	position:absolute;
+	right:0;
+	top:0;
+	height:50px;
+}
 
 #header_list {
 	padding-top:10px;
