@@ -3,5 +3,6 @@
 	"hgc_decimal_places": 5,
 	"taxinc_qrid": "taxinc",
 	"magic_account": "LORD",
-	"tr_comment_maxlen": "300"
+	"tr_comment_maxlen": "300",
+	"hgc_tr_decimal_places": "2"
 }

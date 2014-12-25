@@ -1,5 +1,5 @@
 var COMMENT_MAXLEN = 300
-var HGC_DECIMAL_PLACES = 5
+var HGC_TR_DECIMAL_PLACES = 2
 
 // Will be set to QR-ID values when student_identify is called for the relevant section
 var current_sender = undefined;
@@ -17,8 +17,8 @@ $(function () {
 		COMMENT_MAXLEN = parseInt(res);
 	});
 
-	getConfig("hgc_decimal_places", function (res) {
-		HGC_DECIMAL_PLACES = parseInt(res);
+	getConfig("hgc_tr_decimal_places", function (res) {
+		HGC_TR_DECIMAL_PLACES = parseInt(res);
 	});
 
 	$("#header").load("../header.html", function () {
@@ -51,8 +51,7 @@ $(function () {
 			return;
 		}
 
-		var amount_str = $(".amount").val();
-		amount_str.replace(",", ".");
+		var amount_str = $(".amount").val().replace(",", ".");
 
 		// Check if amount is parsable
 		if (!$.isNumeric(amount_str)) {
@@ -63,9 +62,9 @@ $(function () {
 
 		var amount = parseFloat(amount_str);
 
-		// Check if amount has more than HGC_DECIMAL_PLACES decimals
-		if ((amount * Math.pow(10, HGC_DECIMAL_PLACES)) % 1 != 0) {
-			errorMessage("Betrag enthält mehr als die erlaubten " + HGC_DECIMAL_PLACES
+		// Check if amount has more than HGC_TR_DECIMAL_PLACES decimals
+		if ((amount * Math.pow(10, HGC_TR_DECIMAL_PLACES)) % 1 != 0) {
+			errorMessage("Betrag enthält mehr als die erlaubten " + HGC_TR_DECIMAL_PLACES
 				+ " Dezimalstellen.");
 			return;
 		}

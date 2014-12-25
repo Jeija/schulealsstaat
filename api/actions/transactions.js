@@ -222,6 +222,7 @@ register("get_last_transactions", function (arg, res, req) { try {
  * overspecified	--> Both amount_sent and amount_received are specified
  * underspecified	--> Neither amount_sent or amount_received are specified
  * invalid_amount	--> Amount is not > 0
+ * too_many_decplaces	--> Amount has more decimal places than hgc_tr_decimal_places allows
  * error:<something>	--> Some other error, e.g. with JSON parsing
  */
 register("transaction", function (arg, res, req) { try {
@@ -277,6 +278,8 @@ register("transaction", function (arg, res, req) { try {
 			return;
 		}
 
+		var tr_decplaces = config.get("hgc_tr_decimal_places", 2);
+
 		/* Calculate amount to transfer with taxes */
 		// Possibility 1 - amount_sent is specified
 		if ("amount_sent" in data) {
@@ -288,6 +291,12 @@ register("transaction", function (arg, res, req) { try {
 
 			if (data.amount_sent <= 0) {
 				res.end("invalid_amount");
+				return;
+			}
+
+			// Check if amount has more than hgc_tr_decimal_places decimals
+			if ((data.amount_sent * Math.pow(10, tr_decplaces)) % 1 != 0) {
+				res.end("too_many_decplaces");
 				return;
 			}
 
@@ -305,6 +314,12 @@ register("transaction", function (arg, res, req) { try {
 
 			if (data.amount_received <= 0) {
 				res.end("invalid_amount");
+				return;
+			}
+
+			// Check if amount has more than hgc_tr_decimal_places decimals
+			if ((data.amount_sent * Math.pow(10, tr_decplaces)) % 1 != 0) {
+				res.end("too_many_decplaces");
 				return;
 			}
 
