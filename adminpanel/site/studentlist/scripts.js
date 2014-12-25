@@ -13,7 +13,7 @@ function calcAge(bday) {
 
 function date_readable (birth) {
 	var bdate = new Date(birth);
-	return bdate.getDate() + "." + (bdate.getMonth() + 1) + "." + bdate.getFullYear()
+	return bdate.getDate() + "." + (bdate.getMonth() + 1) + "." + bdate.getFullYear();
 }
 
 function render_list(list) {

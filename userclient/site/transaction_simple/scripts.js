@@ -119,6 +119,6 @@ $(function () {
 			if (!server_answered)
 				errorMessage("Das Währungssystem ist zurzeit nicht verfügbar."
 				+ "Bitte versuche es später noch einmal.");
-		}, 1500)
+		}, 1500);
 	});
 });

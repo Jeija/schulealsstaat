@@ -31,5 +31,15 @@ module.exports = {
 			if (err) log.err("MongoDB", "trdb.add failed: " + err)
 			cb(nt);
 		});
+	},
+
+	// Callback paremeter are all transactions involving qrid sorted by time in ascending order
+	getAllInvolvingQrid : function (qrid, cb) {
+		var query = {	$query : {$or : [{sender : qrid}, {recipient : qrid}]},
+				$orderby : {time : 1}};
+		Transaction.find(query, function (err, tr) {
+			if (err) log.err("MongoDB", "trdb.getAllInvolvingQrid failed: " + err)
+			cb(tr);
+		});
 	}
 }

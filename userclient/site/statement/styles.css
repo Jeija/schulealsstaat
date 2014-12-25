@@ -1,0 +1,94 @@
+/* Anything that could possibly be used in multiple pages was moved to ../common.css */
+
+/* Balance Message Box */
+#balance_box {
+	z-index:2;
+	position:fixed;
+	height:10vw;
+	width:30vw;
+	top:calc(50% - 6vw);
+	left:calc(50% - 15vw);
+	padding:1vw;
+	box-shadow:2px 2px 30px rgba(0, 0, 0, 0.8);
+	background-image:-webkit-linear-gradient(top, rgba(220,255,220,0.9), rgba(220,255,225,0.9));
+	background-image:-moz-linear-gradient(top, rgba(220,255,220,0.9), rgba(220,255,225,0.9));
+	border-radius:5px;
+	font-size:2.5vw;
+}
+
+#balance_box_ok {
+	position:fixed;
+	top:calc(50% + 1vw);
+	left:calc(50% - 3.5vw);
+	background:rgba(0, 0, 0, 0);
+	padding:calc(1vw + 1px) calc(3vw + 1px);
+	font-size:1.5vw;
+	border:1px solid #aaa;
+	border-radius:3px;
+	cursor:pointer;
+}
+
+#balance_box_ok:hover {
+	background:#ddd;
+}
+
+#balance_box_ok:active {
+	padding:1vw 3vw;
+	border:2px solid #aaa;
+}
+
+/* Transactions List */
+#transactions_heading {
+	font-size:4vw;
+	color:#fff;
+}
+
+#transactions_table_container {
+	box-shadow:inset 0 0 8px rgba(0, 0, 0, 0.2);
+	background:#4d4d4d;
+	border-radius:5px;
+	padding:2vw;
+	width:75vw;
+	overflow:auto;
+}
+
+#transactions_table {
+	border-collapse:collapse;
+	white-space:nowrap;
+	table-layout:fixed;
+	width:70vw;
+}
+
+#transactions_table th {
+	color:#ccc;
+	font-size:1.2vw;
+	height:0.5vw;
+	background:#000;
+}
+
+#transactions_table td {
+	border:1px solid #666;
+	padding:0.2vw;
+	font-size:1vw;
+	text-align:center;
+	overflow:hidden;
+}
+
+#transactions_table th.trt_type { width:5vw; }
+#transactions_table th.trt_time { width:7vw; }
+#transactions_table th.trt_amount_sent { width:6.5vw; }
+#transactions_table th.trt_amount_received { width:6.5vw; }
+#transactions_table th.trt_amount_tax { width:5.5vw; }
+#transactions_table th.trt_tax_percent { width:3.5vw; }
+#transactions_table th.trt_sender { width:7vw; }
+#transactions_table th.trt_receiver { width:7vw; }
+#transactions_table th.trt_comment { width:18vw; }
+#transactions_table th.trt_balance { width:8vw; }
+
+#transactions_table tr.inc {
+	background:rgba(180, 255, 180, 0.9);
+}
+
+#transactions_table tr.dec {
+	background:rgba(255, 180, 180, 0.9);
+}

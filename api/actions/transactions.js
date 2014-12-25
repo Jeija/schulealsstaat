@@ -156,6 +156,53 @@ register("get_balance", function (arg, res, req) { try {
 }});
 
 /**
+ * get_all_transactions {
+ *	qrid : String(QR-ID),
+ *	password : String,
+ *	amount : Number (returns <amount> last transactions or all transactions if amount <= 0)
+ * }
+ *
+ * respone values:
+ * Array		--> transactions of the person with qrid if password was correct
+ *			--> Form: [{
+ *				sender : String,
+ *				recipient : String,
+ *				time : Date,
+ *				amount_sent : Number,
+ *				amount_received : Number,
+ *				amount_tax : Number,
+ *				percent_tax : Number,
+ *				comment : String,
+ *				NOT: sender_ip
+ * invalid_qrid		--> the provided qrid doesn't exist
+ * invalid_password	--> provided password was wrong
+ * error:<something>	--> Some other error, e.g. with JSON parsing
+ */
+register("get_last_transactions", function (arg, res, req) { try {
+	var data = JSON.parse(arg);
+	db.students.getByQrid(data.qrid, function (st) {
+		if (!st) {
+			res.end("invalid_qrid");
+			return;
+		}
+
+		if(!check_password(st, data.password)) {
+			res.end("invalid_password");
+			return;
+		}
+
+		db.transactions.getAllInvolvingQrid(data.qrid, function (tr) {
+			if (data.amount > 0)
+				tr = tr.slice(Math.max(tr.length - data.amount, 1));
+			res.end(JSON.stringify(tr));
+		});
+	});
+} catch(e) {
+	log.err("API", "get_last_transactions failed " + e);
+	res.end("error: " + e);
+}});
+
+/**
  * transaction {
  *	sender : String (QR-ID),
  *	sender_password : String,

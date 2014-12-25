@@ -30,7 +30,9 @@ $(function () {
 		};
 
 		// Ask server for balance
+		var server_answered = false;
 		action("get_balance", JSON.stringify(data), function (res) {
+			server_answered = true;
 			// Check for server errors
 			if (res == "invalid_password") {
 				errorMessage("Das Passwort ist falsch.");
@@ -48,5 +50,11 @@ $(function () {
 			$("#balance_box_value").html(balance.toFixed(5));
 			$("#balance_box").fadeIn();
 		});
+
+		setTimeout(function () {
+			if (!server_answered)
+				errorMessage("Das Währungssystem ist zurzeit nicht verfügbar."
+				+ "Bitte versuche es später noch einmal.");
+		}, 1500);
 	});
 });
