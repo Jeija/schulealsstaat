@@ -2,11 +2,13 @@
 <head>
 	<title>SaEU - Kontoauszug</title>
 	<script src="../jquery-2.1.1.min.js"></script>
+	<script src="jquery.webui-popover.js"></script>
 	<script src="../api.js"></script>
 	<script src="../common.js"></script>
 	<script src="scripts.js"></script>
 	<link rel="stylesheet" type="text/css" href="../common.css">
 	<link rel="stylesheet" type="text/css" href="styles.css">
+	<link rel="stylesheet" href="jquery.webui-popover.css">
 	<meta charset="utf-8"/>
 </head>
 <body>
@@ -91,6 +93,9 @@ Hier kannst du deine vergangen Überweisungen einsehen.
 			<div id="transactions_heading">Transaktionen</div>
 			<div id="transactions_table_container">
 				<table id="transactions_table"></table>
+				<div id="balance_container">
+					Endkontostand: <span id="balance"></span>
+				</div>
 			</div>
 		</div>
 	</div>

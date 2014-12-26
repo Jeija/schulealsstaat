@@ -10,10 +10,79 @@ function datetime_readable (datestring) {
 		+ " " + ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2);
 }
 
-function render_transactions (tr) {
+function render_transactions (tr, balance) {
 	var table = $("#transactions_table");
+	$("#balance").html(balance + " HGC");
+
 	table.html("");
-	table.append($("<tr>")
+
+	var bal_now = balance;
+	for (var i = tr.length - 1; i >= 0; i--) {
+		var t = tr[i];
+		var is_sender = (t.sender === current_qrid);
+		var comment = "(kein Kommentar)";
+		if (t.comment)
+			comment = t.comment.replace(/\n/g, "<br/>");
+
+		table.prepend($('<tr class="' + (is_sender ? "dec" : "inc") + '">')
+			.append($('<td class="trt_type">')
+				.text(is_sender ? "Zahlung" : "Eingang"))
+			.append($('<td class="trt_time">')
+				.text(datetime_readable(t.time)))
+			.append($('<td class="trt_amount_sent">')
+				.text(t.amount_sent))
+			.append($('<td class="trt_amount_received">')
+				.text(t.amount_received))
+			.append($('<td class="trt_amount_tax">')
+				.text(t.amount_tax))
+			.append($('<td class="trt_tax_percent">')
+				.text(t.percent_tax))
+			.append($('<td class="trt_sender" data-qrid="' + t.sender + '">')
+				.text(t.sender))
+			.append($('<td class="trt_recipient" data-qrid="' + t.recipient + '">')
+				.text(t.recipient))
+			.append($('<td class="trt_comment" data-content="' + comment + '">')
+				.text("Anzeigen"))
+			.append($('<td class="trt_balance">')
+				.text(bal_now))
+		);
+
+		bal_now += is_sender ? t.amount_sent : -t.amount_received;
+	}
+
+	$(".trt_comment").webuiPopover({title : "Kommentar", trigger : "hover", placement : "left"});
+	$(".trt_recipient").webuiPopover({
+		title : "Empfänger",
+		trigger : "hover",
+		placement : "left",
+		content : '<div class="recipient_popup"></div>'
+	});
+	$(".trt_sender").webuiPopover({
+		title : "Absender",
+		trigger : "hover",
+		placement : "left",
+		content : '<div class="sender_popup"></div>'
+	});
+
+	$(".trt_recipient").hover(function () {
+		var qrid = $(this).data("qrid");
+		data = { qrid : qrid };
+		action("student_identify", JSON.stringify(data), function (res) {
+			var st = JSON.parse(res);
+			$(".recipient_popup").html(student2readable(st));
+		});
+	});
+
+	$(".trt_sender").hover(function () {
+		var qrid = $(this).data("qrid");
+		data = { qrid : qrid };
+		action("student_identify", JSON.stringify(data), function (res) {
+			var st = JSON.parse(res);
+			$(".sender_popup").html(student2readable(st));
+		});
+	});
+
+	table.prepend($("<tr>")
 		.append($('<th class="trt_type">')
 			.text("Typ"))
 		.append($('<th class="trt_time">')
@@ -35,31 +104,6 @@ function render_transactions (tr) {
 		.append($('<th class="trt_balance">')
 			.text("Kontostand"))
 	);
-
-	for (var i = 0; i < tr.length; i++) {
-		var t = tr[i];
-
-		table.append($('<tr class="' + (t.sender == current_qrid ? "dec" : "inc") + '">')
-			.append($('<td class="trt_type">')
-				.text((t.sender === current_qrid) ? "Zahlung" : "Eingang"))
-			.append($('<td class="trt_time">')
-				.text(datetime_readable(t.time)))
-			.append($('<td class="trt_amount_sent">')
-				.text(t.amount_sent))
-			.append($('<td class="trt_amount_received">')
-				.text(t.amount_received))
-			.append($('<td class="trt_amount_tax">')
-				.text(t.amount_tax))
-			.append($('<td class="trt_tax_percent">')
-				.text(t.percent_tax))
-			.append($('<td class="trt_sender">')
-				.text(t.sender))
-			.append($('<td class="trt_receiver">')
-				.text(t.recipient))
-			.append($('<td class="trt_comment">')
-				.text(t.comment))
-		);
-	}
 }
 
 $(function () {
@@ -74,7 +118,7 @@ $(function () {
 
 	$(".confirm").click(function () {
 		// Check for client errors
-		if (!current_qrid) { FIXME
+		if (!current_qrid) {
 			errorMessage("Keine Person angegeben. Wessen Kontoauszug soll"
 				+ " angezeigt werden?");
 			return;
@@ -88,18 +132,8 @@ $(function () {
 			amount : -1
 		};
 
-		// TODO include balance in bank statement
-		/*action("get_balance", JSON.stringify(data), function (res) {
-			var balance = parseFloat(res);
-			if (res.indexOf("error") > -1 || isNaN(res)) {
-				errorMessage("Unbekannter Fehler: " + res + "<br/>"
-					+ "Bitte melde diesen Fehler bei der Zentralbank.");
-				return;
-			}
-		});*/
-
 		var server_answered = false;
-		action("get_last_transactions", JSON.stringify(data), function (res) {
+		action("get_balance", JSON.stringify(data), function (res) {
 			server_answered = true;
 
 			// Check for server errors
@@ -108,19 +142,28 @@ $(function () {
 				return;
 			}
 
-			// Try to parse transactions JSON or report error
-			var tr = undefined;
-			try {
-				tr = JSON.parse(res);
-			} catch(e) {
+			var balance = parseFloat(res);
+			if (res.indexOf("error") > -1 || isNaN(res)) {
 				errorMessage("Unbekannter Fehler: " + res + "<br/>"
 					+ "Bitte melde diesen Fehler bei der Zentralbank.");
 				return;
 			}
 
-			$("#input_all").hide();
-			render_transactions(tr);
-			$("#transactions").fadeIn();
+			action("get_last_transactions", JSON.stringify(data), function (res) {
+				// Try to parse transactions JSON or report error
+				var tr = undefined;
+				try {
+					tr = JSON.parse(res);
+				} catch(e) {
+					errorMessage("Unbekannter Fehler: " + res + "<br/>"
+						+ "Bitte melde diesen Fehler bei der Zentralbank.");
+					return;
+				}
+
+				$("#input_all").hide();
+				render_transactions(tr, balance);
+				$("#transactions").fadeIn();
+			});
 		});
 
 		setTimeout(function () {

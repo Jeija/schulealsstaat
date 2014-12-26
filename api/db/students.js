@@ -10,7 +10,7 @@ var studentSchema = new Schema({
 	lastname :	String,
 	picname :	String,
 	birth :		Date,
-	type :		String,
+	type :		{type : String},
 
 	/* Legal person / institution / ... */
 	special_name :	String,

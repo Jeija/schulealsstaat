@@ -4,6 +4,18 @@ var ZBC_FLAGS = "--prescale=640x480"
 
 var process = require("child_process");
 
+/* Common utils */
+function student2readable(st) {
+	console.log(st);
+	if (st.type != "visitor" && st.type != "teacher" && st.type != "legalentity"
+		&& st.type != "other") {
+		return st.firstname + " " + st.lastname + ", Klasse " + st.type.toUpperCase();
+	}
+
+	return st.firstname + "/" + st.lastname + "/" + st.type + "/" + st.special_name;
+}
+
+
 var handleIdentifyAnswer = function (sectionref, st) {
 	// To be re-defined by the script that includes common.js
 	// Works as student_identify callback

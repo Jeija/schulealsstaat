@@ -81,9 +81,9 @@
 #transactions_table th.trt_amount_tax { width:5.5vw; }
 #transactions_table th.trt_tax_percent { width:3.5vw; }
 #transactions_table th.trt_sender { width:7vw; }
-#transactions_table th.trt_receiver { width:7vw; }
-#transactions_table th.trt_comment { width:18vw; }
-#transactions_table th.trt_balance { width:8vw; }
+#transactions_table th.trt_recipient { width:7vw; }
+#transactions_table th.trt_comment { width:5vw; }
+#transactions_table th.trt_balance { width:10vw; }
 
 #transactions_table tr.inc {
 	background:rgba(180, 255, 180, 0.9);
@@ -91,4 +91,25 @@
 
 #transactions_table tr.dec {
 	background:rgba(255, 180, 180, 0.9);
+}
+
+#balance_container {
+	text-align:right;
+	font-size:2vw;
+	color:#fff;
+}
+
+#transactions_table td.trt_comment, #transactions_table td.trt_sender,
+	#transactions_table td.trt_recipient {
+	background:rgba(150, 150, 150, 0.5);
+}
+
+#transactions_table td.trt_comment:hover, #transactions_table td.trt_sender:hover,
+	#transactions_table td.trt_recipient:hover {
+	background:rgba(230, 230, 230, 0.7);
+}
+
+.tableshow {
+	cursor:pointer;
+	padding:0.6vw;
 }
