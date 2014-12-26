@@ -6,11 +6,21 @@ var process = require("child_process");
 
 /* Common utils */
 function student2readable(st) {
-	console.log(st);
 	if (st.type != "visitor" && st.type != "teacher" && st.type != "legalentity"
-		&& st.type != "other") {
+		&& st.type != "other")
 		return st.firstname + " " + st.lastname + ", Klasse " + st.type.toUpperCase();
-	}
+
+	if (st.type == "visitor")
+		return "Besucher mit Kontonummer " + st.qrid;
+
+	if (st.type == "teacher")
+		return st.firstname + " " + st.lastname + " (Lehrer/Lehrerin)";
+
+	if (st.type == "legalentity")
+		return st.special_name + " (juristische Person)";
+
+	if (st.type == "other")
+		return st.firstname + " " + st.lastname;
 
 	return st.firstname + "/" + st.lastname + "/" + st.type + "/" + st.special_name;
 }
@@ -55,8 +65,7 @@ function student_identify(data, sectionref, cb) {
 		try {
 			var st = JSON.parse(res);
 	
-			complete.html(st.firstname + " " + st.lastname
-				+ ", Klasse " + st.type.toUpperCase());
+			complete.html(student2readable(st));
 			incomplete.css("transform", "rotateY(180deg)");
 			complete.css("transform", "rotateY(0deg)");
 
