@@ -11,7 +11,7 @@ function calc_checkin_time(st) {
 	var checks = JSON.parse(JSON.stringify(st.appear));
 	for (var i = 0; i < checks.length; i++) {
 		// Store relative time values to checkin in seconds
-		checks[i].time = (checks[i].time - begin) / 1000;
+		checks[i].time = (Date.parse(checks[i].time) - begin) / 1000;
 	}
 
 	// Sort checks array: later apperances to the higher indices
@@ -118,7 +118,6 @@ function render_students(list) {
 
 	$(".student").click(function() {
 		var studentid = $(this).data("studentid");
-		console.log(list);
 		var st = list[studentid];
 
 		$("#details").html("");
@@ -132,10 +131,14 @@ function render_students(list) {
 				.text("Typ"))
 		);
 
-		for (var i = 0; i < st.appear.length; i++) {
-			var type = ((st.appear[i].type == "checkin") ? "Check In" : "Check Out");
-			var date = new Date(st.appear[i].time);
-			console.log(st.appear[i].time);
+		// Sort checks array: later apperances to the higher indices
+		var checks = JSON.parse(JSON.stringify(st.appear));
+		checks.sort(function(a, b) {
+			return new Date(a.time) - new Date(b.time);
+		});
+		for (var i = 0; i < checks.length; i++) {
+			var type = ((checks[i].type == "checkin") ? "Check In" : "Check Out");
+			var date = new Date(checks[i].time);
 			var date_readable =
 				  ("0" + date.getDate() ).slice(-2) + "."
 				+ ("0" + date.getMonth()).slice(-2) + ". "
@@ -143,7 +146,7 @@ function render_students(list) {
 				+ ("0" + date.getHours()).slice(-2) + ":"
 				+ ("0" + date.getMinutes()).slice(-2);
 
-			$("#details").append($('<tr class="detail_' + st.appear[i].type + '">')
+			$("#details").append($('<tr class="detail_' + checks[i].type + '">')
 				.append($("<td>")
 					.text(date_readable))
 				.append($("<td>")

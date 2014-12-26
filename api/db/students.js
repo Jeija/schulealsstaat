@@ -17,7 +17,7 @@ var studentSchema = new Schema({
 
 	/* Checkins, Checkouts --> Appearances */
 	// type: "checkin/checkout/...", date: server time at checkin / checkout
-	appear :	[{type : String, time : Date}],
+	appear :	[{type : { type : String}, time : Date}],
 
 	/* Finances */
 	// type: "send" or "receive", reference: to document in transactions db
