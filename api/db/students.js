@@ -46,6 +46,13 @@ module.exports = {
 		});
 	},
 
+	getCertainByProperties : function (properties, fields, cb) {
+		Student.find(properties, fields, function (err, st) {
+			if (err) log.err("MongoDB", "stdb.getCertainByProperties failed: " + err);
+			cb(st);
+		});
+	},
+
 	getByQrid : function (qrid, cb) {
 		Student.findOne({qrid : qrid}, function (err, st) {
 			if (err) log.err("MongoDB", "stdb.getByQrid failed: " + err);
@@ -56,6 +63,13 @@ module.exports = {
 	getAll : function (cb) {
 		Student.find({}, function (err, list) {
 			if (err) log.err("MongoDB", "stdb.getAll failed: " + err);
+			cb(list);
+		});
+	},
+
+	getCertainAll : function (fields, cb) {
+		Student.find({}, fields, function (err, list) {
+			if (err) log.err("MongoDB", "stdb.getCertainAll failed: " + err);
 			cb(list);
 		});
 	}

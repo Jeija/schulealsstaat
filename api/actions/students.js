@@ -29,7 +29,12 @@ module.exports = function (register){
 	/**
 	 * Returns JSON of all students in DB.
 	 *
-	 * admin_hash --> students_dump <no parameters>
+	 * admin_hash --> students_dump
+	 *
+	 * Parameter: none (invalid JSON) or object specifying inclusion / exclusion of fields:
+	 *	inclusion:	{ "firstname" : 1, "lastname" : 1 }	--> only included
+	 *	exlusion:	{ "appear" : 0, "transactions" : 0 }	--> only excluded
+	 *
 	 * response value:
 	 * none (error) or dump of db.students, with all properties:
 	 * [{<student1>}, {<student2>}, ...]
@@ -37,9 +42,18 @@ module.exports = function (register){
 	register("students_dump", function (arg, res, req) {
 		log.info("API", "students_dump: this may take a while");
 		cert.check(["admin_hash"], req, function () {
-			db.students.getAll(function (list) {
-				res.end(JSON.stringify(list));
-			});
+			var fields = undefined;
+			try { fields = JSON.parse(arg); } catch (e) {}
+
+			if (fields) {
+				db.students.getCertainAll(fields, function (list) {
+					res.end(JSON.stringify(list));
+				});
+			} else {
+				db.students.getAll(function (list) {
+					res.end(JSON.stringify(list));
+				});
+			}
 		});
 	});
 
@@ -48,9 +62,17 @@ module.exports = function (register){
 	 * properties like $ne, $or, ...
 	 *
 	 * admin_hash --> get_students {
-	 *	key1 : value1 (both Strings),
-	 *	key2 : value2 (both Strings)
+	 *	query : {
+	 *		key1 : value1 (both Strings),
+	 *		key2 : value2 (both Strings)
+	 *	}
+	 *	fields : <explanation see below>
 	 * }
+	 *
+	 * fields: optional (get everything) or object specifying inclusion / exclusion of fields:
+	 *	inclusion:	{ "firstname" : 1, "lastname" : 1 }	--> only included
+	 *	exlusion:	{ "appear" : 0, "transactions" : 0 }	--> only excluded
+	 *
 	 * response value:
 	 * none (error) or list of student that match given criteria:
 	 * [{<student1>}, {<student2>}, ...]
@@ -60,9 +82,16 @@ module.exports = function (register){
 		cert.check(["admin_hash"], req, function () {
 			try {
 				var data = JSON.parse(arg);
-				db.students.getByProperties(data, function (st) {
-					res.end(JSON.stringify(st));
-				});
+				if ("fields" in data) {
+					db.students.getCertainByProperties(data, data.fields,
+						function (st) {
+						res.end(JSON.stringify(st));
+					});
+				} else {
+					db.students.getByProperties(data, function (st) {
+						res.end(JSON.stringify(st));
+					});
+				}
 			} catch(e) {
 				log.err("API", "get_students failed " + e);
 			}

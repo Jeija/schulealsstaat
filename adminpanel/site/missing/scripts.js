@@ -173,7 +173,12 @@ $(function () {
 
 	$("#query").click(function () {
 		// Load all students matching the given type
-		var condition = JSON.stringify({type : $("#selector_class").val()});
+		var condition = JSON.stringify({
+			query : {
+				type : $("#selector_class").val()
+			},
+			fields : {"firstname" : 1, "lastname" : 1, "type" : 1, "appear" : 1}
+		});
 		action_cert("get_students", condition, "admin_cert", function (res) {
 			var students = JSON.parse(res);
 			render_students(students);

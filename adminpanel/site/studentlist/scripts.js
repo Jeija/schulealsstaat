@@ -224,15 +224,17 @@ $(function() {
 				cond.$nor.push(tc)
 			}
 		}
-		action_cert("get_students", JSON.stringify(cond), "admin_cert", function (res) {
+
+		var req = JSON.stringify({query : cond});
+		action_cert("get_students", req, "admin_cert", function (res) {
 			var students = JSON.parse(res);
 			render_list(students);
 		});	
 	});
 
 	$("#query_go").click(function () {
-		var query = $("#mongoose_query").val();
-		action_cert("get_students", query, "admin_cert", function (res) {
+		var req = JSON.stringify({query : JSON.parse($("#mongoose_query").val())});
+		action_cert("get_students", req, "admin_cert", function (res) {
 			var students = JSON.parse(res);
 			render_list(students);
 		});
