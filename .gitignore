@@ -2,3 +2,5 @@
 cert/
 node_modules/
 /server/webcam/img/
+/client/terminaliso/work
+/client/terminaliso/out
