@@ -11,6 +11,9 @@ CWD="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 trap "kill 0" SIGINT SIGTERM EXIT
 
+if [ "$(pidof systemd)" ]; then
+	systemctl start mongodb
+fi
 
-$CWD/server/run.sh &
-$CWD/client/run.sh
+nodemon $CWD/webcam/main.js &
+nodemon $CWD/api/main.js

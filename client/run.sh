@@ -11,6 +11,6 @@ CWD="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 trap "kill 0" SIGINT SIGTERM EXIT
 
-
-$CWD/server/run.sh &
-$CWD/client/run.sh
+$CWD/registration/run.sh &
+$CWD/adminpanel/run.sh &
+$CWD/entrycheck/run.sh

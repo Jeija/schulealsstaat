@@ -1,0 +1,8 @@
+{
+	"name": "sas_webcam",
+	"description": "Schule als EU Passport Photo Server",
+	"author": "Computer AG",
+	"dependencies": {
+		"colors": ">=1.0.3"
+	}
+}
