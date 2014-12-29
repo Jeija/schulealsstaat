@@ -2,18 +2,8 @@ var log = require("../logging.js");
 var db = require("../db");
 var cert = require("../cert");
 var config = require("../config");
-var crypto = require("crypto");
 var flow = require("flow");
-
-/**
- * Check a given password for a student
- * \param st The database entry for the student
- * \param pwd The provided password to check
- * \return True, if password is correct, otherwise false
- */
-function check_password(st, pwd) {
-	return (crypto.createHash("sha256").update(pwd + st.pwdsalt).digest("hex") == st.pwdhash);
-}
+var common = require("./common.js");
 
 // Round a currency value
 function HGC_round(value) {
@@ -143,7 +133,7 @@ register("get_balance", function (arg, res, req) { try {
 			return;
 		}
 
-		if(!check_password(st, data.password)) {
+		if(!common.check_password(st, data.password)) {
 			res.end("invalid_password");
 			return;
 		}
@@ -186,7 +176,7 @@ register("get_last_transactions", function (arg, res, req) { try {
 			return;
 		}
 
-		if(!check_password(st, data.password)) {
+		if(!common.check_password(st, data.password)) {
 			res.end("invalid_password");
 			return;
 		}
@@ -262,7 +252,7 @@ register("transaction", function (arg, res, req) { try {
 		recipient = st;
 
 		// Check sender's password:
-		if(!check_password(sender, data.sender_password)) {
+		if(!common.check_password(sender, data.sender_password)) {
 			res.end("invalid_password");
 			return;
 		}

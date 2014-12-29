@@ -12,24 +12,37 @@
 <body>
 	<div id="header"></div>
 	<div id="description">
-		<img class="desc_hgc_logo" src="../hgc.png">
-		<div id="heading">Guthabenabfrage</div>
-Hier kann das aktuelle Guthaben auf dem Account abgefragt werden.
+		<img class="desc_key_logo" src="../key.png">
+		<div id="heading">Passwort ändern</div>
+Hier kannst du dein altes Passwort mit einem Neuen ersetzen. Wenn du dein altes Passwort nicht mehr kennst oder falls du andere Profileigenschaften ändern willst, melde dich bei der Zentralbank.
 	</div>
 	<div id="content">
 		<form id="form_all">
-		<!-- SENDER -->
-		<div class="studentselector section student"></div>
+
+		<!-- Person -->
+		<div class="studentselector section student""></div>
 
 		<hr/>
 
-		<!-- Password -->
+		<!-- Old Password -->
 		<div class="section" id="section_password">
-			<div class="section_heading">Passwort</div>
+			<div class="section_heading">Bisheriges Passwort</div>
 			<div class="password_container">
-				<input type="password" class="password">
+				<input type="password" class="old_password">
 			</div>
 		</div>
+
+		<hr/>
+
+		<!-- New Password (twice) -->
+		<div class="section" id="section_password">
+			<div class="section_heading">Neues Passwort</div>
+			<div class="new_password_container">
+				<input type="password" class="new_password1"><br/>
+				<input type="password" class="new_password2">
+			</div>
+		</div>
+
 		</form>
 
 		<!-- Confirm -->
@@ -43,11 +56,10 @@ Hier kann das aktuelle Guthaben auf dem Account abgefragt werden.
 			<input type="button" value="OK" id="messagebox_ok">
 		</div>
 
-		<!-- Balance Message Box -->
-		<div id="balance_box" hidden>
-			Das Guthaben beträgt:<br/>
-			<span id="balance_box_value"></span> HGC
-			<input type="button" value="OK" id="balance_box_ok">
+		<!-- Success Message Box -->
+		<div id="success" hidden>
+			Passwort erfolgreich geändert!
+			<input type="button" value="OK" id="success_ok">
 		</div>
 	</div>
 	</div>

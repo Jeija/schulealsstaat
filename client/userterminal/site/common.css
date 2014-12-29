@@ -97,6 +97,16 @@ body {
 	margin-left:-120px;
 }
 
+.desc_key_logo {
+	position:absolute;
+	top:0;
+	bottom:0;
+	margin:auto;
+	height:80px;
+	float:left;
+	margin-left:-120px;
+}
+
 /* Section */
 
 .section {

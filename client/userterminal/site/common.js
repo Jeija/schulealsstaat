@@ -84,6 +84,7 @@ function student_identify(data, sectionref, cb) {
 }
 
 $(function () {
+$(".studentselector").load("../section_student.html", function () {
 	// Disable dragging
 	$("img").on("dragstart", function(e) {
 		e.preventDefault();
@@ -155,4 +156,4 @@ $(function () {
 
 	/* Cancel */
 	$(".cancel").click(resetAll);
-});
+});});
