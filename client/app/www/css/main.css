@@ -1,0 +1,52 @@
+body { 
+	background-color: black;
+}
+
+img {
+	width: 80%;
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	margin-bottom: 20px;
+}
+
+button.bigbutton {
+	width: 90%;
+	margin: 15px;
+	height: 50px;
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	font-size: 30px;
+	background-color: green;
+	color: yellow;
+	border: solid;
+	border-radius: 8px;
+}
+
+a.mainlinks {
+	text-decoration: none;
+	color: yellow;
+	font-size: 30px;
+	background-color: green;
+	border-radius: 5px;
+	border-style: solid;
+	border-color: yellow;
+	border-width: 3px;
+	display: block;
+	text-align: center;
+}
+
+div.border {
+	border-color: red;
+	border-width: 10px;
+	width: 90%;
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	padding: auto;
+}
+
+
