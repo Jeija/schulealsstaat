@@ -4,3 +4,12 @@
 [submodule "client/entrycheck/site/QRScanJS"]
 	path = client/entrycheck/site/QRScanJS
 	url = https://github.com/Jeija/QRScanJS.git
+[submodule "client/app/plugins/org.apache.cordova.splashscreen"]
+	path = client/app/plugins/org.apache.cordova.splashscreen
+	url = https://github.com/apache/cordova-plugin-splashscreen
+[submodule "client/app/plugins/com.phonegap.plugins.barcodescanner"]
+	path = client/app/plugins/com.phonegap.plugins.barcodescanner
+	url = https://github.com/wildabeast/BarcodeScanner
+[submodule "client/app/plugins/nl.x-services.plugins.flashlight"]
+	path = client/app/plugins/nl.x-services.plugins.flashlight
+	url = https://github.com/EddyVerbruggen/Flashlight-PhoneGap-Plugin

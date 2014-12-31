@@ -3,13 +3,38 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-	<script type="text/javascript" charset="utf-8" src="js/index.js"> </script>
 	<link rel="stylesheet" href="css/index.css" type="text/css">
-	<title> Erster Versuch zur Rotation von Bildern durch CSS3  </title>
+	<script src="cordova.js"></script>
+	<script type="text/javascript" src="js/plugins/Flashlight.js"></script>
+	<script src="barcodescanner.js"></script>
+	<script src="js/jquery.min.js"></script>
+	<script src="js/api.js"></script>
+	<script src="js/storage.js"></script>
+	<script src="js/index.js"></script>
+	<script src="http://192.168.0.100:8081/target/target-script-min.js#anonymous"></script>
+	<title>HöGyCoin Menü</title>
 </head>
 <body>
 	<img src="res/icon.png">
-	<h1 id="Info"> App wird geladen </h1>
-	<button type="button" onclick="myFunction()"> Click for change! </button>
+
+	<div class="border">
+		<a id="authenticate" class="mainlinks">Authentifizieren<a>
+	</div>
+
+	<div class="border">
+		<a href="konto.html" class="mainlinks">Konto<a>
+	</div>
+
+	<div class="border">
+		<a href="ueberweisung.html" class="mainlinks">Überweisung<a>
+	</div>
+
+	<div class="border">
+		<a href="tutorial.html" class="mainlinks">Tutorial<a>
+	</div>
+
+	<div class="border">
+		<a href="hilfe.html" class="mainlinks">Hilfe<a>
+	</div>
 </body>
 </html>

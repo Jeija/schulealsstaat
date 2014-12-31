@@ -7,4 +7,5 @@ node_modules/
 /client/app/build
 /client/app/hooks
 /client/app/platforms
+/client/app/plugins/*.json
 /client/app/.cordova

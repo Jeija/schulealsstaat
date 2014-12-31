@@ -1,28 +1,52 @@
-img {
-	width: 60%;
-	display: block;
-	margin-left: auto;
-	margin-right: auto;
-	margin-bottom: 50px;
-	animation: rotation 3s linear infinite;
-}
-
-@keyframes rotation {
-    from {transform: rotate(0deg);}
-    to {transform: rotate(360deg);}
-}
-
-h1 {
-	color: yellow;
-	text-align: center;
-	animation: fade_in 1s;
-}
-
-@keyframes fade_in {
-    from {opacity: 0;}
-    to {opacity: 1;}
-}
-
 body { 
 	background-color: black;
 }
+
+img {
+	width: 80%;
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	margin-bottom: 20px;
+}
+
+button.bigbutton {
+	width: 90%;
+	margin: 15px;
+	height: 50px;
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	font-size: 30px;
+	background-color: green;
+	color: yellow;
+	border: solid;
+	border-radius: 8px;
+}
+
+a.mainlinks {
+	text-decoration: none;
+	color: yellow;
+	font-size: 30px;
+	background-color: green;
+	border-radius: 5px;
+	border-style: solid;
+	border-color: yellow;
+	border-width: 3px;
+	display: block;
+	text-align: center;
+}
+
+div.border {
+	border-color: red;
+	border-width: 10px;
+	width: 90%;
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	padding: auto;
+}
+
+
