@@ -16,6 +16,11 @@ function flashLightOff() {
 
 $(function () {
 
+document.addEventListener("deviceready", onDeviceReady, false);
+function onDeviceReady() {
+	navigator.splashscreen.hide();
+}
+
 $("#authenticate").click(function () {
 	if (cordova.plugins.barcodeScanner) {
 		cordova.plugins.barcodeScanner.scan(
