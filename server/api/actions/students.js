@@ -129,6 +129,12 @@ module.exports = function (register){
 					log.info("API", "Edit " + data.prop + " of " + st.firstname
 						+ " " + st.lastname + ", from "
 						+ st[data.prop] + " to " + data.value);
+
+					// If qrid was edited, change it in transactions DB
+					if (data.prop == "qrid")
+						db.transactions.updateAllQrid
+							(st[data.prop], data.value);
+
 					st[data.prop] = data.value;
 					st.save();
 					res.end("ok");

@@ -41,5 +41,25 @@ module.exports = {
 			if (err) log.err("MongoDB", "trdb.getByIdList failed: " + err)
 			cb(tr);
 		});
+	},
+
+	updateAllQrid : function (old_qrid, new_qrid) {
+		// Sender
+		Transaction.update(
+			{ sender : old_qrid },			// Query sender
+			{ $set : { sender : new_qrid } },	// Update sender
+			{ multi : true },			// Update every transaction
+			function (err) {			// Callback
+				if (err) log.err("MongoDB", "trdb.updateAllQrid sender failed: " + err);
+		});
+
+		// Recipient
+		Transaction.update(
+			{ recipient : old_qrid },		// Query sender
+			{ $set : { recipient : new_qrid } },	// Update sender
+			{ multi : true },			// Update every transaction
+			function (err) {			// Callback
+				if (err) log.err("MongoDB", "trdb.updateAllQrid sender failed: " + err);
+		});
 	}
 }

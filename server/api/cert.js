@@ -20,7 +20,7 @@ module.exports = {
 
 			for (var i = 0; i < hashfiles.length; i++) {
 				var fn = hashfiles[i];
-				var cmp_hash = fs.readFileSync(__dirname + CERT_DIR + fn, "utf8")
+				var cmp_hash = fs.readFileSync(__dirname + CERT_DIR + fn, "utf8");
 				if (cmp_hash.slice(0, -1) == hash) {
 					cb();
 					hash_correct = true;
