@@ -143,62 +143,6 @@ module.exports = function (register){
 	});
 
 	/**
-	 * Changes password of student (also, re-generates password salt).
-	 * Student is given by his / her QR-ID, the new password by data.password.
-	 * Either master_hash in POST data or old_password must be provided,
-	 * if old_password is provided, uses it instead of certificate
-	 *
-	 * master_hash [option 1] --> password_change {
-	 *	qrid : String (QR-ID),
-	 *	password : String (Password),
-	 *	old_password : String (Password, [option 2])
-	 * }
-	 *
-	 * response value:
-	 * "ok"
-	 * invalid_qrid		--> the provided qrid doesn't exist
-	 * invalid_password	--> provided old_password was wrong
-	 * "error: <something>"
-	 */
-	function change_password (st, new_password) {
-		log.info("API", "Changing Password of " + st.firstname + " " + st.lastname);
-		var crypt = generate_pwdhash(new_password);
-		st.pwdhash = crypt.hash;
-		st.pwdsalt = crypt.salt;
-		st.save();
-	}
-
-	register("password_change", function (arg, res, req) { try {
-		var data = JSON.parse(arg);
-
-		db.students.getByQrid(data.qrid, function (st) {
-			if (!st) {
-				res.end("invalid_qrid");
-				return;
-			}
-
-			if ("old_password" in data) {
-				if(common.check_password(st, data.old_password)) {
-					change_password(st, data.password);
-					res.end("ok");
-				} else {
-					res.end("invalid_password");
-				}
-			} else {
-				cert.check(["master_hash"], req, function () {
-					change_password(st, data.password);
-					res.end("ok");
-				}, function () {
-					res.end("error: incorrect certificate");
-				});
-			}
-		});
-	} catch(e) {
-		log.err("API", "password_change failed " + e);
-		res.end("error: " + e);
-	}});
-
-	/**
 	 * Deletes student completely from DB, picture on webcamserver remains though.
 	 * Transactions won't be altered as well.
 	 *
@@ -279,6 +223,62 @@ module.exports = function (register){
 			res.end("error: " + e);
 		}
 	});
+
+	/**
+	 * Changes password of student (also, re-generates password salt).
+	 * Student is given by his / her QR-ID, the new password by data.password.
+	 * Either master_hash in POST data or old_password must be provided,
+	 * if old_password is provided, uses it instead of certificate
+	 *
+	 * master_hash [option 1] --> password_change {
+	 *	qrid : String (QR-ID),
+	 *	password : String (Password),
+	 *	old_password : String (Password, [option 2])
+	 * }
+	 *
+	 * response value:
+	 * "ok"
+	 * invalid_qrid		--> the provided qrid doesn't exist
+	 * invalid_password	--> provided old_password was wrong
+	 * "error: <something>"
+	 */
+	function change_password (st, new_password) {
+		log.info("API", "Changing Password of " + st.firstname + " " + st.lastname);
+		var crypt = generate_pwdhash(new_password);
+		st.pwdhash = crypt.hash;
+		st.pwdsalt = crypt.salt;
+		st.save();
+	}
+
+	register("password_change", function (arg, res, req) { try {
+		var data = JSON.parse(arg);
+
+		db.students.getByQrid(data.qrid, function (st) {
+			if (!st) {
+				res.end("invalid_qrid");
+				return;
+			}
+
+			if ("old_password" in data) {
+				if(common.check_password(st, data.old_password)) {
+					change_password(st, data.password);
+					res.end("ok");
+				} else {
+					res.end("invalid_password");
+				}
+			} else {
+				cert.check(["master_hash"], req, function () {
+					change_password(st, data.password);
+					res.end("ok");
+				}, function () {
+					res.end("error: incorrect certificate");
+				});
+			}
+		});
+	} catch(e) {
+		log.err("API", "password_change failed " + e);
+		res.end("error: " + e);
+	}});
 
 	// #################### ENTRY CHECK ####################
 	register("ec_checkin", function (arg, res, req) {
