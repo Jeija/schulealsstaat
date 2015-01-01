@@ -12,7 +12,7 @@ function datetime_readable (datestring) {
 
 function render_transactions (tr, balance) {
 	var table = $("#transactions_table");
-	$("#balance").html(balance + " HGC");
+	$("#balance").text(balance + " HGC");
 
 	table.html("");
 
@@ -41,7 +41,7 @@ function render_transactions (tr, balance) {
 				.text(t.sender))
 			.append($('<td class="trt_recipient" data-qrid="' + t.recipient + '">')
 				.text(t.recipient))
-			.append($('<td class="trt_comment" data-content="' + comment + '">')
+			.append($('<td class="trt_comment" data-listid="' + i + '">')
 				.text("Anzeigen"))
 			.append($('<td class="trt_balance">')
 				.text(bal_now))
@@ -50,13 +50,20 @@ function render_transactions (tr, balance) {
 		bal_now += is_sender ? t.amount_sent : -t.amount_received;
 	}
 
-	$(".trt_comment").webuiPopover({title : "Kommentar", trigger : "hover", placement : "left"});
+	$(".trt_comment").webuiPopover({
+		title : "Kommentar",
+		trigger : "hover",
+		placement : "left",
+		content : '<div class="comment_popup"></div>'
+	});
+
 	$(".trt_recipient").webuiPopover({
 		title : "Empfänger",
 		trigger : "hover",
 		placement : "left",
 		content : '<div class="recipient_popup"></div>'
 	});
+
 	$(".trt_sender").webuiPopover({
 		title : "Absender",
 		trigger : "hover",
@@ -64,12 +71,19 @@ function render_transactions (tr, balance) {
 		content : '<div class="sender_popup"></div>'
 	});
 
+	$(".trt_comment").hover(function () {
+		var listid = parseInt($(this).data("listid"));
+		setTimeout(function () {
+			$(".comment_popup").text(tr[listid].comment);
+		}, 0);
+	});
+
 	$(".trt_recipient").hover(function () {
 		var qrid = $(this).data("qrid");
 		data = { qrid : qrid };
 		action("student_identify", JSON.stringify(data), function (res) {
 			var st = JSON.parse(res);
-			$(".recipient_popup").html(student2readable(st));
+			$(".recipient_popup").text(student2readable(st));
 		});
 	});
 
@@ -78,7 +92,7 @@ function render_transactions (tr, balance) {
 		data = { qrid : qrid };
 		action("student_identify", JSON.stringify(data), function (res) {
 			var st = JSON.parse(res);
-			$(".sender_popup").html(student2readable(st));
+			$(".sender_popup").text(student2readable(st));
 		});
 	});
 
