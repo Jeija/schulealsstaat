@@ -33,12 +33,12 @@ module.exports = {
 		});
 	},
 
-	// Callback paremeter are all transactions involving qrid sorted by time in ascending order
-	getAllInvolvingQrid : function (qrid, cb) {
-		var query = {	$query : {$or : [{sender : qrid}, {recipient : qrid}]},
+	// Callback paremeter are all transactions in the list sorted by time in ascending order
+	getByIdList : function (list, cb) {
+		var query = {	$query : {_id : {$in : list}},
 				$orderby : {time : 1}};
 		Transaction.find(query, function (err, tr) {
-			if (err) log.err("MongoDB", "trdb.getAllInvolvingQrid failed: " + err)
+			if (err) log.err("MongoDB", "trdb.getByIdList failed: " + err)
 			cb(tr);
 		});
 	}

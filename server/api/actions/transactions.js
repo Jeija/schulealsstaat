@@ -181,7 +181,7 @@ register("get_last_transactions", function (arg, res, req) { try {
 			return;
 		}
 
-		db.transactions.getAllInvolvingQrid(data.qrid, function (tr) {
+		db.transactions.getByIdList(st.transactions, function (tr) {
 			if (data.amount > 0)
 				tr = tr.slice(Math.max(tr.length - data.amount, 1));
 			res.end(JSON.stringify(tr));

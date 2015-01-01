@@ -194,7 +194,7 @@ module.exports = function (register){
 			}
 		});
 	} catch(e) {
-		log.err("API", "profile_edit failed " + e);
+		log.err("API", "password_change failed " + e);
 		res.end("error: " + e);
 	}});
 
