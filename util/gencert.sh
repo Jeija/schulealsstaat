@@ -46,6 +46,7 @@ echo "$EC_HASH" > $API_CERT_DIR/ec_hash
 echo -e "\b\b\bOK]"
 
 WEBCAM_CERT_DIR=$ROOT/server/webcam/cert
+mkdir -p $WEBCAM_CERT_DIR
 echo "$ADMIN_HASH" > $WEBCAM_CERT_DIR/admin_hash
 echo "$EC_HASH" > $WEBCAM_CERT_DIR/ec_hash
 
