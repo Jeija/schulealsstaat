@@ -1,8 +1,8 @@
-var APISERVER = "127.0.0.1"
-var APIPORT = 1337
+var APISERVER = "127.0.0.1";
+var APIPORT = 1337;
 
-var WEBCAMSERVER = "127.0.0.1"
-var WEBCAMPORT = 1338
+var WEBCAMSERVER = "127.0.0.1";
+var WEBCAMPORT = 1338;
 
 var ACTIONURL = "http://" + APISERVER + ":" + APIPORT + "/action/";
 var WEBCAMURL = "http://" + WEBCAMSERVER + ":" + WEBCAMPORT + "/";
@@ -43,7 +43,7 @@ function action_mastercert(name, data, certfile_selector, cb) {
 			data : reader.result,
 			success : cb
 		});
-	}
+	};
 	reader.readAsText(file, "utf-8");
 }
 

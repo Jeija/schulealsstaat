@@ -27,3 +27,9 @@ sudo npm install -g http-server
 
 # Generate certificates
 $CWD/util/gencert.sh
+
+# Copy api.js to all client applications that use it
+cp $CWD/client/common/api.js $CWD/client/userterminal/site/
+cp $CWD/client/common/api.js $CWD/client/adminpanel/site/
+cp $CWD/client/common/api.js $CWD/client/app/www/js/
+

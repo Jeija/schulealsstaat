@@ -1,8 +1,16 @@
+# Ignore backup copies ending with ~
 *~
-cert/
-node_modules/
-bower_components/
+
+# Don't publish stored data, hashes or certificates
+# init.sh generates a set of certificates and hashes for you
 /server/webcam/img/*
+cert/
+
+# Don't upload backend / frontend dependenices
+bower_components/
+node_modules/
+
+# Ignored working / output directories
 /client/terminaliso/work
 /client/terminaliso/out
 /client/app/build
@@ -10,3 +18,7 @@ bower_components/
 /client/app/platforms
 /client/app/plugins/*.json
 /client/app/.cordova
+
+# Only publish api.js once - in client/common, init.sh will copy it over to all the appropriate places
+api.js
+!/client/common/api.js
