@@ -1,0 +1,11 @@
+{
+  "name": "SaS Adminpanel",
+  "version": "0.0.1",
+  "homepage": "https://github.com/Jeija/schulealsstaat",
+  "description": "Administration tasks for the SaS project",
+  "license": "GPLv3",
+  "dependencies": {
+    "jquery": "~2.1.3",
+    "rome": "~1.2.1"
+  }
+}

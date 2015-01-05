@@ -1,10 +1,14 @@
 {
-	"name": "sas_api",
-	"description": "Schule als EU Database API Server",
-	"author": "Computer AG",
-	"dependencies": {
-		"colors": ">=1.0.3",
-		"flow": "^0.2.3",
-		"mongoose": ">=3.8"
-	}
+  "name": "sas_api",
+  "description": "Schule als EU Database API Server",
+  "author": "Computer AG",
+  "dependencies": {
+    "colors": ">=1.0.3",
+    "flow": "^0.2.3",
+    "mongoose": ">=3.8"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Jeija/schulealsstaat"
+  }
 }

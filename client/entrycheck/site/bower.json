@@ -1,0 +1,10 @@
+{
+  "name": "SaS Entry Check",
+  "version": "0.0.1",
+  "homepage": "https://github.com/Jeija/schulealsstaat",
+  "description": "Register people leaving or entering school",
+  "license": "GPLv3",
+  "dependencies": {
+    "jquery": "~2.1.3"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "name": "SaS Registration",
+  "version": "0.0.1",
+  "homepage": "https://github.com/Jeija/schulealsstaat",
+  "description": "Student registration panel for the SaS project",
+  "license": "GPLv3",
+  "dependencies": {
+    "jquery": "~2.1.3"
+  }
+}
