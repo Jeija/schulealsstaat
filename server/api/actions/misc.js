@@ -1,12 +1,9 @@
 module.exports = function (register){
-	register("test", function (arg, res){
-		console.log("Test Action")
+	register("test", function (payload, answer) {
+		console.log("Test Action");
 
-		res.writeHead(200, {'Content-Type': 'text/plain'});
-		res.write("API Echo Test\n");
-		res.write("------------------------\n");
-		res.write(arg+"\n");
-		res.write("------------------------\n");
-		res.end();
+		answer("API Echo Test\n----------\n"
+			+ JSON.stringify(payload)
+			+ "\n----------");
 	});
-}
+};

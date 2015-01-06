@@ -2,53 +2,48 @@ var log = require("../logging.js");
 var cert = require("../cert");
 var config = require("../config");
 
-module.exports = function (register){
+module.exports = function (register, register_cert) {
 	// Warning: Reading configuration is unprotected!
-	register("config_get", function (arg, res, req) {
+	register("config_get", function (payload, answer) {
 		try {
-			log.info("API", "config_get for " + arg);
-			var value = config.get(arg, "");
-			res.end(value.toString());
+			log.info("API", "config_get for " + payload);
+			var value = config.get(payload, "");
+			answer(value.toString());
 		} catch(e) {
 			log.err("API", "config_get error: " + e);
-			res.end("error: " + e);
+			answer("error: " + e);
 		}
 	});
 
-	register("config_set", function (arg, res, req) {
-		cert.check(["master_hash"], req, function () {
-			try {
-				var data = JSON.parse(arg);
-				log.info("API", "config_set " + data.key + " = " + data.value);
-				config.set(data.key, data.value);
-				res.end("ok");
-			} catch(e) {
-				log.err("API", "config_set error: " + e);
-				res.end("error: " + e);
-			}
-		});
+	register_cert("config_set", ["master_hash"], function (payload, answer) {
+		try {
+			log.info("API", "config_set " + payload.key + " = " + payload.value);
+			config.set(payload.key, payload.value);
+			answer("ok");
+		} catch(e) {
+			log.err("API", "config_set error: " + e);
+			answer("error: " + e);
+		}
 	});
 
-	register("config_del", function (arg, res, req) {
-		cert.check(["master_hash"], req, function () {
-			try {
-				log.info("API", "config_del " + arg);
-				config.del(arg);
-				res.end("ok");
-			} catch(e) {
-				log.err("API", "config_del error: " + e);
-				res.end("error: " + e);
-			}
-		});
+	register("config_del", ["master_hash"], function (payload, answer) {
+		try {
+			log.info("API", "config_del " + payload);
+			config.del(payload);
+			answer("ok");
+		} catch(e) {
+			log.err("API", "config_del error: " + e);
+			answer("error: " + e);
+		}
 	});
 
-	register("config_getall", function (arg, res, req) {
+	register("config_getall", function (payload, answer) {
 		try {
 			log.info("API", "config_getall");
-			res.end(JSON.stringify(config.getAll()));
+			answer(config.getAll());
 		} catch(e) {
 			log.err("API", "config_getall error: " + e);
-			res.end("error: " + e);
+			answer("error: " + e);
 		}
 	});
 }

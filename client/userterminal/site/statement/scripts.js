@@ -81,8 +81,7 @@ function render_transactions (tr, balance) {
 	$(".trt_recipient").hover(function () {
 		var qrid = $(this).data("qrid");
 		data = { qrid : qrid };
-		action("student_identify", JSON.stringify(data), function (res) {
-			var st = JSON.parse(res);
+		action("student_identify", data, function (st) {
 			$(".recipient_popup").text(student2readable(st));
 		});
 	});
@@ -90,8 +89,7 @@ function render_transactions (tr, balance) {
 	$(".trt_sender").hover(function () {
 		var qrid = $(this).data("qrid");
 		data = { qrid : qrid };
-		action("student_identify", JSON.stringify(data), function (res) {
-			var st = JSON.parse(res);
+		action("student_identify", data, function (st) {
 			$(".sender_popup").text(student2readable(st));
 		});
 	});
@@ -147,7 +145,7 @@ $(function () {
 		};
 
 		var server_answered = false;
-		action("get_balance", JSON.stringify(data), function (res) {
+		action("get_balance", data, function (res) {
 			server_answered = true;
 
 			// Check for server errors
@@ -163,13 +161,9 @@ $(function () {
 				return;
 			}
 
-			action("get_last_transactions", JSON.stringify(data), function (res) {
-				// Try to parse transactions JSON or report error
-				var tr = undefined;
-				try {
-					tr = JSON.parse(res);
-				} catch(e) {
-					errorMessage("Unbekannter Fehler: " + res + "<br/>"
+			action("get_last_transactions", data, function (tr) {
+				if (typeof tr !== "object") {
+					errorMessage("Unbekannter Fehler: " + tr + "<br/>"
 						+ "Bitte melde diesen Fehler bei der Zentralbank.");
 					return;
 				}

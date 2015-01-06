@@ -1,7 +1,9 @@
 <html>
 <head>
 	<title>SaEU - Überweisung</title>
+	<script src="../bower_components/jsencrypt/bin/jsencrypt.min.js"></script>
 	<script src="../bower_components/jquery/dist/jquery.js"></script>
+	<script src="../bower_components/sjcl/sjcl.js"></script>
 	<script src="../api.js"></script>
 	<script src="../common.js"></script>
 	<script src="scripts.js"></script>
@@ -42,7 +44,7 @@ Um Geld zu überweisen, müssen hier Absender, Empfänger und Betrag eingegeben 
 			<div class="section_heading">Kommentar</div>
 			<div class="comment_container">
 				<textarea class="comment"></textarea>
-				<div class="comment_info">optional, max. 300 Zeichen</div>
+				<div class="comment_info">optional, max. <span id="comment_maxlen"></span> Zeichen</div>
 			</div>
 		</div>
 

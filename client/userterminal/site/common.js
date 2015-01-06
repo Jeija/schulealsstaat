@@ -55,31 +55,29 @@ function student_identify(data, sectionref, cb) {
 	var complete = incomplete.siblings(".section_complete");
 
 	// Ask server for identification of student by inputs
-	action("student_identify", JSON.stringify(data), function (res) {
-		if (res == "multiple") {
+	action("student_identify", data, function (st) {
+		if (st === "multiple") {
 			errorMessage("Die Eingabe ist nicht eindeutig:<br/>"
 				+ "Es gibt mehrere Personen, die auf die Kriterien passen.");
 			return;
 		}
 
-		try {
-			var st = JSON.parse(res);
-	
-			complete.html(student2readable(st));
-			incomplete.css("transform", "rotateY(180deg)");
-			complete.css("transform", "rotateY(0deg)");
-
-			setTimeout(function () {
-				incomplete.height(incomplete.css("height"));
-				incomplete.height(0);
-			}, 300);
-
-			cb(st);
-		} catch (e) {
+		if (typeof st !== "object") {
 			errorMessage("Konnte Person nicht finden:<br/>"
 				+ "Die angegebenen Kriterien passen auf keine Person.");
 			return;
 		}
+
+		complete.html(student2readable(st));
+		incomplete.css("transform", "rotateY(180deg)");
+		complete.css("transform", "rotateY(0deg)");
+
+		setTimeout(function () {
+			incomplete.height(incomplete.css("height"));
+			incomplete.height(0);
+		}, 300);
+
+		cb(st);
 	});
 }
 

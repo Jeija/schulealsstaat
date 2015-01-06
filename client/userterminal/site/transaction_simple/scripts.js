@@ -13,13 +13,17 @@ handleIdentifyAnswer = function(sectionref, st) {
 }
 
 $(function () {
-	getConfig("tr_comment_maxlen", function (res) {
-		COMMENT_MAXLEN = parseInt(res);
-	});
+	// setTimeout: Wait until private RSA Key was loaded from disk
+	setTimeout(function () {
+		getConfig("tr_comment_maxlen", function (res) {
+			COMMENT_MAXLEN = res;
+			$("#comment_maxlen").text(COMMENT_MAXLEN);
+		});
 
-	getConfig("hgc_tr_decimal_places", function (res) {
-		HGC_TR_DECIMAL_PLACES = parseInt(res);
-	});
+		getConfig("hgc_tr_decimal_places", function (res) {
+			HGC_TR_DECIMAL_PLACES = res;
+		});
+	}, 400);
 
 	$("#header").load("../header.html", function () {
 		$("#transaction_simple_link").addClass("link-selected");
@@ -81,7 +85,7 @@ $(function () {
 		};
 
 		var server_answered = false;
-		action("transaction", JSON.stringify(data), function (res) {
+		action("transaction", data, function (res) {
 			server_answered = true;
 			switch(res) {
 				case "ok":

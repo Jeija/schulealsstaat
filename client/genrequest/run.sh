@@ -8,10 +8,4 @@ then
 fi
 
 CWD="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-
-trap "kill 0" SIGINT SIGTERM EXIT
-
-$CWD/registration/run.sh &
-$CWD/adminpanel/run.sh &
-$CWD/entrycheck/run.sh &
-$CWD/genrequest/run.sh
+http-server $CWD/site -p 83

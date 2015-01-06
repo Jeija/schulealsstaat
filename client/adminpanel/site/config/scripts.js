@@ -1,6 +1,6 @@
 function reload_config() {
 	action("config_getall", false, function (res) {
-		render_config(JSON.parse(res));
+		render_config(res);
 	});
 }
 
@@ -35,10 +35,10 @@ function render_config(conf) {
 	$(".edit").click(function () {
 		var key = $(this).data("property");
 		var value = $("#property_" + key).val();
-		var arg = JSON.stringify({
+		var arg = {
 			key : key,
 			value : value
-		});
+		};
 		action_mastercert("config_set", arg, "#master_cert_input", function (res) {
 			if (res == "ok") {
 				reload_config();
@@ -68,10 +68,10 @@ $(function () {
 	$("#add_submit").click(function () {
 		var key = $("#add_key").val();
 		var value = $("#add_value").val();
-		var arg = JSON.stringify({
+		var arg = {
 			key : key,
 			value : value
-		});
+		};
 		action_mastercert("config_set", arg, "#master_cert_input", function (res) {
 			if (res == "ok") {
 				reload_config();

@@ -31,7 +31,7 @@ $(function () {
 
 		// Ask server for balance
 		var server_answered = false;
-		action("get_balance", JSON.stringify(data), function (res) {
+		action("get_balance", data, function (res) {
 			server_answered = true;
 			// Check for server errors
 			if (res == "invalid_password") {

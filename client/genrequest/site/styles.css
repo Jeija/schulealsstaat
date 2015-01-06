@@ -1,0 +1,21 @@
+body {
+	text-align:center;
+	background:#eee;
+}
+
+#cert_input, #action_name {
+	width:250px;
+}
+
+#payload {
+	width:600px;
+	height:300px;
+	border:1px solid #444;
+}
+
+#response {
+	padding:10px;
+	border:1px dashed #aaa;
+	width:50%;
+	margin:0 auto;
+}

@@ -33,7 +33,8 @@ $(function () {
 
 		// Ask server for balance
 		var server_answered = false;
-		action("password_change", JSON.stringify(data), function (res) {
+		action("password_change", data, function (res) {
+			console.log(res);
 			server_answered = true;
 
 			// Check for server errors

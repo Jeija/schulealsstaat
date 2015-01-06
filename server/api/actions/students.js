@@ -25,7 +25,7 @@ function generate_pwdhash(pwd) {
 	return { salt : pwdsalt, hash : pwdhash };	
 }
 
-module.exports = function (register){
+module.exports = function (register, register_cert) {
 	// #################### ADMIN PANEL #####################
 	/**
 	 * Returns JSON of all students in DB.
@@ -40,22 +40,18 @@ module.exports = function (register){
 	 * none (error) or dump of db.students, with all properties:
 	 * [{<student1>}, {<student2>}, ...]
 	 */
-	register("students_dump", function (arg, res, req) {
+	register_cert("students_dump", ["admin_hash"], function (payload, answer) {
 		log.info("API", "students_dump: this may take a while");
-		cert.check(["admin_hash"], req, function () {
-			var fields = undefined;
-			try { fields = JSON.parse(arg); } catch (e) {}
-
-			if (fields) {
-				db.students.getCertainAll(fields, function (list) {
-					res.end(JSON.stringify(list));
-				});
-			} else {
-				db.students.getAll(function (list) {
-					res.end(JSON.stringify(list));
-				});
-			}
-		});
+		var fields = payload;
+		if (fields) {
+			db.students.getCertainAll(fields, function (list) {
+				answer(list);
+			});
+		} else {
+			db.students.getAll(function (list) {
+				answer(list);
+			});
+		}
 	});
 
 	/**
@@ -78,30 +74,22 @@ module.exports = function (register){
 	 * none (error) or list of student that match given criteria:
 	 * [{<student1>}, {<student2>}, ...]
 	 */
-	register("get_students", function (arg, res, req) {
-		// Data contains an attribute list that may fit none, one or multiple students
-		cert.check(["admin_hash"], req, function () {
-			try {
-				var data = JSON.parse(arg);
-				if ("fields" in data) {
-					db.students.getCertainByProperties(data, data.fields,
-						function (st) {
-						res.end(JSON.stringify(st));
-					});
-				} else {
-					db.students.getByProperties(data, function (st) {
-						res.end(JSON.stringify(st));
-					});
-				}
-			} catch(e) {
-				log.err("API", "get_students failed " + e);
-			}
-		});
+	register_cert("get_students", ["admin_hash"], function (payload, answer) {
+		// Payload contains an attribute list that may fit none, one or multiple students
+		if ("fields" in payload) {
+			db.students.getCertainByProperties(payload, payload.fields, function (st) {
+				answer(st);
+			});
+		} else {
+			db.students.getByProperties(payload, function (st) {
+				answer(st);
+			});
+		}
 	});
 
 	/**
 	 * Changes given value in student's profile entry in DB.
-	 * Student is given by his / her QR-ID, key by data.prop and new value by data.value.
+	 * Student is given by his / her QR-ID, key by payload.prop and new value by payload.value.
 	 * Only the following properties can be changed using this function:
 	 * firstname, lastname, qrid, picname, birth, type, special_name
 	 *
@@ -114,37 +102,27 @@ module.exports = function (register){
 	 * response value:
 	 * "ok" or "error: <something>"
 	 */
-	register("profile_edit", function (arg, res, req) {
-		cert.check(["admin_hash"], req, function () {
-			try {
-				var data = JSON.parse(arg);
-				db.students.getByQrid(data.qrid, function (st) {
-					if (!st) { res.end("error: wrong qrid"); return; }
-					var allow_edit = ["firstname", "lastname", "qrid", "picname",
-						"birth", "type", "special_name"];
-					if (allow_edit.indexOf(data.prop) <= -1) {
-						res.end("error: not allowed to edit " + data.prop);
-						return;
-					}
-					log.info("API", "Edit " + data.prop + " of " + st.firstname
-						+ " " + st.lastname + ", from "
-						+ st[data.prop] + " to " + data.value);
-
-					// If qrid was edited, change it in transactions DB
-					if (data.prop == "qrid")
-						db.transactions.updateAllQrid
-							(st[data.prop], data.value);
-
-					st[data.prop] = data.value;
-					st.save();
-					res.end("ok");
-				});
-			} catch(e) {
-				log.err("API", "profile_edit failed " + e);
-				res.end("error: " + e);
+	register_cert("profile_edit", ["admin_hash"], function (payload, answer) {
+		db.students.getByQrid(payload.qrid, function (st) {
+			if (!st) { answer("error: wrong qrid"); return; }
+			var allow_edit = ["firstname", "lastname", "qrid", "picname", "birth",
+				"type", "special_name"];
+			if (allow_edit.indexOf(payload.prop) <= -1) {
+				answer("error: not allowed to edit " + payload.prop);
+				return;
 			}
-		}, function () {
-			res.end("error: incorrect certificate");
+			log.info("API", "Edit " + payload.prop + " of " + st.firstname
+				+ " " + st.lastname + ", from "
+				+ st[payload.prop] + " to " + payload.value);
+
+			// If qrid was edited, change it in transactions DB
+			if (payload.prop == "qrid")
+				db.transactions.updateAllQrid
+					(st[payload.prop], payload.value);
+
+			st[payload.prop] = payload.value;
+			st.save();
+			answer("ok");
 		});
 	});
 
@@ -158,19 +136,14 @@ module.exports = function (register){
 	 * response value:
 	 * "ok" or "error: <something>"
 	 */
-	register("student_delete", function (arg, res, req) {
-		cert.check(["master_hash"], req, function () {
-			db.students.getByQrid(arg, function (st) {
-				if (st) {
-					st.remove();
-					res.end("ok");
-				} else {
-					res.end("error: invalid qrid")
-				}
-
-			});
-		}, function () {
-			res.end("error: incorrect certificate");
+	register("student_delete", ["master_hash"], function (payload, answer) {
+		db.students.getByQrid(payload, function (st) {
+			if (st) {
+				st.remove();
+				answer("ok");
+			} else {
+				answer("error: invalid qrid")
+			}
 		});
 	});
 
@@ -202,38 +175,41 @@ module.exports = function (register){
 	 *	picname : String
 	 * }
 	 */
-	register("student_identify", function (arg, res) {
-		try {
-			var data = JSON.parse(arg);
-			if (!(data.firstname || data.lastname || data.special_name || data.qrid
-				|| data.type)) {
-				res.end("error: underspecification");
-			}
-
-			if (data.special_name)
-				data.special_name = new RegExp("^" + data.special_name + "$", "i");
-			if (data.firstname)
-				data.firstname = new RegExp("^" + data.firstname + "$", "i");
-			if (data.lastname)
-				data.lastname = new RegExp("^" + data.lastname + "$", "i");
-			if (data.type)
-				data.type = new RegExp("^" + data.type + "$", "i");
-
-			db.students.getByProperties(data, function (st) {
-				if (!st[0]) { res.end("error: not found"); return; }
-				if (st.length > 1) { res.end("multiple"); return; }
-				res.end(JSON.stringify(student_public_only(st[0])));
-			});
-		} catch (e) {
-			log.err("API", "student_identify failed " + e);
-			res.end("error: " + e);
+	register("student_identify", function (payload, answer) {
+		if (!(payload.firstname || payload.lastname || payload.special_name
+				|| payload.qrid || payload.type)) {
+			answer ("error: underspecification");
+			return;
 		}
+
+		if (payload.special_name)
+			payload.special_name = new RegExp("^" + payload.special_name + "$", "i");
+		if (payload.firstname)
+			payload.firstname = new RegExp("^" + payload.firstname + "$", "i");
+		if (payload.lastname)
+			payload.lastname = new RegExp("^" + payload.lastname + "$", "i");
+		if (payload.type)
+			payload.type = new RegExp("^" + payload.type + "$", "i");
+
+		db.students.getByProperties(payload, function (st) {
+			if (!st[0]) { answer("error: not found"); return; }
+			if (st.length > 1) { answer("multiple"); return; }
+			answer(student_public_only(st[0]));
+		});
 	});
+
+	function change_password (st, new_password) {
+		log.info("API", "Changing Password of " + st.firstname + " " + st.lastname);
+		var crypt = generate_pwdhash(new_password);
+		st.pwdhash = crypt.hash;
+		st.pwdsalt = crypt.salt;
+		st.save();
+	}
 
 	/**
 	 * Changes password of student (also, re-generates password salt).
-	 * Student is given by his / her QR-ID, the new password by data.password.
-	 * Either master_hash in POST data or old_password must be provided,
+	 * Student is given by his / her QR-ID, the new password by payload.password.
+	 * Either master_hash in POST data cert or old_password must be provided,
 	 * if old_password is provided, uses it instead of certificate
 	 *
 	 * master_hash [option 1] --> password_change {
@@ -248,145 +224,122 @@ module.exports = function (register){
 	 * invalid_password	--> provided old_password was wrong
 	 * "error: <something>"
 	 */
-	function change_password (st, new_password) {
-		log.info("API", "Changing Password of " + st.firstname + " " + st.lastname);
-		var crypt = generate_pwdhash(new_password);
-		st.pwdhash = crypt.hash;
-		st.pwdsalt = crypt.salt;
-		st.save();
-	}
-
-	register("password_change", function (arg, res, req) { try {
-		var data = JSON.parse(arg);
-
-		db.students.getByQrid(data.qrid, function (st) {
+	register("password_change", function (payload, answer) {
+		db.students.getByQrid(payload.qrid, function (st) {
 			if (!st) {
-				res.end("invalid_qrid");
+				answer("invalid_qrid");
 				return;
 			}
 
-			if ("old_password" in data) {
-				if(common.check_password(st, data.old_password)) {
-					change_password(st, data.password);
-					res.end("ok");
-				} else {
-					res.end("invalid_password");
-				}
+			if(common.check_password(st, payload.old_password)) {
+				change_password(st, payload.password);
+				answer("ok");
 			} else {
-				cert.check(["master_hash"], req, function () {
-					change_password(st, data.password);
-					res.end("ok");
-				}, function () {
-					res.end("error: incorrect certificate");
-				});
+				answer("invalid_password");
 			}
-		});
-	} catch(e) {
-		log.err("API", "password_change failed " + e);
-		res.end("error: " + e);
-	}});
-
-	// #################### ENTRY CHECK ####################
-	register("ec_checkin", function (arg, res, req) {
-		cert.check(["ec_hash", "admin_hash"], req, function () {
-			db.students.getByQrid(arg, function (st) {
-				if (!st) { res.end("error: wrong qrid"); return; }
-				log.info("API", "Checkin by " + st.firstname + " " + st.lastname);
-				st.appear.push({type : "checkin", time : Date.now()});
-				st.save();
-				res.end("ok");
-			});
 		});
 	});
 
-	register("ec_checkout", function (arg, res, req) {
-		cert.check(["ec_hash", "admin_hash"], req, function () {
-			db.students.getByQrid(arg, function (st) {
-				if (!st) { res.end("error: wrong qrid"); return; }
-				log.info("API", "Checkout by " + st.firstname + " " + st.lastname);
-				st.appear.push({type : "checkout", time : Date.now()});
-				st.save();
-				res.end("ok");
-			});
+	/**
+	 * Just like password_change, but requires master_hash instead of old_password
+	 */
+	register("password_change_master", function (payload, answer) {
+		db.students.getByQrid(payload.qrid, function (st) {
+			if (!st) {
+				answer("invalid_qrid");
+				return;
+			}
+			change_password(st, payload.password);
+		});
+	});
+
+	// #################### ENTRY CHECK ####################
+	register_cert("ec_checkin", ["ec_hash", "admin_hash"], function (payload, answer) {
+		db.students.getByQrid(payload, function (st) {
+			if (!st) { answer("error: wrong qrid"); return; }
+			log.info("API", "Checkin by " + st.firstname + " " + st.lastname);
+			st.appear.push({type : "checkin", time : Date.now()});
+			st.save();
+			answer("ok");
+		});
+	});
+
+	register_cert("ec_checkout", ["ec_hash", "admin_hash"], function (payload, answer) {
+		db.students.getByQrid(payload, function (st) {
+			if (!st) { answer("error: wrong qrid"); return; }
+			log.info("API", "Checkout by " + st.firstname + " " + st.lastname);
+			st.appear.push({type : "checkout", time : Date.now()});
+			st.save();
+			answer("ok");
 		});
 	});
 
 	// #################### REGISTRATION ####################
-	register("register_student", function (arg, res, req) {
-		cert.check(["registration_hash"], req, function () {
-			try {
-				var data = JSON.parse(arg);
-				log.info("API", "Registering: " + data.firstname + " " + data.lastname);
+	register_cert("register_student", ["registration_hash"], function (payload, answer) {
+		log.info("API", "Registering: " + payload.firstname + " " + payload.lastname);
 
-				// Type / School class:
-				var type = data.sclass + data.subclass;
+		// Type / School class:
+		var type = payload.sclass + payload.subclass;
 
-				// Birthday
-				var bday_iso;
-				if (type == "teacher")
-					bday_iso = "1970-1-1"
-				else
-					bday_iso = data.birthyear + "-" + data.birthmonth + "-"
-						+ data.birthday;
-				var bday = new Date(bday_iso);
+		// Birthday
+		var bday_iso;
+		if (type == "teacher")
+			bday_iso = "1970-1-1"
+		else
+			bday_iso = payload.birthyear + "-" + payload.birthmonth + "-"
+				+ payload.birthday;
+		var bday = new Date(bday_iso);
 
-				// QR ID:
-				var qrid = "";
-				function regStudent(st) {
-					// Generate new QR ID and check if new one exists
-					if (st || qrid == "")
-					{
-						// If Preset QR ID is used, use it
-						if (data.qrid) {
-							qrid = data.qrid;
-						} else {
-							qrid = crypto.randomBytes(4).toString('hex');
-							db.students.getByQrid(qrid, regStudent);
-							return;
-						}
-					}
-
-					// Otherwise: register student
-					var crypt = generate_pwdhash(data.password);
-
-					var info = {
-						qrid : qrid,
-
-						firstname : data.firstname,
-						lastname : data.lastname,
-						special_name : data.special_name,
-						picname : data.picname,
-						birth : bday,
-						type : data.sclass + data.subclass,
-
-						transactions : [],
-						balance : 0,
-
-						pwdhash : crypt.hash,
-						pwdsalt : crypt.salt
-					}
-
-					db.students.add(info);
-					res.end("ok");
+		// QR ID:
+		var qrid = "";
+		function regStudent(st) {
+			// Generate new QR ID and check if new one exists
+			if (st || qrid == "")
+			{
+				// If Preset QR ID is used, use it
+				if (payload.qrid) {
+					qrid = payload.qrid;
+				} else {
+					qrid = crypto.randomBytes(4).toString('hex');
+					db.students.getByQrid(qrid, regStudent);
+					return;
 				}
-
-				// Check if given preset QR ID already exists
-				if (data.qrid) { db.students.getByQrid(data.qrid, function (student) {
-					if (student) {
-						res.end("error: QR ID " + data.qrid
-							+ " existiert bereits.");
-					} else {
-						regStudent();
-					}
-				});} else {
-					regStudent();
-				}
-			} catch (e) {
-				log.err("API", "register_student failed " + e);
-				res.end("error: " + e);
 			}
-		}, function () {
-			res.end("error: invalid certificate");
-		});
+
+			// Otherwise: register student
+			var crypt = generate_pwdhash(payload.password);
+
+			var info = {
+				qrid : qrid,
+
+				firstname : payload.firstname,
+				lastname : payload.lastname,
+				special_name : payload.special_name,
+				picname : payload.picname,
+				birth : bday,
+				type : payload.sclass + payload.subclass,
+
+				transactions : [],
+				balance : 0,
+
+				pwdhash : crypt.hash,
+				pwdsalt : crypt.salt
+			}
+
+			db.students.add(info);
+			answer("ok");
+		}
+
+		// Check if given preset QR ID already exists
+		if (payload.qrid) {
+			db.students.getByQrid(payload.qrid, function (student) {
+				if (student)
+					answer("error: QR ID " + payload.qrid + " already exists");
+				else
+					regStudent();
+			});
+		} else {
+			regStudent();
+		}
 	});
 }

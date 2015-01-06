@@ -1,0 +1,23 @@
+<html>
+<head>
+	<title>Request Generator</title>
+	<script src="../bower_components/jsencrypt/bin/jsencrypt.min.js"></script>
+	<script src="../bower_components/jquery/dist/jquery.js"></script>
+	<script src="../bower_components/sjcl/sjcl.js"></script>
+	<script src="api.js"></script>
+	<script src="scripts.js"></script>
+	<link rel="stylesheet" type="text/css" href="styles.css">
+	<meta charset="utf-8"/>
+</head>
+<body>
+	<h1>Request Generator</h1>
+	Certificate: <input type="file" id="cert_input"><br/><br/>
+	Action: <input type="text" id="action_name"><br/><br/>
+	Payload (JSON / String):<br/>
+	<textarea id="payload"></textarea><br/><br/>
+	<input type="button" value="Send" id="confirm">
+	<input type="button" value="Send with certificate" id="confirm_cert"><br/><br/>
+	Response<br/>
+	<div id="response"></div>
+</body>
+</html>

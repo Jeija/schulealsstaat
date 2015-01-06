@@ -11,7 +11,7 @@ function HGC_round(value) {
 	return Math.round(value * Math.pow(10, decplaces)) / Math.pow(10, decplaces);
 }
 
-module.exports = function (register) {
+module.exports = function (register, register_cert) {
 // #################### MONEY TRANSFER ####################
 /**
  * registration_hash, master_hash --> spawn_money {
@@ -21,44 +21,34 @@ module.exports = function (register) {
  * }
  * response values: "ok" or "error: <something>"
  */
-register("spawn_money", function (arg, res, req) {
-	cert.check(["registration_hash", "master_hash"], req, function () {
-		try {
-			var data = JSON.parse(arg);
-			db.students.getByQrid(data.recipient, function (st) {
-				if (!st) {
-					log.warn("API", "spawn_money: qrid not found,\
-						ignoring request");
-					res.end("error: QR ID not found, ignoring request");
-					return;
-				}
-				st.balance = st.balance + data.amount;
-
-				var comment = "spawn_money";
-				if ("comment" in data) comment += " - " + data.comment;
-				var transaction = {
-					sender : config.get("magic_account", "LORD"),
-					recipient : st.qrid,
-					time : Date(),
-
-					amount_sent : data.amount,
-					amount_received : data.amount,
-					amount_tax : 0,
-					percent_tax : 0,
-					comment : comment,
-					sender_ip : req.connection.remoteAddress
-				}
-
-				db.transactions.add(transaction, function (dbtrans) {
-					st.transactions.push(dbtrans._id);
-					st.save();
-					res.end("ok");
-				});
-			});
-		} catch (e) {
-			log.err("API", "spawn_money failed " + e);
-			res.end("error: " + e);
+register_cert("spawn_money", ["registration_hash", "master_hash"], function (payload, answer) {
+	db.students.getByQrid(payload.recipient, function (st) {
+		if (!st) {
+			log.warn("API", "spawn_money: qrid not found, ignoring request");
+			answer("error: QR ID not found, ignoring request");
+			return;
 		}
+		st.balance = st.balance + payload.amount;
+
+		var comment = "spawn_money";
+		if ("comment" in payload) comment += " - " + payload.comment;
+		var transaction = {
+			sender : config.get("magic_account", "LORD"),
+			recipient : st.qrid,
+			time : Date(),
+			amount_sent : payload.amount,
+			amount_received : payload.amount,
+			amount_tax : 0,
+			percent_tax : 0,
+			comment : comment,
+			sender_ip : req.connection.remoteAddress
+		}
+
+		db.transactions.add(transaction, function (dbtrans) {
+			st.transactions.push(dbtrans._id);
+			st.save();
+			answer("ok");
+		});
 	});
 });
 
@@ -70,46 +60,37 @@ register("spawn_money", function (arg, res, req) {
  * }
  * response values: "ok" or "error: <something>"
  */
-register("destroy_money", function (arg, res, req) {
-	cert.check(["registration_hash", "master_hash"], req, function () {
-		try {
-			var data = JSON.parse(arg);
-			db.students.getByQrid(data.sender, function (st) {
-				if (!st) {
-					log.warn("API", "destroy_money: qrid not found,\
-						ignoring request");
-					res.end("error: QR ID not found, ignoring request");
-					return;
-				}
-
-				// Log the transaction and perform it
-				st.balance = st.balance - data.amount;
-
-				var comment = "spawn_money";
-				if ("comment" in data) comment += " - " + data.comment;
-				var transaction = {
-					sender : st.qrid,
-					recipient : config.get("magic_account", "LORD"),
-					time : Date(),
-
-					amount_sent : data.amount,
-					amount_received : data.amount,
-					amount_tax : 0,
-					percent_tax : 0,
-					comment : comment,
-					sender_ip : req.connection.remoteAddress
-				}
-
-				db.transactions.add(transaction, function (dbtrans) {
-					st.transactions.push(dbtrans._id);
-					st.save();
-					res.end("ok");
-				});
-			});
-		} catch (e) {
-			log.err("API", "destroy_money failed " + e);
-			res.end("error: " + e);
+register_cert("destroy_money", ["registration_hash", "master_hash"], function (payload, answer) {
+	db.students.getByQrid(payload.sender, function (st) {
+		if (!st) {
+			log.warn("API", "destroy_money: qrid not found, ignoring request");
+			answer("error: QR ID not found, ignoring request");
+			return;
 		}
+
+		// Log the transaction and perform it
+		st.balance = st.balance - payload.amount;
+
+		var comment = "spawn_money";
+		if ("comment" in payload) comment += " - " + payload.comment;
+		var transaction = {
+			sender : st.qrid,
+			recipient : config.get("magic_account", "LORD"),
+			time : Date(),
+
+			amount_sent : payload.amount,
+			amount_received : payload.amount,
+			amount_tax : 0,
+			percent_tax : 0,
+			comment : comment,
+			sender_ip : req.connection.remoteAddress
+		}
+
+		db.transactions.add(transaction, function (dbtrans) {
+			st.transactions.push(dbtrans._id);
+			st.save();
+			answer("ok");
+		});
 	});
 });
 
@@ -125,25 +106,21 @@ register("destroy_money", function (arg, res, req) {
  * invalid_password	--> provided password was wrong
  * error:<something>	--> Some other error, e.g. with JSON parsing
  */
-register("get_balance", function (arg, res, req) { try {
-	var data = JSON.parse(arg);
-	db.students.getByQrid(data.qrid, function (st) {
+register("get_balance", function (payload, answer) {
+	db.students.getByQrid(payload.qrid, function (st) {
 		if (!st) {
-			res.end("invalid_qrid");
+			answer("invalid_qrid");
 			return;
 		}
 
-		if(!common.check_password(st, data.password)) {
-			res.end("invalid_password");
+		if(!payload.password || !common.check_password(st, payload.password)) {
+			answer("invalid_password");
 			return;
 		}
 
-		res.end(String(st.balance));
+		answer(String(st.balance));
 	});
-} catch(e) {
-	log.err("API", "get_balance failed " + e);
-	res.end("error: " + e);
-}});
+});
 
 /**
  * get_all_transactions {
@@ -168,29 +145,25 @@ register("get_balance", function (arg, res, req) { try {
  * invalid_password	--> provided password was wrong
  * error:<something>	--> Some other error, e.g. with JSON parsing
  */
-register("get_last_transactions", function (arg, res, req) { try {
-	var data = JSON.parse(arg);
-	db.students.getByQrid(data.qrid, function (st) {
+register("get_last_transactions", function (payload, answer) {
+	db.students.getByQrid(payload.qrid, function (st) {
 		if (!st) {
-			res.end("invalid_qrid");
+			answer("invalid_qrid");
 			return;
 		}
 
-		if(!common.check_password(st, data.password)) {
-			res.end("invalid_password");
+		if(!common.check_password(st, payload.password)) {
+			answer("invalid_password");
 			return;
 		}
 
 		db.transactions.getByIdList(st.transactions, function (tr) {
-			if (data.amount > 0)
-				tr = tr.slice(Math.max(tr.length - data.amount, 1));
-			res.end(JSON.stringify(tr));
+			if (payload.amount > 0)
+				tr = tr.slice(Math.max(tr.length - payload.amount, 1));
+			answer(tr);
 		});
 	});
-} catch(e) {
-	log.err("API", "get_last_transactions failed " + e);
-	res.end("error: " + e);
-}});
+});
 
 /**
  * transaction {
@@ -215,9 +188,7 @@ register("get_last_transactions", function (arg, res, req) { try {
  * too_many_decplaces	--> Amount has more decimal places than hgc_tr_decimal_places allows
  * error:<something>	--> Some other error, e.g. with JSON parsing
  */
-register("transaction", function (arg, res, req) { try {
-	var data = JSON.parse(arg);
-
+register("transaction", function (payload, answer, req) {
 	// Tax in %, amount_tax in HGC
 	var tax = config.get("transaction_tax_percent", 0);
 
@@ -226,9 +197,9 @@ register("transaction", function (arg, res, req) { try {
 	var amount_tax = 0, amount_received = 0, amount_sent = 0;
 
 	// Check comment length
-	if ("comment" in data) {
-		if (data.comment.length > config.get("tr_comment_maxlen", 300)) {
-			res.end("comment_too_long");
+	if ("comment" in payload) {
+		if (payload.comment.length > config.get("tr_comment_maxlen", 300)) {
+			answer("comment_too_long");
 			return;
 		}
 	}
@@ -236,35 +207,35 @@ register("transaction", function (arg, res, req) { try {
 	// Get sender + recipient from DB
 	var sender, recipient;
 	flow.exec(function () {
-		db.students.getByQrid(data.sender, this);
+		db.students.getByQrid(payload.sender, this);
 	}, function (st) {
 		if (!st) {
-			res.end("invalid_sender");
+			answer("invalid_sender");
 			return;
 		}
 		sender = st;
-		db.students.getByQrid(data.recipient, this);
+		db.students.getByQrid(payload.recipient, this);
 	}, function (st) {
 		if (!st) {
-			res.end("invalid_recipient");
+			answer("invalid_recipient");
 			return;
 		}
 		recipient = st;
 
 		// Check sender's password:
-		if(!common.check_password(sender, data.sender_password)) {
-			res.end("invalid_password");
+		if(!common.check_password(sender, payload.sender_password)) {
+			answer("invalid_password");
 			return;
 		}
 
 		// Check for over- or underspecification of transfer amount
-		if ("amount_sent" in data && "amount_received" in data) {
-			res.end("overspecified");
+		if ("amount_sent" in payload && "amount_received" in payload) {
+			answer("overspecified");
 			return;
 		}
 
-		if (!("amount_sent" in data) && !("amount_received" in data)) {
-			res.end("underspecified");
+		if (!("amount_sent" in payload) && !("amount_received" in payload)) {
+			answer("underspecified");
 			return;
 		}
 
@@ -272,55 +243,56 @@ register("transaction", function (arg, res, req) { try {
 
 		/* Calculate amount to transfer with taxes */
 		// Possibility 1 - amount_sent is specified
-		if ("amount_sent" in data) {
-			if (typeof data.amount_sent != "number" || isNaN(data.amount_sent)
-				|| !isFinite(data.amount_sent)) {
-				res.end("error: invalid amount_sent");
+		if ("amount_sent" in payload) {
+			if (typeof payload.amount_sent != "number" || isNaN(payload.amount_sent)
+				|| !isFinite(payload.amount_sent)) {
+				answer("error: invalid amount_sent");
 				return;
 			}
 
-			if (data.amount_sent <= 0) {
-				res.end("invalid_amount");
+			if (payload.amount_sent <= 0) {
+				answer("invalid_amount");
 				return;
 			}
 
 			// Check if amount has more than hgc_tr_decimal_places decimals
-			if ((data.amount_sent * Math.pow(10, tr_decplaces)) % 1 != 0) {
-				res.end("too_many_decplaces");
+			if ((payload.amount_sent * Math.pow(10, tr_decplaces)) % 1 != 0) {
+				answer("too_many_decplaces");
 				return;
 			}
 
-			amount_sent = HGC_round(data.amount_sent);
+			amount_sent = HGC_round(payload.amount_sent);
 			amount_received = HGC_round(amount_sent / (1 + tax / 100));
 		}
 
 		// Possibility 2 - amount_received is specified
-		if ("amount_received" in data) {
-			if (typeof data.amount_received != "number" || isNaN(data.amount_received) ||
-				!isFinite(data.amount_received)) {
-				res.end("error: invalid amount_received");
+		if ("amount_received" in payload) {
+			if (typeof payload.amount_received != "number"
+				|| isNaN(payload.amount_received)
+				|| !isFinite(payload.amount_received)) {
+				answer("error: invalid amount_received");
 				return;
 			}
 
-			if (data.amount_received <= 0) {
-				res.end("invalid_amount");
+			if (payload.amount_received <= 0) {
+				answer("invalid_amount");
 				return;
 			}
 
 			// Check if amount has more than hgc_tr_decimal_places decimals
-			if ((data.amount_sent * Math.pow(10, tr_decplaces)) % 1 != 0) {
-				res.end("too_many_decplaces");
+			if ((payload.amount_sent * Math.pow(10, tr_decplaces)) % 1 != 0) {
+				answer("too_many_decplaces");
 				return;
 			}
 
-			amount_received = HGC_round(data.amount_received);
+			amount_received = HGC_round(payload.amount_received);
 			amount_sent = HGC_round((1 + tax / 100) * amount_received);
 		}
 		amount_tax = HGC_round(amount_sent - amount_received);
 
 		// Check if sender still has enough money on his account
 		if (sender.balance < amount_sent) {
-			res.end("nomoney");
+			answer("nomoney");
 			return;
 		}
 
@@ -336,7 +308,7 @@ register("transaction", function (arg, res, req) { try {
 			percent_tax : tax,
 			sender_ip : req.connection.remoteAddress
 		}
-		if ("comment" in data) transaction.comment = data.comment;
+		if ("comment" in payload) transaction.comment = payload.comment;
 
 		// Actual transaction and collect tax income
 		sender.balance -= amount_sent;
@@ -356,7 +328,7 @@ register("transaction", function (arg, res, req) { try {
 				recipient.transactions.push(dbtrans._id);
 				sender.save();
 				recipient.save();
-				res.end("ok");
+				answer("ok");
 			});
 		});
 
@@ -364,10 +336,7 @@ register("transaction", function (arg, res, req) { try {
 			+ sender.lastname + " to " + recipient.firstname + " "
 			+ recipient.lastname + ", with net value " + amount_received
 			+ " HGC, tax income is " + amount_tax + " HGC.");
-	}); } catch (e) {
-		log.err("API", "transaction failed " + e);
-		res.end("error: " + e);
-	}
+	});
 });
 
 } // module.exports
