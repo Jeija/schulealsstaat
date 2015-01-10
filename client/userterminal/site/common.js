@@ -82,6 +82,9 @@ function student_identify(data, sectionref, cb) {
 }
 
 $(function () {
+// Hide page before finished loading
+$("body").hide();
+
 $(".studentselector").load("../section_student.html", function () {
 	// Disable dragging
 	$("img").on("dragstart", function(e) {
@@ -154,4 +157,7 @@ $(".studentselector").load("../section_student.html", function () {
 
 	/* Cancel */
 	$(".cancel").click(resetAll);
+
+	// Show page when finished loading:
+	$("body").fadeIn(200);
 });});
