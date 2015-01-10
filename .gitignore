@@ -1,10 +1,9 @@
 # Ignore backup copies ending with ~
 *~
 
-# Don't publish stored data, hashes or certificates
+# Don't publish hashes or certificates
 # init.sh generates a set of certificates and hashes for you
 # Also, don't publish RSA public / private keys
-/server/webcam/img/*
 cert/
 *.pem
 
