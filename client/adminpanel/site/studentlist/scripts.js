@@ -154,7 +154,7 @@ $(function() {
 
 	$("#loadall").click(function () {
 		action_cert("students_dump", null, "admin_cert", function (res) {
-			var students = JSON.parse(res);
+			var students = res;
 			render_list(students);
 		});	
 	});
@@ -225,17 +225,17 @@ $(function() {
 			}
 		}
 
-		var req = JSON.stringify({query : cond});
+		var req = {query : cond};
 		action_cert("get_students", req, "admin_cert", function (res) {
-			var students = JSON.parse(res);
+			var students = res;
 			render_list(students);
 		});	
 	});
 
 	$("#query_go").click(function () {
-		var req = JSON.stringify({query : JSON.parse($("#mongoose_query").val())});
+		var req = {query : JSON.parse($("#mongoose_query").val())};
 		action_cert("get_students", req, "admin_cert", function (res) {
-			var students = JSON.parse(res);
+			var students = res;
 			render_list(students);
 		});
 	});
@@ -266,26 +266,26 @@ $(function() {
 	});
 
 	$(".profile_edit").click(function () {
-		console.log($(this).parent().parent());
 		var change = {
 			qrid : current_profile.qrid,
 			prop : $(this).data("profile_property"),
 			value : $(this).parent().parent().find(".profile_value").val()
 		};
 
-		action_cert("profile_edit", JSON.stringify(change), "admin_cert", function (res) {
+		action_cert("profile_edit", change, "admin_cert", function (res) {
 			if(res == "ok") alert("Wert geändert");
 			else alert("Fehler " + res);
 		});
 	});
 
 	$("#profile_pwd_edit").click(function () {
-		var data = JSON.stringify({
+		var data = {
 			qrid : current_profile.qrid,
 			password : $("#profile_pwd").val()
-		});
+		};
 
-		action_mastercert("password_change", data, "#profile_pwd_master_cert", function (res) {
+		action_mastercert("password_change_master", data, "#profile_pwd_master_cert",
+				function (res) {
 			if(res == "ok") alert("Passwort geändert");
 			else alert("Fehler " + res);
 		});

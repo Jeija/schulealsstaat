@@ -32,19 +32,17 @@ $("#authenticate").click(function () {
 				storage.set("qrid", result.text);
 				alert(storage.get("qrid"));
 
-				var queryData = JSON.stringify({
+				var queryData = {
 					qrid : result.text
-				});
+				};
 
 				action("student_identify", queryData, function (res) {
-					var st = undefined;
-					try {
-						st = JSON.parse(res);
-					} catch (e) {
+					if (typeof res !== "object") {
 						alert("Der QR-Code ist ungültig");
+					} else {
+						alert("Dein Name ist " + st.firstname + " "
+							+ st.lastname);
 					}
-
-					alert("Dein Name ist " + st.firstname + " " + st.lastname);
 				});
 			}, 
 			function (error) {}

@@ -132,11 +132,11 @@ $(function() {
 			hgc_value = $("#hgc_preload_enter_value").val().replace(",", ".");
 		var hgc_num = parseFloat(hgc_value);
 
-		var spawn = JSON.stringify({
+		var spawn = {
 			recipient : $("#qrid").val(),
 			amount : hgc_num,
 			comment : "Besucher Aufladung"
-		});
+		};
 		action_cert("spawn_money", spawn, "registration_cert", function (res) {
 			if (res == "ok") alert(hgc_num + " HGC aufgeladen!");
 			else alert("Aufladung schlug fehl, error: " + res);
@@ -167,24 +167,19 @@ $(function() {
 			return;
 		}
 
-		// Send Picture
 		var pictureData = $("#webcam_shot")[0].toDataURL();
 		var picname = (Math.random()*1e17+Math.random()*1e35).toString(36);
-		var passimgServer = "http://" + WEBCAMSERVER + ":" + WEBCAMPORT + "/upload/";
 
 		var photo_result = false;
 		var api_result = false;
 
-		$.ajax({
-			type:		"POST",
-			url:		passimgServer,
-			data:		JSON.stringify({name : picname, pic : pictureData})
-		}).done(function (res) {
+		// Send Picture
+		webcamserv_upload(picname, pictureData, function (res) {
 			photo_result = res;
 		});
 
 		// Send Data
-		var regdata = JSON.stringify({
+		var regdata = {
 			password : $("#password").val(),
 			firstname : $("#firstname").val(),
 			lastname : $("#lastname").val(),
@@ -196,7 +191,7 @@ $(function() {
 			subclass : $("#subclass").val(),
 			picname : picname,
 			qrid : $("#qrid").val()
-		});
+		};
 
 		action_cert("register_student", regdata, "registration_cert", function (res) {
 			api_result = res;

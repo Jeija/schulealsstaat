@@ -44,7 +44,7 @@ $(function() {
 		QRReader.scan(function (qrid) {
 			$("#webcam_popup").hide();
 			current_qrid = qrid;
-			var data = JSON.stringify({ qrid : qrid });
+			var data = { qrid : qrid };
 			$.ajax({
 				url:	ACTIONURL + "student_identify/?data=" + data
 			}).done(function(res) {

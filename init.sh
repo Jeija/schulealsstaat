@@ -11,8 +11,8 @@ fi
 
 CWD="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-#sudo npm install -g bower TODO
-#sudo npm install -g http-server
+sudo npm install -g bower
+sudo npm install -g http-server
 
 # Generate RSA public and private keys and store them
 rm $CWD/server/api/privkey.pem
@@ -43,7 +43,9 @@ $CWD/util/gencert.sh
 
 # Copy api.js to all client applications that use it
 cp $CWD/client/common/api.js $CWD/client/userterminal/site/
+cp $CWD/client/common/api.js $CWD/client/registration/site/
 cp $CWD/client/common/api.js $CWD/client/genrequest/site/
 cp $CWD/client/common/api.js $CWD/client/adminpanel/site/
+cp $CWD/client/common/api.js $CWD/client/entrycheck/site/
 cp $CWD/client/common/api.js $CWD/client/app/www/js/
 

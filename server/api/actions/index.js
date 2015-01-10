@@ -2,6 +2,7 @@ var fs = require("fs");
 var ursa = require("ursa");
 var cert = require("../cert");
 var sjcl = require("sjcl");
+var log = require("../logging");
 
 // Load private key to decrypt requests
 var PRIVKEY_FILE = "privkey.pem";
@@ -66,11 +67,14 @@ function execute(name, req, res)
 			cert.check(actions[name].cert, query.cert, function () {
 				actions[name].action(query.payload, on_answer, req);
 			}, function () {
+				log.warn("API", name + ": incorrect certificate from "
+					+ req.connection.remoteAddress);
 				res.end("error: incorrect certificate");
 			});
 		else
 			actions[name].action(query.payload, on_answer, req);
 	} catch(e) {
+		log.err("API", name + ": " + e);
 		res.end("error: " + e);
 	}});
 }

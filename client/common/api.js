@@ -87,3 +87,11 @@ function webcamserv_get(picname, certname, cb) {
 		});
 	});
 }
+
+function webcamserv_upload(picname, pictureData, cb) {
+	$.ajax({
+		type:		"POST",
+		url:		WEBCAMURL + "upload/",
+		data:		JSON.stringify({name : picname, pic : pictureData})
+	}).done(cb);
+}

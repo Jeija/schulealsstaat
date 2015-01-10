@@ -136,7 +136,7 @@ module.exports = function (register, register_cert) {
 	 * response value:
 	 * "ok" or "error: <something>"
 	 */
-	register("student_delete", ["master_hash"], function (payload, answer) {
+	register_cert("student_delete", ["master_hash"], function (payload, answer) {
 		db.students.getByQrid(payload, function (st) {
 			if (st) {
 				st.remove();
@@ -250,6 +250,7 @@ module.exports = function (register, register_cert) {
 				return;
 			}
 			change_password(st, payload.password);
+			answer("ok");
 		});
 	});
 

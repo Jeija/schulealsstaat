@@ -1,29 +1,7 @@
-// WebCam-Stream starten:
-var PASSIMG_SERVER = "127.0.0.1"
-var PASSIMG_PORT = 1338
-
-var APISERVER = "127.0.0.1"
-var APIPORT = 1337
-var ACTIONURL = "http://" + APISERVER + ":" + APIPORT + "/action/";
-
 var WEBCAM_WIDTH = 800;
 var WEBCAM_HEIGHT = 600;
 
 var PWD_MINLEN = 10;
-
-function action_cert(name, data, certname, cb) {
-	var url;
-	if (data) url = ACTIONURL + name + "/?data=" + data;
-	else url = ACTIONURL + name;
-	$.get("cert/" + certname, function (cert) {
-		$.ajax({
-			type : "POST",
-			url : url,
-			success : cb,
-			data : cert
-		});
-	});
-}
 
 $(function() {
 	$("#pwd_minlen").html(PWD_MINLEN);
@@ -119,24 +97,19 @@ $(function() {
 			return;
 		}
 
-		// Send Picture
 		var pictureData = $("#webcam_shot")[0].toDataURL();
 		var picname = (Math.random()*1e17+Math.random()*1e35).toString(36);
-		var passimgServer = "http://" + PASSIMG_SERVER + ":" + PASSIMG_PORT + "/upload/";
 
 		var photo_result = false;
 		var api_result = false;
 
-		$.ajax({
-			type:		"POST",
-			url:		passimgServer,
-			data:		JSON.stringify({name : picname, pic : pictureData})
-		}).done(function (res) {
+		// Send Picture
+		webcamserv_upload(picname, pictureData, function (res) {
 			photo_result = res;
 		});
 
 		// Send Data
-		var regdata = JSON.stringify({
+		var regdata = {
 			password : $("#password").val(),
 			firstname : $("#firstname").val(),
 			lastname : $("#lastname").val(),
@@ -146,7 +119,7 @@ $(function() {
 			sclass : $("#class").val(),
 			subclass : $("#subclass").val(),
 			picname : picname
-		});
+		};
 
 		action_cert("register_student", regdata, "registration_cert", function (res) {
 			api_result = res;
