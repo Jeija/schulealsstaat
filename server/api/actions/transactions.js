@@ -33,7 +33,7 @@ register_cert("spawn_money", ["registration_hash", "master_hash"], function (pay
 		var comment = "spawn_money";
 		if ("comment" in payload) comment += " - " + payload.comment;
 		var transaction = {
-			sender : config.get("magic_account", "LORD"),
+			sender : config.get("magic_account", "Zentralbank"),
 			recipient : st.qrid,
 			time : Date(),
 			amount_sent : payload.amount,
