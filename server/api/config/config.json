@@ -2,7 +2,7 @@
 	"transaction_tax_percent": "10",
 	"hgc_decimal_places": 5,
 	"taxinc_qrid": "taxinc",
-	"magic_account": "LORD",
 	"tr_comment_maxlen": "300",
-	"hgc_tr_decimal_places": "2"
+	"hgc_tr_decimal_places": "2",
+	"magic_account": "Zentralbank"
 }

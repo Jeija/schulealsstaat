@@ -6,6 +6,8 @@ var process = require("child_process");
 
 /* Common utils */
 function student2readable(st) {
+	if (!st.type) return "Keine genaue Beschreibung verfügbar";
+
 	if (st.type != "visitor" && st.type != "teacher" && st.type != "legalentity"
 		&& st.type != "other")
 		return st.firstname + " " + st.lastname + ", Klasse " + st.type.toUpperCase();
