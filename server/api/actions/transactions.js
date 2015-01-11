@@ -21,7 +21,7 @@ module.exports = function (register, register_cert) {
  * }
  * response values: "ok" or "error: <something>"
  */
-register_cert("spawn_money", ["registration_hash", "master_hash"], function (payload, answer) {
+register_cert("spawn_money", ["registration_hash", "master_hash"], function (payload, answer, req) {
 	db.students.getByQrid(payload.recipient, function (st) {
 		if (!st) {
 			log.warn("API", "spawn_money: qrid not found, ignoring request");
@@ -60,7 +60,7 @@ register_cert("spawn_money", ["registration_hash", "master_hash"], function (pay
  * }
  * response values: "ok" or "error: <something>"
  */
-register_cert("destroy_money", ["registration_hash", "master_hash"], function (payload, answer) {
+register_cert("destroy_money", ["registration_hash", "master_hash"], function (payload, answer, req) {
 	db.students.getByQrid(payload.sender, function (st) {
 		if (!st) {
 			log.warn("API", "destroy_money: qrid not found, ignoring request");
