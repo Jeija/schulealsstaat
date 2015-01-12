@@ -9,12 +9,15 @@ then
 	exit 1
 fi
 
+set -xe
+
 CWD="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 sudo npm install -g bower
 sudo npm install -g http-server
 sudo npm install -g node-gyp
 sudo npm install -g nodemon
+sudo npm install -g nodewebkit
 
 # Generate RSA public and private keys and store them
 rm $CWD/server/api/privkey.pem
@@ -51,3 +54,15 @@ cp $CWD/client/common/api.js $CWD/client/adminpanel/site/
 cp $CWD/client/common/api.js $CWD/client/entrycheck/site/
 cp $CWD/client/common/api.js $CWD/client/app/www/js/
 
+# Workaround for missing libudev.so.0 on most systems, for nodewebkit
+if [ ! -f /lib/x86_64-linux-gnu/libudev.so.1 ] && [ ! -f /lib/libudev.so.1 ]; then
+	# Most debian-based systems
+	if [ -f /lib/x86_64-linux-gnu/libudev.so.1 ]; then
+		sudo ln -s /lib/x86_64-linux-gnu/libudev.so.1 /lib/x86_64-linux-gnu/libudev.so.0
+	fi
+
+	# Some other systems, like Archlinux
+	if [ -f /lib/libudev.so.1 ]; then
+		sudo ln -s /lib/libudev.so.1 /lib/libudev.so.0
+	fi
+fi
