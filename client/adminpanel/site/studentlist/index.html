@@ -23,43 +23,49 @@
 		<hr/>
 		<!-- Filter -->
 		<h3>Filter</h3>
-		<b>Verknüpfung:</b>
-		UND<input type="radio" value="and" name="operator" checked> / 
-		ODER<input type="radio" value="or" name="operator"> /
-		NOR<input type="radio" value="nor" name="operator">
-		<table>
-			<tr><th></th><th>Kriterium</th><th>=</th><th>≠</th><th>egal</th></tr>
-			<tr id="firstname">
-				<td>Vorname</td>
-			</tr>
-			<tr id="lastname">
-				<td>Nachname</td>
-			</tr>
-			<tr id="qrid">
-				<td>QR-ID</td>
-			</tr>
-			<tr id="type">
-				<td>Klasse</td>
-			</tr>
-			<tr id="country">
-				<td>Land</td>
-			</tr>
-		</table>
-		<table>
-			<tr><th></th><th>Kriterium</th><th>></th><th><</th><th>=</th><th>≠</th><th>egal</th></tr>
-			<tr id="birth">
-				<td>Alter</td>
-			</tr>
-			<tr id="balance">
-				<td>Kontostand</td>
-			</tr>
-		</table>
-		<input type="button" id="loadfilter" value="Filter anwenden">
+		<div id="criteria_tables">
+			<b>Verknüpfung:</b>
+			UND<input type="radio" value="and" name="operator" checked> / 
+			ODER<input type="radio" value="or" name="operator"> /
+			NOR<input type="radio" value="nor" name="operator"><br/>
+
+			<table id="criteria_yesno">
+				<tr><th></th><th>Kriterium</th><th>=</th><th>≠</th><th>egal</th></tr>
+				<tr id="firstname">
+					<td>Vorname</td>
+				</tr>
+				<tr id="lastname">
+					<td>Nachname</td>
+				</tr>
+				<tr id="qrid">
+					<td>QR-ID</td>
+				</tr>
+				<tr id="type">
+					<td>Klasse</td>
+				</tr>
+				<tr id="country">
+					<td>Land</td>
+				</tr>
+			</table>
+			<table id="criteria_compare">
+				<tr><th></th><th>Kriterium</th>
+				<th>></th><th><</th>
+				<th>=</th><th>≠</th>
+				<th>egal</th></tr>
+				<tr id="birth">
+					<td>Alter</td>
+				</tr>
+				<tr id="balance">
+					<td>Kontostand</td>
+				</tr>
+			</table>
+			<input type="button" id="loadfilter" value="Filter anwenden">
+		</div>
 
 		<!-- Query -->
 		<h3>Expertenmodus: Query</h3>
 		Direkteingabe für Mongoose MongoDB Datenbank-Queries, als JSON-String.<br/>
-		<input type="input" id="mongoose_query"><input type="button" id="query_go" value="Go">
+		<input type="text" id="mongoose_query"><input type="button" id="query_go" value="Go">
 		<hr/>
 
 		<!-- Master - Certificate -->

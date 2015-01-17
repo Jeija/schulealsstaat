@@ -3,6 +3,9 @@ body {
 	margin: 0;
 	background: #BFBCBC;
 	font-family:Arial;
+	-moz-user-select:none;
+	user-select:none;
+	cursor:default;
 }
 
 .criterium {
@@ -92,4 +95,76 @@ body {
 	width: 1000px;
 	margin: 0 auto;
 	padding: 15px;
+	text-align:center;
+}
+
+input[type="text"] {
+	border:1px solid #000;
+}
+
+input[type="button"] {
+	border:1px solid #000;
+	cursor:pointer;
+	background:rgba(0, 0, 0, 0);
+	padding:0 5px;
+}
+
+input[type="button"]:hover {
+	background:rgba(0, 0, 0, 0.1);
+}
+
+input[type="button"]:active {
+	background:rgba(0, 0, 0, 0.25);
+	padding:0 5px;
+}
+
+h3 {
+	font-size:20px;
+	text-align:center;
+}
+
+#criteria_tables {
+	display:inline-block;
+	background:#ddd;
+	box-shadow:0 0 15px rgba(0, 0, 0, 0.8);
+	border-radius:6px;
+	width:95%;
+	height:250px;
+	position:relative;
+	padding:13px;
+}
+
+#criteria_yesno {
+	position:absolute;
+	top:15%;
+	left:2%;
+	width:42%;
+	display:inline-block;
+	border-collapse:collapse;
+}
+
+#criteria_compare {
+	position:absolute;
+	top:15%;
+	right:2%;
+	width:50%;
+	display:inline-block;
+	border-collapse:collapse;
+}
+
+#criteria_yesno td, #criteria_compare td {
+	border:1px solid #ccc;
+	padding:2px 5px;
+}
+
+#loadfilter {
+	position:absolute;
+	bottom:2%;
+	width:150px;
+	height:40px;
+	left:calc(50% - 75px);
+}
+
+.qrid_scan_target {
+	width:68% !important;
 }

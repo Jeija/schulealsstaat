@@ -243,6 +243,7 @@ $(function() {
 		}
 
 		var req = {query : cond};
+		console.log(cond);
 		action_cert("get_students", req, "admin_cert", function (res) {
 			var students = res;
 			render_list(students);

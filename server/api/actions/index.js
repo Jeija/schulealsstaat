@@ -60,7 +60,7 @@ function execute(name, req, res)
 
 		// Send AES-encrypted answer
 		var on_answer = function (ans) {
-			res.end(sjcl.encrypt(aes_key, JSON.stringify(ans)));
+			if (ans) res.end(sjcl.encrypt(aes_key, JSON.stringify(ans)));
 		};
 
 		if (actions[name].cert)
