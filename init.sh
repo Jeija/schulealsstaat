@@ -20,7 +20,7 @@ sudo npm install -g nodemon
 sudo npm install -g nodewebkit
 
 # Generate RSA public and private keys and store them
-rm $CWD/server/api/privkey.pem
+rm -f $CWD/server/api/privkey.pem
 openssl genrsa -rand /dev/urandom -out $CWD/server/api/privkey.pem 1024
 PUBKEY=$( openssl rsa -pubout -in $CWD/server/api/privkey.pem )
 echo -e "Generated RSA public key:\n$PUBKEY"
@@ -32,8 +32,8 @@ echo -ne "$PUBKEY" > $CWD/client/userterminal/site/pubkey.pem
 echo -ne "$PUBKEY" > $CWD/client/genrequest/site/pubkey.pem
 
 # Install server dependencies
-( cd $CWD/server/api ; npm install )
-( cd $CWD/server/webcam ; npm install )
+( cd $CWD/server/api ; sudo npm install )
+( cd $CWD/server/webcam ; sudo npm install )
 
 # Install client dependencies
 ( cd $CWD/client/adminpanel/site ; bower install )
@@ -55,7 +55,7 @@ cp $CWD/client/common/api.js $CWD/client/entrycheck/site/
 cp $CWD/client/common/api.js $CWD/client/app/www/js/
 
 # Workaround for missing libudev.so.0 on most systems, for nodewebkit
-if [ ! -f /lib/x86_64-linux-gnu/libudev.so.1 ] && [ ! -f /lib/libudev.so.1 ]; then
+if [ ! -f /lib/x86_64-linux-gnu/libudev.so.0 ] && [ ! -f /lib/libudev.so.0 ]; then
 	# Most debian-based systems
 	if [ -f /lib/x86_64-linux-gnu/libudev.so.1 ]; then
 		sudo ln -s /lib/x86_64-linux-gnu/libudev.so.1 /lib/x86_64-linux-gnu/libudev.so.0
