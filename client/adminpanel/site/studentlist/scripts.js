@@ -16,6 +16,15 @@ function date_readable (birth) {
 	return bdate.getDate() + "." + (bdate.getMonth() + 1) + "." + bdate.getFullYear();
 }
 
+function country_readable (country) {
+	if (country == "gb") return "Großbritannien";
+	if (country == "de") return "Deutschland";
+	if (country == "fr") return "Frankreich";
+	if (country == "it") return "Italien";
+	if (country == "tr") return "Türkei";
+	return country;
+}
+
 function render_list(list) {
 	$("#studentlist").html("");
 	$("#studentlist").append($("<tr>")
@@ -27,6 +36,8 @@ function render_list(list) {
 			.text("jur. Person"))
 		.append($("<th>")
 			.text("Klasse"))
+		.append($("<th>")
+			.text("Land"))
 		.append($("<th>")
 			.text("Alter"))
 		.append($("<th>")
@@ -51,6 +62,8 @@ function render_list(list) {
 				.text(st.special_name))
 			.append($("<td>")
 				.text(st.type))
+			.append($("<td>")
+				.text(country_readable(st.country)))
 			.append($("<td>")
 				.text(calcAge(st.birth)))
 			.append($("<td>")
@@ -96,6 +109,9 @@ function render_list(list) {
 				.append($("<td>").text("Klasse / Typ"))
 				.append($("<td>").text(st.type)))
 			.append($("<tr>")
+				.append($("<td>").text("Land"))
+				.append($("<td>").text(country_readable(st.country))))
+			.append($("<tr>")
 				.append($("<td>").text("Geburtstag"))
 				.append($("<td>").text(date_readable(st.birth))))
 			.append($("<tr>")
@@ -123,7 +139,7 @@ function render_list(list) {
 
 $(function() {
 	// #################### Prepare page ####################
-	var forms = ["firstname", "lastname", "type"];
+	var forms = ["firstname", "lastname", "type", "country"];
 	forms.forEach(function (f) {
 		$('	<td><input type="text" class="criterium"></td>\
 			<td><input type="radio" name="yesno_' + f + '" value="yes" /></td>\
@@ -203,6 +219,7 @@ $(function() {
 		cond_yesno(condition, "lastname");
 		cond_yesno(condition, "qrid");
 		cond_yesno(condition, "type");
+		cond_yesno(condition, "country");
 		cond_compare(condition, "balance");
 		cond_compare(condition, "birth");
 

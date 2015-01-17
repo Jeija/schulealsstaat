@@ -118,6 +118,7 @@ $(function() {
 			birthyear : $("#birthyear").val(),
 			sclass : $("#class").val(),
 			subclass : $("#subclass").val(),
+			country : $("#country").val(),
 			picname : picname
 		};
 

@@ -9,6 +9,7 @@ var studentSchema = new Schema({
 	firstname :	String,
 	lastname :	String,
 	picname :	String,
+	country :	String,
 	birth :		Date,
 	type :		{type : String},
 

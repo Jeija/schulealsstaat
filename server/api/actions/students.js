@@ -12,6 +12,7 @@ function student_public_only(st) {
 		firstname :	st.firstname,
 		lastname :	st.lastname,
 		picname :	st.picname,
+		country :	st.country,
 		birth :		st.birth,
 		type :		st.type,
 		qrid :		st.qrid
@@ -106,7 +107,7 @@ module.exports = function (register, register_cert) {
 		db.students.getByQrid(payload.qrid, function (st) {
 			if (!st) { answer("error: wrong qrid"); return; }
 			var allow_edit = ["firstname", "lastname", "qrid", "picname", "birth",
-				"type", "special_name"];
+				"type", "special_name", "country"];
 			if (allow_edit.indexOf(payload.prop) <= -1) {
 				answer("error: not allowed to edit " + payload.prop);
 				return;
@@ -317,6 +318,7 @@ module.exports = function (register, register_cert) {
 				lastname : payload.lastname,
 				special_name : payload.special_name,
 				picname : payload.picname,
+				country : payload.country,
 				birth : bday,
 				type : payload.sclass + payload.subclass,
 
