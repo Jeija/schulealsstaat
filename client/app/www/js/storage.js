@@ -20,4 +20,4 @@ var storage = {
 		var data = storage.getStorage();
 		return data[key];
 	}
-}
+};

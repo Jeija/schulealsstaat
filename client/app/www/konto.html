@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+
+	<meta charset="UTF-8">
+	<link rel="stylesheet" href="css/index.css" type="text/css">
+	<link rel="stylesheet" href="css/statement.css" type="text/css">
+	<script src="cordova.js"></script>
+	<script type="text/javascript" src="js/plugins/Flashlight.js"></script>
+	<script src="barcodescanner.js"></script>
+	<script src="bower_components/jsencrypt/bin/jsencrypt.min.js"></script>
+	<script src="bower_components/jquery/dist/jquery.js"></script>
+	<script src="bower_components/sjcl/sjcl.js"></script>
+	<script src="js/api.js"></script>
+	<script src="js/storage.js"></script>
+	<script src="js/index.js"></script>
+
+</head>
+<body>
+	<h1 class="mainheadline"> Kontoauszug </h1>
+	
+	<table id="statement">
+		<tr>
+			<th>Handelspartner/<br/ >Zeitpunkt</th>
+			<th>Betrag</th>
+		</tr>
+		<tr>
+			<td>Joseph<br/ >1.5.2014 19:20</td>
+			<td>+30,52 HGC</td>
+		</tr>
+		<tr>
+			<td>Günther<br/ >3.9.2014 16:23</td>
+			<td>+12 HGC</td>
+		</tr>
+		<tr>
+			<td>Horst<br/ >18.1.2015 16:20</td>
+			<td>-763,864 HGC </td>
+		</tr>
+		<tr>
+			<td>Torsten<br/ >3.8.2014 6:20</td>
+			<td>-73,4 HGC </td>
+		</tr>
+	</table>
+	
+	<h3 id="balance_text">Aktueller Kontostand:<br/ ><div id="balance_number">30,24 HGC</div></h3>
+	
+	<div class="border">
+		<a href="index.html" class="halfsizelink">Zurück</a>
+		<a href="index.html" class="halfsizelink">Neu laden</a>
+	</div>
+
+</body>
+</html>

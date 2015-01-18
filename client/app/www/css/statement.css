@@ -1,0 +1,29 @@
+#statement {
+	border-collapse: collapse;
+	width: auto;
+	color: white;
+	margin-left: auto;
+	margin-right: auto;
+	
+}
+
+table, tr, th {
+	border: 1px solid white;
+}
+
+table, tr, th, td {
+	padding: 5px 15px 5px 10px;;
+}
+
+h3 {
+	color: yellow;
+	text-align: center;
+}
+
+div {
+	display: inline-block;
+	padding: 5px;
+	border: solid;
+	margin: 10px;
+	font-size: 30px;
+}

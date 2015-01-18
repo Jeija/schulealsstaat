@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<script src="cordova.js"></script>
+	<script src="bower_components/jsencrypt/bin/jsencrypt.min.js"></script>
+	<script src="bower_components/jquery/dist/jquery.js"></script>
+	<script src="bower_components/sjcl/sjcl.js"></script>
+	<script src="js/api.js"></script>
+	<script src="js/storage.js"></script>
+	<script src="js/authenticate.js"></script>
+	<script src="http://192.168.0.100:8081/target/target-script-min.js#anonymous"></script>
+</head>
+<body>
+	<input id="scan_card" type="button" value="Karte Scannen" /><br/>
+	Oder Kontonummer eingeben:
+	<input id="qrid" type="text" /><br/>
+	Passwort:
+	<input id="password" type="password" />
+	<input type="button" id="register" value="Registrieren">
+</body>
+</html>

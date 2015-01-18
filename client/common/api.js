@@ -1,15 +1,19 @@
-var APISERVER = "127.0.0.1";
+var APISERVER = "192.168.0.100";
 var APIPORT = 1337;
 
-var WEBCAMSERVER = "127.0.0.1";
+var WEBCAMSERVER = "192.168.0.100";
 var WEBCAMPORT = 1338;
 
 var ACTIONURL = "http://" + APISERVER + ":" + APIPORT + "/action/";
 var WEBCAMURL = "http://" + WEBCAMSERVER + ":" + WEBCAMPORT + "/";
 
-// Load public key
+// Load public key (either from parent directory or this directory)
 var pubkey = new JSEncrypt();
 $.get("../pubkey.pem", function (pubkey_str) {
+	pubkey.setPublicKey(pubkey_str);
+});
+
+$.get("pubkey.pem", function (pubkey_str) {
 	pubkey.setPublicKey(pubkey_str);
 });
 

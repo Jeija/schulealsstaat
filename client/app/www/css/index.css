@@ -35,11 +35,10 @@ a.mainlinks {
 	border-width: 3px;
 	display: block;
 	text-align: center;
+	width: auto;
 }
 
 div.border {
-	border-color: red;
-	border-width: 10px;
 	width: 90%;
 	display: block;
 	margin-left: auto;
@@ -49,4 +48,22 @@ div.border {
 	padding: auto;
 }
 
+h1.mainheadline {
+	color: yellow;
+	font-size: 30px;
+	text-align: center;
+}
+
+a.halfsizelink {	
+	text-decoration: none;
+	color: yellow;
+	font-size: 30px;
+	background-color: green;
+	border-radius: 5px;
+	border-style: solid;
+	border-color: yellow;
+	border-width: 3px;
+	display: inline-block;
+	text-align: center;
+	width: 45%;
 
