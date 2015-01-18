@@ -15,14 +15,16 @@ function flashLightOff() {
 }
 
 $(function () {
+	function onDeviceReady() {
+		navigator.splashscreen.hide();
+	}
+	document.addEventListener("deviceready", onDeviceReady, false);
 
-function onDeviceReady() {
-	navigator.splashscreen.hide();
-}
-document.addEventListener("deviceready", onDeviceReady, false);
-
-if (!storage.get("qrid")) {
-	window.location = "authenticate.html";
-}
-
+	if (!storage.get("qrid")) {
+		window.location = "authenticate.html";
+	}
 });
+
+setInterval(function () {
+	$("#balance").text(storage.get("balance") + " HGC");
+}, 200);
