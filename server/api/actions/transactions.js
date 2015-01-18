@@ -123,7 +123,7 @@ register("get_balance", function (payload, answer) {
 });
 
 /**
- * get_all_transactions {
+ * get_last_transactions {
  *	qrid : String(QR-ID),
  *	password : String,
  *	amount : Number (returns <amount> last transactions or all transactions if amount <= 0)
@@ -159,7 +159,7 @@ register("get_last_transactions", function (payload, answer) {
 
 		db.transactions.getByIdList(st.transactions, function (tr) {
 			if (payload.amount > 0)
-				tr = tr.slice(Math.max(tr.length - payload.amount, 1));
+				tr = tr.slice(Math.max(tr.length - payload.amount, 0));
 			answer(tr);
 		});
 	});
