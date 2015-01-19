@@ -12,8 +12,6 @@ bower_components/
 node_modules/
 
 # Ignored working / output directories
-/client/terminaliso/work
-/client/terminaliso/out
 /client/app/build
 /client/app/hooks
 /client/app/platforms
@@ -21,6 +19,8 @@ node_modules/
 /client/app/.cordova
 
 # Terminal ISO: Publish PKGBUILDs and build scripts, no prebuilt packages and binaries
+/client/terminaliso/iso/work
+/client/terminaliso/iso/out
 /client/terminaliso/packages/*/*
 !/client/terminaliso/packages/*/PKGBUILD
 !/client/terminaliso/packages/*/*.install
