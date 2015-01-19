@@ -59,7 +59,7 @@ make_basefs() {
 
 # Additional packages (airootfs)
 make_packages() {
-    setarch ${arch} mkarchiso ${verbose} -w "${work_dir}/${arch}" -C "${pacman_conf}" -D "${install_dir}" -p "$(grep -h -v ^# ${script_path}/packages.{both,${arch}})" install
+    setarch ${arch} mkarchiso ${verbose} -w "${work_dir}/${arch}" -C "${pacman_conf}" -D "${install_dir}" -p "$(grep -h -v ^# ${script_path}/packages)" install
 }
 
 # Copy mkinitcpio archiso hooks and build initramfs (airootfs)

@@ -10,7 +10,7 @@ ln -sf /usr/share/zoneinfo/Europe/Berlin /etc/localtime
 cp -aT /etc/skel/ /root/
 chmod 700 /root
 
-useradd -p "" -g users -G "adm,audio,network,rfkill,scanner,optical,power,wheel" sas
+useradd -p "" -g users -G "adm,audio,video,floppy,log,network,rfkill,scanner,storage,optical,power,wheel" sas
 
 chmod 750 /etc/sudoers.d
 chmod 440 /etc/sudoers.d/g_wheel
@@ -18,5 +18,5 @@ chmod 440 /etc/sudoers.d/g_wheel
 sed -i "s/#Server/Server/g" /etc/pacman.d/mirrorlist
 sed -i 's/#\(Storage=\)auto/\1volatile/' /etc/systemd/journald.conf
 
-systemctl enable pacman-init.service choose-mirror.service
+systemctl enable pacman-init.service choose-mirror.service sasprepare.service
 systemctl set-default multi-user.target

@@ -1,0 +1,1 @@
+ACTION=="add", SUBSYSTEM=="net", ATTR{address}=="00:0f:60:*", NAME="saswifi0"

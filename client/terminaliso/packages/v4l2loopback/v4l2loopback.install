@@ -1,0 +1,26 @@
+pre_install() {
+  true
+}
+
+post_install() {
+  depmod -a
+  echo "==> v4l2loopback module"
+  echo "==> modprobe v4l2loopback"
+}
+
+pre_upgrade() {
+  true
+}
+
+post_upgrade() {
+  depmod -a
+}
+
+pre_remove() {
+  true
+}
+
+post_remove() {
+  depmod -a
+}
+

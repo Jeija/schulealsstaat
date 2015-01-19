@@ -1,0 +1,23 @@
+pkgname=v4l2loopback
+pkgrel=1
+pkgver=0.8.1
+pkgdesc="A kernel module to create V4L2 loopback devices"
+url="https://github.com/umlaeute/v4l2loopback"
+license=("GPL")
+arch=('i686' 'x86_64')
+makedepends=('git' 'linux-headers')
+install="$pkgname.install"
+source=( 'https://github.com/umlaeute/v4l2loopback/archive/master.tar.gz' )
+md5sums=('SKIP')
+
+build() {
+	cd "$srcdir/$pkgname-master"
+	make
+}
+
+package() {
+	cd "$srcdir/$pkgname-master"
+	make DESTDIR="$pkgdir/" PREFIX=/usr
+	install -Dm 644 "v4l2loopback.ko" \
+		"$pkgdir/usr/lib/modules/$(uname -r)/kernel/drivers/misc/v4l2loopback.ko"
+}

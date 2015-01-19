@@ -1,0 +1,34 @@
+pkgname=nwjs
+pkgver=0.12.0_alpha2
+pkgrel=1
+pkgdesc="Chromium-based webkit engine with node.js backend"
+arch=("i686" "x86_64")
+url="https://github.com/nwjs/nw.js"
+license=("MIT")
+depends=("alsa-lib" "gconf" "gtk2" "nss" "ttf-font" "libnotify" "libxtst")
+
+if [ "$CARCH" = "i686" ]; then
+	_arch="ia32"
+	sha256sums=("4aa88c71f753a908e7a1a8b560770e7c3143322bef0af07d476ec498ed7d3d48")
+fi
+
+if [ "$CARCH" = "x86_64" ]; then
+	_arch="x64"
+	sha256sums=("5b3a86bfaac9fd4b9d8152cb6b49057b0ffcc7cb937b6fc477723c49673808d4")
+fi
+
+source=( "http://dl.nwjs.io/v${pkgver//_/-}/${pkgname}-v${pkgver//_/-}-linux-${_arch}.tar.gz" )
+
+package() {
+	# create path and copy files
+	mkdir -p $pkgdir/usr/{lib/${pkgname},bin}
+	chmod +rx $srcdir/${pkgname}-v${pkgver//_/-}-linux-$_arch/{nw,libffmpegsumo.so}
+	chmod +r $srcdir/${pkgname}-v${pkgver//_/-}-linux-$_arch/{nw.pak,credits.html,icudtl.dat}
+	cp -R $srcdir/${pkgname}-v${pkgver//_/-}-linux-$_arch/* $pkgdir/usr/lib/${pkgname}/
+
+	# replace string libudev.so.0 to libudev.so.1 in nw binary"
+	sed -i 's/\x75\x64\x65\x76\x2E\x73\x6F\x2E\x30/\x75\x64\x65\x76\x2E\x73\x6F\x2E\x31/g' $pkgdir/usr/lib/${pkgname}/nw
+
+	# symlink /usr/bin/nw -> /usr/lib/${pkgname}/nw
+	ln -s "/usr/lib/${pkgname}/nw" "$pkgdir/usr/bin/nw"
+}
