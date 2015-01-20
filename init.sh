@@ -17,7 +17,7 @@ sudo npm install -g bower
 sudo npm install -g http-server
 sudo npm install -g node-gyp
 sudo npm install -g nodemon
-sudo npm install -g nodewebkit
+sudo npm install -g nw
 
 # Generate RSA public and private keys and store them
 rm -f $CWD/server/api/privkey.pem

@@ -2,7 +2,7 @@
 	"name" : "SaEU user client",
 	"main" : "./site/transaction_simple/index.html",
 	"scripts" : {
-		"start" : "nodewebkit"
+		"start" : "nw"
 	},
 	"window": {
 		"toolbar": true,
