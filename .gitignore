@@ -21,6 +21,8 @@ node_modules/
 # Terminal ISO: Publish PKGBUILDs and build scripts, no prebuilt packages and binaries
 /client/terminaliso/iso/work
 /client/terminaliso/iso/out
+/client/terminaliso/iso/pacman.schulealsstaat.conf
+/client/terminaliso/repo
 /client/terminaliso/packages/*/*
 !/client/terminaliso/packages/*/PKGBUILD
 !/client/terminaliso/packages/*/*.install
