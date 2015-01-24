@@ -20,7 +20,7 @@ h3 {
 	text-align: center;
 }
 
-div {
+#balance_number {
 	display: inline-block;
 	padding: 5px;
 	border: solid;

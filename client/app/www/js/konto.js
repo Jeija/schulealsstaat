@@ -38,5 +38,8 @@ $(function () {
 					.text(is_sender ? -trans.amount_sent : trans.amount_received))
 			);
 		}
+		
+		$("#balance_number").text(storage.get("balance") + " HGC");
+		
 	});}, 200);
 });
