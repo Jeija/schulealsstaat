@@ -1,3 +1,5 @@
+bash
+mkinitcpio
 openssh
 wireless_tools
 grub
@@ -25,3 +27,12 @@ gtk2
 ttf-font
 ttf-liberation
 libnotify
+bridge-utils
+dnsmasq
+hostapd
+iproute2
+iptables
+iw
+nwjs
+create_ap
+v4l2loopback
