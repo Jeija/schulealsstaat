@@ -1,7 +1,7 @@
-var APISERVER = "192.168.178.155";
+var APISERVER = "127.0.0.1";
 var APIPORT = 1337;
 
-var WEBCAMSERVER = "192.168.178.155";
+var WEBCAMSERVER = "127.0.0.1";
 var WEBCAMPORT = 1338;
 
 var ACTIONURL = "http://" + APISERVER + ":" + APIPORT + "/action/";
