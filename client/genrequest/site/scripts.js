@@ -1,3 +1,8 @@
+function printMessageReadable(msg) {
+		var res_readable = JSON.stringify(msg).replace(/(.{60})/g, "$1\n");
+		$("#response").text(res_readable);
+}
+
 function getMessage() {
 	var msg;
 	try {
@@ -11,14 +16,13 @@ function getMessage() {
 $(function () {
 	$("#confirm").click(function () {
 		action($("#action_name").val(), getMessage(), function (res) {
-			$("#response").text(res);
+			printMessageReadable(res);
 		});
 	});
 
 	$("#confirm_cert").click(function () {
 		action_mastercert($("#action_name").val(), getMessage(), "#cert_input", function (res) {
-			var res_readable = JSON.stringify(res).replace(/(.{60})/g, "$1\n");
-			$("#response").text(res_readable);
+			printMessageReadable(res);
 		});
 	});
 });
