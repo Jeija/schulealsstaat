@@ -17,7 +17,8 @@ $(function () {
 
 	$("#confirm_cert").click(function () {
 		action_mastercert($("#action_name").val(), getMessage(), "#cert_input", function (res) {
-			$("#response").text(res);
+			var res_readable = JSON.stringify(res).replace(/(.{60})/g, "$1\n");
+			$("#response").text(res_readable);
 		});
 	});
 });
