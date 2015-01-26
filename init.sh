@@ -13,6 +13,7 @@ set -xe
 
 CWD="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
+npm config set python /usr/bin/python2
 sudo npm install -g bower
 sudo npm install -g http-server
 sudo npm install -g node-gyp
