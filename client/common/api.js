@@ -1,21 +1,37 @@
-var APISERVER = "127.0.0.1";
+var APISERVER = "192.168.0.100";
 var APIPORT = 1337;
 
-var WEBCAMSERVER = "127.0.0.1";
+var WEBCAMSERVER = "192.168.0.100";
 var WEBCAMPORT = 1338;
 
 var ACTIONURL = "http://" + APISERVER + ":" + APIPORT + "/action/";
 var WEBCAMURL = "http://" + WEBCAMSERVER + ":" + WEBCAMPORT + "/";
 
-// Load public key (either from parent directory or this directory)
-var pubkey = new JSEncrypt();
-$.get("../pubkey.pem", function (pubkey_str) {
-	pubkey.setPublicKey(pubkey_str);
+$.ajaxSetup({
+	xhr: function() {
+		return new window.XMLHttpRequest({ mozSystem : true });
+	}
 });
 
-$.get("pubkey.pem", function (pubkey_str) {
-	pubkey.setPublicKey(pubkey_str);
-});
+/* Public Key Loading */
+var pubkey = new JSEncrypt();
+function load_pubkey(url) {
+	var xhr = new XMLHttpRequest({ mozSystem : true });
+	xhr.open("GET", url, true);
+	xhr.onload = function () {
+		if (xhr.responseText.indexOf("PUBLIC KEY") > -1) {
+			pubkey.setPublicKey(xhr.responseText);
+		}
+	}
+	xhr.send();
+}
+
+// Public key location may vary depending on the specific build details
+// Therefore, search the public key at multiple places, such as www/pubkey.pem,
+// the current directory and the parent directory
+load_pubkey("/www/pubkey.pem");
+load_pubkey("../pubkey.pem");
+load_pubkey("pubkey.pem");
 
 function encrypt_passphrase (passphrase) {
 	return pubkey.encrypt(passphrase);

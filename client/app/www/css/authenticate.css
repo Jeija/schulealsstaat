@@ -1,0 +1,19 @@
+body {
+	color:#fff;
+	font-size:8vw;
+	background:#000;
+}
+
+input[type="button"] {
+	width:80%;
+	height:12vw;
+	font-size:5vw;
+}
+
+input[type="text"], input[type="password"] {
+	width:80%;
+	height:10vw;
+	font-size:5vw;
+	background:#fff;
+	border:none;
+}

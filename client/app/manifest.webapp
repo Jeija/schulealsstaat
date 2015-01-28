@@ -1,0 +1,20 @@
+{
+    "version": "0.1",
+    "name": "HöGyCoin",
+    "description": "Schule als EU HöGyCoin",
+    "launch_path": "/www/index.html",
+    "icons": {
+        "128": "/icon128.png",
+        "900": "/icon.png"
+    },
+    "developer": {
+        "name": "Schule als EU Computer AG"
+    },
+    "orientation": [ "portrait" ],
+    "installs_allowed_from": ["*"],
+    "default_locale": "de",
+    "type": "privileged",
+    "permissions": {
+        "systemXHR": { "description": "Zur Kommunikation mit dem Währungsserver" }
+    }
+}
