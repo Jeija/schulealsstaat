@@ -5,7 +5,8 @@ $(function () {
 	document.addEventListener("deviceready", onDeviceReady, false);
 
 	$("#scan_card").click(function () {
-		if (cordova.plugins.barcodeScanner) {
+		if (typeof cordova !== "undefined" && cordova.plugins.barcodeScanner) {
+			// Use native barcodeScanner (e.g. android)
 			cordova.plugins.barcodeScanner.scan(
 				function (result) {
 					if (result.format != "QR_CODE") {
@@ -17,7 +18,18 @@ $(function () {
 				}, 
 				function (error) {}
 			);
-		} // TODO: use JS QR Scanner if plugin doesn't exist
+		} else {
+			// Use builtin JS QRScanJS Scanner
+			$("#scanner_popup").fadeIn();
+			$("#scanner_abort").click(function () {
+				$("#scanner_popup").hide();
+			});
+			QRReader.init("#scanner_webcam", "QRScanJS/");
+			QRReader.scan(function (result) {
+				$("#scanner_popup").hide();
+				$("#qrid").val(result);
+			});
+		}
 	});
 
 	$("#register").click(function () {

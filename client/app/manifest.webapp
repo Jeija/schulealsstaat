@@ -15,6 +15,7 @@
     "default_locale": "de",
     "type": "privileged",
     "permissions": {
-        "systemXHR": { "description": "Zur Kommunikation mit dem Währungsserver" }
+        "systemXHR": { "description": "Zur Kommunikation mit dem Währungsserver" },
+        "video-capture": { "description": "Um QR-Codes zu lesen" }
     }
 }

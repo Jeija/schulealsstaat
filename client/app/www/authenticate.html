@@ -4,6 +4,7 @@
 	<meta charset="UTF-8">
 	<script src="cordova.js"></script>
 	<link rel="stylesheet" href="css/authenticate.css" type="text/css">
+	<script type="text/javascript" src="QRScanJS/qrscan.js"></script>
 	<script src="bower_components/jsencrypt/bin/jsencrypt.min.js"></script>
 	<script src="bower_components/jquery/dist/jquery.js"></script>
 	<script src="bower_components/sjcl/sjcl.js"></script>
@@ -12,6 +13,10 @@
 	<script src="js/authenticate.js"></script>
 </head>
 <body>
+	<div id="scanner_popup" hidden>
+		<video autoplay="true" id="scanner_webcam" width="100%"></video>
+		<input type="button" value="Abbrechen" id="scanner_abort" />
+	</div>
 	<input id="scan_card" type="button" value="Karte Scannen" /><br/>
 	Oder Kontonummer eingeben:<br/>
 	<input id="qrid" type="text" /><br/>

@@ -17,3 +17,21 @@ input[type="text"], input[type="password"] {
 	background:#fff;
 	border:none;
 }
+
+#scanner_popup {
+	position:fixed;
+	left:0;
+	top:0;
+	width:100%;
+	height:100%;
+	background:#000;
+}
+
+#scanner_abort {
+	width:100%;
+	background:#000;
+	border:2px solid #fff;
+	font-size:7vw;
+	color:#fff;
+	border-radius:4px;
+}
