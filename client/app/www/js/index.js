@@ -26,5 +26,6 @@ $(function () {
 });
 
 setInterval(function () {
-	$("#balance").text(storage.get("balance") + " HGC");
+	$("#balance").text("Guthaben: "+storage.get("balance") + " HGC");
+	$("#qrid").text("Konto: " + storage.get("qrid"));
 }, 200);

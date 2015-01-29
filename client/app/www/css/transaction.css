@@ -1,0 +1,27 @@
+div.ta_main {
+	background-color: #555;
+	border-radius: 10px;
+	border: solid 5px yellow;
+	margin-top: 15px;
+	margin-left: auto;
+	margin-right: auto;
+	width: 90%;
+	padding-bottom: 5px;
+	height: 35%;
+}
+
+h4.ta {
+	text-align: center;
+	font-size: 5vw;
+	margin: 3%;
+}
+
+a {
+	text-decoration: none;
+	color: white;
+}
+
+img {
+	height: 60%;
+	width: auto;
+}

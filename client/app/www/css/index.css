@@ -1,13 +1,19 @@
-body { 
+html { 
 	background-color: black;
 	color: white;
+	height: 100%;
 }
 
-img {
-	width: 80%;
+body {
+	height: 95%;
+}
+
+#logo {
+	width: 70%;
 	display: block;
 	margin-left: auto;
 	margin-right: auto;
+	margin-top: 10px;
 	margin-bottom: 20px;
 }
 
@@ -18,17 +24,17 @@ button.bigbutton {
 	display: block;
 	margin-left: auto;
 	margin-right: auto;
-	font-size: 30px;
+	font-size: 8vw;
 	background-color: green;
 	color: yellow;
 	border: solid;
-	border-radius: 8px;
+	border-radius: 7px;
 }
 
 a.mainlinks {
 	text-decoration: none;
 	color: yellow;
-	font-size: 30px;
+	font-size: 7vw;
 	background-color: green;
 	border-radius: 5px;
 	border-style: solid;
@@ -55,6 +61,11 @@ h1.mainheadline {
 	text-align: center;
 }
 
+div.mainheadline{
+	height: 7%;
+	padding-bottom: 1px;
+}
+
 a.halfsizelink {	
 	text-decoration: none;
 	color: yellow;
@@ -67,4 +78,15 @@ a.halfsizelink {
 	display: inline-block;
 	text-align: center;
 	width: 45%;
+}
 
+#statusbar {
+	padding-bottom: 5px;
+	border-bottom-style: solid;
+	border-bottom-width: 1px;
+}
+
+#qrid {
+	display: inline-block;
+	float: right;
+}
