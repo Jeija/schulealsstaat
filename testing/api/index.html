@@ -1,0 +1,41 @@
+<html>
+<head>
+	<title>Request Generator</title>
+	<script src="/bower_components/jsencrypt/bin/jsencrypt.min.js"></script>
+	<script src="/bower_components/jquery/dist/jquery.js"></script>
+	<script src="/bower_components/sjcl/sjcl.js"></script>
+	<script src="/api.js"></script>
+	<script src="/scripts.js"></script>
+	<link rel="stylesheet" type="text/css" href="styles.css">
+	<meta charset="utf-8"/>
+</head>
+<body>
+	<h1>API Performance Testing</h1>
+	<table>
+		<tr>
+			<td>Requests per second</td>
+			<td id="req_per_sec">0</td>
+		</tr>
+		<tr>
+			<td>Responses per second</td>
+			<td id="res_per_sec">0</td>
+		</tr>
+		<tr>
+			<td>Mean response time (seconds)</td>
+			<td id="avg_res_time">0</td>
+		</tr>
+		<tr>
+			<td>Mean response size</td>
+			<td id="avg_res_size">0</td>
+		</tr>
+		<tr>
+			<td>% of requests answered</td>
+			<td id="perc_res">0</td>
+		</tr>
+	</table>
+
+	<input type="button" value="reset" id="reset">
+	<input type="button" value="student_identify" id="student_identify">
+	<input type="button" value="students_dump" id="students_dump">
+</body>
+</html>

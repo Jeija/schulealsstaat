@@ -31,6 +31,7 @@ echo -ne "$PUBKEY" > $CWD/client/entrycheck/site/pubkey.pem
 echo -ne "$PUBKEY" > $CWD/client/registration/site/pubkey.pem
 echo -ne "$PUBKEY" > $CWD/client/userterminal/site/pubkey.pem
 echo -ne "$PUBKEY" > $CWD/client/genrequest/site/pubkey.pem
+echo -ne "$PUBKEY" > $CWD/testing/api/pubkey.pem
 
 # Install server dependencies
 ( cd $CWD/server/api ; sudo npm install )
@@ -54,6 +55,7 @@ cp $CWD/client/common/api.js $CWD/client/genrequest/site/
 cp $CWD/client/common/api.js $CWD/client/adminpanel/site/
 cp $CWD/client/common/api.js $CWD/client/entrycheck/site/
 cp $CWD/client/common/api.js $CWD/client/app/www/js/
+cp $CWD/client/common/api.js $CWD/testing/api/
 
 # Workaround for missing libudev.so.0 on most systems, for nodewebkit
 if [ ! -f /lib/x86_64-linux-gnu/libudev.so.0 ] && [ ! -f /lib/libudev.so.0 ]; then
