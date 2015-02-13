@@ -1,0 +1,12 @@
+{
+  "name": "saeu_dns",
+  "description": "Schule als EU DNS Server",
+  "author": "Computer AG",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Jeija/schulealsstaat"
+  },
+  "dependencies": {
+    "native-dns": "^0.7.0"
+  }
+}

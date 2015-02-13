@@ -1,0 +1,41 @@
+body {
+	background:#ccc;
+	font-family:Helvetica, Arial;
+}
+
+#ecb {
+	color:#00f;
+	font-size:28px;
+	text-align:center;
+	margin-bottom:20px;
+}
+
+#euflag {
+	display:block;
+	max-width:35em;
+	width:70vw;
+	margin:0 auto;
+}
+
+#stop {
+	font-size:100px;
+	text-align:center;
+	color:#f00;
+}
+
+#explanation {
+	display:block;
+	max-width:700px;
+	width:70vw;
+	font-size:20px;
+	margin:0 auto;
+}
+
+#saeu {
+	text-align:right;
+	display:block;
+	max-width:700px;
+	width:70vw;
+	margin:0 auto;
+	font-style:italic;
+}
