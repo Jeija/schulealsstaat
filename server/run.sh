@@ -15,5 +15,5 @@ if [ "$(pidof systemd)" ]; then
 	systemctl start mongodb
 fi
 
-nodemon $CWD/webcam/main.js &
-nodemon $CWD/api/main.js
+cd $CWD/webcam && nodemon main.js &
+cd $CWD/api && nodemon main.js
