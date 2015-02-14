@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+	<title>SaEU - Fehlende Personen</title>
+	<script src="../bower_components/jsencrypt/bin/jsencrypt.min.js"></script>
+	<script src="../bower_components/jquery/dist/jquery.js"></script>
+	<script src="../bower_components/qr-js/qr.min.js"></script>
+	<script src="../bower_components/sjcl/sjcl.js"></script>
+	<script src="../api.js"></script>
+	<script src="scripts.js"></script>
+	<link rel="stylesheet" type="text/css" href="styles.css">
+	<meta charset="utf-8"/>
+</head>
+<body>
+	<div id="type_popup">
+		<div id="popup_heading">Klasse / Typ?</div>
+		Gib die Klasse (5a, 5b, 6c, ks1, ks2, ...) bzw. den Typ (teacher, other, ...) der
+		Personen, deren ID-Karten generiert werden sollen, an.
+		<input type="text" id="type" value="*">
+		<input type="button" id="type_ok" value="OK">
+	</div>
+	<table id="studentlist"></table>
+</body>
+</html>

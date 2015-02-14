@@ -52,6 +52,7 @@ function get_image(req, res, query) {
 		fs.exists(path, function (exists) {
 			if (!exists) {
 				console.log("  --> Could not find requested file: " + path);
+				res.end();
 			} else {
 				fs.readFile(path, function (err, data) {
 					if (err) throw err;
