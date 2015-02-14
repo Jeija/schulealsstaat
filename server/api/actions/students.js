@@ -77,15 +77,10 @@ module.exports = function (register, register_cert) {
 	 */
 	register_cert("get_students", ["admin_hash"], function (payload, answer) {
 		// Payload contains an attribute list that may fit none, one or multiple students
-		if ("fields" in payload) {
-			db.students.getCertainByProperties(payload, payload.fields, function (st) {
-				answer(st);
-			});
-		} else {
-			db.students.getByProperties(payload, function (st) {
-				answer(st);
-			});
-		}
+		if ("fields" in payload)
+			db.students.getCertainByProperties(payload.query, payload.fields, answer);
+		else
+			db.students.getByProperties(payload.query, answer);
 	});
 
 	/**
