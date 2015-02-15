@@ -42,7 +42,7 @@ register_cert("spawn_money", ["registration_hash", "master_hash"], function (pay
 			percent_tax : 0,
 			comment : comment,
 			sender_ip : req.connection.remoteAddress
-		}
+		};
 
 		db.transactions.add(transaction, function (dbtrans) {
 			st.transactions.push(dbtrans._id);
@@ -84,7 +84,7 @@ register_cert("destroy_money", ["registration_hash", "master_hash"], function (p
 			percent_tax : 0,
 			comment : comment,
 			sender_ip : req.connection.remoteAddress
-		}
+		};
 
 		db.transactions.add(transaction, function (dbtrans) {
 			st.transactions.push(dbtrans._id);
@@ -244,8 +244,9 @@ register("transaction", function (payload, answer, req) {
 		/* Calculate amount to transfer with taxes */
 		// Possibility 1 - amount_sent is specified
 		if ("amount_sent" in payload) {
-			if (typeof payload.amount_sent != "number" || isNaN(payload.amount_sent)
-				|| !isFinite(payload.amount_sent)) {
+			if (typeof payload.amount_sent != "number" ||
+				isNaN(payload.amount_sent) ||
+				!isFinite(payload.amount_sent)) {
 				answer("error: invalid amount_sent");
 				return;
 			}
@@ -256,7 +257,7 @@ register("transaction", function (payload, answer, req) {
 			}
 
 			// Check if amount has more than hgc_tr_decimal_places decimals
-			if ((payload.amount_sent * Math.pow(10, tr_decplaces)) % 1 != 0) {
+			if ((payload.amount_sent * Math.pow(10, tr_decplaces)) % 1 !== 0) {
 				answer("too_many_decplaces");
 				return;
 			}
@@ -267,9 +268,9 @@ register("transaction", function (payload, answer, req) {
 
 		// Possibility 2 - amount_received is specified
 		if ("amount_received" in payload) {
-			if (typeof payload.amount_received != "number"
-				|| isNaN(payload.amount_received)
-				|| !isFinite(payload.amount_received)) {
+			if (typeof payload.amount_received != "number" ||
+				isNaN(payload.amount_received) ||
+				!isFinite(payload.amount_received)) {
 				answer("error: invalid amount_received");
 				return;
 			}
@@ -280,7 +281,7 @@ register("transaction", function (payload, answer, req) {
 			}
 
 			// Check if amount has more than hgc_tr_decimal_places decimals
-			if ((payload.amount_sent * Math.pow(10, tr_decplaces)) % 1 != 0) {
+			if ((payload.amount_sent * Math.pow(10, tr_decplaces)) % 1 !== 0) {
 				answer("too_many_decplaces");
 				return;
 			}
@@ -307,7 +308,7 @@ register("transaction", function (payload, answer, req) {
 			amount_tax : amount_tax,
 			percent_tax : tax,
 			sender_ip : req.connection.remoteAddress
-		}
+		};
 		if ("comment" in payload) transaction.comment = payload.comment;
 
 		// Actual transaction and collect tax income
@@ -316,8 +317,8 @@ register("transaction", function (payload, answer, req) {
 		db.students.getByQrid(config.get("taxinc_qrid", "taxinc"),
 		function (tic) {
 			if (!tic) {
-				log.err("BANK", "Tax income account not found, discarding " 
-					+ "income of " + amount_tax + " HGC.");
+				log.err("BANK", "Tax income account not found, discarding " +
+					"income of " + amount_tax + " HGC.");
 			} else {
 				tic.balance += amount_tax;
 				tic.save();
@@ -332,11 +333,10 @@ register("transaction", function (payload, answer, req) {
 			});
 		});
 
-		log.info("BANK", "Transaction from " + sender.firstname + " "
-			+ sender.lastname + " to " + recipient.firstname + " "
-			+ recipient.lastname + ", with net value " + amount_received
-			+ " HGC, tax income is " + amount_tax + " HGC.");
+		log.info("BANK", "Transaction from " + sender.firstname + " " +
+			sender.lastname + " to " + recipient.firstname + " " +
+			recipient.lastname + ", with net value " + amount_received +
+			" HGC, tax income is " + amount_tax + " HGC.");
 	});
 });
-
-} // module.exports
+}; // module.exports
