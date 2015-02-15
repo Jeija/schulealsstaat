@@ -1,0 +1,12 @@
+{
+  "name": "sas_sjcl_perforance",
+  "description": "SJCL node.js AES performance testing",
+  "author": "Computer AG",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Jeija/schulealsstaat"
+  },
+  "dependencies": {
+    "sjcl": "^1.0.2"
+  }
+}
