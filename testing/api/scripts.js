@@ -9,10 +9,9 @@ $(function () {
 	var reqInterval;
 
 	function update_stats () {
-		if (reqN == 0 || resN == 0) return;
 		var req_per_sec = reqN / (Date.now() / 1000 - beginTime);
 		var res_per_sec = resN / (Date.now() / 1000 - beginTime);
-		var perc_res = resN / reqN * 100;
+		var perc_res = reqN == 0 ? 0 : resN / reqN * 100;
 
 		// Calculate average response size in bytes
 		var total_res_size = 0;
@@ -20,7 +19,7 @@ $(function () {
 			if (requests[i].resSize)
 				total_res_size += requests[i].resSize;
 		}
-		var avg_res_size = total_res_size / resN;
+		var avg_res_size = resN == 0 ? 0 : total_res_size / resN;
 
 		// Calculate average respone time in seconds
 		var total_res_time = 0;
@@ -29,7 +28,7 @@ $(function () {
 				total_res_time += requests[i].resTime
 								- requests[i].reqTime;
 		}
-		var avg_res_time = total_res_time / resN;
+		var avg_res_time = resN == 0 ? 0 : total_res_time / resN;
 
 		// Output calculated values to stats table
 		$("#req_per_sec").text(req_per_sec);
@@ -61,6 +60,7 @@ $(function () {
 			requests[thisn].reqTime = Date.now() / 1000;
 			requests[thisn].reqSize = JSON.stringify(payload).length;
 			action("student_identify", payload, function (res) {
+				if (!requests[thisn]) return;
 				resN++;
 				requests[thisn].resTime = Date.now() / 1000;
 				requests[thisn].resSize = JSON.stringify(res).length;
@@ -77,11 +77,16 @@ $(function () {
 			requests[thisn].reqTime = Date.now() / 1000;
 			requests[thisn].reqSize = 0;
 			action_cert("students_dump", null, "admin_cert", function (res) {
+				if (!requests[thisn]) return;
 				resN++;
 				requests[thisn].resTime = Date.now() / 1000;
 				requests[thisn].resSize = JSON.stringify(res).length;
 			});
 		}, 1);
+	});
+
+	$("#stop_requests").click(function () {
+		if (reqInterval) clearInterval(reqInterval);
 	});
 
 	$("#reset").click(reset);
