@@ -26,6 +26,7 @@ $(function () {
 });
 
 setInterval(function () {
-	$("#balance").text("Guthaben: "+storage.get("balance") + " HGC");
+	var balance = Math.floor(parseFloat(storage.get("balance")) * 100 + 0.5) / 100;
+	$("#balance").text("Guthaben: " + balance + " HGC");
 	$("#qrid").text("Konto: " + storage.get("qrid"));
 }, 200);

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" href="css/common.css" type="text/css">
+	<link rel="stylesheet" href="css/transaction.css" type="text/css">
+	<script src="cordova.js"></script>
+	<script src="bower_components/jsencrypt/bin/jsencrypt.min.js"></script>
+	<script src="bower_components/jquery/dist/jquery.js"></script>
+	<script src="bower_components/gibberish-aes/dist/gibberish-aes-1.0.0.min.js"></script>
+	<script src="js/api.js"></script>
+	<script src="js/storage.js"></script>
+	<script src="js/common.js"></script>
+	<script src="js/send.js"></script>
+	<title>Zahlung tätigen</title>
+</head>
+
+<body>
+	<div id="content">
+		<div class="mainheadline">Zahlung tätigen</div>
+
+		<div>
+			<h4 class="ta">Empfänger:</h4>
+			<input id="scan_card" type="button" value="Karte Scannen" /> <br/>
+			Kontonummer: <input type="text" id="qrid_rec" placeholder="Kontonummer"><br/>
+			Vor/Nachname: <input type="text" id="firstname" placeholder="Vorname">
+			<input type="text" id="lastname" placeholder="Nachname"><br/>
+			Klasse: <input type="text" id="type" placeholder="Klasse">
+		</div>
+	
+		<div>
+			<h4 class="ta">Betrag:</h4>
+			<div>
+				<input type="number" min="0" step="0.01" id="amount">HGC
+			</div>
+		</div>
+	
+		<div>
+			<h4 class="ta">Kommentar:</h4>
+			<textarea id="comment" placeholder="Kommentar"></textarea>
+		</div>
+	
+		<a href="transaction.html">Zurück</a>
+		<input type="button" id="confirm" value="Angaben prüfen">
+	</div>
+
+	<div id="confirm_window" hidden>
+		<div id="confirm_window_padding">
+			<div class="confirm_subsection">Empfänger</div>
+			<div class="confirm_text" id="confirm_recipient"></div>
+			<div class="confirm_subsection">Betrag</div>
+			<div class="confirm_text" id="confirm_amount"></div>
+			<div class="confirm_subsection">Kommentar</div>
+			<div class="confirm_text" id="confirm_comment"></div>
+		</div>
+		<button class="bigbutton" id="confirm_submit">Abschicken</button>
+		<button class="bigbutton" id="confirm_back">Zurück</button>
+	</div>
+
+	<div id="success" hidden>
+		<div id="success_text">Transaktion erfolgreich!</div>
+		<div id="success_bottom">
+			<a class="mainlinks" href="index.html" id="success_mainmenu">Hauptmenü</a>
+			<a class="mainlinks" href="transaction.html" id="success_transaction">Überweisung</a>
+		</div>
+	</div>
+
+	<div id="error" hidden>
+		<div id="error_heading">Fehler</div>
+		<div id="error_message"></div>
+		<input type="button" value="OK" id="error_ok">
+	</div>
+</body>
+</html>

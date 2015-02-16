@@ -1,4 +1,4 @@
-div.ta_main {
+.ta_main {
 	background-color: #555;
 	border-radius: 10px;
 	border: solid 5px yellow;
@@ -8,6 +8,7 @@ div.ta_main {
 	width: 90%;
 	padding-bottom: 5px;
 	height: 35%;
+	position:relative;
 }
 
 h4.ta {
@@ -23,5 +24,10 @@ a {
 
 img {
 	height: 60%;
-	width: auto;
+	position: absolute;
+	margin: auto;
+	top: 12vw;
+	left: 0;
+	right: 0;
+	bottom: 0;
 }
