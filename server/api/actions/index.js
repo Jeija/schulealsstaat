@@ -1,7 +1,7 @@
-var fs = require("fs");
+var openssl = require("openssl-wrapper");
 var ursa = require("ursa");
+var fs = require("fs");
 var cert = require("../cert");
-var sjcl = require("sjcl");
 var log = require("../logging");
 
 // Load private key to decrypt requests
@@ -39,8 +39,38 @@ function decrypt_aes_key(passphrase) {
 	return privkey.decrypt(passphrase, "base64", "utf8", ursa.RSA_PKCS1_PADDING);
 }
 
-function decrypt_query(query_enc, aes_key) {
-	return sjcl.decrypt(aes_key, query_enc);
+
+// OpenSSL AES decryption + encryption functions
+function decrypt_query(query_enc, aes_key, name, res, callback) {
+	var query_buf = new Buffer(query_enc);
+	var ssl_options = {
+		"d" : true,
+		"aes-256-cbc" : true,
+		"a" : true,
+		"k" : aes_key // child_process.spawn sanitizes user input
+	};
+	openssl.exec("enc", query_buf, ssl_options, function (err, plain) {
+		try {
+			callback(plain.toString());
+		} catch(e) {
+			log.err("API (Query)", name + ": " + e);
+			res.end("error: " + e);
+		}
+	});
+}
+
+function encrypt_query(query_plain, aes_key, callback) {
+	var query_buf = new Buffer(query_plain);
+	var ssl_options = {
+		"e" : true,
+		"aes-256-cbc" : true,
+		"a" : true,
+		"k" : aes_key // child_process.spawn sanitizes user input
+	};
+
+	openssl.exec("enc", query_buf, ssl_options, function (err, query_buf) {
+		callback(query_buf.toString());
+	});
 }
 
 function execute(name, req, res)
@@ -55,26 +85,30 @@ function execute(name, req, res)
 
 		// Retrieve AES key from post_data
 		var aes_key = decrypt_aes_key(post_data.passphrase);
-		var query_str = decrypt_query(post_data.encrypted, aes_key);
-		var query = JSON.parse(query_str);
+		decrypt_query(post_data.encrypted, aes_key, name, res, function (query_str) {
+			var query = JSON.parse(query_str);
 
-		// Send AES-encrypted answer
-		var on_answer = function (ans) {
-			if (ans) res.end(sjcl.encrypt(aes_key, JSON.stringify(ans)));
-		};
+			// Send AES-encrypted answer
+			var on_answer = function (ans) {
+				if (!ans) return;
+				encrypt_query(JSON.stringify(ans), aes_key, function (enc) {
+					res.end(enc);
+				});
+			};
 
-		if (actions[name].cert)
-			cert.check(actions[name].cert, query.cert, function () {
+			if (actions[name].cert)
+				cert.check(actions[name].cert, query.cert, function () {
+					actions[name].action(query.payload, on_answer, req);
+				}, function () {
+					log.warn("API", name + ": incorrect certificate from " +
+						req.connection.remoteAddress);
+					res.end("error: incorrect certificate");
+				});
+			else
 				actions[name].action(query.payload, on_answer, req);
-			}, function () {
-				log.warn("API", name + ": incorrect certificate from "
-					+ req.connection.remoteAddress);
-				res.end("error: incorrect certificate");
-			});
-		else
-			actions[name].action(query.payload, on_answer, req);
+		});
 	} catch(e) {
-		log.err("API", name + ": " + e);
+		log.err("API (POST)", name + ": " + e);
 		res.end("error: " + e);
 	}});
 }

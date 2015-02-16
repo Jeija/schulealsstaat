@@ -38,29 +38,24 @@ function encrypt_passphrase (passphrase) {
 }
 
 function encrypt_query(passphrase, query) {
-	return sjcl.encrypt(passphrase, query);
+	return GibberishAES.enc(query, passphrase);
 }
 
 function decrypt_answer(passphrase, answer) {
-	try {
-		return JSON.parse(sjcl.decrypt(passphrase, answer));
-	} catch (e) {
-		return answer;
-	}
+	return GibberishAES.dec(answer, passphrase);
 }
 
 function send_query(name, query, cb) {
-	// Generate random AES passphrase (no cryptographically secure randomness, but should be
-	// enough for this use case)
-	function rnd () {
-		return Math.random().toString(36).substring(7);
-	}
-	var passphrase = rnd() + rnd() + rnd();
+	// Generate AES passphrase
+	var passphrase = "";
+	for (var i = 0; i < 32; i++) passphrase += String.fromCharCode(Math.floor(Math.random() * 256));
+	passphrase = "random passphrase";
 	var passphrase_encrypted = encrypt_passphrase(passphrase);
+	var query_encrypted = encrypt_query(passphrase, JSON.stringify(query));
 
 	var post = JSON.stringify({
 		passphrase : passphrase_encrypted,
-		encrypted : encrypt_query(passphrase, JSON.stringify(query))
+		encrypted : query_encrypted
 	});
 
 	$.ajax({
@@ -68,7 +63,7 @@ function send_query(name, query, cb) {
 		url : ACTIONURL + name,
 		data : post,
 		success : function (ans) {
-			cb(decrypt_answer(passphrase, ans));
+			cb(JSON.parse(decrypt_answer(passphrase, ans)));
 		}
 	});
 }

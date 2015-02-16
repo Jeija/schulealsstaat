@@ -6,8 +6,9 @@
     "colors": ">=1.0.3",
     "flow": "^0.2.3",
     "mongoose": ">=3.8",
+    "openssl-wrapper": "^0.2.1",
     "sjcl": "^1.0.1",
-    "ursa": "^0.8.1"
+    "ursa": "^0.8.2"
   },
   "repository": {
     "type": "git",
