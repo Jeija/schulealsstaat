@@ -96,12 +96,13 @@ function execute(name, req, res)
 				});
 			};
 
+			var ip = req.connection.remoteAddress;
 			if (actions[name].cert)
-				cert.check(actions[name].cert, query.cert, function () {
+				cert.check(actions[name].cert, query.cert, ip, function () {
 					actions[name].action(query.payload, on_answer, req);
 				}, function () {
 					log.warn("API", name + ": incorrect certificate from " +
-						req.connection.remoteAddress);
+						ip);
 					res.end("error: incorrect certificate");
 				});
 			else
