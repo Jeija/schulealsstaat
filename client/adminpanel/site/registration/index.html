@@ -2,7 +2,7 @@
 
 <html>
 <head>
-	<title>Schule als Staat</title>
+	<title>SaEU - Registrierung</title>
 	<script src="../bower_components/jsencrypt/bin/jsencrypt.min.js"></script>
 	<script src="../bower_components/jquery/dist/jquery.js"></script>
 	<script src="../bower_components/gibberish-aes/dist/gibberish-aes-1.0.0.min.js"></script>
@@ -119,6 +119,28 @@
 
 	<div id="send_container"><input type="button" id="send" value="Anmelden" /></div>
 	</form>
+	</div>
+
+	<!-- Settings bottom bar -->
+	<div id="bottombar">
+		<input type="button" id="settings_show" value="Einstellungen">
+		<input type="button" id="settings_forget" value="Einstellungen vergessen">
+	</div>
+
+	<!-- Settings Popup -->
+	<div id="settings_popup" hidden>
+		<div id="settings_popup_heading">Einstellungen</div>
+		<div id="settings_popup_desc">
+			Wird für ein Besucher Geld aufgeladen, so muss dieses von
+			einem Konto abgebucht werden. Dieses Konto kann hier angegeben
+			werden:
+		</div>
+		<table id="settings_popup_table"><tr>
+			<td>QR-ID:</td><td><input id="settings_qrid" type="text"></td>
+		</tr><tr>
+			<td>Passwort:</td><td><input id="settings_password" type="password"></td>
+		</tr></table>
+		<input type="button" id="settings_ok" value="OK">
 	</div>
 
 	<!-- QR Scanner Popup -->

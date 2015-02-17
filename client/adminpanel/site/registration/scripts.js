@@ -125,23 +125,53 @@ $(function() {
 	});
 
 	function preload_money() {
-		// optionally preload money
+		// Load settings: Account to transfer money from
+		var settings;
+		try {
+			settings = JSON.parse(localStorage.getItem("saeu-settings"));
+		} catch (e) {
+			alert("Konnte Geld nicht aufladen: Einstellungen fehlen!");
+			return;
+		}
+
 		if ($("#class").val() != "visitor") return;
 		var hgc_value = $("#hgc_preload_value").val();
 		if (hgc_value == "enter_value")
 			hgc_value = $("#hgc_preload_enter_value").val().replace(",", ".");
 		var hgc_num = parseFloat(hgc_value);
 
-		var spawn = {
+		var transaction = {
+			sender : settings.qrid,
+			sender_password : settings.password,
 			recipient : $("#qrid").val(),
-			amount : hgc_num,
-			comment : "Besucher Aufladung"
+			amount_sent : hgc_num,
+			comment : "Besucher - Aufladung"
 		};
-		action_cert("spawn_money", spawn, "registration_cert", function (res) {
+		action_cert("transaction_taxfree", transaction, "registration_cert",
+				function (res) {
 			if (res == "ok") alert(hgc_num + " HGC aufgeladen!");
 			else alert("Aufladung schlug fehl, error: " + res);
 		});
 	}
+
+	$("#settings_show").click(function () {
+		$("#settings_popup").fadeIn();
+	});
+
+	$("#settings_forget").click(function () {
+		localStorage.setItem("saeu-settings", "");
+		alert("Einstellungen sind vergessen!");
+	});
+
+	$("#settings_ok").click(function () {
+		var password = $("#settings_password").val();
+		var qrid = $("#settings_qrid").val();
+		$("#settings_popup").fadeOut();
+		localStorage.setItem("saeu-settings", JSON.stringify({
+			password : password,
+			qrid : qrid
+		}));
+	});
 
 	$("#send").click(function() {
 		// If preloading money, make sure the input value is a valid number:

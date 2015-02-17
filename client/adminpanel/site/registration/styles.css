@@ -68,6 +68,7 @@ body {
 	width:830px;
 	margin:0 auto;
 	font-size:18px;
+	margin-bottom:80px;
 }
 
 .content h1 {
@@ -139,4 +140,74 @@ img#hoegy {
 	margin-left:10px;
 	width:200px;
 	text-align:right;
+}
+
+/* Settings bottom bar */
+#bottombar {
+	position:fixed;
+	bottom:0;
+	left:0;
+	width:100%;
+	background:rgba(40, 50, 140, 0.5);
+	height:40px;
+}
+
+#settings_show, #settings_forget {
+	background:transparent;
+	height:30px;
+	position:fixed;
+	bottom:5px;
+	font-size:16px;
+	color:#fff;
+	border:1px solid #ccc;
+	border-radius:4px;
+	cursor:pointer;
+	transition:background 0.3s;
+}
+
+#settings_show:hover, #settings_forget:hover {
+	background:rgba(0, 0, 0, 0.3);
+	transition:background 0.3s;
+}
+
+#settings_show {
+	right:220px;
+}
+
+#settings_forget {
+	right:20px;
+}
+
+/* Settings (money preload) popup */
+#settings_popup {
+	width:700px;
+	height:220px;
+	position:fixed;
+	top:0;
+	bottom:0;
+	left:0;
+	right:0;
+	margin:auto;
+	background:#fff;
+	padding:25px;
+	border:2px solid #555;
+	text-align:center;
+	box-shadow:0 0 8px #555;
+}
+
+#settings_popup_desc {
+	font-size:17px;
+	font-style:italic;
+}
+
+#settings_popup_heading {
+	font-size:30px;
+}
+
+#settings_ok {
+	width:100px;
+	margin:0 auto;
+	margin-top:10px;
+	font-size:20px;
+	padding:4px;
 }

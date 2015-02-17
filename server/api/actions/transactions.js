@@ -208,7 +208,7 @@ function transaction(sender_qrid, recipient_qrid, amount_sent, amount_received, 
 }
 
 /**
- * transaction {
+ * transaction / transaction_taxfree {
  *	sender : String (QR-ID),
  *	sender_password : String,
  *	recipient : String (QR-ID),
@@ -216,6 +216,8 @@ function transaction(sender_qrid, recipient_qrid, amount_sent, amount_received, 
  *	amount_sent : Number, OR amount_received : Number,
  *	comment : String(max. 300 characters)
  * }
+ *
+ * transaction_taxfree: No tax fees, but requires registration_cert or admin_cert
  *
  * response values:
  * ok			--> Transaction succesfully completed
@@ -230,10 +232,7 @@ function transaction(sender_qrid, recipient_qrid, amount_sent, amount_received, 
  * too_many_decplaces	--> Amount has more decimal places than hgc_tr_decimal_places allows
  * error:<something>	--> Some other error, e.g. with JSON parsing
  */
-register("transaction", function (payload, answer, req) {
-	// Tax in %
-	var tax = config.get("transaction_tax_percent", 0);
-
+function transaction_common(payload, answer, req, tax) {
 	/*** Gather data from payload ***/
 	var sender = payload.sender;
 	var recipient = payload.recipient;
@@ -261,6 +260,17 @@ register("transaction", function (payload, answer, req) {
 		var ip = req.connection.remoteAddress;
 		transaction(sender, recipient, sent, received, tax, comment, ip, answer);
 	});
+}
+
+register("transaction", function (payload, answer, req) {
+	// Tax in %
+	var tax = config.get("transaction_tax_percent", 0);
+	transaction_common(payload, answer, req, tax);
+});
+
+register_cert("transaction_taxfree", ["registration_hash", "admin_hash"],
+		function (payload, answer, req) {
+	transaction_common(payload, answer, req, 0);
 });
 
 /**
