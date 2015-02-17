@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+	<title>SaEU - Transaktionen</title>
+	<script src="../bower_components/jsencrypt/bin/jsencrypt.min.js"></script>
+	<script src="../bower_components/jquery/dist/jquery.js"></script>
+	<script src="../bower_components/gibberish-aes/dist/gibberish-aes-1.0.0.min.js"></script>
+	<script src="../api.js"></script>
+	<script src="scripts.js"></script>
+	<link rel="stylesheet" type="text/css" href="/common.css">
+	<link rel="stylesheet" type="text/css" href="styles.css">
+	<meta charset="utf-8"/>
+</head>
+<body>
+	<div id="bg"></div>
+	<div id="heading">Transaktionen</div>
+	<div id="content">
+	<div id="infotable_container">
+
+	<!-- Sender input table -->
+	<table id="sender_info" class="infotable">
+		<tr><th colspan="2">Absender</th></tr>
+		<tr id="sender_qrid">
+			<td>QR-ID</td>
+			<td><input type="text" class="value"></td>
+			<td><input type="checkbox" class="matters"></td>
+		</tr><tr id="sender_country">
+			<td>Land</td>
+			<td><select class="value">
+				<option value="de">Deutschland</option>
+				<option value="fr">Frankreich</option>
+				<option value="it">Italien</option>
+				<option value="tr">Türkei</option>
+				<option value="gb">Großbritannien</option>
+				<option value="">Kein Land</option>
+			</select></td>
+			<td><input type="checkbox" class="matters"></td>
+		</tr>
+	</table>
+
+	<!-- Transaction input table -->
+	<table id="transaction_info" class="infotable">
+		<tr><th colspan="2">Transaktion</th></tr>
+		<tr id="minimal_amount">
+			<td>Mindestwert</td>
+			<td><input type="text" class="value"></td>
+			<td><input type="checkbox" class="matters"></td>
+		</tr><tr id="maximal_amount">
+			<td>Maximalwert</td>
+			<td><input type="text" class="value"></td>
+			<td><input type="checkbox" class="matters"></td>
+		</tr><tr id="tax_percent">
+			<td>Steuersatz</td>
+			<td><input type="text" class="value"></td>
+			<td><input type="checkbox" class="matters"></td>
+		</tr><tr id="tax_min">
+			<td>min. Steuer</td>
+			<td><input type="text" class="value"></td>
+			<td><input type="checkbox" class="matters"></td>
+		</tr><tr id="tax_max">
+			<td>max. Steuer</td>
+			<td><input type="text" class="value"></td>
+			<td><input type="checkbox" class="matters"></td>
+		</tr>
+	</table>
+
+	<!-- Recipient input table -->
+	<table id="recipient_info" class="infotable">
+		<tr><th colspan="2">Empfänger</th></tr>
+		<tr id="recipient_qrid">
+			<td>QR-ID</td>
+			<td><input type="text" class="value"></td>
+			<td><input type="checkbox" class="matters"></td>
+		</tr><tr id="recipient_country">
+			<td>Land</td>
+			<td><select class="value">
+				<option value="de">Deutschland</option>
+				<option value="fr">Frankreich</option>
+				<option value="it">Italien</option>
+				<option value="tr">Türkei</option>
+				<option value="gb">Großbritannien</option>
+				<option value="">Kein Land</option>
+			</select></td>
+			<td><input type="checkbox" class="matters"></td>
+		</tr>
+	</table>
+	<input type="button" value="Abfrage" id="query">
+	</div> <!-- infotable_container -->
+	<div class="subheading">Transaktionsliste</div>
+	</div> <!-- content -->
+</body>
+</html>

@@ -1,13 +1,9 @@
-body {
-	font-family:Arial;
-	background:#aaa;
-}
-
 #content {
 	width:800px;
 	border:1px solid #000;
 	margin:0 auto;
-	background:#fff;
+	margin-top:30px;
+	background:rgba(255, 255, 255, 0.85);
 	padding:20px;
 	text-align:center;
 }
@@ -142,12 +138,13 @@ body {
 #details_popup {
 	position:absolute;
 	top:50px;
-	width:500px;
 	left:calc(50% - 250px);
 	margin:0 auto;
 	background:#fff;
 	border:2px solid #000;
 	text-align:center;
+	width:280px;
+	padding:40px 20px;
 }
 
 #details_heading {

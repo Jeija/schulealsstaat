@@ -1,0 +1,101 @@
+#heading {
+	height:40px;
+	background:#000;
+	width:100%;
+	text-align:center;
+	font-size:30px;
+	color:#fff;
+	padding-top:6px;
+	margin-bottom:30px;
+}
+
+.subheading {
+	text-align:center;
+	font-size:30px;
+}
+
+#content {
+	width:930px;
+	background:rgba(255, 255, 255, 0.85);
+	margin:0 auto;
+}
+
+#infotable_container {
+	position:relative;
+	height:220px;
+	background:#ccc;
+	box-shadow:0 0 10px #000;
+	margin-bottom:10px;
+}
+
+#sender_info {
+	position:absolute;
+	top:10px;
+	left:30px;
+}
+
+#transaction_info {
+	position:absolute;
+	top:10px;
+	right:0;
+	left:0;
+	width:300px;
+	margin:0 auto;
+}
+
+#recipient_info {
+	position:absolute;
+	top:10px;
+	right:30px;
+}
+
+.infotable th {
+	text-align:center;
+	font-size:22px;
+	padding-bottom:5px;
+	font-weight:normal;
+	font-style:italic;
+}
+
+.infotable {
+}
+
+.infotable input[type="text"] {
+	width:120px;
+	font-size:15px;
+	padding:3px;
+	background:#fff;
+	border:1px solid #000;
+}
+
+.infotable select {
+	width:128px;
+	padding:1px;
+	font-size:13px;
+	padding:3px;
+	border:1px solid #000;
+	background:#fff;
+}
+
+.infotable input[type="checkbox"] {
+	transform: scale(1.2);
+	-webkit-transform: scale(1.5);
+}
+
+#query {
+	position:absolute;
+	right:30px;
+	bottom:20px;
+	font-size:20px;
+	padding:6px 14px;
+	border:1px solid #666;
+	border-radius:4px;
+	background:transparent;
+	cursor:pointer;
+	transition:background 0.3s;
+}
+
+#query:hover {
+	background:#eee;
+	transition:background 0.3s;
+}

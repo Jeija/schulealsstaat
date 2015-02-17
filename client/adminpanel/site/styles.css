@@ -1,22 +1,3 @@
-body {
-	box-shadow:inset 0 0 100px rgba(0, 0, 0, 0.5);
-	width:100%;
-	margin:0;
-	font-family:Arial;
-	background:#000;
-}
-
-#bg {
-	width:100vw;
-	height:100vh;
-	position:absolute;
-	top:0;
-	left:0;
-	background:url(/euflag.svg) no-repeat center center fixed;
-        background-size:cover;
-	opacity:0.25;
-}
-
 #content {
 	width:600px;
 	position: fixed;

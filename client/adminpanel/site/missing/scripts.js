@@ -121,7 +121,7 @@ function render_students(list) {
 		var st = list[studentid];
 
 		$("#details").html("");
-		$("#details_popup").slideDown();
+		$("#details_popup").fadeIn();
 		$("#details_close").show();
 
 		$("#details").append($("<tr>")
@@ -186,6 +186,6 @@ $(function () {
 
 	$("#details_close").click(function () {
 		$(this).hide();
-		$("#details_popup").slideUp();
+		$("#details_popup").fadeOut();
 	});
 });
