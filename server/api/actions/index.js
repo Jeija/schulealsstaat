@@ -41,7 +41,7 @@ function decrypt_aes_key(passphrase) {
 
 
 // OpenSSL AES decryption + encryption functions
-function decrypt_query(query_enc, aes_key, name, res, callback) {
+function decrypt_query(query_enc, aes_key, name, answer, callback) {
 	var query_buf = new Buffer(query_enc);
 	var ssl_options = {
 		"d" : true,
@@ -54,7 +54,7 @@ function decrypt_query(query_enc, aes_key, name, res, callback) {
 			callback(plain.toString());
 		} catch(e) {
 			log.err("API (Query)", name + ": " + e);
-			res.end("error: " + e);
+			answer("error: " + e);
 		}
 	});
 }
@@ -80,38 +80,47 @@ function execute(name, req, res)
 
 	var POST = "";
 	req.on("data", function (data) { POST += data; });
-	req.on("end", function () { try {
-		var post_data = JSON.parse(POST);
+	req.on("end", function () {
+		var post_data;
+		try {
+			post_data = JSON.parse(POST);
+		} catch(e) {
+			log.err("API (JSON.parse)", name + ": " + e);
+			res.end("error: " + e);
+			return;
+		} try {
 
 		// Retrieve AES key from post_data
 		var aes_key = decrypt_aes_key(post_data.passphrase);
-		decrypt_query(post_data.encrypted, aes_key, name, res, function (query_str) {
-			var query = JSON.parse(query_str);
 
-			// Send AES-encrypted answer
-			var on_answer = function (ans) {
-				if (!ans) return;
-				encrypt_query(JSON.stringify(ans), aes_key, function (enc) {
-					res.end(enc);
-				});
-			};
+		// Send AES-encrypted answer
+		var on_answer = function (ans) {
+			if (!ans) return;
+			encrypt_query(JSON.stringify(ans), aes_key, function (enc) {
+				res.end(enc);
+			});
+		};
+
+		decrypt_query(post_data.encrypted, aes_key, name, on_answer, function (query_str) {
+			var query = JSON.parse(query_str);
 
 			var ip = req.connection.remoteAddress;
 			if (actions[name].cert)
 				cert.check(actions[name].cert, query.cert, ip, function () {
 					actions[name].action(query.payload, on_answer, req);
 				}, function () {
-					log.warn("API", name + ": incorrect certificate from " +
-						ip);
-					res.end("error: incorrect certificate");
+					log.warn("API (Cert)", name +
+						": incorrect certificate from " + ip);
+					on_answer("error: incorrect certificate");
 				});
 			else
 				actions[name].action(query.payload, on_answer, req);
 		});
-	} catch(e) {
-		log.err("API (POST)", name + ": " + e);
-		res.end("error: " + e);
-	}});
+		} catch(e) {
+			log.err("API (Action)", name + ": " + e);
+			on_answer("error: " + e);
+		}
+	});
 }
 
 require("./misc.js")(register_action, register_action_cert);
