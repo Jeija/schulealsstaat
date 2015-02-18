@@ -1,9 +1,13 @@
 #content {
 	width:600px;
-	position: fixed;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
+	height:730px;
+	position:absolute;
+	top:0;
+	left:0;
+	right:0;
+	bottom:0;
+	margin:auto;
+	padding:50px 0;
 }
 
 #preheading {
