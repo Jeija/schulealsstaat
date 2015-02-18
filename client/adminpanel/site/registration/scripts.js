@@ -84,11 +84,10 @@ $(function() {
 	update_subclass();
 
 	$("#hgc_preload_value").on("keydown change", function() {
-		if (this.value == "enter_value") {
+		if (this.value == "enter_value")
 			$("#hgc_preload_enter_value").show();
-		} else {
+		else
 			$("#hgc_preload_enter_value").hide();
-		}
 	});
 
 	function highlight_pwd() {
@@ -110,15 +109,19 @@ $(function() {
 	}
 
 	$("#password").on("input", highlight_pwd);
-
 	$("#password_repeat").on("input", highlight_pwd);
+
+	/*** QR Scan Popup ***/
+	$("#qr_popup_abort").click(function () {
+		$("#qr_popup").fadeOut();
+	});
 
 	$(".qrid_scan").click(function () {
 		var qrid_scan_target = $(this).parent().parent().find(".qrid_scan_target")
-		QRReader.init("#webcam_qr", "../QRScanJS/");
-		$("#webcam_popup").slideDown(200);
+		QRReader.init("#qr_webcam", "../QRScanJS/");
+		$("#qr_popup").fadeIn(100);
 		QRReader.scan(function (qrid) {
-			$("#webcam_popup").slideUp(200);
+			$("#qr_popup").fadeOut(100);
 			qrid_scan_target.val(qrid);
 		})
 	});
@@ -220,7 +223,6 @@ $(function() {
 			picname : picname,
 			qrid : $("#qrid").val()
 		};
-		console.log(regdata);
 
 		action_cert("register_student", regdata, "registration_cert", function (res) {
 			api_result = res;

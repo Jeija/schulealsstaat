@@ -71,7 +71,7 @@ function render_list(list) {
 			.append($("<td>")
 				.text(st.qrid))
 			.append($("<td>")
-				.text(st.balance + " HGC"))
+				.text(st.balance.toFixed(3) + " HGC"))
 			.append($("<td>")
 				.append('<input type="button" value="&#x270e;"\
 					class="profile_open" data-listid="' + i + '">'))
@@ -85,7 +85,7 @@ function render_list(list) {
 	$(".profile_open").click(function () {
 		var st = list[$(this).data("listid")];
 		current_profile = st;
-		$("#profile").slideDown(200, function () {
+		$("#profile").fadeIn(200, function () {
 			$("#profile_close").show();
 		});
 		$("#profile_name").text(st.firstname + " " + st.lastname);
@@ -260,10 +260,10 @@ $(function() {
 
 	$("#profile_close").click(function () {
 		$(this).hide();
-		$("#profile").slideUp(200, function () {
+		$("#profile").fadeIn(200, function () {
 			$("#profile").hide();
 		});
-		$("#webcam_popup").hide();
+		$("#qr_popup").hide();
 	});
 
 	$("#profile_pass_load").click(function () {
@@ -275,10 +275,10 @@ $(function() {
 
 	$(".qrid_scan").click(function () {
 		var qrid_scan_target = $(this).siblings(".qrid_scan_target")
-		QRReader.init("#webcam", "../QRScanJS/");
-		$("#webcam_popup").slideDown(200);
+		QRReader.init("#qr_webcam", "../QRScanJS/");
+		$("#qr_popup").fadeIn(200);
 		QRReader.scan(function (qrid) {
-			$("#webcam_popup").slideUp(200);
+			$("#qr_popup").fadeOut(200);
 			qrid_scan_target.val(qrid);
 		})
 	});
@@ -328,6 +328,6 @@ $(function() {
 	});
 
 	$("#qr_scan_abort").click(function() {
-		$("#webcam_popup").slideUp();
+		$("#qr_popup").fadeOut();
 	});
 });
