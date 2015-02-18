@@ -16,3 +16,10 @@
 ### Internet Filtering
 Userterminals will create their wifi networks using the script in `network/wifi/wifi.sh`.
 They must `ebtables-restore < ebtables.save` (`ebtables.save` is in `network/wifi`) immediately after setting up their WiFi access point.
+
+### Dependencies
+The `terminaliso` has to be built on Archlinux, the `prepare.sh` script prepares the environment and
+installs build dependencies. All other dependencies will be installed by `init.sh`. On Debian-based
+distors and on Arch-based ones, it will install all dependencies, including tmux and nodejs + npm.
+On other distributions, you have to install `tmux` and `nodejs` *before* executing the script.
+

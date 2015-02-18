@@ -9,9 +9,10 @@ fi
 
 CWD="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-trap "kill 0" SIGINT SIGTERM EXIT
-
-$CWD/registration/run.sh &
-$CWD/adminpanel/run.sh &
-$CWD/entrycheck/run.sh &
-$CWD/genrequest/run.sh
+tmux send-key "$CWD/registration/run.sh" C-m
+tmux split-window -v -p 75
+tmux send-key "$CWD/adminpanel/run.sh" C-m
+tmux split-window -v -p 67
+tmux send-key "$CWD/entrycheck/run.sh" C-m
+tmux split-window -v
+tmux send-key "$CWD/genrequest/run.sh" C-m

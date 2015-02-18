@@ -9,11 +9,11 @@ fi
 
 CWD="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-trap "kill 0" SIGINT SIGTERM EXIT
-
 if [ "$(pidof systemd)" ]; then
 	systemctl start mongodb
 fi
 
-cd $CWD/webcam && nodemon main.js &
-cd $CWD/api && nodemon main.js
+# Spawn Webcam and API Server in different tmux windows
+tmux send-key "cd $CWD/webcam && nodemon main.js" C-m
+tmux split-window -v
+tmux send-key "cd $CWD/api && nodemon main.js" C-m

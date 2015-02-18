@@ -13,6 +13,17 @@ set -xe
 
 CWD="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
+# Debian-based distros
+if type "apt-get" > /dev/null; then
+	apt-get update
+	apt-get install nodejs-legacy tmux
+fi
+
+# Arch-based distros
+if type "pacman" > /dev/null; then
+	pacman -Sy nodejs tmux
+fi
+
 npm config set python /usr/bin/python2
 sudo npm install -g bower
 sudo npm install -g http-server

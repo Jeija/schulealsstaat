@@ -9,8 +9,20 @@ fi
 
 CWD="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-trap "kill 0" SIGINT SIGTERM EXIT
+#!/bin/bash
+SESSION="SaEU"
 
-
-$CWD/server/run.sh &
-$CWD/client/run.sh
+tmux -2 new-session -d -s "$SESSION"
+tmux rename-window "Schule als EU"
+tmux split-window -h
+tmux select-pane -t 0
+tmux send-key "$CWD/server/run.sh" C-m
+sleep 0.1
+tmux select-pane -t 2
+sleep 0.1
+tmux send-key "$CWD/client/run.sh" C-m
+tmux set-option mode-mouse on
+tmux set-option mouse-select-pane on
+tmux set-option mouse-resize-pane on
+tmux set-option mouse-select-window on
+tmux -2 attach-session -t "$SESSION"
