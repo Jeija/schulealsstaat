@@ -8,6 +8,10 @@ var transactionSchema = new Schema({
 	recipient : String,
 	time : Date,
 
+	/* "Countries" of sender and recipient */
+	sender_country : String,
+	recipient_county : String,
+
 	/* Amount in HGC, rounded to 5 comma values (12.34567) */
 	amount_sent : Number,		// Amount subtracted from sender's account
 	amount_received : Number,	// Amount added to recipient's account

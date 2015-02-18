@@ -26,7 +26,9 @@ $(function() {
 		});
 	}
 
-	navigator.getUserMedia({video: true}, handleVideo, function (err){alert(err);});
+	navigator.getUserMedia({video: true}, handleVideo, function (err) {
+		alert("Webcam konnte nicht gefunden werden!");
+	});
 
 	$("#class").on("keydown change", function() {
 		var subclass = $("#subclass");

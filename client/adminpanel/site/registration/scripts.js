@@ -26,7 +26,9 @@ $(function() {
 		});
 	}
 
-	navigator.getUserMedia({video: true}, handleVideo, function (err){alert(err);});
+	navigator.getUserMedia({video: true}, handleVideo, function (err) {
+		alert("Webcam konnte nicht gefunden werden!");
+	});
 
 	$("#class").on("keydown change", function() {
 		var subclass = $("#subclass");
@@ -88,18 +90,13 @@ $(function() {
 	});
 
 	function highlight_pwd() {
-		if ($("#password").val().length < PWD_MINLEN)
-		{
+		if ($("#password").val().length < PWD_MINLEN) {
 			$("#password").css("box-shadow", "0px 0px 5px #d00");
 			$("#password_repeat").css("box-shadow", "0px 0px 5px #d00");
-		}
-		else if ($("#password").val() != $("#password_repeat").val())
-		{
+		} else if ($("#password").val() != $("#password_repeat").val()) {
 			$("#password").css("box-shadow", "0px 0px 5px #0d0");
 			$("#password_repeat").css("box-shadow", "0px 0px 5px #d00");
-		}
-		else
-		{
+		} else {
 			$("#password").css("box-shadow", "0px 0px 5px #0d0");
 			$("#password_repeat").css("box-shadow", "0px 0px 5px #0d0");
 		}
@@ -184,14 +181,12 @@ $(function() {
 
 		// Retrieve & Check password before sending anything
 		var pwd = $("#password").val();
-		if (pwd != $("#password_repeat").val())
-		{
+		if (pwd != $("#password_repeat").val()) {
 			alert("Fehler: Die Passwörter stimmen nicht überein.");
 			return;
 		}
 
-		if (pwd.length < PWD_MINLEN)
-		{
+		if (pwd.length < PWD_MINLEN) {
 			alert("Fehler: Das Passwort muss mindestens " + PWD_MINLEN
 				+ " Zeichen lang sein.");
 			return;
@@ -219,9 +214,11 @@ $(function() {
 			birthyear : $("#birthyear").val(),
 			sclass : $("#class").val(),
 			subclass : $("#subclass").val(),
+			country : $("#country").val(),
 			picname : picname,
 			qrid : $("#qrid").val()
 		};
+		console.log(regdata);
 
 		action_cert("register_student", regdata, "registration_cert", function (res) {
 			api_result = res;
