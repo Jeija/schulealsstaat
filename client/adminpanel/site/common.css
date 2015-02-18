@@ -3,6 +3,7 @@ body {
 	margin:0;
 	font-family:Arial;
 	background:#000;
+	margin-top:80px;
 }
 
 html {
@@ -19,4 +20,31 @@ html {
 	background:url(/euflag.svg) no-repeat center center fixed;
         background-size:cover;
 	opacity:0.25;
+}
+
+#heading {
+	position:fixed;
+	top:0;
+	z-index:2;
+	font-family:Arial;
+	height:35px;
+	font-size:25px;
+	padding-top:10px;
+	width:100%;
+	text-align:center;
+	color:#fff;
+	text-transform:uppercase;
+	font-weight:bold;
+	background:rgba(0, 20, 60, 0.9);
+}
+
+#heading a {
+	display:block;
+	background:url(euflag.svg);
+        background-size:100%;
+	height:45px;
+	width:67.5px;
+	position:absolute;
+	top:0;
+	left:0;
 }

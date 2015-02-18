@@ -66,12 +66,6 @@
 	margin-bottom:80px;
 }
 
-.content h1 {
-	text-align:center;
-	margin-top:8px;
-	margin-bottom:30px;
-}
-
 select {
 	font-size:18px;
 	margin-right:-7px;
@@ -100,16 +94,9 @@ table td {
 	padding:5px 8px;
 }
 
-img#eu {
-	position:absolute;
-	top:10px;
-	right:10px;
-	width:100px;
-}
-
 img#hoegy {
 	position:absolute;
-	top:90px;
+	top:10px;
 	right:10px;
 	width:100px;
 }

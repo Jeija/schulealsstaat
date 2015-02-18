@@ -60,17 +60,6 @@ input[type="text"]:focus {
 	width:120px;
 }
 
-#heading {
-	height:40px;
-	background:#000;
-	width:100%;
-	text-align:center;
-	font-size:30px;
-	color:#fff;
-	padding-top:6px;
-	margin-bottom:30px;
-}
-
 #content {
 	width:800px;
 	margin:0 auto;

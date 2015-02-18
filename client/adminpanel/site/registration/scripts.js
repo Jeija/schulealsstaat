@@ -30,15 +30,16 @@ $(function() {
 		alert("Webcam konnte nicht gefunden werden!");
 	});
 
-	$("#class").on("keydown change", function() {
+	function update_subclass() {
 		var subclass = $("#subclass");
+		var mainclass = $("#class");
 		subclass.empty();
-		if(this.value == "ks") {
+		if(mainclass.val() == "ks") {
 			subclass[0].add(new Option("1", "1"));
 			subclass[0].add(new Option("2", "2"));
 			subclass.show();
-		} else if (this.value == "teacher" || this.value == "other" 
-			|| this.value == "legalentity" || this.value == "visitor") {
+		} else if (mainclass.val() == "teacher" || mainclass.val() == "other" 
+			|| mainclass.val() == "legalentity" || mainclass.val() == "visitor") {
 			subclass[0].add(new Option("none", ""));
 			subclass.hide();
 		} else {
@@ -50,13 +51,14 @@ $(function() {
 			subclass.show();
 		}
 
-		if (this.value == "teacher" || this.value == "legalentity" || this.value == "visitor") {
+		if (mainclass.val() == "teacher" || mainclass.val() == "legalentity" ||
+				mainclass.val() == "visitor") {
 			$("#birth_container").hide();
 		} else {
 			$("#birth_container").show();
 		}
 
-		if (this.value == "legalentity" || this.value == "visitor") {
+		if (mainclass.val() == "legalentity" || mainclass.val() == "visitor") {
 			$("#webcam_container").hide();
 			$("#lastname_container").hide();
 			$("#firstname_container").hide();
@@ -68,18 +70,18 @@ $(function() {
 			$("#qrid_container").hide();
 		}
 
-		if (this.value == "legalentity") {
+		if (mainclass.val() == "legalentity")
 			$("#special_name_container").show();
-		} else {
+		else
 			$("#special_name_container").hide();
-		}
 
-		if (this.value == "visitor") {
+		if (mainclass.val() == "visitor")
 			$("#hgc_preload_container").show();
-		} else {
+		else
 			$("#hgc_preload_container").hide();
-		}
-	});
+	}
+	$("#class").change(update_subclass);
+	update_subclass();
 
 	$("#hgc_preload_value").on("keydown change", function() {
 		if (this.value == "enter_value") {

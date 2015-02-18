@@ -30,14 +30,15 @@ $(function() {
 		alert("Webcam konnte nicht gefunden werden!");
 	});
 
-	$("#class").on("keydown change", function() {
+	function update_subclass() {
 		var subclass = $("#subclass");
+		var mainclass = $("#class");
 		subclass.empty();
-		if(this.value == "ks") {
+		if(mainclass.val() == "ks") {
 			subclass[0].add(new Option("1", "1"));
 			subclass[0].add(new Option("2", "2"));
 			subclass.show();
-		} else if (this.value == "teacher" || this.value == "other") {
+		} else if (mainclass.val() == "teacher" || mainclass.val() == "other") {
 			subclass[0].add(new Option("none", ""));
 			subclass.hide();
 		} else {
@@ -49,12 +50,13 @@ $(function() {
 			subclass.show();
 		}
 
-		if (this.value == "teacher") {
+		if (mainclass.val() == "teacher")
 			$("#birth_container").hide();
-		} else {
+		else
 			$("#birth_container").show();
-		}
-	});
+	}
+	$("#class").change(update_subclass);
+	update_subclass();
 
 	function highlight_pwd() {
 		if ($("#password").val().length < PWD_MINLEN)
