@@ -28,7 +28,7 @@ module.exports = {
 	add : function (info, cb) {
 		var nt = new Transaction(info);
 		nt.save(function (err) {
-			if (err) log.err("MongoDB", "trdb.add failed: " + err)
+			if (err) log.err("MongoDB", "trdb.add failed: " + err);
 			cb(nt);
 		});
 	},
@@ -37,8 +37,10 @@ module.exports = {
 	getByIdList : function (list, cb) {
 		var query = {	$query : {_id : {$in : list}},
 				$orderby : {time : 1}};
-		Transaction.find(query, function (err, tr) {
-			if (err) log.err("MongoDB", "trdb.getByIdList failed: " + err)
+		Transaction.find(query).sort({
+			"time" : "descending"
+		}).exec(function (err, tr) {
+			if (err) log.err("MongoDB", "trdb.getByIdList failed: " + err);
 			cb(tr);
 		});
 	},
@@ -61,5 +63,14 @@ module.exports = {
 			function (err) {			// Callback
 				if (err) log.err("MongoDB", "trdb.updateAllQrid sender failed: " + err);
 		});
+	},
+
+	getByProperties : function (properties, cb) {
+		Transaction.find(properties).sort({
+			"time" : "descending"
+		}).exec(function (err, st) {
+			if (err) log.err("MongoDB", "stdb.getByProperties failed: " + err);
+			cb(st);
+		});
 	}
-}
+};

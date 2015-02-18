@@ -42,23 +42,23 @@
 	<!-- Transaction input table -->
 	<table id="transaction_info" class="infotable">
 		<tr><th colspan="2">Transaktion</th></tr>
-		<tr id="minimal_amount">
-			<td>Mindestwert</td>
+		<tr id="minimal_sent">
+			<td>min. Brutto</td>
 			<td><input type="text" class="value"></td>
 			<td><input type="checkbox" class="matters"></td>
-		</tr><tr id="maximal_amount">
-			<td>Maximalwert</td>
+		</tr><tr id="maximal_sent">
+			<td>max. Brutto</td>
 			<td><input type="text" class="value"></td>
 			<td><input type="checkbox" class="matters"></td>
-		</tr><tr id="tax_percent">
+		</tr><tr id="percent_tax">
 			<td>Steuersatz</td>
 			<td><input type="text" class="value"></td>
 			<td><input type="checkbox" class="matters"></td>
-		</tr><tr id="tax_min">
+		</tr><tr id="minimal_tax">
 			<td>min. Steuer</td>
 			<td><input type="text" class="value"></td>
 			<td><input type="checkbox" class="matters"></td>
-		</tr><tr id="tax_max">
+		</tr><tr id="maximal_tax">
 			<td>max. Steuer</td>
 			<td><input type="text" class="value"></td>
 			<td><input type="checkbox" class="matters"></td>
@@ -85,9 +85,29 @@
 			<td><input type="checkbox" class="matters"></td>
 		</tr>
 	</table>
+
+	<!-- Number of transactions -->
+	<div id="n_transactions_desc">Anzahl</div>
+	<select id="n_transactions">
+		<option value="5" selected>5</option>
+		<option value="10">10</option>
+		<option value="20">20</option>
+		<option value="50">50</option>
+		<option value="all">Alle</option>
+	</select>
 	<input type="button" value="Abfrage" id="query">
 	</div> <!-- infotable_container -->
+
 	<div class="subheading">Transaktionsliste</div>
+	<div id="transactions_container">
+		<table id="transactions"></table>
+	</div>
 	</div> <!-- content -->
+
+	<div id="comment_preview" hidden>
+		<div id="comment_preview_heading">Kommentar</div>
+		<div id="comment_text"></div>
+		<input type="button" value="OK" id="comment_preview_ok">
+	</div>
 </body>
 </html>

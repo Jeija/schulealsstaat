@@ -58,7 +58,7 @@ register("get_balance", function (payload, answer) {
  *				amount_tax : Number,
  *				percent_tax : Number,
  *				comment : String,
- *				NOT: sender_ip
+ *				NOT: sender_ip }]
  * invalid_qrid		--> the provided qrid doesn't exist
  * invalid_password	--> provided password was wrong
  * error:<something>	--> Some other error, e.g. with JSON parsing
@@ -77,9 +77,37 @@ register("get_last_transactions", function (payload, answer) {
 
 		db.transactions.getByIdList(st.transactions, function (tr) {
 			if (payload.amount > 0)
-				tr = tr.slice(Math.max(tr.length - payload.amount, 0));
+				tr = tr.slice(0, payload.amount);
 			answer(tr);
 		});
+	});
+});
+
+/**
+ * find_transactions {
+ *	query : Query for transactions DB,
+ *	amount : Number (returns <amount> last transactions or all transactions if amount <= 0)
+ * }
+ *
+ * response values:
+ * Array		--> all matching transactions
+ *			--> Form: [{
+ *				sender : String,
+ *				recipient : String,
+ *				time : Date,
+ *				amount_sent : Number,
+ *				amount_received : Number,
+ *				amount_tax : Number,
+ *				percent_tax : Number,
+ *				comment : String,
+ *				sender_ip : String }]
+ * Array may also be empty, if no matching transactions were found
+ */
+register_cert("find_transactions", ["admin_hash"], function (payload, answer) {
+	db.transactions.getByProperties(payload.query, function (tr) {
+		if (payload.amount > 0)
+			tr = tr.slice(0, payload.amount);
+		answer(tr);
 	});
 });
 

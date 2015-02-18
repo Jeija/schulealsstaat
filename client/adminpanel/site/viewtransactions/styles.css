@@ -10,14 +10,17 @@
 }
 
 .subheading {
+	margin-top:20px;
+	margin-bottom:10px;
 	text-align:center;
 	font-size:30px;
 }
 
 #content {
-	width:930px;
-	background:rgba(255, 255, 255, 0.85);
+	width:1200px;
+	background:rgba(255, 255, 255, 0.7);
 	margin:0 auto;
+	padding-bottom:20px;
 }
 
 #infotable_container {
@@ -68,7 +71,7 @@
 	border:1px solid #000;
 }
 
-.infotable select {
+.infotable select, #n_transactions {
 	width:128px;
 	padding:1px;
 	font-size:13px;
@@ -84,7 +87,7 @@
 
 #query {
 	position:absolute;
-	right:30px;
+	right:34px;
 	bottom:20px;
 	font-size:20px;
 	padding:6px 14px;
@@ -92,10 +95,127 @@
 	border-radius:4px;
 	background:transparent;
 	cursor:pointer;
-	transition:background 0.3s;
+	transition:background 0.1s;
 }
 
 #query:hover {
-	background:#eee;
-	transition:background 0.3s;
+	background:#ddd;
+}
+
+#query:active {
+	background:#fff;
+}
+
+#n_transactions_desc {
+	position:absolute;
+	right:150px;
+	bottom:50px;
+	width:103px;
+	font-size:16px;
+	font-style:italic;
+}
+
+#n_transactions {
+	position:absolute;
+	right:150px;
+	bottom:20px;
+	width:103px;
+}
+
+/*** Transactions table ***/
+#transactions_container {
+	text-align:center;
+}
+
+#transactions {
+	display:inline-block;
+	border-collapse:collapse;
+}
+
+#transactions th {
+	background:#fff;
+	padding:3px 14px;
+	border:1px solid #666;
+}
+
+#transactions td {
+	padding:3px 14px;
+	border:1px solid #666;
+}
+
+#transactions td.num {
+	text-align:right;
+	padding-right:5px;
+	font-family:Monospace;
+	font-size:15px;
+}
+
+#transactions .showcomment {
+	color:#33a;
+	cursor:pointer;
+	font-weight:bold;
+}
+
+#transactions .showcomment:hover {
+	color:#00f;
+}
+
+/*** Comment preview ***/
+#comment_preview {
+	width:400px;
+	height:180px;
+	background:rgba(230, 230, 230, 0.9);
+	position:relative;
+	position:fixed;
+	top:0;
+	left:0;
+	right:0;
+	bottom:0;
+	margin:auto;
+	text-align:center;
+	border:1px solid #777;
+	box-shadow:0 0 4px #000;
+	border-radius:5px;
+}
+
+#comment_preview_heading {
+	font-size:40px;
+}
+
+#comment_preview_ok {
+	position:absolute;
+	left:0;
+	right:0;
+	width:60px;
+	bottom:10px;
+	margin:auto;
+	background:transparent;
+	font-size:18px;
+	border:1px solid #fff;
+	padding:3px 15px;
+	border-radius:4px;
+	cursor:pointer;
+	transition:background 0.1s;
+	outline:none;
+}
+
+#comment_preview_ok:hover {
+	background:#ddd;
+}
+
+#comment_preview_ok:active {
+	background:#fff;
+}
+
+#comment_preview_ok::-moz-focus-inner {
+	border:none;
+}
+
+#comment_text {
+	width:90%;
+	overflow:auto;
+	margin:0 auto;
+	background:#fff;
+	height:45%;
+	border:1px solid #666;
 }
