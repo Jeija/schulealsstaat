@@ -17,6 +17,7 @@ function date_readable (birth) {
 }
 
 function country_readable (country) {
+	if (typeof country === "undefined") return "";
 	if (country == "gb") return "Großbritannien";
 	if (country == "de") return "Deutschland";
 	if (country == "fr") return "Frankreich";
@@ -70,14 +71,13 @@ function render_list(list) {
 				.text(date_readable(st.birth)))
 			.append($("<td>")
 				.text(st.qrid))
-			.append($("<td>")
+			.append($('<td class="num">')
 				.text(st.balance.toFixed(3) + " HGC"))
 			.append($("<td>")
-				.append('<input type="button" value="&#x270e;"\
-					class="profile_open" data-listid="' + i + '">'))
-			.append($("<td>")
-				.append('<input type="button" value="&#x232b;"\
-					class="student_delete" data-listid="' + i + '">'))
+				.append('<input type="button" value="ändern"' +
+					'class="profile_open" data-listid="' + i + '">')
+				.append('<input type="button" value="löschen"' +
+					'class="student_delete" data-listid="' + i + '">'))
 		);
 	}
 
@@ -85,14 +85,14 @@ function render_list(list) {
 	$(".profile_open").click(function () {
 		var st = list[$(this).data("listid")];
 		current_profile = st;
-		$("#profile").fadeIn(200, function () {
-			$("#profile_close").show();
-		});
-		$("#profile_name").text(st.firstname + " " + st.lastname);
+		$("#profile").fadeIn(200);
 
-		$("#profile_pass").hide();
+		$("#profile_pass").attr("src", "");
 		$("#profile_table").html("");
 		$("#profile_table")
+			.append($("<tr>")
+				.append($("<td>").text("QR-ID"))
+				.append($("<td>").text(st.qrid)))
 			.append($("<tr>")
 				.append($("<td>").text("Vorname"))
 				.append($("<td>").text(st.firstname)))
@@ -100,17 +100,16 @@ function render_list(list) {
 				.append($("<td>").text("Nachname"))
 				.append($("<td>").text(st.lastname)))
 			.append($("<tr>")
-				.append($("<td>").text("Jur. Person"))
+				.append($("<td>").text("jur. Person"))
 				.append($("<td>").text(st.special_name)))
-			.append($("<tr>")
-				.append($("<td>").text("QR-ID"))
-				.append($("<td>").text(st.qrid)))
 			.append($("<tr>")
 				.append($("<td>").text("Klasse / Typ"))
 				.append($("<td>").text(st.type)))
 			.append($("<tr>")
 				.append($("<td>").text("Land"))
-				.append($("<td>").text(country_readable(st.country))))
+				.append($("<td>").text(country_readable(st.country) +
+					(typeof st.country !== "undefined" ?
+					" (" + st.country + ")" : "none" ))))
 			.append($("<tr>")
 				.append($("<td>").text("Geburtstag"))
 				.append($("<td>").text(date_readable(st.birth))))
@@ -122,7 +121,7 @@ function render_list(list) {
 				.append($("<td>").text(st.birth)))
 			.append($("<tr>")
 				.append($("<td>").text("Bild-ID"))
-				.append($("<td>").text(st.picname)))
+				.append($("<td>").text(st.picname)));
 	});
 
 	$(".student_delete").click(function () {
@@ -141,39 +140,32 @@ $(function() {
 	// #################### Prepare page ####################
 	var forms = ["firstname", "lastname", "type", "country"];
 	forms.forEach(function (f) {
-		$('	<td><input type="text" class="criterium"></td>\
-			<td><input type="radio" name="yesno_' + f + '" value="yes" /></td>\
-			<td><input type="radio" name="yesno_' + f + '" value="no" /></td>\
-			<td><input type="radio" name="yesno_' + f + '" value="ignore" checked /></td>\
-		').appendTo("#"+f);
+		$(	'<td><input type="text" class="criterium"></td>' +
+			'<td><input type="radio" name="yesno_' + f + '" value="yes" /></td>' +
+			'<td><input type="radio" name="yesno_' + f + '" value="no" /></td>' +
+			'<td><input type="radio" name="yesno_' + f + '" value="ignore" checked /></td>'
+		).appendTo("#"+f);
 	});
 
-	$('	<td><input type="text" class="criterium qrid_scan_target">\
-		<input type="button" value="Scan" class="qrid_scan"></td>\
-		<td><input type="radio" name="yesno_qrid" value="yes" /></td>\
-		<td><input type="radio" name="yesno_qrid" value="no" /></td>\
-		<td><input type="radio" name="yesno_qrid" value="ignore" checked /></td>\
-	').appendTo("#qrid");
+	$(	'<td><input type="text" class="criterium qrid_scan_target"></td>' +
+		'<td><input type="radio" name="yesno_qrid" value="yes" /></td>' +
+		'<td><input type="radio" name="yesno_qrid" value="no" /></td>' +
+		'<td><input type="radio" name="yesno_qrid" value="ignore" checked /></td>' +
+		'<td><input type="button" value="Scan" class="qrid_scan"></td>'
+	).appendTo("#qrid");
 
 	var forms_compare = ["birth", "balance"];
 	forms_compare.forEach(function (f) {
-		$('	<td><input type="text" class="criterium"></td>\
-			<td><input name="compare_' + f + '" type="radio" value="greater"></td>\
-			<td><input name="compare_' + f + '" type="radio" value="smaller"></td>\
-			<td><input name="compare_' + f + '" type="radio" value="equal"></td>\
-			<td><input name="compare_' + f + '" type="radio" value="unequal"></td>\
-			<td><input name="compare_' + f + '" type="radio" value="ignore" checked></td>\
-		').appendTo("#"+f);
+		$(	'<td><input type="text" class="criterium"></td>' +
+			'<td><input name="compare_' + f + '" type="radio" value="greater"></td>' +
+			'<td><input name="compare_' + f + '" type="radio" value="smaller"></td>' +
+			'<td><input name="compare_' + f + '" type="radio" value="equal"></td>' +
+			'<td><input name="compare_' + f + '" type="radio" value="unequal"></td>' +
+			'<td><input name="compare_' + f + '" type="radio" value="ignore" checked></td>'
+		).appendTo("#"+f);
 	});
 	$('input[value="unequal"][name="compare_birth"]').attr("disabled", true);
 
-
-	$("#loadall").click(function () {
-		action_cert("students_dump", null, "admin_cert", function (res) {
-			var students = res;
-			render_list(students);
-		});	
-	});
 
 	function cond_yesno(cond, crit) {
 		var value = $("#" + crit + " input[type=text]").val();
@@ -187,8 +179,9 @@ $(function() {
 	function cond_compare(cond, crit) {
 		var value = $("#" + crit + " input[type=text]").val();
 		var flip = false; // flip greater than / smaller than
+
+		var birth = new Date();
 		if (crit == "birth") {
-			var birth = new Date();
 			birth.setFullYear(birth.getFullYear() - value);
 			value = new Date(birth);
 			flip = true;
@@ -223,27 +216,26 @@ $(function() {
 		cond_compare(condition, "balance");
 		cond_compare(condition, "birth");
 
-		var cond = {};
+		var cond = {}, crit, tc;
 		var operator = $('input[name=operator]:checked').val();
 		if (operator == "and") cond = condition;
 		else if (operator == "or") {
 			cond.$or = [];
-			for (var crit in condition) {
-				var tc = {}
+			for (crit in condition) {
+				tc = {};
 				tc[crit] = condition[crit];
-				cond.$or.push(tc)
+				cond.$or.push(tc);
 			}
 		} else if (operator == "nor") {
 			cond.$nor = [];
-			for (var crit in condition) {
-				var tc = {}
+			for (crit in condition) {
+				tc = {};
 				tc[crit] = condition[crit];
-				cond.$nor.push(tc)
+				cond.$nor.push(tc);
 			}
 		}
 
 		var req = {query : cond};
-		console.log(cond);
 		action_cert("get_students", req, "admin_cert", function (res) {
 			var students = res;
 			render_list(students);
@@ -259,28 +251,24 @@ $(function() {
 	});
 
 	$("#profile_close").click(function () {
-		$(this).hide();
-		$("#profile").fadeIn(200, function () {
-			$("#profile").hide();
-		});
-		$("#qr_popup").hide();
+		$("#profile").fadeOut(200);
+		$("#qr_popup").fadeOut(200);
 	});
 
 	$("#profile_pass_load").click(function () {
 		webcamserv_get(current_profile.picname, "admin_cert", function (res) {
 			$("#profile_pass").attr("src", "data:image/png;base64," + res);
-			$("#profile_pass").show();
 		});
 	});
 
 	$(".qrid_scan").click(function () {
-		var qrid_scan_target = $(this).siblings(".qrid_scan_target")
+		var qrid_scan_target = $(this).parent().parent().find(".qrid_scan_target");
 		QRReader.init("#qr_webcam", "../QRScanJS/");
 		$("#qr_popup").fadeIn(200);
 		QRReader.scan(function (qrid) {
 			$("#qr_popup").fadeOut(200);
 			qrid_scan_target.val(qrid);
-		})
+		});
 	});
 
 	$(".profile_edit").click(function () {
@@ -302,7 +290,7 @@ $(function() {
 			password : $("#profile_pwd").val()
 		};
 
-		action_mastercert("password_change_master", data, "#profile_pwd_master_cert",
+		action_mastercert("password_change_master", data, "#master_cert_input",
 				function (res) {
 			if(res == "ok") alert("Passwort geändert");
 			else alert("Fehler " + res);
@@ -313,7 +301,8 @@ $(function() {
 		var qrid = current_profile.qrid;
 		action_cert("ec_checkin", qrid, "admin_cert", function (res) {
 			var fullname = current_profile.firstname + " " + current_profile.lastname;
-			if(res == "ok") alert("Checkin von " + fullname + " erfolgreich");
+			if(res == "ok") alert("Checkin" + 
+				(fullname.length > 1 ? " von " + fullname : "") + " erfolgreich!");
 			else alert("Fehler " + res);
 		});
 	});
@@ -322,12 +311,13 @@ $(function() {
 		var qrid = current_profile.qrid;
 		action_cert("ec_checkout", qrid, "admin_cert", function (res) {
 			var fullname = current_profile.firstname + " " + current_profile.lastname;
-			if(res == "ok") alert("Checkout von " + fullname + " erfolgreich");
+			if(res == "ok") alert("Checkout" +
+				(fullname.length > 1 ? " von " + fullname : "") + " erfolgreich!");
 			else alert("Fehler " + res);
 		});
 	});
 
-	$("#qr_scan_abort").click(function() {
-		$("#qr_popup").fadeOut();
+	$("#qr_popup_abort").click(function() {
+		$("#qr_popup").fadeOut(200);
 	});
 });

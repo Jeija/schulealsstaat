@@ -18,13 +18,7 @@
 	<div id="heading"><a href="/index.html"></a>Accountverwaltung</div>
 
 	<div class="content">
-		<!-- Load all -->
-		<h3>Alle Schüler laden</h3>
-		<span id="warning">Warnung:</span> Dies kann lange dauern und verlangsamt das gesamte System für einige Zeit.<br/>
-		<input type="button" id="loadall" value="Trotzdem laden">
-		<hr/>
 		<!-- Filter -->
-		<h3>Filter</h3>
 		<div id="criteria_tables">
 			<b>Verknüpfung:</b>
 			UND<input type="radio" value="and" name="operator" checked> / 
@@ -33,14 +27,14 @@
 
 			<table id="criteria_yesno">
 				<tr><th></th><th>Kriterium</th><th>=</th><th>≠</th><th>egal</th></tr>
+				<tr id="qrid">
+					<td>QR-ID</td>
+				</tr>
 				<tr id="firstname">
 					<td>Vorname</td>
 				</tr>
 				<tr id="lastname">
 					<td>Nachname</td>
-				</tr>
-				<tr id="qrid">
-					<td>QR-ID</td>
 				</tr>
 				<tr id="type">
 					<td>Klasse</td>
@@ -61,100 +55,106 @@
 					<td>Kontostand</td>
 				</tr>
 			</table>
-			<input type="button" id="loadfilter" value="Filter anwenden">
+			<input type="button" id="loadfilter" value="Suche">
 		</div>
 
 		<!-- Query -->
-		<h3>Expertenmodus: Query</h3>
-		Direkteingabe für Mongoose MongoDB Datenbank-Queries, als JSON-String.<br/>
-		<input type="text" id="mongoose_query"><input type="button" id="query_go" value="Go">
-		<hr/>
-
-		<!-- Master - Certificate -->
-		<h3>Master - Zertifikat</h3>
-		<input type="file" id="master_cert_input">
+		<div class="subheading">Datenbank-Query</div>
+		Eingabe als JSON-String:<br/>
+		<input type="text" id="mongoose_query"><input type="button" id="query_go" value="Suche">
 		<hr/>
 
 		<!-- Student List -->
-		<table id="studentlist"></table>
+		<div id="studentlist_container">
+			<table id="studentlist"></table>
+		</div>
 	</div>
 
 	<!-- Profile Popup (hidden) -->
 	<div id="profile" hidden>
-		<img id="profile_pass">
-		<input type="button" value="Foto laden" id="profile_pass_load">
+		<div id="profile_pass_container">
+			<img alt="Nicht geladen!" id="profile_pass"></img>
+			<input type="button" value="Foto laden" id="profile_pass_load">
+		</div>
 		<div id="profile_close">&#x2715;</div>
-		<div id="profile_name"></div>
 		<table id="profile_table"></table>
-		<div class="profile_subheading">Aktionen</div>
-		<input type="button" value="Check In" id="profile_checkin">
-		<input type="button" value="Check Out" id="profile_checkout">
 		<table id="profile_actions">
-			<tr><th>Zu ändern</th><th>Wert</th></tr>
+			<tr>
+				<td>QR-ID</td>
+				<td>
+					<input type="text" class="profile_value qrid_scan_target">
+				</td>
+				<td>
+					<input type="button" value="Setzen" class="profile_edit"
+						data-profile_property="qrid">
+				</td>
+				<td>
+					<input type="button" value="Scan" class="qrid_scan">
+				</td>
+			</tr>
 			<tr>
 				<td>Vorname</td>
 				<td><input type="text" class="profile_value"></td>
-				<td><input type="button" value="&#x270e;" class="profile_edit"
+				<td><input type="button" value="Setzen" class="profile_edit"
 					data-profile_property="firstname"></td>
 			</tr>
 			<tr>
 				<td>Nachname</td>
 				<td><input type="text" class="profile_value"></td>
-				<td><input type="button" value="&#x270e;" class="profile_edit"
+				<td><input type="button" value="Setzen" class="profile_edit"
 					data-profile_property="lastname"></td>
 			</tr>
 			<tr>
 				<td>jur. Person</td>
 				<td><input type="text" class="profile_value"></td>
-				<td><input type="button" value="&#x270e;" class="profile_edit"
+				<td><input type="button" value="Setzen" class="profile_edit"
 					data-profile_property="special_name"></td>
-			</tr>
-			<tr>
-				<td>QR-ID</td>
-				<td>
-					<input type="text" class="profile_value qrid_scan_target">
-					<input type="button" value="Scan" class="qrid_scan">
-				</td>
-				<td><input type="button" value="&#x270e;" class="profile_edit"
-					data-profile_property="qrid"></td>
 			</tr>
 			<tr>
 				<td>Klasse / Typ</td>
 				<td><input type="text" class="profile_value"></td>
-				<td><input type="button" value="&#x270e;" class="profile_edit"
+				<td><input type="button" value="Setzen" class="profile_edit"
 					data-profile_property="type"></td>
 			</tr>
 			<tr>
 				<td>Countrycode</td>
 				<td><input type="text" class="profile_value"></td>
-				<td><input type="button" value="&#x270e;" class="profile_edit"
+				<td><input type="button" value="Setzen" class="profile_edit"
 					data-profile_property="country"></td>
 			</tr>
 			<tr>
 				<td>Birth-ID</td>
 				<td><input type="text" class="profile_value"></td>
-				<td><input type="button" value="&#x270e;" class="profile_edit"
+				<td><input type="button" value="Setzen" class="profile_edit"
 					data-profile_property="birth"></td>
 			</tr>
 			<tr>
 				<td>Bild-ID</td>
 				<td><input type="text" class="profile_value"></td>
-				<td><input type="button" value="&#x270e;" class="profile_edit"
+				<td><input type="button" value="Setzen" class="profile_edit"
 					data-profile_property="picname"></td>
 			</tr>
+			<tr>
+				<td>Passwort</td>
+				<td><input type="password" id="profile_pwd" class="profile_value"></td>
+				<td><input type="button" value="Setzen" id="profile_pwd_edit"></td>
+			</tr>
 		</table>
-		<div class="profile_subheading">Passwort ändern</div>
-		Master-Zertifikat:
-		<input type="file" id="profile_pwd_master_cert"><br/>
-		<input type="password" id="profile_pwd">
-		<input type="button" value="&#x270e;" id="profile_pwd_edit">
-	</div>
+		<div class="profile_subheading">Aktionen</div>
+			<input type="button" value="Check In" id="profile_checkin">
+			<input type="button" value="Check Out" id="profile_checkout">
+		</div>
 
 	<!-- QR Scanner Popup -->
 	<div id="qr_popup" hidden>
 		<div id="qr_popup_heading">QR Scan</div>
 		<video autoplay="true" id="qr_webcam"></video>
 		<input type="button" value="Abbrechen" id="qr_popup_abort">
+	</div>
+
+	<!-- Master-certificate -->
+	<div id="master_cert_container">
+		Master-Zertifikat: <input type="file" id="master_cert_input">
 	</div>
 </body>
 </html>

@@ -2,20 +2,80 @@
 	width:200px;
 }
 
-.criterium.qrid_scan_target {
-	width:140px;
+.qrid_scan {
+	border-radius:2px !important;
+	font-weight:bold;
+	font-style:italic;
+	padding:1px 13px !important;
 }
 
+.qrid_scan:hover {
+}
+
+.profile_open, .student_delete {
+	margin-right:3px;
+	border:none !important;
+	font-weight:bold;
+	color:#33a;
+	font-size:16px;
+}
+
+.profile_open:hover, .student_delete:hover {
+	background:transparent !important;
+	color:#00f;
+}
+
+.subheading {
+	margin-top:15px;
+	font-size:26px;
+}
+
+#mongoose_query {
+	margin-top:8px;
+	background:rgba(255, 255, 255, 0.5);
+	width:700px;
+	line-height:25px;
+	font-size:15px;
+	border:1px solid #000;
+	border-right:none;
+	border-bottom-right-radius:0;
+	border-top-right-radius:0;
+}
+
+#mongoose_query:hover {
+	background:rgba(255, 255, 255, 0.7);
+}
+
+#mongoose_query:focus {
+	background:rgba(255, 255, 255, 1.0);
+}
+
+#query_go {
+	font-size:15px;
+	padding:2px;
+	height:29px;
+	border:1px solid #000;
+	border-left:none;
+	border-bottom-left-radius:0;
+	border-top-left-radius:0;
+}
 
 /* Student Profile Popup */
 #profile {
-	border:4px solid black;
-	position:fixed;
+	position:relative;
+	border:1px solid #666;
+	box-shadow:0 0 5px #000;
+	border-radius:4px;
 	width:600px;
-	height:800px;
-	top:80px;
-	left:calc(50% - 300px);
-	background:#fff;
+	height:630px;
+	position:fixed;
+	right:0;
+	left:0;
+	left:0;
+	top:100px;
+	margin:auto;
+	background:#ddd;
+	padding:12px;
 }
 
 #profile_close {
@@ -40,9 +100,32 @@
 	cursor:pointer;
 }
 
+#profile_pass_container {
+	position:absolute;
+	right:10px;
+	top:10px;
+	text-align:center;
+	background:#ccc;
+	width:240px;
+	padding:10px 0;
+	border:1px solid #666;
+}
+
 #profile_pass {
+	color:#fff;
+	display:inline-block;
 	width:200px;
-	height:150px;
+	height:160px;
+	line-height:150px;
+	font-weight:bold;
+	background:#000;
+}
+
+#profile_pass_load {
+	margin-top:10px;
+	font-size:15px;
+	font-weight:bold;
+	padding:3px 10px;
 }
 
 #warning {
@@ -50,18 +133,77 @@
 	font-size: 20px;
 }
 
+#profile_table {
+	border-collapse:separate;
+	border-spacing:3px;
+}
+
+#profile_table td {
+	padding:3px 10px;
+	font-size:14px;
+}
+
+#profile_table tbody tr:last-child td {
+	border-bottom:none;
+}
+
+#profile_table tr td:first-child {
+	font-weight:bold;
+	text-align:right;
+}
+
+#profile_table tr td:nth-child(2) {
+	text-align:left;
+	background:#f0f0f0;
+}
+
+#profile_actions {
+	margin-top:10px;
+	border-collapse:collapse;
+}
+
+#profile_actions td {
+	padding:2px 5px;
+	text-align:right;
+	font-size:14px;
+}
+
+#profile_actions tr td:first-child {
+	font-weight:bold;
+}
+
+#profile_actions td input[type="text"], input[type="password"] {
+	width:200px;
+	font-size:16px;
+	padding:3px 10px;
+}
+
+#profile_actions .profile_edit, #profile_pwd_edit {
+	padding:3px 5px;
+}
+
+#profile_checkin, #profile_checkout {
+	font-size:15px;
+	padding: 4px 8px;
+	font-weight:bold;
+}
+
+#profile_checkin { background: rgba(0, 255, 0, 0.1); }
+#profile_checkout { background: rgba(255, 0, 0, 0.1); }
+
 .content {
 	position:relative;
 	background:rgba(255, 255, 255, 0.85);
-	width:1000px;
+	width:1100px;
 	margin:0 auto;
 	padding:15px;
 	text-align:center;
 	margin-bottom:100px;
 }
 
-input[type="text"] {
-	border:1px solid #000;
+input[type="text"], input[type="password"] {
+	border:1px solid #ccc;
+	border-radius:2px;
 }
 
 input[type="radio"] {
@@ -70,10 +212,11 @@ input[type="radio"] {
 }
 
 input[type="button"] {
-	border:1px solid #000;
+	border:1px solid #666;
 	cursor:pointer;
-	background:rgba(0, 0, 0, 0);
-	padding:0 5px;
+	background:transparent;
+	padding:1px 5px;
+	border-radius:3px;
 }
 
 input[type="button"]:hover {
@@ -120,18 +263,71 @@ h3 {
 }
 
 #criteria_yesno td, #criteria_compare td {
-	border:1px solid #ccc;
-	padding:2px 5px;
+	padding:3px 6px;
+	text-align:right;
 }
 
 #loadfilter {
+	font-size:20px;
 	position:absolute;
 	bottom:2%;
-	width:150px;
+	width:130px;
 	height:40px;
-	left:calc(50% - 75px);
+	left:0;
+	right:0;
+	margin:auto;
 }
 
-.qrid_scan_target {
-	width:68% !important;
+.profile_subheading {
+	font-size:20px;
+	margin-top:10px;
+}
+
+/*** Student list ***/
+#studentlist_container {
+	text-align:center;
+}
+
+#studentlist {
+	display:inline-block;
+	border-collapse:collapse;
+}
+
+#studentlist th {
+	background:#fff;
+	padding:3px 14px;
+	border:1px solid #666;
+}
+
+#studentlist td {
+	padding:0 14px;
+	border:1px solid #666;
+	font-size:14px;
+}
+
+#studentlist td.num {
+	font-family:Monospace;
+	text-align:right;
+}
+
+/*** Master certificate bar ***/
+#master_cert_container {
+	position:fixed;
+	bottom:0;
+	left:0;
+	height:40px;
+	width:100%;
+	background:rgba(40, 50, 140, 0.5);
+	text-align:center;
+	color:#fff;
+	padding-top:5px;
+	font-size:17px;
+	font-weight:bold;
+}
+
+#master_cert_input {
+	font-size:17px;
+	border: 1px dashed #ccc;
+	background:rgba(100, 100, 100, 0.5);
+	padding:3px;
 }
