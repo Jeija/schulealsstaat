@@ -14,7 +14,7 @@
 
 #infotable_container {
 	position:relative;
-	height:220px;
+	height:260px;
 	background:#ccc;
 	box-shadow:0 0 10px #000;
 	margin-bottom:10px;
@@ -207,4 +207,34 @@
 	background:#fff;
 	height:45%;
 	border:1px solid #666;
+}
+
+/*** Statistics ***/
+#stats_container {
+	text-align:center;
+}
+
+#stats {
+	display:inline-block;
+	border-collapse:collapse;
+	border:1px solid #666;
+}
+
+#stats td, #stats th {
+	padding:4px 12px;
+	border-bottom:1px dashed #666;
+}
+
+#stats tr:last-child td, #stats tr:last-child th {
+	border-bottom:none;
+}
+
+#stats th {
+	text-align:right;
+}
+
+#stats td {
+	font-family:Monospace;
+	font-size:18px;
+	text-align:right;
 }

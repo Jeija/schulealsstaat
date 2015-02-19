@@ -202,6 +202,7 @@ function transaction(sender_qrid, recipient_qrid, amount_sent, amount_received, 
 		recipient.balance += amount_received;
 		taxinc.balance += amount_tax;
 		taxinc.save();
+		console.log(recipient.country);
 
 		/*** Log Transaction in Transactions DB ***/
 		db.transactions.add({
@@ -212,6 +213,10 @@ function transaction(sender_qrid, recipient_qrid, amount_sent, amount_received, 
 			amount_received : amount_received,
 			amount_tax : amount_tax,
 			percent_tax : tax,
+			sender_country : typeof sender == "object" && "country" in sender
+				? sender.country : undefined,
+			recipient_country : typeof recipient == "object" && "country" in recipient
+				? recipient.country : undefined,
 			sender_ip : sender_ip,
 			comment : comment
 		}, function (dbtrans) {

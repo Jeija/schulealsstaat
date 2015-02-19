@@ -7,6 +7,7 @@
 	<script src="../bower_components/jquery/dist/jquery.js"></script>
 	<script src="../bower_components/gibberish-aes/dist/gibberish-aes-1.0.0.min.js"></script>
 	<script src="../api.js"></script>
+	<script src="../common.js"></script>
 	<script src="scripts.js"></script>
 	<link rel="stylesheet" type="text/css" href="/common.css">
 	<link rel="stylesheet" type="text/css" href="styles.css">
@@ -62,6 +63,14 @@
 			<td>max. Steuer</td>
 			<td><input type="text" class="value"></td>
 			<td><input type="checkbox" class="matters"></td>
+		</tr><tr id="time_before">
+			<td>Vor Zeit</td>
+			<td><input type="text" placeholder="In Min. vor jetzt" class="value"></td>
+			<td><input type="checkbox" class="matters"></td>
+		</tr><tr id="time_after">
+			<td>Nach Zeit</td>
+			<td><input type="text" placeholder="In Min. vor jetzt" class="value"></td>
+			<td><input type="checkbox" class="matters"></td>
 		</tr>
 	</table>
 
@@ -102,6 +111,40 @@
 	<div id="transactions_container">
 		<table id="transactions"></table>
 	</div>
+	<div id="stats_container" hidden>
+		<div class="subheading">Statistiken</div>
+		<table id="stats">
+			<tr>
+				<th>Anzahl</th>
+				<td id="total_number"></td>
+			</tr><tr>
+				<th>Gesamtvolumen Brutto</th>
+				<td id="total_sent"></td>
+			</tr><tr>
+				<th>Gesamtvolumen Netto</th>
+				<td id="total_received"></td>
+			</tr><tr>
+				<th>Gesamtvolumen Steuer</th>
+				<td id="total_tax"></td>
+			</tr><tr>
+				<th>Durchschnitt Brutto</th>
+				<td id="average_sent"></td>
+			</tr><tr>
+				<th>Durchschnitt Netto</th>
+				<td id="average_received"></td>
+			</tr><tr>
+				<th>Durchschnitt Steuer</th>
+				<td id="average_tax"></td>
+			</tr><tr>
+				<th>Kommentarlänge gesamt</th>
+				<td id="total_comment_length"></td>
+			</tr><tr>
+				<th>Durchschnittliche Komentarlänge</th>
+				<td id="average_comment_length"></td>
+			</tr>
+		</table>
+	</div>
+
 	</div> <!-- content -->
 
 	<div id="comment_preview" hidden>
