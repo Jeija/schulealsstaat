@@ -239,7 +239,7 @@ register("password_change", function (payload, answer) {
 /**
  * Just like password_change, but requires master_hash instead of old_password
  */
-register("password_change_master", function (payload, answer) {
+register_cert("password_change_master", ["master_hash"], function (payload, answer) {
 	db.students.getByQrid(payload.qrid, function (st) {
 		if (!st) {
 			answer("invalid_qrid");
