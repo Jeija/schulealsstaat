@@ -10,11 +10,12 @@
 	background:rgba(255, 255, 255, 0.7);
 	margin:0 auto;
 	padding-bottom:20px;
+	margin-bottom:100px;
 }
 
 #infotable_container {
 	position:relative;
-	height:260px;
+	height:280px;
 	background:#ccc;
 	box-shadow:0 0 10px #000;
 	margin-bottom:10px;
@@ -72,6 +73,25 @@
 .infotable input[type="checkbox"] {
 	transform: scale(1.2);
 	-webkit-transform: scale(1.5);
+}
+
+.infotable .qrid_scan {
+	background:transparent;
+	border:1px solid #666;
+	border-radius:2px;
+	font-weight:bold;
+	font-style:italic;
+	padding:1px 13px;
+	cursor:pointer;
+	transition:background 0.1s;
+}
+
+.infotable .qrid_scan:hover {
+	background:#ddd;
+}
+
+.infotable .qrid_scan:active {
+	background:#fff;
 }
 
 #query {

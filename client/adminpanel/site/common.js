@@ -7,3 +7,9 @@ function country_readable (country) {
 	if (country == "tr") return "Türkei";
 	return country;
 }
+
+function getConfig(config, cb) {
+	action("config_get", config, function (res) {
+		if (res != "") cb(res);
+	});
+}

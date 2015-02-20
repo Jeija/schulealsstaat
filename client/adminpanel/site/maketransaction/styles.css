@@ -1,0 +1,296 @@
+.subheading {
+	margin-top:20px;
+	margin-bottom:10px;
+	text-align:center;
+	font-size:30px;
+}
+
+#content {
+	width:1400px;
+	background:rgba(255, 255, 255, 0.7);
+	margin:0 auto;
+	padding-bottom:20px;
+	margin-bottom:100px;
+}
+
+#infotable_container {
+	position:relative;
+	height:320px;
+	background:#ccc;
+	box-shadow:0 0 10px #000;
+	margin-bottom:10px;
+}
+
+#sender_info {
+	position:absolute;
+	top:10px;
+	left:30px;
+}
+
+#transaction_info {
+	position:absolute;
+	top:10px;
+	right:0;
+	left:0;
+	width:300px;
+	margin:0 auto;
+}
+
+#recipient_info {
+	position:absolute;
+	top:10px;
+	right:30px;
+}
+
+.infotable th {
+	text-align:center;
+	font-size:22px;
+	padding-bottom:5px;
+	font-weight:normal;
+	font-style:italic;
+}
+
+.infotable input[type="text"] {
+	width:120px;
+	font-size:15px;
+	padding:2px;
+	background:#fff;
+	border:1px solid #000;
+}
+
+.infotable select, #n_transactions {
+	width:128px;
+	padding:1px;
+	font-size:13px;
+	padding:3px;
+	border:1px solid #000;
+	background:#fff;
+}
+
+.infotable input[type="checkbox"], input[type="radio"] {
+	transform: scale(1.2);
+	-webkit-transform: scale(1.5);
+	margin-top:8px;
+}
+
+.infotable td {
+	padding:1px 5px;
+	white-space:nowrap;
+}
+
+.infotable td.or {
+	font-style:italic;
+	text-align:center;
+	padding:10px 0;
+}
+
+.infotable #comment_heading {
+	text-align:center;
+	padding-top:8px;
+	font-weight:bold;
+}
+
+.infotable #comment_container {
+	text-align:center;
+}
+
+.infotable #comment {
+	display:inline-block;
+	width:90%;
+	height:60px;
+	background:transparent;
+	border:1px solid #666;
+	border-radius:3px;
+	resize:none;
+}
+
+.infotable .qrid_scan {
+	background:transparent;
+	border:1px solid #666;
+	border-radius:2px;
+	font-weight:bold;
+	font-style:italic;
+	padding:1px 13px;
+	cursor:pointer;
+	transition:background 0.1s;
+}
+
+.infotable .qrid_scan:hover {
+	background:#ddd;
+}
+
+.infotable .qrid_scan:active {
+	background:#fff;
+}
+
+#add_transaction {
+	position:absolute;
+	right:30px;
+	bottom:15px;
+	padding:5px 15px;
+	background:transparent;
+	border:1px solid #777;
+	border-radius:3px;
+	font-size:16px;
+	cursor:pointer;
+}
+
+#add_transaction:hover {
+	background:rgba(255, 255, 255, 0.5);
+}
+
+#add_transaction:active {
+	background:#fff;
+}
+
+/*** Transactions ***/
+#transactions_container {
+	text-align:center;
+}
+
+#transactions {
+	display:inline-block;
+	border-collapse:collapse;
+	max-width:1350px;
+	overflow:auto;
+	background:rgba(255, 255, 255, 0.5);
+	font-size:16px;
+}
+
+#transactions th {
+	background:#fff;
+	padding:3px 14px;
+	border:1px solid #666;
+}
+
+#transactions td {
+	padding:3px 14px;
+	border:1px solid #666;
+}
+
+#transactions td.num {
+	text-align:right;
+	padding-right:5px;
+	font-family:Monospace;
+	font-size:15px;
+}
+
+#transactions td.transaction_delete {
+	font-weight:bold;
+	color:#337;
+	cursor:pointer;
+	user-select:none;
+	-moz-user-select:none;
+	-webkit-user-select:none;
+}
+
+#transactions td.transaction_delete:hover {
+	color:#00f;
+}
+
+#transactions tr.state_pending {
+	background:rgba(255, 255, 0, 0.1);
+}
+
+#transactions tr.state_nonsense {
+	background:rgba(255, 100, 0, 0.1);
+}
+
+#transactions tr.state_error {
+	background:rgba(255, 0, 0, 0.1);
+}
+
+#transactions tr.state_complete {
+	background:rgba(0, 255, 0, 0.1);
+}
+
+/*** Bottom Box ***/
+
+#bottombox_container {
+	text-align:center;
+}
+
+#bottombox {
+	padding:20px;
+	display:inline-block;
+	width:80%;
+	height:235px;
+	background:#ccc;
+	box-shadow:0 0 10px #000;
+	margin-top:10px;
+	text-align:left;
+}
+
+#bottombox_buttons {
+	width:240px;
+	float:right;
+}
+
+#bottombox input[type="button"] {
+	margin-right:20px;
+	margin-top:10px;
+	float:right;
+	width:100%;
+	background:transparent;
+	border:1px solid #777;
+	padding:4px;
+	border-radius:3px;
+	font-size:16px;
+	cursor:pointer;
+}
+
+#bottombox input[type="button"]:hover {
+	background:rgba(255, 255, 255, 0.5);
+}
+
+#bottombox input[type="button"]:active {
+	background:#fff;
+}
+
+/*** Master certificate bar ***/
+#master_cert_container {
+	position:fixed;
+	bottom:0;
+	left:0;
+	height:40px;
+	width:100%;
+	background:rgba(40, 50, 140, 0.5);
+	text-align:center;
+	color:#fff;
+	padding-top:5px;
+	font-size:17px;
+	font-weight:bold;
+}
+
+#master_cert_input {
+	font-size:17px;
+	border: 1px dashed #ccc;
+	background:rgba(100, 100, 100, 0.5);
+	padding:3px;
+}
+
+/*** Stats Table ***/
+#stats_heading {
+	font-size:20px;
+}
+
+#stats {
+	border-collapse:collapse;
+	border:1px solid #666;
+}
+
+#stats tr td:first-child {
+	font-weight:bold;
+}
+
+#stats tr td:nth-child(2) {
+	font-family:Monospace;
+	text-align:right;
+	font-size:16px;
+}
+
+#stats tr td {
+	padding:5px 10px;
+	font-size:16px;
+	border-bottom:1px dashed #666;
+}

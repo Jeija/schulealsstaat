@@ -88,7 +88,7 @@ function render_transactions (trlist) {
 	$("#average_sent").text(average_sent.toFixed(3));
 	$("#average_received").text(average_received.toFixed(3));
 	$("#total_comment_length").text(total_comment_length);
-	$("#average_comment_length").text(average_comment_length);
+	$("#average_comment_length").text(average_comment_length.toFixed(3));
 	$("#stats_container").show();
 }
 
@@ -109,9 +109,9 @@ $("#query").click(function () {
 	};
 
 	// Load query from UI
-	addTableVal(payload.query, "sender", "#sender");
+	addTableVal(payload.query, "sender", "#sender_qrid");
 	addTableVal(payload.query, "sender_country", "#sender_country");
-	addTableVal(payload.query, "recipient", "#recipient");
+	addTableVal(payload.query, "recipient", "#recipient_qrid");
 	addTableVal(payload.query, "recipient_country", "#recipient_country");
 	addTableVal(payload.query, "percent_tax", "#percent_tax");
 	addTableVal(payload.query.time, "$lt", "#time_before", true);
@@ -128,6 +128,20 @@ $("#query").click(function () {
 	action_cert("find_transactions", payload, "admin_cert", function (tr) {
 		render_transactions(tr);
 	});
+});
+
+$(".qrid_scan").click(function () {
+	var qrid_scan_target = $(this).parent().parent().find(".qrid_scan_target");
+	QRReader.init("#qr_webcam", "../QRScanJS/");
+	$("#qr_popup").fadeIn(200);
+	QRReader.scan(function (qrid) {
+		$("#qr_popup").fadeOut(200);
+		qrid_scan_target.val(qrid);
+	});
+});
+
+$("#qr_popup_abort").click(function() {
+	$("#qr_popup").fadeOut(200);
 });
 
 });

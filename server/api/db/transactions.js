@@ -39,10 +39,9 @@ module.exports = {
 
 	// Callback paremeter are all transactions in the list sorted by time in ascending order
 	getByIdList : function (list, cb) {
-		var query = {	$query : {_id : {$in : list}},
-				$orderby : {time : 1}};
+		var query = {_id : {$in : list}};
 		Transaction.find(query).sort({
-			"time" : "descending"
+			"time" : "ascending"
 		}).exec(function (err, tr) {
 			if (err) log.err("MongoDB", "trdb.getByIdList failed: " + err);
 			cb(tr);

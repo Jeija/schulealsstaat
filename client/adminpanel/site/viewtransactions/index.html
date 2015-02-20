@@ -6,6 +6,7 @@
 	<script src="../bower_components/jsencrypt/bin/jsencrypt.min.js"></script>
 	<script src="../bower_components/jquery/dist/jquery.js"></script>
 	<script src="../bower_components/gibberish-aes/dist/gibberish-aes-1.0.0.min.js"></script>
+	<script src="../QRScanJS/qrscan.js"></script>
 	<script src="../api.js"></script>
 	<script src="../common.js"></script>
 	<script src="scripts.js"></script>
@@ -24,8 +25,9 @@
 		<tr><th colspan="2">Absender</th></tr>
 		<tr id="sender_qrid">
 			<td>QR-ID</td>
-			<td><input type="text" class="value"></td>
+			<td><input type="text" class="value qrid_scan_target"></td>
 			<td><input type="checkbox" class="matters"></td>
+			<td><input type="button" value="Scan" class="qrid_scan"></td>
 		</tr><tr id="sender_country">
 			<td>Land</td>
 			<td><select class="value">
@@ -79,8 +81,9 @@
 		<tr><th colspan="2">Empfänger</th></tr>
 		<tr id="recipient_qrid">
 			<td>QR-ID</td>
-			<td><input type="text" class="value"></td>
+			<td><input type="text" class="value qrid_scan_target"></td>
 			<td><input type="checkbox" class="matters"></td>
+			<td><input type="button" value="Scan" class="qrid_scan"></td>
 		</tr><tr id="recipient_country">
 			<td>Land</td>
 			<td><select class="value">
@@ -151,6 +154,13 @@
 		<div id="comment_preview_heading">Kommentar</div>
 		<div id="comment_text"></div>
 		<input type="button" value="OK" id="comment_preview_ok">
+	</div>
+
+	<!-- QR Scanner Popup -->
+	<div id="qr_popup" hidden>
+		<div id="qr_popup_heading">QR Scan</div>
+		<video autoplay="true" id="qr_webcam"></video>
+		<input type="button" value="Abbrechen" id="qr_popup_abort">
 	</div>
 </body>
 </html>

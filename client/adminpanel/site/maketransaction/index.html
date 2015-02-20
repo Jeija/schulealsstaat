@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+	<title>SaEU - Transaktion machen</title>
+	<script src="../bower_components/jsencrypt/bin/jsencrypt.min.js"></script>
+	<script src="../bower_components/jquery/dist/jquery.js"></script>
+	<script src="../bower_components/gibberish-aes/dist/gibberish-aes-1.0.0.min.js"></script>
+	<script src="../QRScanJS/qrscan.js"></script>
+	<script src="../api.js"></script>
+	<script src="../common.js"></script>
+	<script src="scripts.js"></script>
+	<link rel="stylesheet" type="text/css" href="/common.css">
+	<link rel="stylesheet" type="text/css" href="styles.css">
+	<meta charset="utf-8"/>
+</head>
+<body>
+	<div id="bg"></div>
+	<div id="heading"><a href="/index.html"></a>Transaktion machen</div>
+	<div id="content">
+	<div id="infotable_container">
+
+	<!-- Sender input table -->
+	<table id="sender_info" class="infotable">
+		<tr><th colspan="2">Absender</th></tr>
+		<tr id="sender_qrid">
+			<td>QR-ID</td>
+			<td><input type="text" class="value qrid_scan_target"></td>
+			<td><input type="checkbox" class="matters"></td>
+			<td><input type="button" value="Scan" class="qrid_scan"></td>
+		</tr><tr id="sender_firstname">
+			<td>Vorname</td>
+			<td><input type="text" class="value"></td>
+			<td><input type="checkbox" class="matters"></td>
+		</tr><tr id="sender_lastname">
+			<td>Nachname</td>
+			<td><input type="text" class="value"></td>
+			<td><input type="checkbox" class="matters"></td>
+		</tr><tr id="sender_qrid">
+			<td>Klasse / Typ</td>
+			<td><input type="text" class="value"></td>
+			<td><input type="checkbox" class="matters"></td>
+		</tr><tr>
+			<td colspan="3" class="or">oder</td>
+		</tr><tr>
+			<td colspan="2">Geld erschaffen</td>
+			<td><input type="checkbox" id="spawn"></td>
+		</tr>
+	</table>
+
+	<!-- Transaction input table -->
+	<table id="transaction_info" class="infotable">
+		<tr><th colspan="2">Transaktion</th></tr>
+		<tr>
+			<td>Brutto</td>
+			<td><input type="text" id="amount_sent" class="value"></td>
+			<td><input type="radio" name="amounttype" value="sent" checked="checked"></td>
+		</tr><tr>
+			<td>Netto</td>
+			<td><input type="text" id="amount_received" class="value"></td>
+			<td><input type="radio" name="amounttype" value="received"></td>
+		</tr><tr>
+			<td colspan="2">Standardsteuersatz</td>
+			<td><input type="radio" name="tax" value="default" checked="checked"></td>
+		</tr><tr>
+			<td colspan="2">Steuerfrei</td>
+			<td><input type="radio" name="tax" value="free"></td>
+		</tr><tr>
+			<td>Steuersatz %</td>
+			<td><input type="text" id="tax_percent"></td>
+			<td><input type="radio" name="tax" value="percent"></td>
+		</tr><tr>
+			<td colspan="3" id="comment_heading">Kommentar</td>
+		</tr><tr>
+			<td colspan="3" id="comment_container">
+				<textarea id="comment"></textarea>
+			</td>
+		</tr>
+	</table>
+
+	<!-- Recipient input table -->
+	<table id="recipient_info" class="infotable">
+		<tr><th colspan="2">Empfänger</th></tr>
+		<tr id="recipient_qrid">
+			<td>QR-ID</td>
+			<td><input type="text" class="value qrid_scan_target"></td>
+			<td><input type="checkbox" class="matters"></td>
+			<td><input type="button" value="Scan" class="qrid_scan"></td>
+		</tr><tr id="recipient_firstname">
+			<td>Vorname</td>
+			<td><input type="text" class="value"></td>
+			<td><input type="checkbox" class="matters"></td>
+		</tr><tr id="recipient_lastname">
+			<td>Nachname</td>
+			<td><input type="text" class="value"></td>
+			<td><input type="checkbox" class="matters"></td>
+		</tr><tr id="recipient_qrid">
+			<td>Klasse / Typ</td>
+			<td><input type="text" class="value"></td>
+			<td><input type="checkbox" class="matters"></td>
+		</tr><tr>
+			<td colspan="3" class="or">oder</td>
+		</tr><tr>
+			<td colspan="2">Geld zerstören</td>
+			<td><input type="checkbox" id="destroy"></td>
+		</tr>
+	</table>
+	<input type="button" value="Hinzufügen" id="add_transaction">
+
+	</div> <!-- infotable_container -->
+
+	<div id="transactions_container">
+		<table id="transactions"></table>
+	</div>
+
+	<div id="bottombox_container">
+	<div id="bottombox">
+		<div id="bottombox_buttons">
+			<input type="button" id="start" value="Transaktionen starten">
+			<input type="button" id="download" value="Liste herunterladen">
+			<input type="button" id="upload" value="Liste hochladen">
+			<input type="button" id="make_pending" value="Alle &quot;ausstehend&quot; machen">
+		</div>
+		<div id="stats_heading">Statistiken</div>
+		<table id="stats">
+			<tr><td>Anzahl</td><td id="total_number"></td></tr>
+			<tr><td>Gesamt Brutto</td><td id="total_sent"></td></tr>
+			<tr><td>Gesamt Netto</td><td id="total_received"></td></tr>
+			<tr><td>Gesamt Steuern</td><td id="total_tax"></td></tr>
+			<tr><td>Durschnitt Brutto</td><td id="average_sent"></td></tr>
+			<tr><td>Durschnitt Netto</td><td id="average_received"></td></tr>
+			<tr><td>Durschnitt Steuern</td><td id="average_tax"></td></tr>
+		</table>
+	</div> <!-- bottombox -->
+	</div> <!-- bottombox_container -->
+	</div> <!-- content -->
+
+	<!-- Master-certificate -->
+	<div id="master_cert_container">
+		Master-Zertifikat: <input type="file" id="master_cert_input">
+	</div>
+
+	<!-- QR Scanner Popup -->
+	<div id="qr_popup" hidden>
+		<div id="qr_popup_heading">QR Scan</div>
+		<video autoplay="true" id="qr_webcam"></video>
+		<input type="button" value="Abbrechen" id="qr_popup_abort">
+	</div>
+</body>
+</html>

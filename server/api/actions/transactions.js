@@ -126,21 +126,19 @@ db.students.getByQrid(config.get("taxinc_qrid", "taxinc"), function (taxinc) {
  * net value   (netto ) --> amount_received
  *
  * Formulas:
- *   --> gross = net / (100% + tax%)
- *   --> net = gross * (100% - tax%)
- *   --> taxamount = gross * tax%
- *   --> taxamount = -(net * tax%) / (tax% - 1)
+ *   --> taxamount = tax% * net 
+ *   --> taxamount = tax% * gross / (1 + tax%)
  *
  * Tax parameter is in % already, so it has to be converted.
  */
 function gross2tax(gross, tax_percent) {
 	var tax = tax_percent / 100;
-	return HGC_roundup(gross * tax);
+	return HGC_roundup(tax * gross / (1 + tax));
 }
 
 function net2tax(net, tax_percent) {
 	var tax = tax_percent / 100;
-	return HGC_roundup(-(net * tax) / (tax - 1));
+	return HGC_roundup(tax * net);
 }
 
 /**
@@ -176,12 +174,12 @@ function transaction(sender_qrid, recipient_qrid, amount_sent, amount_received, 
 	}, function (st) {
 		if (!st) { cb("error: no tax income account"); return; }
 		taxinc = st;
-		if (spawn_money) this(true)
+		if (spawn_money) this(true);
 		else db.students.getByQrid(sender_qrid, this);
 	}, function (st) {
 		if (!st) { cb("invalid_sender"); return; }
 		sender = st;
-		if (destroy_money) this(true)
+		if (destroy_money) this(true);
 		else db.students.getByQrid(recipient_qrid, this);
 	}, function (st) {
 		if (!st) { cb("invalid_recipient"); return; }
@@ -202,7 +200,6 @@ function transaction(sender_qrid, recipient_qrid, amount_sent, amount_received, 
 		recipient.balance += amount_received;
 		taxinc.balance += amount_tax;
 		taxinc.save();
-		console.log(recipient.country);
 
 		/*** Log Transaction in Transactions DB ***/
 		db.transactions.add({
@@ -213,10 +210,10 @@ function transaction(sender_qrid, recipient_qrid, amount_sent, amount_received, 
 			amount_received : amount_received,
 			amount_tax : amount_tax,
 			percent_tax : tax,
-			sender_country : typeof sender == "object" && "country" in sender
-				? sender.country : undefined,
-			recipient_country : typeof recipient == "object" && "country" in recipient
-				? recipient.country : undefined,
+			sender_country : typeof sender == "object" && "country" in sender ?
+				sender.country : undefined,
+			recipient_country : typeof recipient == "object" && "country" in recipient ?
+				recipient.country : undefined,
 			sender_ip : sender_ip,
 			comment : comment
 		}, function (dbtrans) {
@@ -297,7 +294,7 @@ function transaction_common(payload, answer, req, tax) {
 
 register("transaction", function (payload, answer, req) {
 	// Tax in %
-	var tax = config.get("transaction_tax_percent", 0);
+	var tax = config.get("transaction_tax_percent", 10);
 	transaction_common(payload, answer, req, tax);
 });
 
@@ -307,7 +304,7 @@ register_cert("transaction_taxfree", ["registration_hash", "admin_hash"],
 });
 
 /**
- * registration_hash, master_hash --> spawn_money {
+ * master_hash --> spawn_money {
  *	amount : Number,
  *	recipient : String(QR-ID),
  *	comment : String
@@ -318,14 +315,14 @@ register_cert("spawn_money", ["master_hash"], function (payload, answer, req) {
 	var sender = config.get("magic_account", "Zentralbank");
 	var recipient = payload.recipient;
 	var amount = payload.amount;
-	var comment = "spawn_money" + "comment" in payload ? " - " + payload.comment : "";
+	var comment = "spawn_money" + (("comment" in payload) ? " - " + payload.comment : "");
 	var ip = req.connection.remoteAddress;
 
 	transaction(sender, recipient, amount, false, 0, comment, ip, answer);
 });
 
 /**
- * registration_hash, master_hash --> destroy_money {
+ * master_hash --> destroy_money {
  *	amount : Number,
  *	sender : String(QR-ID),
  *	comment : String
@@ -336,9 +333,37 @@ register_cert("destroy_money", ["master_hash"], function (payload, answer, req) 
 	var recipient = config.get("magic_account", "Zentralbank");
 	var sender = payload.sender;
 	var amount = payload.amount;
-	var comment = "destroy_money" + "comment" in payload ? " - " + payload.comment : "";
+	var comment = "destroy_money" + (("comment" in payload) ? " - " + payload.comment : "");
 	var ip = req.connection.remoteAddress;
 
 	transaction(sender, recipient, amount, false, 0, comment, ip, answer);
 });
+
+/**
+ * master_hash --> master_transaction {
+ *	same arguments as "transaction" action, but:
+ *		- doesn't require sender_password
+ *		- if "tax_percent" is specified, uses that tax value
+ * }
+ *
+ * Same answers as "transaction" action, apart from too_many_decplaces, comment_too_long
+ * (these properties won't be checked)
+ */
+register_cert("master_transaction", ["master_hash"], function (payload, answer, req) {
+	// Tax in %
+	var tax_percent = "tax_percent" in payload ?
+		payload.tax_percent : config.get("transaction_tax_percent", 10);
+	if (tax_percent < 0) { answer("error: invalid tax_percent"); return; }
+	var sender = payload.sender;
+	var recipient = payload.recipient;
+	var sent = "amount_sent" in payload ? payload.amount_sent : false;
+	var received = "amount_received" in payload ? payload.amount_received : false;
+	var comment = "comment" in payload ? payload.comment : false;
+	var ip = req.connection.remoteAddress;
+
+	// Do NOT perform password checking, comment length checking, decimal places checking
+	// for master transactions
+	transaction(sender, recipient, sent, received, tax_percent, comment, ip, answer);
+});
+
 }; // module.exports
