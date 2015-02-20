@@ -48,15 +48,18 @@
 	background:#4d4d4d;
 	border-radius:5px;
 	padding:2vw;
-	width:75vw;
+	margin-left:-5vw;
+	width:85vw;
 	overflow:auto;
+	text-align:center;
 }
 
 #transactions_table {
 	border-collapse:collapse;
 	white-space:nowrap;
 	table-layout:fixed;
-	width:70vw;
+	width:80vw;
+	display:inline-block;
 }
 
 #transactions_table th {
@@ -74,15 +77,15 @@
 	overflow:hidden;
 }
 
-#transactions_table th.trt_type { width:5vw; }
-#transactions_table th.trt_time { width:7vw; }
-#transactions_table th.trt_amount_sent { width:6.5vw; }
-#transactions_table th.trt_amount_received { width:6.5vw; }
-#transactions_table th.trt_amount_tax { width:5.5vw; }
-#transactions_table th.trt_tax_percent { width:3.5vw; }
-#transactions_table th.trt_sender { width:7vw; }
-#transactions_table th.trt_recipient { width:7vw; }
-#transactions_table th.trt_comment { width:5vw; }
+#transactions_table th.trt_type { width:5.5vw; }
+#transactions_table th.trt_time { width:7.5vw; }
+#transactions_table th.trt_amount_sent { width:7.5vw; }
+#transactions_table th.trt_amount_received { width:7.5vw; }
+#transactions_table th.trt_amount_tax { width:6.0vw; }
+#transactions_table th.trt_tax_percent { width:6.0vw; }
+#transactions_table th.trt_sender { width:11vw; }
+#transactions_table th.trt_recipient { width:11vw; }
+#transactions_table th.trt_comment { width:7vw; }
 #transactions_table th.trt_balance { width:10vw; }
 
 #transactions_table tr.inc {
@@ -93,7 +96,15 @@
 	background:rgba(255, 180, 180, 0.9);
 }
 
+#transactions_table td.num {
+	font-family:Monospace;
+	text-align:right;
+	font-weight:bold;
+}
+
 #balance_container {
+	margin-top:1vw;
+	margin-right:5vw;
 	text-align:right;
 	font-size:2vw;
 	color:#fff;

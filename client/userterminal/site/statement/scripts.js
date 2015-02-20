@@ -12,7 +12,7 @@ function datetime_readable (datestring) {
 
 function render_transactions (tr, balance) {
 	var table = $("#transactions_table");
-	$("#balance").text(balance + " HGC");
+	$("#balance").text(balance.toFixed(2) + " HGC");
 
 	table.html("");
 
@@ -29,12 +29,12 @@ function render_transactions (tr, balance) {
 				.text(is_sender ? "Zahlung" : "Eingang"))
 			.append($('<td class="trt_time">')
 				.text(datetime_readable(t.time)))
-			.append($('<td class="trt_amount_sent">')
-				.text(t.amount_sent))
-			.append($('<td class="trt_amount_received">')
-				.text(t.amount_received))
-			.append($('<td class="trt_amount_tax">')
-				.text(t.amount_tax))
+			.append($('<td class="trt_amount_sent num">')
+				.text(t.amount_sent.toFixed(2)))
+			.append($('<td class="trt_amount_received num">')
+				.text(t.amount_received.toFixed(2)))
+			.append($('<td class="trt_amount_tax num">')
+				.text(t.amount_tax.toFixed(2)))
 			.append($('<td class="trt_tax_percent">')
 				.text(t.percent_tax))
 			.append($('<td class="trt_sender" data-qrid="' + t.sender + '">')
@@ -43,8 +43,8 @@ function render_transactions (tr, balance) {
 				.text(t.recipient))
 			.append($('<td class="trt_comment" data-listid="' + i + '">')
 				.text("Anzeigen"))
-			.append($('<td class="trt_balance">')
-				.text(bal_now))
+			.append($('<td class="trt_balance num">')
+				.text((Math.round(bal_now * 100) / 100).toFixed(2)))
 		);
 
 		bal_now += is_sender ? t.amount_sent : -t.amount_received;
@@ -104,9 +104,9 @@ function render_transactions (tr, balance) {
 		.append($('<th class="trt_amount_received">')
 			.text("Netto"))
 		.append($('<th class="trt_amount_tax">')
-			.text("FTT"))
+			.text("Steuer"))
 		.append($('<th class="trt_tax_percent">')
-			.text("FTT %"))
+			.text("Steuer %"))
 		.append($('<th class="trt_sender">')
 			.text("Sender"))
 		.append($('<th class="trt_receiver">')
