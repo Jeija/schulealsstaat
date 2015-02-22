@@ -36,8 +36,20 @@ else
 	ip route add default via "$2"
 fi
 
-trap "kill 0" SIGINT SIGTERM EXIT
-
 dhcpd
-nodemon $CWD/illegal/server.js &
-nodemon $CWD/dns/main.js
+
+SESSION="SaEUnet"
+tmux -2 new-session -d -s "$SESSION"
+tmux rename-window "SaEU Network Management"
+tmux split-window -h
+tmux select-pane -t 0
+tmux send-key "nodemon $CWD/illegal/server.js" C-m
+sleep 0.1
+tmux select-pane -t 1
+sleep 0.1
+tmux send-key "nodemon $CWD/dns/main.js" C-m
+tmux set-option mode-mouse on
+tmux set-option mouse-select-pane on
+tmux set-option mouse-resize-pane on
+tmux set-option mouse-select-window on
+tmux -2 attach-session -t "$SESSION"
