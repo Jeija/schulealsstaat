@@ -45,11 +45,16 @@ function decrypt_answer(passphrase, answer) {
 	return GibberishAES.dec(answer, passphrase);
 }
 
+function randomString(length) {
+	var s = ""
+	for (var i = 0; i < length; i++)
+		s += String.fromCharCode(32 + Math.floor(Math.random() * 94));
+	return s;
+}
+
 function send_query(name, query, cb) {
 	// Generate AES passphrase
-	var passphrase = "";
-	for (var i = 0; i < 32; i++) passphrase += String.fromCharCode(Math.floor(Math.random() * 256));
-	passphrase = "random passphrase";
+	var passphrase = randomString(32);
 	var passphrase_encrypted = encrypt_passphrase(passphrase);
 	var query_encrypted = encrypt_query(passphrase, JSON.stringify(query));
 
