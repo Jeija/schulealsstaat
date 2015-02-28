@@ -81,17 +81,16 @@ function execute(name, req, res)
 	var POST = "";
 	req.on("data", function (data) { POST += data; });
 	req.on("end", function () {
-		var post_data;
+		var post_data, aes_key;
 		try {
+			// Retrieve AES key from post_data
 			post_data = JSON.parse(POST);
+			aes_key = decrypt_aes_key(post_data.passphrase);
 		} catch(e) {
-			log.err("API (JSON.parse)", name + ": " + e);
+			log.err("API (JSON.parse + decrypt)", name + ": " + e);
 			res.end("error: " + e);
 			return;
-		} try {
-
-		// Retrieve AES key from post_data
-		var aes_key = decrypt_aes_key(post_data.passphrase);
+		}
 
 		// Send AES-encrypted answer
 		var on_answer = function (ans) {
@@ -101,21 +100,25 @@ function execute(name, req, res)
 			});
 		};
 
-		decrypt_query(post_data.encrypted, aes_key, name, on_answer, function (query_str) {
-			var query = JSON.parse(query_str);
-
-			var ip = req.connection.remoteAddress;
-			if (actions[name].cert)
-				cert.check(actions[name].cert, query.cert, ip, function () {
+		try {
+			var enc = post_data.encrypted;
+			decrypt_query(enc, aes_key, name, on_answer, function (query_str) {
+				var query = JSON.parse(query_str);
+				var ip = req.connection.remoteAddress;
+				var cert_required = actions[name].cert;
+				if (cert_required) {
+					var cert_provided = query.cert;
+					cert.check(cert_required, cert_provided, ip, function () {
+						actions[name].action(query.payload, on_answer, req);
+					}, function () {
+						log.warn("API (Cert)", name +
+							": incorrect certificate from " + ip);
+						on_answer("error: incorrect certificate");
+					});
+				} else {
 					actions[name].action(query.payload, on_answer, req);
-				}, function () {
-					log.warn("API (Cert)", name +
-						": incorrect certificate from " + ip);
-					on_answer("error: incorrect certificate");
-				});
-			else
-				actions[name].action(query.payload, on_answer, req);
-		});
+				}
+			});
 		} catch(e) {
 			log.err("API (Action)", name + ": " + e);
 			on_answer("error: " + e);
