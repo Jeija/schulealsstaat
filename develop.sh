@@ -17,12 +17,13 @@ tmux rename-window "Schule als EU"
 tmux split-window -h
 tmux select-pane -t 0
 tmux send-key "$CWD/server/run.sh" C-m
-sleep 0.1
+sleep 0.3
 tmux select-pane -t 2
-sleep 0.1
+sleep 0.3
 tmux send-key "$CWD/client/run.sh" C-m
 tmux set-option mode-mouse on
 tmux set-option mouse-select-pane on
 tmux set-option mouse-resize-pane on
 tmux set-option mouse-select-window on
+sleep 0.3
 tmux -2 attach-session -t "$SESSION"
