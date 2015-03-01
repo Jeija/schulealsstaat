@@ -4,21 +4,13 @@ var PASSIMG_PORT = 1338
 var APISERVER = "127.0.0.1"
 var APIPORT = 1337
 
-var CERTNAME = "cert/ec_cert";
+var CERTNAME = "ec_cert";
 
 var ACTIONURL = "http://" + APISERVER + ":" + APIPORT + "/action/";
 
 function showpic(picname) {
-	var passimgServer = "http://" + PASSIMG_SERVER + ":" + PASSIMG_PORT + "/get/";
-
-	$.get(CERTNAME, function (cert) {
-		$.ajax({
-			type:		"POST",
-			url:		passimgServer + picname,
-			data:		cert
-		}).done(function (imgbase64) {
-			$("#pass").attr("src", "data:image/png;base64," + imgbase64);
-		});
+	webcamserv_get(picname, CERTNAME, function (imgbase64) {
+		$("#pass").attr("src", "data:image/png;base64," + imgbase64);
 	});
 }
 
@@ -45,10 +37,12 @@ $(function() {
 			$("#webcam_popup").hide();
 			current_qrid = qrid;
 			var data = { qrid : qrid };
-			$.ajax({
-				url:	ACTIONURL + "student_identify/?data=" + data
-			}).done(function(res) {
-				var student = JSON.parse(res);
+			action("student_identify", data, function(student) {
+				if (typeof student != "object") {
+					alert("Account nicht gefunden!");
+					scan();
+					return;
+				}
 				$("#td_name").html(student.firstname + " " + student.lastname);
 				$("#td_class").html(student.type);
 				$("#td_age").html(calcAge(student.birth));
@@ -62,15 +56,8 @@ $(function() {
 
 	$("#checkin").click(function () {
 		var response;
-		$.get(CERTNAME, function (cert) {
-			$.ajax({
-				type : "POST",
-				url : ACTIONURL + "ec_checkin/?data=" + current_qrid,
-				success : function (res) {
-					response = res;
-				},
-				data : cert
-			});
+		action_cert("ec_checkin", current_qrid, CERTNAME, function (res) {
+			response = res;
 		});
 		var interval = setInterval(function() {
 			if (!response) return;
@@ -84,16 +71,9 @@ $(function() {
 
 	$("#checkout").click(function () {
 		var response;
-		$.get(CERTNAME, function (cert) {
-			$.ajax({
-				type : "POST",
-				url : ACTIONURL + "ec_checkout/?data=" + current_qrid,
-				success : function (res) {
-					response = res;
-				},
-				data : cert
-			});
-		});z
+		action_cert("ec_checkout", current_qrid, CERTNAME, function (res) {
+			response = res;
+		});
 		var interval = setInterval(function() {
 			if (!response) return;
 			if (response == "ok") {
