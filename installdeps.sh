@@ -15,7 +15,7 @@ CWD="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 # Debian-based distros
 if type "apt-get" > /dev/null; then
 	sudo apt-get update
-	sudo apt-get -y install nodejs-legacy tmux
+	sudo apt-get -y install npm nodejs-legacy tmux
 fi
 
 # Arch-based distros
