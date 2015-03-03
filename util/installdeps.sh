@@ -10,7 +10,7 @@ fi
 
 set -xe
 
-CWD="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/.."
 
 # Debian-based distros
 if type "apt-get" > /dev/null; then
@@ -32,16 +32,16 @@ if ! type "nodemon" > /dev/null; then sudo npm install -g nodemon ; fi
 if ! type "nw" > /dev/null; then sudo npm install -g nw ; fi
 
 # Install server dependencies
-( cd $CWD/server/api ; sudo npm install )
-( cd $CWD/server/webcam ; sudo npm install )
+( cd $ROOT/server/api ; sudo npm install )
+( cd $ROOT/server/webcam ; sudo npm install )
 
 # Install client dependencies
-( cd $CWD/client/adminpanel/site ; bower install )
-( cd $CWD/client/app/www ; bower install )
-( cd $CWD/client/entrycheck/site ; bower install )
-( cd $CWD/client/registration/site ; bower install )
-( cd $CWD/client/userterminal/site ; bower install )
-( cd $CWD/client/genrequest/site ; bower install )
+( cd $ROOT/client/adminpanel/site ; bower install )
+( cd $ROOT/client/app/www ; bower install )
+( cd $ROOT/client/entrycheck/site ; bower install )
+( cd $ROOT/client/registration/site ; bower install )
+( cd $ROOT/client/userterminal/site ; bower install )
+( cd $ROOT/client/genrequest/site ; bower install )
 
 # Workaround for missing libudev.so.0 on most systems, for nodewebkit
 if [ ! -f /lib/x86_64-linux-gnu/libudev.so.0 ] && [ ! -f /lib/libudev.so.0 ]; then

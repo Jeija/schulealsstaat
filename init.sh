@@ -13,5 +13,5 @@ set -xe
 
 CWD="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-$CWD/installdeps.sh
-$CWD/prepare.sh
+$CWD/util/installdeps.sh
+$CWD/util/prepare.sh

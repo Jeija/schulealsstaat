@@ -9,7 +9,7 @@ var CERTNAME = "ec_cert";
 var ACTIONURL = "http://" + APISERVER + ":" + APIPORT + "/action/";
 
 function showpic(picname) {
-	webcamserv_get(picname, CERTNAME, function (imgbase64) {
+	webcamserv_get(picname, function (imgbase64) {
 		$("#pass").attr("src", "data:image/png;base64," + imgbase64);
 	});
 }

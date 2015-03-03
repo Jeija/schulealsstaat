@@ -246,7 +246,7 @@ $(function() {
 	});
 
 	$("#profile_pass_load").click(function () {
-		webcamserv_get(current_profile.picname, "admin_cert", function (res) {
+		webcamserv_get(current_profile.picname, function (res) {
 			$("#profile_pass").attr("src", "data:image/png;base64," + res);
 		});
 	});

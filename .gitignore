@@ -27,6 +27,10 @@ node_modules/
 !/client/terminaliso/packages/*/PKGBUILD
 !/client/terminaliso/packages/*/*.install
 
-# Only publish api.js once - in client/common, init.sh will copy it over to all the appropriate places
+# Only publish some files once in */common/, prepare.sh will copy it to all appropriate places
 api.js
 !/client/common/api.js
+logging.js
+cert.js
+!/server/common/logging.js
+!/server/common/cert.js

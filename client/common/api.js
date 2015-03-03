@@ -96,9 +96,9 @@ function action_mastercert(name, payload, certfile_selector, cb) {
 	reader.readAsText(file, "utf-8");
 }
 
-function webcamserv_get(picname, certname, cb) {
+function webcamserv_get(picname, cb) {
 	var url = WEBCAMURL + "get/" + picname;
-	$.get("../cert/" + certname, function (cert) {
+	$.get("../cert/webcam_cert", function (cert) {
 		$.ajax({
 			type : "POST",
 			url : url,

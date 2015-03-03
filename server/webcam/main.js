@@ -1,6 +1,7 @@
 /**
  * Requests must follow this schema:
- * GET Request: [IP]:[PORT]/get/[PICNAME]
+ * POST Request: [IP]:[PORT]/get/[PICNAME]
+ * Where POST data is webcam_cert
  * Answer: base64-encoded png image
  *
  * POST Request: [IP]:[PORT]/upload/[PICNAME]
@@ -23,7 +24,7 @@ function upload_image(req, res) {
 	process.stdout.write("Uploading Image [..]");
 	var imgdata = "";
 
-	req.on("data", function (data) { imgdata += data });
+	req.on("data", function (data) { imgdata += data; });
 	req.on("end", function () {
 		var img = JSON.parse(imgdata);
 		console.log("\b\b\bOK]");
@@ -40,25 +41,34 @@ function upload_image(req, res) {
 
 function get_image(req, res, query) {
 	var imgname = query[1];
-	log.info("get_image", "Requested \"" + imgname + ".png\" from "
-		+ req.connection.remoteAddress);
+	log.info("get_image", "Requested \"" + imgname + ".png\" from " +
+		req.connection.remoteAddress);
 
-	// Only anwer picture requests with correct certificate
-	cert.check(["ec_hash", "admin_hash"], req, function () {
-		res.writeHead(200, {'Content-Type': 'image/png',
-			'Access-Control-Allow-Origin' : '*'});
-		var path =__dirname + IMG_PATH + imgname + ".png"
+	// Only answer picture requests with correct certificate
+	var clientCert = "";
+	var ip = req.connection.remoteAddress;
+	req.on("data", function (data) { clientCert += data; });
+	req.on("end", function () {
+		cert.check(["webcam_hash"], clientCert, ip, function () {
+			res.writeHead(200, {'Content-Type': 'image/png',
+				'Access-Control-Allow-Origin' : '*'});
+			var path =__dirname + IMG_PATH + imgname + ".png";
 
-		fs.exists(path, function (exists) {
-			if (!exists) {
-				console.log("  --> Could not find requested file: " + path);
-				res.end();
-			} else {
+			fs.exists(path, function (exists) {
+				if (!exists) {
+					console.log("  --> Could not find requested file: " + path);
+					res.end();
+					return;
+				}
+
 				fs.readFile(path, function (err, data) {
-					if (err) throw err;
-					res.end(data.toString("base64"));
+					if (err) {
+						log.err("get_image, fs.readFile", err);
+					} else {
+						res.end(data.toString("base64"));
+					}
 				});
-			}
+			});
 		});
 	});
 }
@@ -78,4 +88,4 @@ http.createServer(function (req, res) {
 	}
 }).listen(1338);
 
-log.ok("WebCamServ", "Started!")
+log.ok("WebCamServ", "Started!");

@@ -16,7 +16,7 @@ function render_student_card(student, td) {
 	var passpic = $('<img class="passpic" hidden>')
 		.appendTo(idcard);
 
-	webcamserv_get(student.picname, "admin_cert", function (res) {
+	webcamserv_get(student.picname, function (res) {
 		if (res == "") return;
 		passpic.attr("src", "data:image/png;base64," + res);
 		passpic.show();
