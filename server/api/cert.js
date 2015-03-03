@@ -6,8 +6,10 @@ var CERT_DIR = "/cert/";
 
 module.exports = {
 	// hashfiles = List of filenames for hashes in CERT_DIR that grant access
-	// req = NodeJS request, to receive certificate via POST
+	// cert = Certificate provided by the requester, a string
+	// ip = IP Address of the requester, used for logging
 	// cb = callback to be executed when validation is successful
+	// cb_false = callback to be executed when validation is unsuccessful
 	check: function(hashfiles, cert, ip, cb, cb_false) {
 		var hash_correct = false;
 
