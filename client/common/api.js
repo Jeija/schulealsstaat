@@ -42,7 +42,16 @@ function encrypt_query(passphrase, query) {
 }
 
 function decrypt_answer(passphrase, answer) {
-	return GibberishAES.dec(answer, passphrase);
+	var decrypted;
+	try {
+		decrypted = GibberishAES.dec(answer, passphrase);
+	} catch (e) {
+		console.log("Response decryption failed, error is:");
+		console.log(answer);
+		decrypted = "error: (while decrypting) " + answer;
+	}
+
+	return decrypted;
 }
 
 function randomString(length) {

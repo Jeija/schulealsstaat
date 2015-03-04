@@ -76,7 +76,7 @@ function encrypt_query(query_plain, aes_key, callback) {
 function execute(name, req, res)
 {
 	// Given action is not registered
-	if (!actions[name]) { res.end(); return; }
+	if (!actions[name]) { res.end("error: invalid action"); return; }
 
 	var POST = "";
 	req.on("data", function (data) { POST += data; });
