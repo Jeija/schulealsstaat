@@ -4,12 +4,11 @@ openssh
 wireless_tools
 grub
 intel-ucode
-arptables
+ebtables
 xorg-server
 xorg-server-utils
 xorg-xinit
 xorg-utils
-xf86-video-modesetting
 xf86-input-synaptics
 xf86-video-nouveau
 xf86-video-intel
@@ -31,6 +30,7 @@ bridge-utils
 dnsmasq
 hostapd
 iproute2
+dhcpcd
 iptables
 iw
 nwjs

@@ -10,8 +10,6 @@ ln -sf /usr/share/zoneinfo/Europe/Berlin /etc/localtime
 cp -aT /etc/skel/ /root/
 chmod 700 /root
 
-useradd -p "" -g users -G "adm,audio,video,floppy,log,network,rfkill,scanner,storage,optical,power,wheel" sas
-
 chmod 750 /etc/sudoers.d
 chmod 440 /etc/sudoers.d/g_wheel
 

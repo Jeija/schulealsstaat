@@ -1,17 +1,19 @@
 #!/bin/bash
+# Set up Ethernet connection with bridge, NO WiFi configuration etc.
+# WiFi setup may require user input or supervision --> after auto-login 
 
-# Home router
-arptables --append INPUT --destination-mac 44:32:C8:1B:19:8C -j DROP
-arptables --append INPUT --source-mac 44:32:C8:1B:19:8C -j DROP
-arptables --append OUTPUT --destination-mac 44:32:C8:1B:19:8C -j DROP
-arptables --append OUTPUT --source-mac 44:32:C8:1B:19:8C -j DROP
-arptables --append FORWARD --destination-mac 44:32:C8:1B:19:8C -j DROP
-arptables --append FORWARD --source-mac 44:32:C8:1B:19:8C -j DROP
+ebtables-restore < /root/ebtables.save
+rfkill unblock wifi
 
-# Home AP
-arptables --append INPUT --destination-mac 10:FE:ED:50:D0:00 -j DROP
-arptables --append INPUT --source-mac 10:FE:ED:50:D0:00 -j DROP
-arptables --append OUTPUT --destination-mac 10:FE:ED:50:D0:00 -j DROP
-arptables --append OUTPUT --source-mac 10:FE:ED:50:D0:00 -j DROP
-arptables --append FORWARD --destination-mac 10:FE:ED:50:D0:00 -j DROP
-arptables --append FORWARD --source-mac 10:FE:ED:50:D0:00 -j DROP
+# Make bridge interface and connect ethernet to it
+BRIDGE_IFACE=br0
+ETH_IFACE=$(find /sys/class/net/enp* | sed "s/.*\///")
+
+brctl addbr $BRIDGE_IFACE
+brctl addif $BRIDGE_IFACE $ETH_IFACE
+ip link set up dev $BRIDGE_IFACE
+ip link set up dev $ETH_IFACE
+
+# Start DHCP client to retrieve IP address, from own DHCP server
+# (original DHCP server has been blocked using ebtables)
+dhcpcd
