@@ -40,5 +40,8 @@ cp $ROOT/client/common/api.js $ROOT/testing/api/
 # Copy cert.js + logging.js to all server applications that use it
 cp $ROOT/server/common/cert.js $ROOT/server/api/cert.js
 cp $ROOT/server/common/cert.js $ROOT/server/webcam/cert.js
+cp $ROOT/server/common/cert.js $ROOT/server/proxy/internet/cert.js
 cp $ROOT/server/common/logging.js $ROOT/server/api/logging.js
 cp $ROOT/server/common/logging.js $ROOT/server/webcam/logging.js
+cp $ROOT/server/common/logging.js $ROOT/server/proxy/internet/logging.js
+cp $ROOT/server/common/logging.js $ROOT/server/proxy/intranet/logging.js

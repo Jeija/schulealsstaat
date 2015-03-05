@@ -1,0 +1,13 @@
+{
+  "name": "sas_proxy_internet",
+  "description": "Schule als EU Internet Proxy",
+  "author": "Computer AG",
+  "dependencies": {
+    "colors": ">=1.0.3",
+    "najax": "^0.1.5"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Jeija/schulealsstaat"
+  }
+}
