@@ -1,0 +1,22 @@
+pkgname=zbarcam
+_reponame=ZBar
+pkgver=1.0
+pkgrel=1
+pkgdesc="Webcam barcode reader, modified for the Schule als EU project"
+arch=('i686' 'x86_64')
+depends=(v4l-utils imagemagick libxv git)
+md5sums=('SKIP')
+source=('git://github.com/Jeija/ZBar')
+
+build() {
+	echo "${srcdir}/${_reponame}"
+	cd "${srcdir}/${_reponame}"
+	autoreconf --install
+	./configure --prefix=/usr --without-python --without-qt --without-gtk
+	make
+}
+
+package() {
+	cd "${srcdir}/${_reponame}"
+	make DESTDIR="$pkgdir/" install
+}

@@ -35,3 +35,7 @@ iptables
 iw
 nwjs
 v4l2loopback
+v4l-utils
+imagemagick
+libxv
+zbarcam
