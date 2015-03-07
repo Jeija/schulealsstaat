@@ -27,6 +27,11 @@ node_modules/
 !/client/terminaliso/packages/*/PKGBUILD
 !/client/terminaliso/packages/*/*.install
 
+# Don't publish pre-built dlpackages or PGP keys
+/client/terminaliso/iso/airootfs/root/packetkey.pub
+/client/terminaliso/dlpackage/dlrepo/*
+!/client/terminaliso/dlpackage/dlrepo/list
+
 # Only publish some files once in */common/, prepare.sh will copy it to all appropriate places
 api.js
 !/client/common/api.js
