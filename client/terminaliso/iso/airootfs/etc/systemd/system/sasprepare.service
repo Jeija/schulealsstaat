@@ -1,8 +1,0 @@
-[Unit]
-Description=SaS Preparation Script
-
-[Service]
-ExecStart=/root/sasprepare.sh
-
-[Install]
-WantedBy=multi-user.target

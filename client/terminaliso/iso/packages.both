@@ -39,3 +39,5 @@ v4l-utils
 imagemagick
 libxv
 zbarcam
+dialog
+rfkill
