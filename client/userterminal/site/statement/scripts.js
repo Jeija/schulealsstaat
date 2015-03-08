@@ -1,28 +1,30 @@
-var current_qrid = undefined;
+var current_qrid = null;
 
 handleIdentifyAnswer = function(sectionref, st) {
 	current_qrid = st.qrid;
-}
+};
 
 function datetime_readable (datestring) {
 	var d = new Date(datestring);
-	return d.getDate() + "." + (d.getMonth() + 1)
-		+ " " + ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2);
+	return d.getDate() + "." + (d.getMonth() + 1) + " " +
+		("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2);
 }
 
 function render_transactions (tr, balance) {
 	var table = $("#transactions_table");
-	$("#balance").text(balance.toFixed(2) + " HGC");
+	$("#balance").text(balance.toFixed(2).replace(".", ",") + " HGC");
 
 	table.html("");
 
-	var bal_now = balance;
-	for (var i = tr.length - 1; i >= 0; i--) {
+	var bal_now = 0;
+	for (var i = 0; i < tr.length; i++) {
 		var t = tr[i];
 		var is_sender = (t.sender === current_qrid);
 		var comment = "(kein Kommentar)";
 		if (t.comment)
 			comment = t.comment.replace(/\n/g, "<br/>");
+
+		bal_now += is_sender ? -t.amount_sent : t.amount_received;
 
 		table.prepend($('<tr class="' + (is_sender ? "dec" : "inc") + '">')
 			.append($('<td class="trt_type">')
@@ -30,11 +32,11 @@ function render_transactions (tr, balance) {
 			.append($('<td class="trt_time">')
 				.text(datetime_readable(t.time)))
 			.append($('<td class="trt_amount_sent num">')
-				.text(t.amount_sent.toFixed(2)))
+				.text(t.amount_sent.toFixed(2).replace(".", ",")))
 			.append($('<td class="trt_amount_received num">')
-				.text(t.amount_received.toFixed(2)))
+				.text(t.amount_received.toFixed(2).replace(".", ",")))
 			.append($('<td class="trt_amount_tax num">')
-				.text(t.amount_tax.toFixed(2)))
+				.text(t.amount_tax.toFixed(2).replace(".", ",")))
 			.append($('<td class="trt_tax_percent">')
 				.text(t.percent_tax))
 			.append($('<td class="trt_sender" data-qrid="' + t.sender + '">')
@@ -44,10 +46,9 @@ function render_transactions (tr, balance) {
 			.append($('<td class="trt_comment" data-listid="' + i + '">')
 				.text("Anzeigen"))
 			.append($('<td class="trt_balance num">')
-				.text((Math.round(bal_now * 100) / 100).toFixed(2)))
+				.text((Math.round(bal_now * 100) / 100).toFixed(2).
+					replace(".", ",") + " HGC"))
 		);
-
-		bal_now += is_sender ? t.amount_sent : -t.amount_received;
 	}
 
 	$(".trt_comment").webuiPopover({
@@ -131,8 +132,8 @@ $(function () {
 	$(".confirm").click(function () {
 		// Check for client errors
 		if (!current_qrid) {
-			errorMessage("Keine Person angegeben. Wessen Kontoauszug soll"
-				+ " angezeigt werden?");
+			errorMessage("Keine Person angegeben. Wessen Kontoauszug soll" +
+				" angezeigt werden?");
 			return;
 		}
 
@@ -156,15 +157,15 @@ $(function () {
 
 			var balance = parseFloat(res);
 			if (res.indexOf("error") > -1 || isNaN(res)) {
-				errorMessage("Unbekannter Fehler: " + res + "<br/>"
-					+ "Bitte melde diesen Fehler bei der Zentralbank.");
+				errorMessage("Unbekannter Fehler: " + res + "<br/>" +
+					"Bitte melde diesen Fehler bei der Zentralbank.");
 				return;
 			}
 
 			action("get_last_transactions", data, function (tr) {
 				if (typeof tr !== "object") {
-					errorMessage("Unbekannter Fehler: " + tr + "<br/>"
-						+ "Bitte melde diesen Fehler bei der Zentralbank.");
+					errorMessage("Unbekannter Fehler: " + tr + "<br/>" +
+						"Bitte melde diesen Fehler bei der Zentralbank.");
 					return;
 				}
 
@@ -176,8 +177,8 @@ $(function () {
 
 		setTimeout(function () {
 			if (!server_answered)
-				errorMessage("Das Währungssystem ist zurzeit nicht verfügbar."
-				+ "Bitte versuche es später noch einmal.");
+				errorMessage("Das Währungssystem ist zurzeit nicht verfügbar." +
+					"Bitte versuche es später noch einmal.");
 		}, 1500);
 	});
 });

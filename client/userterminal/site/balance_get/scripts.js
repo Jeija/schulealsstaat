@@ -47,7 +47,7 @@ $(function () {
 			}
 
 			// Write answer to balance messagebox
-			$("#balance_box_value").html(balance.toFixed(5));
+			$("#balance_box_value").html(balance.toFixed(2).replace(".", ","));
 			$("#balance_box").fadeIn();
 		});
 

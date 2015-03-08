@@ -1,16 +1,16 @@
-var COMMENT_MAXLEN = 300
-var HGC_TR_DECIMAL_PLACES = 2
+var COMMENT_MAXLEN = 300;
+var HGC_TR_DECIMAL_PLACES = 2;
 
 // Will be set to QR-ID values when student_identify is called for the relevant section
-var current_sender = undefined;
-var current_recipient = undefined;
+var current_sender = null;
+var current_recipient = null;
 
 handleIdentifyAnswer = function(sectionref, st) {
 	if ($(sectionref).closest(".section_incomplete").parent(".recipient").length)
 		current_recipient = st.qrid;
 	if ($(sectionref).closest(".section_incomplete").parent(".sender").length)
 		current_sender = st.qrid;
-}
+};
 
 $(function () {
 	// setTimeout: Wait until private RSA Key was loaded from disk
@@ -44,14 +44,14 @@ $(function () {
 		this.disabled = true;
 
 		if (!current_sender) {
-			errorMessage("Der Absender fehlt:<br/>"
-				+ "Für jede Transaktion muss ein Absender angegeben werden.");
+			errorMessage("Der Absender fehlt:<br/>" +
+				"Für jede Transaktion muss ein Absender angegeben werden.");
 			return;
 		}
 
 		if (!current_recipient) {
-			errorMessage("Der Empfänger fehlt:<br/>"
-				+ "Für jede Transaktion muss ein Empfänger angegeben werden.");
+			errorMessage("Der Empfänger fehlt:<br/>" +
+				"Für jede Transaktion muss ein Empfänger angegeben werden.");
 			return;
 		}
 
@@ -59,17 +59,17 @@ $(function () {
 
 		// Check if amount is parsable
 		if (!$.isNumeric(amount_str)) {
-			errorMessage("Betrag ist ungültig:<br/>"
-			+ "Gültige Wert sind z.B.: 1,5 15.3 12e-2 0xa5");
+			errorMessage("Betrag ist ungültig:<br/>" +
+				"Gültige Wert sind z.B.: 1,5 15.3 12e-2 0xa5");
 			return;
 		}
 
 		var amount = parseFloat(amount_str);
 
 		// Check if amount has more than HGC_TR_DECIMAL_PLACES decimals
-		if ((amount * Math.pow(10, HGC_TR_DECIMAL_PLACES)) % 1 != 0) {
-			errorMessage("Betrag enthält mehr als die erlaubten " + HGC_TR_DECIMAL_PLACES
-				+ " Dezimalstellen.");
+		if ((amount * Math.pow(10, HGC_TR_DECIMAL_PLACES)) % 1 !== 0) {
+			errorMessage("Betrag enthält mehr als die erlaubten " +
+				HGC_TR_DECIMAL_PLACES + " Dezimalstellen.");
 			return;
 		}
 
@@ -94,8 +94,7 @@ $(function () {
 					break;
 
 				case "nomoney":
-					errorMessage("Der Sender hat nicht genug Geld"
-						+ " auf seinem Account.");
+					errorMessage("Guthaben reicht nicht aus!");
 					break;
 
 				case "invalid_password":
@@ -103,25 +102,25 @@ $(function () {
 					break;
 
 				case "invalid_amount":
-					errorMessage("Der Betrag muss über 0 liegen.");
+					errorMessage("Der Betrag muss über 0 HGC liegen.");
 					break;
 
 				case "comment_too_long":
-					errorMessage("Der Länge des Kommentars überschreitet die "
-						+ "zugelassenen " + COMMENT_MAXLEN + " Zeichen.");
+					errorMessage("Der Länge des Kommentars überschreitet die " +
+						"zugelassenen " + COMMENT_MAXLEN + " Zeichen.");
 					break;
 
 				default:
-					errorMessage("Unbekannter Fehler: " + res + "<br/>"
-						+ "Bitte melde diesen Fehler bei der Zentralbank.");
+					errorMessage("Unbekannter Fehler: " + res + "<br/>" +
+						"Bitte melde diesen Fehler bei der Zentralbank.");
 					break;
 			}
 		});
 
 		setTimeout(function () {
 			if (!server_answered)
-				errorMessage("Das Währungssystem ist zurzeit nicht verfügbar."
-				+ "Bitte versuche es später noch einmal.");
+				errorMessage("Das Währungssystem ist zurzeit nicht verfügbar." +
+					"Bitte versuche es später noch einmal.");
 		}, 1500);
 	});
 });

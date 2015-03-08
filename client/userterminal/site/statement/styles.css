@@ -97,13 +97,14 @@
 }
 
 #transactions_table td.num {
+	font-weight:bold;
 	font-family:Monospace;
 	text-align:right;
-	font-weight:bold;
 }
 
 #balance_container {
-	margin-top:1vw;
+	margin-top:0.5vw;
+	margin-bottom:1vw;
 	margin-right:5vw;
 	text-align:right;
 	font-size:2vw;
