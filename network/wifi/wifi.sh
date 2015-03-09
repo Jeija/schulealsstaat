@@ -23,7 +23,7 @@ brctl addbr $BRIDGE_IFACE
 brctl addif $BRIDGE_IFACE $ETH_IFACE
 ip link set up dev $BRIDGE_IFACE
 ip link set up dev $ETH_IFACE
-dhcpcd
+dhcpcd -4
 
 # Set up hostapd
 rfkill unblock wlan

@@ -16,7 +16,7 @@ ip link set up dev $ETH_IFACE
 
 # Start DHCP client to retrieve IP address, from own DHCP server
 # (original DHCP server has been blocked using ebtables)
-dhcpcd
+dhcpcd -4
 
 PACKAGESERVER="http://packages.saeu:100"
 
