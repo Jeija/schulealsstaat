@@ -1,4 +1,86 @@
-## Only notes, complete README is TODO
+# Schule als EU
+### Hölderlin-Gymnasium Nürtingen 2015
+---
+The "Schule als EU" project aims to simulate the real EU at school for one week in 2015. This means a parliament consiting of students, companies, an own currency and more has to be created. This software package can be used to simplify several **governmental management** tasks by storing information in databases and other digital forms instead of collecting them on paper records. Additionally, it provides a set of server and client applications that can be used to manage and tranfer a **digital currency**, called *HöGyCoin (HGC)* referring to the school's name, from user accouns that are linked to the ID cards that are used for other management services.
+
+## Live Demo / PR
+You can either download the software and set it up by yourself, or you can just try out a demo of the currency system. This demo may not always be online and data in the demo database will be erased on a regular basis. Refer to the HöGy Central Bank website over at [centralbank.eu](http://centralbank.eu) for more information and news updates on the current status of the project.
+The Live Demo usually does *NOT* represent the very current state of development but is a usually somewhat outdated and modified version of the software in this repo. Currently, it also misses a lot of functionality that is available in local installs.
+
+## High-level description
+This repo consists of most software components required for the deployment of the HöGyCoin currency and the management system, including both server and client applications, scripts to build ISOs for client Laptops and the mobile (Cordova) App. It also includes utilities for testing server performance and for setting up the large Ethernet network that WiFi clients can be in.
+
+All the software is written in JavaScript, CSS, HTML and a bunch of bash scripts. It uses node.js and MongoDB on the server side, for easier interoperability of client and server applications.
+
+* **The API Server** (`server/api`)
+	The API Server manages the main MongoDB-Database that contains all student records including balances, transactions and references to the picture resources. All traffic that reads or writes data from/to the database has to be encrypted (see Security). You can take a closer look at all the possible requests in `server/api/actions/students.js` and `server/api/actions/transactions.js`.
+
+* **The Webcam Server** (`server/webcam`)
+	The Webcam Server stores passport images (PNG files) of the registered students. It is seperated from the API server as traffic from or to this server is unencrypted and in order to split up bandwidth between multiple machines. That way, the webcam server can be positioned at the place where most queries to it are sent. While the API requests are just a few kilobytes of data, a picture on the Webcam Server can be of multiple Megabytes of size.
+
+* **The Proxy Server** (`server/proxy`)
+	This is just a small utility that consists of an internet and an intranet component. The internet component can be installed on a publicly accessible domain, such as [centralbank.eu](http://centralbank.eu). Even if the client is not in the intranet, it can then send requests to the API Server to the internet component. The intranet component regularly asks for new API requests and forwards them to the real API Server. Instead, an HTTP-over-SSH tunnel may also be used, but the method with the Proxy Server has the advantage of being able to cache requests if the API server is offline or when switching the API server from one machine to another.
+
+* **The Management Client** (`client/adminpanel`)
+	The Management client can be used to add, remove and modify students and to force transactions as well as for other administrative tasks. You may get asked to provide a master certificate ("Master-Zertifikat"), you can find that in `util/cert/master_cert`. This is the "key" for some tasks that require additional authentication.
+
+* **The User Client** (`client/userterminal`)
+	The userterminal client is a simple client for usage by students, visitors and other citizens for money transactions, for viewing their account history and more.
+
+* **The HöGyCoin App** (`client/app`)
+	The App is a trimmed down edition of the user client for mobile devices, also written in HTML, CSS and JavaScript using cordova.
+
+* **The `genrequest` client** (`client/genrequest`)
+	This client can be used to manually send arbitrary JSON-encoded action requests to the API Server.
+
+* **The Entrycheck Client** (`client/entrycheck`)
+	This client can be used to scan ID cards and check in / check out students.
+
+* **The Registration Client** (`client/registration`)
+	This client is a more simple version of the registration page in the Management Client that can be used for registering the mass of students in the database with their name, birthday, passport picture and password.
+
+* **The Terminaliso** (`client/terminaliso`)
+	This is a set of scripts to create the ISO image that the User Client-Laptops will run off. In order to build the iso, first run `client/terminaliso/prepare.sh` and then `client/terminaliso/iso/build.sh`. These commands have to be issued on a 64-bit x86 Archlinux machine.
+
+* **The Network Folder** (`network`)
+	This folder contains scripts for setting up a DHCP, DNS and Walled Garden HTTP Server (`network/management.sh`) and for starting up a terminaliso-like hostapd WiFi AP on Archlinux (`network/accesspoint.sh`). The script only works with USB WiFi adapters using the RaLink RT5370 chip.
+
+## Download and Install
+You can download and install the server component, management software, the HöGyCoin-App and more to your own machine.
+
+#### Dependencies
+* A Computer running Linux, Ubuntu 14.04 and Archlinux have been tested (Mac OS X might also work for some core functions)
+* Preferably a Router that you can edit hostnames on (e.g. OpenWRT), but that is not required
+
+#### Setup
+* Install the following packages:
+	* Ubuntu: `sudo apt install nodejs-legacy npm git mongodb tmux`
+	* Archlinux: `sudo pacman -S nodejs git mongodb tmux`
+* Make sure npm is instructed to use python2: `npm config set python /usr/bin/python2`
+* Install the following node.js packages:
+`sudo npm install -g bower http-server node-gyp nodemon nw`
+* Clone this repository *recursively*: `git clone --recursive https://github.com/Jeija/schulealsstaat` and `cd schulealsstaat`
+* Let the included script set up your development environment and install project-internal dependencies: `./init.sh`
+* Start up API and Webcam Servers and launch HTTP Servers for the client applications: `./develop.sh`
+
+#### Usage
+You can now access the client applications at
+
+* [http://localhost:80](http://localhost:80) (Registration client)
+* [http://localhost:81](http://localhost:81) (Entrycheck client)
+* [http://localhost:82](http://localhost:82) (Management client)
+* [http://localhost:83](http://localhost:83) (`genrequest` client)
+
+## Security
+As you can buy real goods with this digital currency, the currency system is of particular interest to attackers. Secondly, the collected data has to be well protected, as it contains records of more than a thousand people. We are very aware of this and have developed a number of counter-measures to fight manipulations.
+
+#### Encryption
+Even though this project does not use HTTPS for client-server communication, all requests to the API server are encrypted. The clients have an RSA Public Key of the API Server and use it to encrypt a password. This password this then used to encrypt the actual payload of the requests with AES and is also used to encrypt the answer again by the server. In this case the main downside of JavaScirpt cryptography, the often insecure channel of distributing the encryption key and files, is irrelevant since the software on the Laptops is cryptographically signed and the App software is distributed in advance. Also, an attacker that might e.g. try to sniff user's passwords by intercepting WiFi traffic could only be amongst a relatively small number of people in the intranet.
+
+#### Certificate System
+Simple passwords can easily be cracked, therefore HöGyCoin uses a system of certificate files that contain long arbitrary strings that serve as passwords. These files are included with the respective management client packets, so it has to be made sure that only the person on the computer running the management software has access to the files (e.g. only listen for requests on the loopback interface, not on any public interface). If a certificate got stolen, they can easily be regenerated. The server only stores hashes and compares them.
+
+# Other notes
 
 ## IPs
 * 192.168.2.100 - 192.168.30.250 for clients
@@ -16,12 +98,6 @@
 ## Internet Filtering
 Userterminals will create their wifi networks using the script in `network/wifi/wifi.sh`.
 They must `ebtables-restore < ebtables.save` (`ebtables.save` is in `network/wifi`) immediately after setting up their WiFi access point.
-
-## Dependencies
-The `terminaliso` has to be built on Archlinux, the `prepare.sh` script prepares the environment and
-installs build dependencies. All other dependencies will be installed by `init.sh`. On Debian-based
-distors and on Arch-based ones, it will install all dependencies, including tmux and nodejs + npm.
-On other distributions, you have to install `tmux` and `nodejs` *before* executing the script.
 
 ## Known attacks
 ### Get access to passport photos
@@ -43,3 +119,4 @@ On other distributions, you have to install `tmux` and `nodejs` *before* executi
 * Disable the picture upload feature during the project
 * Use a password / certificate check for picture uploading
 * Detect suspicious requests and block / find the attacker in the intranet
+

@@ -12,25 +12,6 @@ set -xe
 
 ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/.."
 
-# Debian-based distros
-if type "apt-get" > /dev/null; then
-	sudo apt-get update
-	sudo apt-get -y install npm nodejs-legacy tmux
-fi
-
-# Arch-based distros
-if type "pacman" > /dev/null; then
-	sudo pacman -Sy nodejs tmux --noconfirm
-fi
-
-# Global NPM dependencies
-npm config set python /usr/bin/python2
-if ! type "bower" > /dev/null; then sudo npm install -g bower ; fi
-if ! type "http-server" > /dev/null; then sudo npm install -g http-server ; fi
-if ! type "node-gyp" > /dev/null; then sudo npm install -g node-gyp ; fi
-if ! type "nodemon" > /dev/null; then sudo npm install -g nodemon ; fi
-if ! type "nw" > /dev/null; then sudo npm install -g nw ; fi
-
 # Install server dependencies
 ( cd $ROOT/server/api ; sudo npm install )
 ( cd $ROOT/server/webcam ; sudo npm install )
