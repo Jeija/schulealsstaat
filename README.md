@@ -52,7 +52,7 @@ You can download and install the server component, management software, the HöG
 * A computer running Linux, Ubuntu 14.04 and Archlinux have been tested (Mac OS X might also work for some core functions)
 * Preferably a Router that you can edit hostnames on (e.g. OpenWRT), but that is not required
 
-### Network preparation
+#### Network preparation
 If you can edit hostnames on your router (that acts as DNS server, e.g. using `dnsmasq`), just add the following lines to the router's `/etc/hosts` file:
 ```
 <IP of development machine> api.saeu
