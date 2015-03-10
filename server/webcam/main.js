@@ -10,35 +10,48 @@
  */
 
 var http = require("http");
-var qs = require("querystring");
+var path = require("path");
 var fs = require("fs");
-var crypto = require("crypto");
 var cert = require("./cert.js");
 var log = require("./logging.js");
 
-var IMG_PATH = "/img/";
+var IMG_PATH = "img";
 
+/**
+ * upload_image
+ * Upload image files to the server. Does not require authentication, but may be disabled or
+ * restricted to certain sources during the project. See first comment for more information.
+ */
 function upload_image(req, res) {
 	res.writeHead(200, {'Content-Type': 'text/plain', 'Access-Control-Allow-Origin' : '*'});
 
-	process.stdout.write("Uploading Image [..]");
-	var imgdata = "";
+	var ip = req.connection.remoteAddress;
 
+	log.info("upload_image", ip + " uploads file...");
+
+	var imgdata = "";
 	req.on("data", function (data) { imgdata += data; });
 	req.on("end", function () {
 		var img = JSON.parse(imgdata);
-		console.log("\b\b\bOK]");
-		var filename = __dirname + IMG_PATH + img.name + ".png";
-		console.log("--> Saving as " + filename);
-		var webcamData = img.pic.replace(/^data:image\/png;base64,/, "");
-		fs.writeFile(filename, webcamData, "base64", function (err) {
-			if (err) console.log("ERROR:" + err);
+		var fn = path.join(__dirname, IMG_PATH, img.name + ".png");
+		log.info("upload_image", ip + ": completed, saving to " + fn);
+
+		var png = img.pic.replace(/^data:image\/png;base64,/, "");
+		fs.writeFile(fn, png, { encoding: "base64", flag : "wx" }, function (err) {
+			if (err) {
+				log.err("upload_image", "fs.writeFile: " + err);
+				res.end("error: fs.writeFile: " + err);
+			} else {
+				res.end("ok");
+			}
 		});
 	});
-
-	res.end("ok");
 }
 
+/**
+ * get_image
+ * Get a base64-encoded png image from the server.
+ */
 function get_image(req, res, query) {
 	var imgname = query[1];
 	log.info("get_image", "Requested \"" + imgname + ".png\" from " +
@@ -52,22 +65,16 @@ function get_image(req, res, query) {
 		cert.check(["webcam_hash"], clientCert, ip, function () {
 			res.writeHead(200, {'Content-Type': 'image/png',
 				'Access-Control-Allow-Origin' : '*'});
-			var path =__dirname + IMG_PATH + imgname + ".png";
+			var fn = path.join(__dirname, IMG_PATH, imgname + ".png");
 
-			fs.exists(path, function (exists) {
-				if (!exists) {
-					console.log("  --> Could not find requested file: " + path);
+			fs.readFile(fn, function (err, data) {
+				if (err) {
+					log.warn("get_image, fs.readFile " + fn + ": " + err);
 					res.end();
 					return;
+				} else {
+					res.end(data.toString("base64"));
 				}
-
-				fs.readFile(path, function (err, data) {
-					if (err) {
-						log.err("get_image, fs.readFile", err);
-					} else {
-						res.end(data.toString("base64"));
-					}
-				});
 			});
 		});
 	});
@@ -82,7 +89,7 @@ http.createServer(function (req, res) {
 	if (query[0] == "upload") upload_image(req, res);
 	else if (query[0] == "get") get_image(req, res, query);
 	else {
-		console.log("[WEBCAM] Invalid request: " + req.url + " from " +
+		log.info("main", "Invalid request: " + req.url + " from " +
 			req.connection.remoteAddress);
 		res.end();
 	}
