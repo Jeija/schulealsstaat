@@ -49,8 +49,36 @@ All the software is written in JavaScript, CSS, HTML and a bunch of bash scripts
 You can download and install the server component, management software, the HöGyCoin-App and more to your own machine.
 
 #### Dependencies
-* A Computer running Linux, Ubuntu 14.04 and Archlinux have been tested (Mac OS X might also work for some core functions)
+* A computer running Linux, Ubuntu 14.04 and Archlinux have been tested (Mac OS X might also work for some core functions)
 * Preferably a Router that you can edit hostnames on (e.g. OpenWRT), but that is not required
+
+### Network preparation
+If you can edit hostnames on your router (that acts as DNS server, e.g. using `dnsmasq`), just add the following lines to the router's `/etc/hosts` file:
+```
+<IP of development machine> api.saeu
+<IP of development machine> cam.saeu
+<IP of development machine> packages.saeu
+```
+
+You might also want to always assign the same IP to your development machine (e.g. if it has multiple network interfaces) so that the router's DHCP server knows their MAC addresses. In order to do that, edit `/etc/config/dhcp`:
+
+```
+config host
+	option ip '<IP of development machine>'
+	option mac '<MAC Address of development machine network interface 1>, <interface 2>, ...'
+	option name '<hostname of development machine>'
+```
+
+Then reload the network config using `/etc/init.d/dnsmasq restart`.
+
+If you only want to use the clients on your development machine, you can instead also add the domain name entries to your local `/etc/hosts`:
+```
+127.0.0.1 api.saeu
+127.0.0.1 cam.saeu
+127.0.0.1 packages.saeu
+```
+
+If, however, you want to access the server from multiple devices such as from the app and you can't edit your router's configuration files, you will have to manually edit the server addresses in the `client/common/api.js` file *before running `./init.sh`* (see Setup). Just follow the instructions in `client/common/api.js` to edit the API server and webcam server address.
 
 #### Setup
 * Install the following packages:
