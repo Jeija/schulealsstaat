@@ -1,18 +1,5 @@
-var PASSIMG_SERVER = "127.0.0.1"
-var PASSIMG_PORT = 1338
-
-var APISERVER = "127.0.0.1"
-var APIPORT = 1337
-
-var CERTNAME = "ec_cert";
-
-var ACTIONURL = "http://" + APISERVER + ":" + APIPORT + "/action/";
-
-function showpic(picname) {
-	webcamserv_get(picname, function (imgbase64) {
-		$("#pass").attr("src", "data:image/png;base64," + imgbase64);
-	});
-}
+// Prevent duplicate scanning by storing the last scanned ID cards for 5 seconds
+var last_qrids = [];
 
 function calcAge(bday) {
 	var today = new Date();
@@ -25,62 +12,68 @@ function calcAge(bday) {
 	return age;
 }
 
+function addActionCard(qrid) {
+	// Make sure this is not a duplicate scan
+	if (last_qrids.indexOf(qrid) > -1) return;
+	last_qrids.push(qrid);
+	setTimeout(function () {
+		last_qrids.splice(last_qrids.indexOf(qrid), 1);
+	}, 5000);
+
+	// Get more information on the student based by sending the unique QR-ID to the
+	// API Server
+	action("student_identify", { qrid : qrid }, function(student) {
+		// Show student information card
+		var card = $("#card_prototype").clone(true).appendTo("#cardlist");
+		card.show();
+		card.attr("id", null);
+		card.data("qrid", qrid);
+		if (typeof student != "object") {
+			card.find(".qrid").text(qrid);
+			card.find(".notfound").show();
+			return
+		} else {
+			card.find(".found").show();
+		}
+
+		// Load data into attribute card
+		card.find(".td_name").html(student.firstname + " " + student.lastname);
+		card.find(".td_class").html(student.type);
+		card.find(".td_age").html(calcAge(student.birth));
+		card.find(".pass").attr("src", "");
+		webcamserv_get(student.picname, function (imgbase64) {
+			card.find(".pass").attr("src", "data:image/png;base64," + imgbase64);
+		});
+	});
+}
+
 $(function() {
-	QRReader.init("#webcam", "../QRScanJS/")
-	var current_qrid;
+	QRReader.init("#webcam", "../QRScanJS/");
 
-	// #################### Check In / Check Out ####################
-	function scan() {
-		$("#credentials").hide();
-		$("#webcam_popup").show();
-		QRReader.scan(function (qrid) {
-			$("#webcam_popup").hide();
-			current_qrid = qrid;
-			var data = { qrid : qrid };
-			action("student_identify", data, function(student) {
-				if (typeof student != "object") {
-					alert("Account nicht gefunden!");
-					scan();
-					return;
-				}
-				$("#td_name").html(student.firstname + " " + student.lastname);
-				$("#td_class").html(student.type);
-				$("#td_age").html(calcAge(student.birth));
-				$("#pass").attr("src", "");
-				$("#credentials").show();
-				showpic(student.picname);
-			});
-		})
+	function scan (qrid) {
+		addActionCard(qrid);
+		QRReader.scan(scan);
 	}
-	scan();
 
-	$("#checkin").click(function () {
-		var response;
-		action_cert("ec_checkin", current_qrid, CERTNAME, function (res) {
-			response = res;
+	QRReader.scan(scan);
+
+	$(".checkin").click(function () {
+		var card = $(this).parent().parent();
+		action_cert("ec_checkin", card.data("qrid"), "ec_cert", function (res) {
+			if (res != "ok") alert("Fehler! Server-Antwort: " + res);
+			else card.remove();
 		});
-		var interval = setInterval(function() {
-			if (!response) return;
-			if (response == "ok") {
-				clearInterval(interval);
-				scan();
-			}
-			else alert("Error: Server respone was \"" + response + "\"");
-		}, 50);
 	});
 
-	$("#checkout").click(function () {
-		var response;
-		action_cert("ec_checkout", current_qrid, CERTNAME, function (res) {
-			response = res;
+	$(".checkout").click(function () {
+		var card = $(this).parent().parent();
+		action_cert("ec_checkout", card.data("qrid"), "ec_cert", function (res) {
+			if (res != "ok") alert("Fehler! Server-Antwort: " + res);
+			else card.remove();
 		});
-		var interval = setInterval(function() {
-			if (!response) return;
-			if (response == "ok") {
-				clearInterval(interval);
-				scan();
-			}
-			else alert("Error: Server respone was \"" + response + "\"");
-		}, 50);
 	});
-})
+
+	$(".close").click(function () {
+		$(this).parent().parent().remove();
+	});
+});

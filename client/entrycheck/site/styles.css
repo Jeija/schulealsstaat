@@ -1,129 +1,103 @@
 html, body {
-	overflow:hidden;
 	background:#000;
 	color:#fff;
-	text-align:center;
-	height:100%;
-	width:100%;
+	margin:0;
 	font-family:Arial;
 }
 
-#credentials {
-	position:relative;
-	margin:0 auto;
+/** Intregrated QRScanJS **/
+#webcam_scanner {
+	background:#333;
+	text-align:center;
+}
+
+#webcam {
 	display:inline-block;
+	float:center;
+	max-height:30vh;
+	width:50vw;
+}
+
+/** Credentials / User information **/
+.card {
+	width:340px;
+	margin:auto;
+	display:inline-block;
+	margin:20px 5px;
+	margin-right:30px;
 	padding:20px;
-	border:1px dashed #555;
+	border:1px solid #555;
 	height:90%;
-	max-width:75%;
 	background:#111;
+	text-align:center;
+	position:relative;
 }
 
-#pass {
-	max-height:50%;
-	max-width:90%;
+.pass {
+	width:320px;
+	height:240px;
+	background:#000;
+	display:inline-block;
+	margin-bottom:20px;
 }
 
-#prop_table {
-	margin-left:25px;
-	font-size:4vw;
+.prop_table {
+	margin-left:10px;
+	font-size:30px;
 	text-align:left;
+	margin-bottom:20px;
 }
 
-#prop_table tr td:first-child {
+.prop_table tr td:first-child {
 	width:100px;
 	font-weight:bold;
 	padding-right:30px;
 }
 
-#checkin {
+.close {
 	position:absolute;
-	background-color:#2a2;
-	left:10px;
-	bottom:10px;
-	width:48%;
-	height:100px;
-	border:2px solid #ddd;
-	border-radius:5px;
-	font-size:4vw;
-}
-#checkin:hover { background-color:#0a0; }
-#checkin:active { background-color:#0f0; }
-
-#checkout {
-	position:absolute;
-	background-color:#a22;
-	right:10px;
-	bottom:10px;
-	width:48%;
-	height:100px;
-	border:2px solid #ddd;
-	border-radius:5px;
-	font-size:4vw;
-}
-#checkout:hover { background-color:#a00; }
-#checkout:active { background-color:#f00; }
-
-#webcam_popup {
-	position:absolute;
-	background:#000;
-	color:#fff;
-	bottom:0;
-	right:0;
-	left:0;
-	top:0;
+	right:-20px;
+	top:-20px;
+	font-size:20px;
+	background:#fff;
+	border:2px solid #555;
+	border-radius:30px;
+	width:30px;
+	height:30px;
 	text-align:center;
+	line-height:30px;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	user-select: none;
+	color:#000;
 }
 
-#popup_heading {
-	position:absolute;
-	width:100%;
-	text-align:center;
-	z-index:2;
-	font-size:6vw;
+.close:hover {
+	background:#aaa;
+	cursor:pointer;
 }
 
-#webcam {
-	position:absolute;
-	max-height:90%;
-	min-width:90%;
-	bottom:0;
-	right:0;
-	left:0;
-	top:0;
-	margin:auto;
+.notfound {
+	font-size:20px;
 }
 
-@keyframes scanner_animation {
-    0% {top:-50%;}
-    100% {bottom:0;}
+/** Checkin / Checkout button **/
+.checkin, .checkout {
+	width:95%;
+	margin-top:5px;
+	height:50px;
+	border:1px solid #555;
+	border-radius:3px;
+	font-size:30px;
+	cursor:pointer;
+	color:#000;
 }
 
-@-webkit-keyframes scanner_animation {
-    0% {top:0px;}
-    100% {top:1500px;}
-}
+.checkin { background-color:#3a3; }
+.checkin:hover { background-color:#0a0; }
+.checkin:active { background-color:#0f0; }
 
-.scanner_beacon {
-	z-index:1;
-	position:relative;
-	top:100%;
-	height:20px;
-	transform-origin:0 100%;
-	-webkit-transform-origin:0 100%;
-	animation:scanner_animation 2s ease-out infinite;
-	-webkit-animation:scanner_animation 2s ease-out infinite;
-}
-
-#beacon_1 {
-	background-color:rgba(0, 255, 0, 0.1);
-}
-#beacon_2 {
-	background-color:rgba(0, 255, 0, 0.2);
-}
-#beacon_3 {
-	background-color:rgba(0, 255, 0, 0.4);
-}
-#beacon_4 {
-	background-color:rgba(0, 255, 0, 0.8);
-}
+.checkout { background-color:#a22; }
+.checkout:hover { background-color:#a00; }
+.checkout:active { background-color:#f00; }
