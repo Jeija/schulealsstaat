@@ -1,3 +1,12 @@
+/**
+ * You can improve scanning performance by using ZBarCam, a compiled scanning application,
+ * for QR Code Input. In order to do that, run the entrycheck application in NW.js
+ * and install ZBarCam. You may need to edit the WEBCAM and ZBC_FLAGS variables
+ * in this file. Otherwise, entrycheck falls back to QRScanJS.
+ * Requires ZBar build from https://github.com/Jeija/ZBar, branch entrycheck.
+ * You can e.g. use the saeubuild.sh script to build ZBarCam.
+ */
+
 var ZBARCAM = "zbarcam";
 var WEBCAM = "/dev/video0";
 var ZBC_FLAGS = "--prescale=640x480"
