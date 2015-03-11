@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+	<title>SaEU - Zugangskontrolle</title>
+	<script src="../bower_components/jsencrypt/bin/jsencrypt.min.js"></script>
+	<script src="../bower_components/jquery/dist/jquery.js"></script>
+	<script src="../bower_components/gibberish-aes/dist/gibberish-aes-1.0.0.min.js"></script>
+	<script src="../QRScanJS/qrscan.js"></script>
+	<script src="../api.js"></script>
+	<script src="scripts.js"></script>
+	<link rel="stylesheet" type="text/css" href="styles.css">
+	<meta charset="utf-8"/>
+</head>
+<body>
+	<div id="webcam_scanner">
+		<video autoplay="true" id="webcam"></video>
+	</div>
+
+	<div id="cardlist">
+		<!-- Prototype -->
+		<div class="card" id="card_prototype" style="display:none">
+			<div class="notfound" hidden>
+				QR-ID <span class="qrid"></span>: Nicht gefunden!
+			</div>
+			<div class="found" hidden>
+				<img class="pass" alt="Wird geladen...">
+				<table class="prop_table">
+					<tr>
+						<td>Name:</td>
+						<td class="td_name"></td>
+					</tr>
+					<tr>
+						<td>Klasse:</td>
+						<td class="td_class"></td>
+					</tr>
+					<tr>
+						<td>Alter:</td>
+						<td class="td_age"></td>
+					</tr>
+				</table>
+				<input type="button" class="checkin" value="Check In">
+				<input type="button" class="checkout" value="Check Out">
+				<a class="close">&#x2715;</a>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

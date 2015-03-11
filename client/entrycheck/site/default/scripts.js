@@ -1,3 +1,13 @@
+var ZBARCAM = "zbarcam";
+var WEBCAM = "/dev/video0";
+var ZBC_FLAGS = "--prescale=640x480"
+
+// In node.js (nwjs) environment: Spawn ZBarCam instead of QRScanJS
+var process = undefined;
+if (typeof require !== "undefined") {
+	process = require("child_process");
+}
+
 // Prevent duplicate scanning by storing the last scanned ID cards for 5 seconds
 var last_qrids = [];
 
@@ -13,6 +23,7 @@ function calcAge(bday) {
 }
 
 function addActionCard(qrid) {
+	console.log(qrid);
 	// Make sure this is not a duplicate scan
 	if (last_qrids.indexOf(qrid) > -1) return;
 	last_qrids.push(qrid);
@@ -48,14 +59,28 @@ function addActionCard(qrid) {
 }
 
 $(function() {
-	QRReader.init("#webcam", "../QRScanJS/");
+	// NW.js - ZBarCam:
+	if (process) {
+		$("#webcam_scanner").hide();
+		var zbar = process.exec(ZBARCAM + " " + WEBCAM + " " + ZBC_FLAGS);
+		zbar.stdout.on("data", function (qrid_raw) {
+			var qrids = qrid_raw.split("\n");
+			console.log(qrids);
+			for (var i = 0; i < qrids.length - 1; i++)
+				addActionCard(qrids[i]);
+		});
 
-	function scan (qrid) {
-		addActionCard(qrid);
+	// Native JavaScript QRScanJS
+	} else {
+		function scan (qrid) {
+			addActionCard(qrid);
+			QRReader.scan(scan);
+		}
+
+		QRReader.init("#webcam", "../QRScanJS/");
 		QRReader.scan(scan);
 	}
 
-	QRReader.scan(scan);
 
 	$(".checkin").click(function () {
 		var card = $(this).parent().parent();

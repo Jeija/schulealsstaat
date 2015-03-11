@@ -1,0 +1,13 @@
+{
+	"name" : "SaEU Zugangskontrolle",
+	"main" : "./site/default/index.html",
+	"scripts" : {
+		"start" : "nw"
+	},
+	"window": {
+		"toolbar": true,
+		"frame": true,
+		"width":1000,
+		"height":600
+	}
+}
