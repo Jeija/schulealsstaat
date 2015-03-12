@@ -17,7 +17,7 @@ sleep 1
 
 # Make bridge interface
 BRIDGE_IFACE=br0
-ETH_IFACE=$(find /sys/class/net/enp* | sed "s/.*\///")
+ETH_IFACE=$(find /sys/class/net/e* | sed "s/.*\///")
 
 brctl addbr $BRIDGE_IFACE
 brctl addif $BRIDGE_IFACE $ETH_IFACE
