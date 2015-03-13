@@ -19,11 +19,8 @@ sleep 1
 
 # Delete any remaining network configuration
 ip link set down dev $ETH_IFACE
-if [[ $(brctl show) == *"$BRIDGE_IFACE"* ]]
-then
-	ip link set down dev $BRIDGE_IFACE
-	brctl delbr $BRIDGE_IFACE
-fi
+ip link set down dev $BRIDGE_IFACE || true
+brctl delbr $BRIDGE_IFACE || true
 ip addr flush dev $ETH_IFACE
 ip route flush all
 
