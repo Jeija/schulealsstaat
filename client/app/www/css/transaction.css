@@ -1,21 +1,30 @@
 .ta_main {
 	background-color: #555;
-	border-radius: 10px;
-	border: solid 5px yellow;
-	margin-top: 15px;
+	border-radius: 2vw;
+	border: solid 1vw yellow;
+	margin-top: 2vw;
 	margin-left: auto;
 	margin-right: auto;
-	width: 90%;
-	padding-bottom: 5px;
-	height: 35%;
+	width: 90vw;
+	padding-bottom: 1vw;
+	height: 33vw;
 	position:relative;
 }
 
 h4.ta {
 	text-align: center;
 	font-size: 5vw;
-	margin: 3%;
+	margin: 1vw;
 }
+
+h4.ta_sub{
+	text-align: center;
+	font-size: 5vw;
+	margin: 1vw;
+	margin-top: 0vw;
+}
+
+
 
 a {
 	text-decoration: none;
@@ -23,11 +32,120 @@ a {
 }
 
 img {
-	height: 60%;
+	height: 22vw;
 	position: absolute;
 	margin: auto;
-	top: 12vw;
+	top: 8vw;
 	left: 0;
 	right: 0;
 	bottom: 0;
+}
+
+.seperation {
+	background-color: #555;
+	width: 90vw;
+	border-radius: 2vw;
+	padding: 2vw;
+	padding-bottom: 1.5vw;
+	margin: auto;
+	margin-top: 1.5vw;
+	margin-bottom: 1.5vw;
+	font-size: 5vw;
+	left: 0;
+	right: 0;
+}
+
+input {
+	width: 40vw;
+	font-size: 4vw;
+}
+
+textarea {
+	font-size: 4vw;
+	width: 80vw;
+	display: block;
+	margin: auto;
+}
+ 
+#inline {
+	display: inline-table;
+}
+
+.value {
+	position: relative;
+	width: auto;
+	text-align: center;
+}
+
+#amount:valid {
+	background-color: #afa;
+}
+
+#amount:invalid {
+	background-color: #faa;
+}
+/*
+#scan_card {
+	text-decoration: none;
+	color: white;
+	font-size: 5vw;
+	border-style: ridge;
+	border-color: white;
+	background-color: black;
+	display: block;
+	position: relative;
+	width: 90vw;
+	margin: auto;
+	left: 0;
+	right: 0;
+	margin-bottom: 2vw;
+}
+*/
+span {
+	display: block;
+	text-align: center;
+	font-size: 5vw;
+	font-weight: bold;
+	margin: 1vw;
+}
+
+#alt {
+	border: solid;
+	border-color: #888;
+	width: 94vw;
+	border-radius: 2vw;
+	border-width: 1.5vw;
+	margin-top: 1vw;
+}
+
+#alt > div {
+	margin: 0vw;
+	border-radius: 0;
+	background-color: #555;
+	width: 90vw;
+	padding: 2vw;
+	padding-bottom: 1.5vw;
+	margin: auto;
+	font-size: 5vw;
+	left: 0;
+	right: 0;
+}
+
+span + .seperation {
+	padding-top: 5vw;
+}
+
+table {
+	position: relative;
+	width: 90vw;
+	margin: auto;
+	left: 0;
+	right: 0;
+	border-collapse: collapse;
+}
+
+td {
+}
+
+span+div {
 }

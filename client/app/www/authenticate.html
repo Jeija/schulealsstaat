@@ -3,8 +3,8 @@
 <head>
 	<meta charset="UTF-8">
 	<script src="cordova.js"></script>
-	<link rel="stylesheet" href="css/authenticate.css" type="text/css">
 	<link rel="stylesheet" href="css/common.css" type="text/css">
+	<link rel="stylesheet" href="css/authenticate.css" type="text/css"
 	<script type="text/javascript" src="QRScanJS/qrscan.js"></script>
 	<script src="bower_components/jsencrypt/bin/jsencrypt.min.js"></script>
 	<script src="bower_components/jquery/dist/jquery.js"></script>
@@ -12,18 +12,20 @@
 	<script src="js/api.js"></script>
 	<script src="js/storage.js"></script>
 	<script src="js/authenticate.js"></script>
+	<script src="js/common.js"></script>
 </head>
 <body>
 	<div id="scanner_popup" hidden>
 		<video autoplay="true" id="scanner_webcam" width="100%"></video>
 		<input type="button" value="Abbrechen" id="scanner_abort" />
 	</div>
-	<input id="scan_card" type="button" value="Karte Scannen" /><br/>
-	Oder Kontonummer eingeben:<br/>
-	<input id="qrid" type="text" /><br/>
-	Passwort:<br/>
-	<input id="password" type="password" /><br/>
-	<input type="button" id="register" value="Registrieren">
+	<input class="bigbutton" id="scan_card" type="button" value="Karte Scannen" />
+	<div class=seperation>Oder Kontonummer eingeben:<br/>
+	<input id="qrid" type="text" /></div>
+	<div class=seperation>Passwort:<br/>
+	<input id="password" type="password" /></Div>
+	<input type="button"
+class="bigbutton" id="register" value="Registrieren">
 </body>
 </html>
 

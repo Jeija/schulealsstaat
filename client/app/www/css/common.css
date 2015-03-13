@@ -5,23 +5,19 @@ html {
 	height: 100%;
 }
 
-body {
-	height: 95%;
-}
-
-button.bigbutton {
+.bigbutton {
 	text-decoration: none;
 	color: yellow;
 	font-size: 7vw;
 	background-color: green;
-	border-radius: 5px;
+	border-radius: 1vw;
 	border-style: solid;
 	border-color: yellow;
-	border-width: 3px;
+	border-width: 0.5vw;
 	display: block;
 	text-align: center;
 	width: auto;
-	width:90%;
+	width:90vw;
 	margin:auto;
 	margin-bottom:1.5vw;
 }
@@ -34,11 +30,10 @@ a.mainlinks {
 	border-radius: 5px;
 	border-style: solid;
 	border-color: yellow;
-	border-width: 3px;
+	border-width: 0.6vw;
 	display: block;
 	text-align: center;
-	width: auto;
-	width:90%;
+	width:90vw;
 	margin:auto;
 	margin-top:1.5vw;
 }
@@ -46,23 +41,83 @@ a.mainlinks {
 .mainheadline {
 	padding-top:0.6vw;
 	color: yellow;
-	font-size: 30px;
+	font-size: 9vw;
 	text-align: center;
 }
 
 .halfsizelink {	
 	text-decoration: none;
 	color: yellow;
-	font-size: 30px;
+	font-size: 9vw;
 	background-color: green;
-	border-radius: 5px;
+	border-radius: 1vw;
 	border-style: solid;
 	border-color: yellow;
-	border-width: 3px;
+	border-width: 0.6vw;
 	display: inline-block;
 	text-align: center;
-	width: 45%;
+	width: 43vw;
 	margin-top:1.5vw;
+}
+
+a.halfsize_small {
+	text-decoration: none;
+	color: yellow;
+	font-size: 7vw;
+	background-color: green;
+	border-radius: 1vw;
+	border-style: solid;
+	border-color: yellow;
+	border-width: 0.6vw;
+	display: block;
+	text-align: center;
+	width: 35vw;
+	height: auto;
+	float: right;
+	padding: 0.4vw;
+}
+
+input.halfsize_small {
+	text-decoration: none;
+	color: yellow;
+	font-size: 7vw;
+	background-color: green;
+	border-radius: 1vw;
+	border-style: solid;
+	border-color: yellow;
+	border-width: 0.6vw;
+	display: block;
+	text-align: center;
+	width: auto;
+	height: auto;
+	float: right;
+}
+
+.seperation {
+	background-color: #555;
+	width: 90vw;
+	border-radius: 1vw;
+	padding: 2vw;
+	padding-bottom: 1.5vw;
+	margin: auto;
+	margin-top: 1.5vw;
+	margin-bottom: 1.5vw;
+	font-size: 5vw;
+	left: 0;
+	right: 0;
+}
+
+#loading {
+	position: absolute;
+	left:0;
+	right:0;
+	top:0;
+	bottom:0;
+	margin: auto;
+	height: 8vw;
+	width: 80vw;
+	font-size: 8vw;
+	text-align: center;
 }
 
 /*** Error Message ***/
