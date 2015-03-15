@@ -1,0 +1,18 @@
+#logo {
+	width: 65vw;
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 2vw;
+	margin-bottom: 3vw;
+}
+
+#statusbar {
+	border-bottom-style: solid;
+	border-bottom-width: 0.4vw;
+}
+
+#qrid {
+	display: inline-block;
+	float: right;
+}

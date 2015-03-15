@@ -8,24 +8,25 @@
 }
 
 table, tr, th {
-	border: 1px solid white;
+	border: 0.3vw solid white;
 }
 
 table, tr, th, td {
-	padding: 5px 15px 5px 10px;;
+	padding: 1vw 3vw 1vw 2vw;
 }
 
 h3 {
 	color: yellow;
 	text-align: center;
+	font-size: 7vw;
 }
 
 #balance_number {
 	display: inline-block;
-	padding: 5px;
+	padding: 1vw;
 	border: solid;
-	margin: 10px;
-	font-size: 30px;
+	margin: 2vw;
+	font-size: 9vw;
 }
 
 #nostatement {
