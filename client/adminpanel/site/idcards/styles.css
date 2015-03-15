@@ -2,11 +2,12 @@ body {
 	font-family:Helvetica, Arial;
 	background:#fff;
 	margin:2cm 2cm 2cm 2cm;
+	overflow:hidden;
 }
 
 #type_popup {
 	width:400px;
-	height:180px;
+	height:230px;
 	border:2px solid #000;
 	border-radius:5px;
 	background:#555;
@@ -24,6 +25,27 @@ body {
 #popup_heading {
 	font-size:35px;
 	margin-bottom:10px;
+}
+
+#upload {
+	font-size:20px;
+	background:transparent;
+	color:#fff;
+	border-radius:5px;
+	border:1px solid #ccc;
+	padding:4px 15px;
+	margin-left:-5px;
+	cursor:pointer;
+}
+
+#upload:hover {
+	transition:background 0.2s;
+	background:#333;
+}
+
+#or {
+	padding:10px;
+	font-style:italic;
 }
 
 #type {
@@ -60,34 +82,11 @@ body {
 	background:#333;
 }
 
-/** EDIT THESE VALUES **/
-.idcard-container {
-	padding:0.1cm 0.2cm;
-}
-
-.idcard {
-	min-width:7cm;
-	height:4cm;
-	border:1px dashed #ccc;
-	position:relative;
-}
-
-.qrcode {
+/** PDF **/
+#pdf_preview {
 	position:absolute;
-	left:0.5cm;
-	top:0.3cm;	
-}
-
-.idcard .name {
-	font-size:20px;
-	position:absolute;
-	left:0.5cm;
-	bottom:0.2cm;
-}
-
-.passpic {
-	width:2.5cm;
-	position:absolute;
-	right:0.2cm;
-	top:0.3cm;
+	left:0;
+	top:0;
+	width:100%;
+	height:100%;
 }

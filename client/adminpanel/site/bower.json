@@ -9,6 +9,7 @@
     "rome": "~1.2.1",
     "jsencrypt": "~2.1.0",
     "qr-js": "~1.1.3",
-    "gibberish-aes": "*"
+    "gibberish-aes": "*",
+    "jspdf": "~1.0.272"
   }
 }
