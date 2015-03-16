@@ -1,3 +1,5 @@
+var TCPPORT = 1233;
+
 /**
  * Requests must follow this schema:
  * POST Request: [IP]:[PORT]/get/[PICNAME]
@@ -93,6 +95,6 @@ http.createServer(function (req, res) {
 			req.connection.remoteAddress);
 		res.end();
 	}
-}).listen(1338);
+}).listen(TCPPORT);
 
 log.ok("WebCamServ", "Started!");

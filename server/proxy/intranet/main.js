@@ -1,7 +1,7 @@
-// TODO: Use proper server URLS
+// TODO: Use proper server URLs
 var USER_SERVER = "http://api.saeu";
-var PROXY_SERVER = "http://127.0.0.1";
-var USER_PORT = 1337;
+var PROXY_SERVER = "http://centralbank.eu";
+var USER_PORT = 1230;
 var PROXY_PORT = 1381;
 
 var fs = require("fs");
@@ -37,7 +37,7 @@ function postUserResponse(res, id) {
 		if (err != "ok") {
 			log.err("putResponse", "Internet proxy didn't answer 'ok', but " + err);
 		} else {
-			log.info("putResponse", "Forwarded requests succesfully");
+			log.info("putResponse", "Forwarded request with ID " + id + " succesfully");
 		}
 	});
 }

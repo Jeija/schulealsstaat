@@ -1,16 +1,18 @@
-var TCPPORT = 1337;
+var TCPPORT = 1230;
 
 var http = require("http");
 var log = require("./logging.js");
 var actions = require("./actions");
 
-
 /**
  * Use requests as follows:
  * [IP]:[TCPPORT]/action/[ACTIONNAME], for instance:
- * 192.168.0.50:1337/action/student_checkin
+ * 192.168.0.50:1230/action/student_checkin
  * [ACTIONNAME] is the name of the action registered via register([ACTION_NAME], function() {})
  * in actions/*.js
+ *
+ * Before requesting you may want to call [IP]:[TCPPORT]/ping, which answers with a 204 HTTP
+ * status code if the API server is online.
  *
  * The API uses a form of hybrid encryption with AES for symmetric operations and RSA for keypairs.
  * POST data must be a JSON that consists of the following:
@@ -24,14 +26,24 @@ var actions = require("./actions");
  * }
  */ 
 http.createServer(function (req, res) {
-	res.writeHead(200, {'Content-Type': 'text/plain', 'Access-Control-Allow-Origin' : '*'});
-
 	// Parse HTTP query
 	var fragments = req.url.substring(1).split("/");
 	var query = fragments.splice(0, 2);
 	query.push(fragments.join('/'));
 
-	if (query[0] == "action") actions.execute(query[1], req, res);
+	if (query[0] == "ping") {
+		res.writeHead(204, {"Access-Control-Allow-Origin" : "*"});
+		res.end();
+	} else if (query[0] == "action") {
+		res.writeHead(200, {"Content-Type": "text/plain",
+			"Access-Control-Allow-Origin" : "*"});
+		actions.execute(query[1], req, res);
+	} else {
+		// empty answer, but with Access-Control-Allow-Origin: *
+		res.writeHead(200, {"Content-Type": "text/plain",
+			"Access-Control-Allow-Origin" : "*"});
+		res.end();
+	}
 }).listen(TCPPORT);
 
 log.ok("NodeJS", "Server started");

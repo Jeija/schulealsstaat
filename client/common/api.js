@@ -12,13 +12,25 @@
 
 /** The server address and port for the API server - edit this if you need to! **/
 var APISERVER = "api.saeu";
-var APIPORT = 1337;
+var APIPORT = 1230;
+
+/** The server address and port for the API internet proxy server **/
+/** This is NOT HTTPS Traffic, but uses port 443 because that should certainly be
+	open in any mobile network / behind a firewall somewhere **/
+var PROXYSERVER = "centralbank.eu";
+var PROXYPORT = 443;
 
 /** The server address and port for the Webcam server - edit this if you need to! **/
 var WEBCAMSERVER = "cam.saeu";
-var WEBCAMPORT = 1338;
+var WEBCAMPORT = 1233;
 
-var ACTIONURL = "http://" + APISERVER + ":" + APIPORT + "/action/";
+/** Ping / Query Timeouts: Abort request if server doesn't answer within given time **/
+var TIMEOUT_INTRANET = 1500;
+var TIMEOUT_INTERNET = 4000;
+var TIMEOUT_QUERY = 5000;
+
+var APIURL = "http://" + APISERVER + ":" + APIPORT + "/";
+var PROXYURL = "http://" + PROXYSERVER + ":" + PROXYPORT + "/";
 var WEBCAMURL = "http://" + WEBCAMSERVER + ":" + WEBCAMPORT + "/";
 
 /** For Firefox OS App - require permission for performing AJAX calls **/
@@ -91,6 +103,13 @@ function decrypt_answer(passphrase, answer) {
 	return decrypted;
 }
 
+/** Query status codes **/
+SUCCESS_INTRANET = 1;
+SUCCESS_INTERNET = 2;
+ERROR = 3;
+ERROR_UNKNOWN = 4;
+ERROR_SPOOF = 5;
+
 /**
  * send_query
  * This function takes care of generating a random passphrase, encrypting the payload string
@@ -107,13 +126,43 @@ function send_query(name, query, cb) {
 		encrypted : query_encrypted
 	});
 
-	$.ajax({
-		type : "POST",
-		url : ACTIONURL + name,
-		data : post,
-		success : function (ans) {
-			cb(JSON.parse(decrypt_answer(passphrase, ans)));
-		}
+	function perform_query(URL) {
+		$.ajax({
+			type : "POST",
+			url : URL + "action/" + name,
+			data : post,
+			timeout : TIMEOUT_QUERY,
+			success : function (res) {
+				var answer = JSON.parse(decrypt_answer(passphrase, res));
+				var success = URL == APIURL ? SUCCESS_INTRANET : SUCCESS_INTERNET;
+				cb(answer, success);
+			},
+			error : function () {
+				cb(null, ERROR_UNKNOWN);
+			}
+		});
+	}
+
+	function ping_and_perform(URL, timeout, error_cb) {
+		$.ajax({
+			type : "GET",
+			url : URL + "ping/",
+			timeout : timeout,
+			success : function (data, text, jqXHR) {
+				if (jqXHR.status != 204) {
+					cb(null, ERROR_SPOOF);
+				} else {
+					perform_query(URL);
+				}
+			},
+			error: error_cb
+		});
+	}
+
+	ping_and_perform(APIURL, TIMEOUT_INTRANET, function () {
+		ping_and_perform(PROXYURL, TIMEOUT_INTERNET, function () {
+			cb(null, ERROR);
+		});
 	});
 }
 
@@ -123,7 +172,14 @@ function send_query(name, query, cb) {
  *	name: The name of the action to be executed on the server (unencrypted)
  *	payload: Any variable that the server requires as payload for the action (encrypted)
  *	cb: Function that is called when an answer from the server is received, of the form
-		function (response), where response is the response variable from the API
+ *		function (response, flags) with
+ *		response: the response variable from the API
+ *		flags: SUCCESS_INTRANET, SUCCESS_INTERNET or ERROR: information on wheter the
+ *		requests was successful through the intranet / internet proxy or unsuccessful
+ *		ERROR_UNKNOWN is parsed if the server responded to the ping request, but not
+ *		to the action query
+ *		ERROR_SPOOF is thrown if the server responded, but not with the 204 HTTP status
+ *		code which may be a sign for spoofing
  *
  * action_cert(name, payload, certname, cb)
  *	name, payload, cb same as action

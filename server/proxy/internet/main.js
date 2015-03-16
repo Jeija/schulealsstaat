@@ -1,4 +1,4 @@
-var USER_PORT = 1337;
+var USER_PORT = 443;
 var PROXY_PORT = 1381;
 
 var http = require("http");
@@ -15,16 +15,15 @@ http.createServer(function (req, res) {
 	var url_components = fragments.splice(0, 2);
 	url_components.push(fragments.join('/'));
 
-	res.writeHead(200, {'Content-Type': 'text/plain', 'Access-Control-Allow-Origin' : '*'});
-
-	// Answer PING requests immediately
 	if (url_components[0] == "ping") {
+		// Answer PING requests immediately
+		res.writeHead(204, {"Access-Control-Allow-Origin" : "*"});
 		res.end();
 		return;
-	}
-
-	// Store ACTION requests in 'requests'
-	if (url_components[0] == "action") {
+	} else if (url_components[0] == "action") {
+		// Store ACTION requests in 'requests'
+		res.writeHead(200, {"Content-Type": "text/plain",
+			"Access-Control-Allow-Origin" : "*"});
 		var POST = "";
 		req.on("data", function (data) { POST += data; });
 		req.on("end", function () {
@@ -33,9 +32,14 @@ http.createServer(function (req, res) {
 				action : url_components[1],
 				request : POST
 			};
-			id++;
 			log.info("ADD", "New request in query, ID is " + id);
+			id++;
 		});
+	} else {
+		// empty answer, but with Access-Control-Allow-Origin: *
+		res.writeHead(200, {"Content-Type": "text/plain",
+			"Access-Control-Allow-Origin" : "*"});
+		res.end();
 	}
 }).listen(USER_PORT);
 
