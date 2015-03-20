@@ -131,7 +131,10 @@ function render_student_card(pdf, student, page, xpos, ypos) {
 	if ("picname" in student) {
 		passpics_to_load++;
 		webcamserv_get(student.picname, function (res) {
-			if (res === "") return;
+			if (res === "") {
+				passpics_to_load--;
+				return;
+			}
 
 			toJPEG("data:image/png;base64," + res, function (jpeg) {
 				passpics_to_load--;
