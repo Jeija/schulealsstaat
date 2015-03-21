@@ -30,7 +30,7 @@ bridge-utils
 dnsmasq
 hostapd
 iproute2
-dhcpcd
+dhcp
 iptables
 iw
 nwjs
@@ -41,3 +41,4 @@ libxv
 zbarcam
 dialog
 rfkill
+tmux
