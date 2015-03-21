@@ -8,4 +8,4 @@ then
 fi
 
 CWD="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-http-server $CWD/site -p 80
+http-server $CWD/site -p 84

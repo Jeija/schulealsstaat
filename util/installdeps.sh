@@ -24,6 +24,9 @@ ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/.."
 ( cd $ROOT/client/userterminal/site ; bower install )
 ( cd $ROOT/client/genrequest/site ; bower install )
 
+# Install networking dependencies
+( cd $ROOT/network/dns ; npm install )
+
 # Workaround for missing libudev.so.0 on most systems, for nodewebkit
 if [ ! -f /lib/x86_64-linux-gnu/libudev.so.0 ] && [ ! -f /lib/libudev.so.0 ]; then
 	# Most debian-based systems
