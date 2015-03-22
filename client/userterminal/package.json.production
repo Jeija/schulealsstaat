@@ -1,0 +1,14 @@
+{
+	"name" : "SaEU user client",
+	"main" : "./site/transaction_simple/index.html",
+	"scripts" : {
+		"start" : "nw"
+	},
+	"window": {
+		"toolbar": false,
+		"frame": false,
+		"fullscreen": true,
+		"width": 1024,
+		"height": 768
+	}
+}

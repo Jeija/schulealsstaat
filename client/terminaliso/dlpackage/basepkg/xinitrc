@@ -1,0 +1,15 @@
+#!/bin/sh
+
+if [ -d /etc/X11/xinit/xinitrc.d ]; then
+	for f in /etc/X11/xinit/xinitrc.d/*; do
+		[ -x "$f" ] && . "$f"
+		done
+	unset f
+fi
+
+SCREENX=$(xdpyinfo | grep dimensions | awk '{print $2}' | awk -Fx '{print $1}')
+SCREENY=$(xdpyinfo | grep dimensions | awk '{print $2}' | awk -Fx '{print $2}')
+
+sed -i "/width/c\\\t\t\"width\"\:\ $SCREENX," /tmp/userterminal/package.json
+sed -i "/height/c\\\t\t\"height\"\:\ $SCREENY" /tmp/userterminal/package.json
+cd /tmp && nw userterminal
