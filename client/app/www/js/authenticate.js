@@ -5,31 +5,9 @@ $(function () {
 	document.addEventListener("deviceready", onDeviceReady, false);
 
 	$("#scan_card").click(function () {
-		if (typeof cordova !== "undefined" && cordova.plugins.barcodeScanner) {
-			// Use native barcodeScanner (e.g. android)
-			cordova.plugins.barcodeScanner.scan(
-				function (result) {
-					if (result.format != "QR_CODE") {
-						alert("Ungültiger Code!");
-						return;
-					}
-
-					$("#qrid").val(result.text);
-				}, 
-				function (error) {}
-			);
-		} else {
-			// Use builtin JS QRScanJS Scanner
-			$("#scanner_popup").fadeIn();
-			$("#scanner_abort").click(function () {
-				$("#scanner_popup").hide();
-			});
-			QRReader.init("#scanner_webcam", "QRScanJS/");
-			QRReader.scan(function (result) {
-				$("#scanner_popup").hide();
-				$("#qrid").val(result);
-			});
-		}
+		QridScan(function (qrid) {
+			$("#qrid").val(qrid);
+		});
 	});
 
 	$("#register").click(function () {

@@ -9,6 +9,12 @@ var amount = null;
 var comment = null;
 
 $(function() {
+	$("#scan_card").click(function () {
+		QridScan(function(qrid) {
+			$("#qrid_rec").val(qrid);
+		});
+	});
+
 	$("#confirm").click(function () {
 		var recipient_qrid = $("#qrid_rec").val();
 		var recipient_firstname = $("#firstname").val();

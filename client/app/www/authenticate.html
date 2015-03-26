@@ -10,23 +10,18 @@
 	<script src="bower_components/jquery/dist/jquery.js"></script>
 	<script src="bower_components/gibberish-aes/dist/gibberish-aes-1.0.0.min.js"></script>
 	<script src="QRScanJS/qrscan.js"></script>
-	<script src="js/api.js"></script>
+	<script src="js/common.js"></script>
 	<script src="js/api.js"></script>
 	<script src="js/storage.js"></script>
 	<script src="js/authenticate.js"></script>
 </head>
 <body>
-	<div id="scanner_popup" hidden>
-		<video autoplay="true" id="scanner_webcam" width="100%"></video>
-		<input type="button" value="Abbrechen" id="scanner_abort" />
-	</div>
 	<input class="bigbutton" id="scan_card" type="button" value="Karte Scannen" />
 	<div class=seperation>Oder Kontonummer eingeben:<br/>
 	<input id="qrid" type="text" /></div>
 	<div class=seperation>Passwort:<br/>
 	<input id="password" type="password" /></Div>
-	<input type="button"
-class="bigbutton" id="register" value="Registrieren">
+	<input type="button" class="bigbutton" id="register" value="Registrieren">
 </body>
 </html>
 
