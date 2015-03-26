@@ -42,7 +42,9 @@ function QridScan(cb) {
 		// Use builtin JS QRScanJS Scanner
 		var scanner_popup = $('<div id="scanner_popup" hidden>').appendTo("body");
 		var scanner_video = $('<video autoplay="true" id="scanner_webcam" width="100%">').appendTo(scanner_popup);
-		var scanner_abort = $('<input type="button" id="scanner_abort" value="Abbrechen" />').appendTo(scanner_popup);
+		var scanner_button_container = $('<div class="bottombuttons">').appendTo(scanner_popup);
+		var scanner_abort = $('<input type="button" class="button full" id="scanner_abort" value="Abbrechen" />')
+			.appendTo(scanner_button_container);
 		scanner_popup.fadeIn();
 		scanner_abort.click(function () {
 			scanner_popup.remove();
@@ -71,5 +73,14 @@ function update_balance() {
 $(function () {
 	$("#error_ok").click(function () {
 		$("#error").fadeOut();
+	});
+
+	// Hide bottom box when focusing on textbox (--> keyboard visible)
+	$('input[type="text"], input[type="password"], textarea').focus(function () {
+		$(".bottombuttons").hide();
+	});
+
+	$('input[type="text"], input[type="password"], textarea').focusout(function () {
+		$(".bottombuttons").show();
 	});
 });

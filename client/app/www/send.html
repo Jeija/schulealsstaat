@@ -24,7 +24,7 @@
 		<div id="alt">
 		<div>
 			<h4 class="ta_sub">Empfänger:</h4>
-			<input id="scan_card" type="button" class="bigbutton" value="Karte Scannen" />
+			<input id="scan_card" type="button" class="button full" value="Karte Scannen" />
 				Kontonummer: <input type="text" id="qrid_rec" placeholder="Kontonummer">
 			</div>	
 				<span>ODER</span>
@@ -47,13 +47,10 @@
 			<h4 class="ta_sub">Kommentar:</h4>
 			<textarea id="comment" placeholder="max. 300 Zeichen" maxlength="300"></textarea>
 		</div>
-		<table>
-			<tr><td>
-				<a href="transaction.html" class="halfsize_small">Zurück</a>
-			</td><td>
-				<input type="button" id="confirm" value="Angaben prüfen" class="halfsize_small">
-			</td></tr>
-		</table>
+		<div class="bottombuttons">
+			<a href="transaction.html" class="button left">Zurück</a>
+			<input type="button" id="confirm" value="Prüfen" class="button right">
+		</div>
 	</div>
 
 	<div id="confirm_window" hidden>
@@ -65,15 +62,18 @@
 			<div class="confirm_subsection">Kommentar</div>
 			<div class="confirm_text" id="confirm_comment"></div>
 		</div>
-		<button class="bigbutton" id="confirm_submit">Abschicken</button>
-		<button class="bigbutton" id="confirm_back">Zurück</button>
+
+		<div class="bottombuttons">
+			<button id="confirm_back" class="button left">Zurück</button>
+			<button id="confirm_submit" class="button right warning">Abschicken</button>
+		</div>
 	</div>
 
 	<div id="success" hidden>
 		<div id="success_text">Transaktion erfolgreich!</div>
 		<div id="success_bottom">
-			<a class="mainlinks" href="mainmenu.html" id="success_mainmenu">Hauptmenü</a>
-			<a class="mainlinks" href="transaction.html" id="success_transaction">Überweisung</a>
+			<a class="button full mainmenu" href="mainmenu.html" id="success_mainmenu">Hauptmenü</a>
+			<a class="button full mainmenu" href="transaction.html" id="success_transaction">Überweisung</a>
 		</div>
 	</div>
 
