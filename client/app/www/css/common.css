@@ -1,8 +1,17 @@
 html {
 	font-family:Arial;
-	background-color: black;
+	background-color: #000;
 	color: white;
 	height: 100%;
+}
+
+#logo {
+	width:50vw;
+	display:block;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 2vw;
+	margin-bottom: 3vw;
 }
 
 .bigbutton {
@@ -16,7 +25,6 @@ html {
 	border-width: 0.5vw;
 	display: block;
 	text-align: center;
-	width: auto;
 	width:90vw;
 	margin:auto;
 	margin-bottom:1.5vw;

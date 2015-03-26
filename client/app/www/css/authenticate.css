@@ -4,10 +4,22 @@ body {
 	background:#000;
 }
 
+.attrbox {
+	margin-bottom:5vw;
+	text-align:center;
+}
+
+.auth_text {
+	text-align:center;
+	font-size:5vw;
+	font-style:italic;
+	margin:1.5vw;
+}
+
 #qrid, #password {
-	width:85vw;
-	font-size:8vw;
-	padding:2vw;
+	width:90vw;
+	font-size:6vw;
+	padding:1vw;
 	background:#fff;
 	border:none;
 }

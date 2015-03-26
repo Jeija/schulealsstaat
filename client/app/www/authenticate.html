@@ -16,11 +16,16 @@
 	<script src="js/authenticate.js"></script>
 </head>
 <body>
-	<input class="bigbutton" id="scan_card" type="button" value="Karte Scannen" />
-	<div class=seperation>Oder Kontonummer eingeben:<br/>
-	<input id="qrid" type="text" /></div>
-	<div class=seperation>Passwort:<br/>
-	<input id="password" type="password" /></Div>
+	<img src="res/icon.png" id="logo">
+	<div class="attrbox">
+		<input class="bigbutton" id="scan_card" type="button" value="Karte Scannen" />
+		<div class="auth_text">...oder Kontonummer eingeben:</div>
+		<input id="qrid" type="text" />
+	</div>
+	<div class="attrbox">
+		<div class="auth_text">Passwort:</div>
+		<input id="password" type="password" />
+	</div>
 	<input type="button" class="bigbutton" id="register" value="Registrieren">
 </body>
 </html>
