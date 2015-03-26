@@ -40,6 +40,5 @@ $(function () {
 		}
 		
 		$("#balance_number").text(storage.get("balance") + " HGC");
-		
 	});}, 200);
 });

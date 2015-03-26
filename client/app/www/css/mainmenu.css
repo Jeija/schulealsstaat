@@ -1,9 +1,40 @@
 #statusbar {
-	border-bottom-style: solid;
-	border-bottom-width: 0.4vw;
+	border-bottom:0.4vw solid #fff;
+	height:5vw;
+	font-size:4.5vw;
+	
 }
 
 #qrid {
+	position:absolute;
+	display:block;
+	left:4vw;
+}
+
+#version {
+	position:absolute;
+	display:block;
+	right:4vw;
+}
+
+#hgc {
+	float: left;
+	width: 50vw
+}
+
+#infocontainer {
 	display: inline-block;
+	width: 95vw;
+	background-color: #444;
+	border-radius: 1vw;
+	padding: 1vw;
+	margin-top: 2vw;
+}
+
+#hgc_container, #last_transaction {
+	display: inline-block;
+	padding: 2vw;
 	float: right;
+	width: 40vw;
+	font-size: 5vw;
 }
