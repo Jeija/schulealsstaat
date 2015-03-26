@@ -5,8 +5,9 @@ body {
 }
 
 #qrid, #password {
-	width:100%;
-	font-size:5vw;
+	width:85vw;
+	font-size:8vw;
+	padding:2vw;
 	background:#fff;
 	border:none;
 }
