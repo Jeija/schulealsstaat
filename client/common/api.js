@@ -104,11 +104,11 @@ function decrypt_answer(passphrase, answer) {
 }
 
 /** Query status codes **/
-SUCCESS_INTRANET = 1;
-SUCCESS_INTERNET = 2;
-ERROR = 3;
-ERROR_UNKNOWN = 4;
-ERROR_SPOOF = 5;
+var SUCCESS_INTRANET = 1;
+var SUCCESS_INTERNET = 2;
+var ERROR = 3;
+var ERROR_UNKNOWN = 4;
+var ERROR_SPOOF = 5;
 
 /**
  * send_query
