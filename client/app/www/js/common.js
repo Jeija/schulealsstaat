@@ -76,11 +76,11 @@ $(function () {
 	});
 
 	// Hide bottom box when focusing on textbox (--> keyboard visible)
-	$('input[type="text"], input[type="password"], textarea').focus(function () {
+	$('input[type="text"], input[type="password"], textarea, input[type="number"]').focus(function () {
 		$(".bottombuttons").hide();
 	});
 
-	$('input[type="text"], input[type="password"], textarea').focusout(function () {
+	$('input[type="text"], input[type="password"], textarea, input[type="number"]').focusout(function () {
 		$(".bottombuttons").show();
 	});
 });
