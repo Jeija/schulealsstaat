@@ -8,7 +8,7 @@
  */
 
 var ZBARCAM = "zbarcam";
-var WEBCAM = "/dev/video0";
+var WEBCAM = "/dev/video3";
 var ZBC_FLAGS = "--prescale=640x480"
 
 // In node.js (nwjs) environment: Spawn ZBarCam instead of QRScanJS

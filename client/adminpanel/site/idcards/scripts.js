@@ -1,43 +1,43 @@
 var PAGE_W = 210;
-var PAGE_H = 300;
+var PAGE_H = 297;
 
 // Cards
-var CARD_W = 50;
-var CARD_H = 30;
-var CARD_MARGIN_X = 10;
-var CARD_MARGIN_Y = 10;
-var PAGE_OFFSET_X = 10;
-var PAGE_OFFSET_Y = 10;
+var CARD_W = 70;
+var CARD_H = 50.8;
+var CARD_MARGIN_X = 0;
+var CARD_MARGIN_Y = 0;
+var PAGE_OFFSET_X = 0;
+var PAGE_OFFSET_Y = 21;
 
 // QR Code
-var QRCODE_OFFSET_X = 2;
+var QRCODE_OFFSET_X = 4;
 var QRCODE_OFFSET_Y = 2;
-var QRCODE_W = 26;
-var QRCODE_H = 26;
-var QRCODE_RESOLUTION = 20;
+var QRCODE_W = 41;
+var QRCODE_H = 41;
+var QRCODE_RESOLUTION = 10;
 
 // Passport Image
-var PASSPIC_OFFSET_X = 33;
+var PASSPIC_OFFSET_X = 43;
 var PASSPIC_OFFSET_Y = 2;
-var PASSPIC_W = 16;
-var PASSPIC_H = 12;
+var PASSPIC_W = 21.333;
+var PASSPIC_H = 16;
 
 // Text
-var TEXT_OFFSET_X = 25;
-var TEXT_OFFSET_Y = 20;
-var TEXT_FONTSIZE = 6;
+var TEXT_OFFSET_X = 43;
+var TEXT_OFFSET_Y = 28;
+var TEXT_FONTSIZE = 8;
 var TEXT_LINEHEIGHT = 3;
 
 // QR-ID
-var QRID_OFFSET_X = 8;
-var QRID_OFFSET_Y = 27;
-var QRID_FONTSIZE = 7;
+var QRID_OFFSET_X = 16;
+var QRID_OFFSET_Y = 47;
+var QRID_FONTSIZE = 10;
 
 // Logo
-var LOGO_OFFSET_X = 24.5;
-var LOGO_OFFSET_Y = 2;
-var LOGO_W = 8;
-var LOGO_H = 8;
+var LOGO_OFFSET_X = 4;
+var LOGO_OFFSET_Y = 41;
+var LOGO_W = 9;
+var LOGO_H = 9;
 
 var AMOUNT_X = Math.floor((PAGE_W - PAGE_OFFSET_X + CARD_MARGIN_X) / (CARD_W + CARD_MARGIN_X));
 var AMOUNT_Y = Math.floor((PAGE_H - PAGE_OFFSET_Y + CARD_MARGIN_Y) / (CARD_H + CARD_MARGIN_Y));
@@ -79,10 +79,10 @@ function date_readable (birth) {
 }
 
 /**
- * Returns up to 3 lines of text that describe a student / an account,
+ * Returns multiple lines of text that describe a student / an account,
  * e.g. containing name, class, birth date, etc.
  * Return value is in the form:
- *	[ line0, line1, line2 ]
+ *	[ line0, line1, line2, ... ]
  */
 function student_readable(student) {
 	var lines = [];
@@ -94,8 +94,11 @@ function student_readable(student) {
 		lines.push("(juristische Person)");
 	} else if (cl == "VISITOR") {
 		lines.push("Besucher");
-		lines.push("Diese Karte darf NICHT");
-		lines.push("weitergegeben werden.");
+		lines.push("");
+		lines.push("Diese Karte darf");
+		lines.push("       NICHT");
+		lines.push("weitergegeben");
+		lines.push("werden.");
 	} else {
 		assert("firstname", student);
 		assert("lastname", student);
@@ -115,7 +118,7 @@ function student_readable(student) {
 }
 
 function render_student_card(pdf, student, page, xpos, ypos) {
-	pdf.rect(xpos, ypos, CARD_W, CARD_H);
+	//pdf.rect(xpos, ypos, CARD_W, CARD_H);
 
 	// Render QR-Code
 	var qrdat = qr.toDataURL({
