@@ -29,21 +29,21 @@ $(function() {
 		if (recipient_type !== "") data.type = recipient_type;
 		if (recipient_qrid !== "") data.qrid = recipient_qrid;
 
-		action("student_identify", data, function (res) {
+		action_app("student_identify", data, function (res) {
 			if (res == "multiple") {
-				showError("Die Eingabe ist nicht eindeutig:" +
+				errorMessage("Die Eingabe ist nicht eindeutig: " +
 					"Es gibt mehrere Personen, die auf die Kriterien passen.");
 				return;
 			}
 
 			if (typeof res != "object") {
-				showError("Konnte Person nicht finden:" +
+				errorMessage("Konnte Person nicht finden: " +
 					"Die angegebenen Kriterien passen auf keine Person.");
 				return;
 			}
 
 			if (amount === "" || !amount || isNaN(amount) || amount <= 0) {
-				showError("Der angegebene Betrag ist ungültig.");
+				errorMessage("Der angegebene Betrag ist ungültig.");
 				return;
 			}
 			current_recipient = res;
@@ -67,19 +67,19 @@ $(function() {
 			sender_password : password
 		};
 
-		action("transaction", data, function (res) {
+		action_app("transaction", data, function (res) {
 			if (res == "nomoney") {
-				showError("Nicht genug Geld auf dem Senderkonto!");
+				errorMessage("Nicht genug Geld auf dem Senderkonto!");
 				return;
 			}
 
 			if (res == "invalid_password") {
-				showError("Das Sender-Passwort ist falsch!");
+				errorMessage("Das Sender-Passwort ist falsch!");
 				return;
 			}
 
 			if (res != "ok") {
-				showError("Unbekannter Fehler: " + res);
+				errorMessage("Unbekannter Fehler: " + res);
 				return;
 			}
 

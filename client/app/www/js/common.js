@@ -1,13 +1,8 @@
-function showError(msg) {
-	$("#error_message").text(msg);
-	$("#error").fadeIn();
-}
-
 function student2readable(st) {
 	if (!st.type) return "Keine genaue Beschreibung verfügbar";
 
-	if (st.type != "visitor" && st.type != "teacher" && st.type != "legalentity"
-		&& st.type != "other")
+	if (st.type != "visitor" && st.type != "teacher" && st.type != "legalentity" &&
+		st.type != "other")
 		return st.firstname + " " + st.lastname + ", Klasse " + st.type.toUpperCase();
 
 	if (st.type == "visitor")
@@ -25,13 +20,42 @@ function student2readable(st) {
 	return st.firstname + "/" + st.lastname + "/" + st.type + "/" + st.special_name;
 }
 
+/**
+ * action_app(name, payload, cb)
+ * Same as action(name, payload, cb),
+ * but also handles connection errors
+ */
+function action_app(name, payload, cb) {
+	action(name, payload, function (res, status) {
+		if (status == ERROR) {
+			errorMessage("Verbindung zum Zentralbank-Server konnte nicht" +
+				" aufgebaut werden (" + status + ")");
+		} else if (status == ERROR_UNKNOWN) {
+			errorMessage("Der Zentralbank-Server antwortet nicht auf die Anfrage" +
+				" der App (" + status + ")");
+		} else if (status == ERROR_SPOOF) {
+			errorMessage("Konnte nicht mit dem echten Zentralbank-Server" +
+				" kommunizieren. Bitte melde diesen Fehler! (" + status + ")");
+		} else if (status == ERROR_ENCRYPTION) {
+			errorMessage("Kommunikation mit Zentralbank-Server fehlgeschlagen: " +
+				"Verschlüsselung nicht akzeptiert. Bitte schaue nach Updates " + 
+				"für die App und lösche deinen Browsercache. " +
+				"Besteht das Problem weiterhin, bitte melde es bei der Zentralbank.");
+		} else if (status == SUCCESS_INTRANET || status == SUCCESS_INTERNET) {
+			cb(res);
+		} else {
+			errorMessage("Unbekannter Server-API-Statuscode: " + status);
+		}
+	});
+}
+
 function QridScan(cb) {
 	if (typeof cordova !== "undefined" && cordova.plugins.barcodeScanner) {
 		// Use native barcodeScanner (e.g. android)
 		cordova.plugins.barcodeScanner.scan(
 			function (result) {
 				if (result.format != "QR_CODE") {
-					alert("Ungültiger Code!");
+					errorMessage("Ungültiger Code!");
 					return;
 				}
 				cb(result.text);
@@ -70,11 +94,18 @@ function update_balance() {
 	});
 }
 
-$(function () {
-	$("#error_ok").click(function () {
-		$("#error").fadeOut();
-	});
+function errorMessage(message) {
+	var error_dialog = $('<div id="error">').appendTo("body");
+	$('<div id="error_heading">').text("Fehler").appendTo(error_dialog);
+	$('<div id="error_message">').text(message).appendTo(error_dialog);
+	var error_bottombuttons = $('<div class="bottombuttons">').appendTo(error_dialog);
+	var error_ok = $('<a class="button full warning">').text("OK").appendTo(error_bottombuttons);
+	error_ok.click(function () {
+		error_dialog.remove();
+	});	
+}
 
+$(function () {
 	// Hide bottom box when focusing on textbox (--> keyboard visible)
 	$('input[type="text"], input[type="password"], textarea, input[type="number"]').focus(function () {
 		$(".bottombuttons").hide();

@@ -19,13 +19,15 @@ $(function () {
 			qrid : qrid
 		};
 
-		action("get_balance", req, function (res) {
+		action_app("get_balance", req, function (res) {
+			console.log("got res: " + res);
 			if (res == "invalid_qrid") {
-				alert("Kontonummer nicht gefunden!");
+				console.log("WÜRGS");
+				errorMessage("Kontonummer nicht gefunden!");
 			} else if (res == "invalid_password") {
-				alert("Das Passwort ist falsch!");
+				errorMessage("Das Passwort ist falsch!");
 			} else if (res.indexOf("error") > -1) {
-				alert("Server-Error: " + res);
+				errorMessage("Server-Error: " + res);
 			} else {
 				storage.set("qrid", qrid);
 				storage.set("password", password);

@@ -33,6 +33,14 @@ var APIURL = "http://" + APISERVER + ":" + APIPORT + "/";
 var PROXYURL = "http://" + PROXYSERVER + ":" + PROXYPORT + "/";
 var WEBCAMURL = "http://" + WEBCAMSERVER + ":" + WEBCAMPORT + "/";
 
+/** Query status codes **/
+var SUCCESS_INTRANET = 1;
+var SUCCESS_INTERNET = 2;
+var ERROR = 3;
+var ERROR_UNKNOWN = 4;
+var ERROR_SPOOF = 5;
+var ERROR_ENCRYPTION = 6;
+
 /** For Firefox OS App - require permission for performing AJAX calls **/
 $.ajaxSetup({
 	xhr: function() {
@@ -91,24 +99,20 @@ function encrypt_query(passphrase, query) {
 }
 
 function decrypt_answer(passphrase, answer) {
-	var decrypted;
 	try {
-		decrypted = GibberishAES.dec(answer, passphrase);
+		return {
+			value : GibberishAES.dec(answer, passphrase),
+			success : true
+		};
 	} catch (e) {
 		console.log("Response decryption failed, error is:");
 		console.log(answer);
-		decrypted = "error: (while decrypting) " + answer;
+		return {
+			value : "error: (while decrypting) " + answer,
+			success : false
+		};
 	}
-
-	return decrypted;
 }
-
-/** Query status codes **/
-var SUCCESS_INTRANET = 1;
-var SUCCESS_INTERNET = 2;
-var ERROR = 3;
-var ERROR_UNKNOWN = 4;
-var ERROR_SPOOF = 5;
 
 /**
  * send_query
@@ -133,9 +137,14 @@ function send_query(name, query, cb) {
 			data : post,
 			timeout : TIMEOUT_QUERY,
 			success : function (res) {
-				var answer = JSON.parse(decrypt_answer(passphrase, res));
+				var decrypt = decrypt_answer(passphrase, res);
+				if (!decrypt.success) {
+					cb(decrypt.value, ERROR_ENCRYPTION);
+					return;
+				}
+
 				var success = URL == APIURL ? SUCCESS_INTRANET : SUCCESS_INTERNET;
-				cb(answer, success);
+				cb(JSON.parse(decrypt.value), success);
 			},
 			error : function () {
 				cb(null, ERROR_UNKNOWN);
