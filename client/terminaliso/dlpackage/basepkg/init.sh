@@ -6,9 +6,9 @@ BR_IFACE=netbr
 
 ### Networking ###
 exec 3>&1
-WIFI_CHANNEL=$(dialog --inputbox WiFi\ Channel? 10 50 6 2>&1 1>&3)
-DHCPSERVER=$(dialog --inputbox DHCP\ Server? 10 50 192.168.2.10 2>&1 1>&3)
-TXPOWER=$(dialog --inputbox TX\ Power\ \(mdBm\)? 10 50 100 2>&1 1>&3)
+WIFI_CHANNEL=$(dialog --nocancel --inputbox WiFi\ Channel? 10 50 6 2>&1 1>&3)
+DHCPSERVER=$(dialog --nocancel --inputbox DHCP\ Server? 10 50 192.168.2.10 2>&1 1>&3)
+TXPOWER=$(dialog --nocancel --inputbox TX\ Power\ \(mdBm\)? 10 50 100 2>&1 1>&3)
 exec 3>&-
 
 # Some debug output..

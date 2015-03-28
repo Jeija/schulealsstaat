@@ -27,8 +27,9 @@ node_modules/
 !/client/terminaliso/packages/*/PKGBUILD
 !/client/terminaliso/packages/*/*.install
 
-# Don't publish pre-built dlpackages or PGP keys
+# Don't publish pre-built dlpackages or PGP/SSH keys
 /client/terminaliso/iso/airootfs/root/packetkey.pub
+/client/terminaliso/iso/airootfs/root/.ssh/authorized_keys
 /client/terminaliso/dlpackage/dlrepo/*
 !/client/terminaliso/dlpackage/dlrepo/list
 
