@@ -5,9 +5,8 @@ set -e -u
 echo "######################"
 echo "customize_airootfs.sh"
 
-# Password
-echo "Enter root password (you may need to enter this for both 32bit and 64bit):"
-passwd
+# Remove unused packages from base install
+pacman -Rns dhcpcd xfsprogs reiserfsprogs lvm2 --noconfirm
 
 # Locale
 sed -i 's/#\(de_DE\.UTF-8\)/\1/' /etc/locale.gen

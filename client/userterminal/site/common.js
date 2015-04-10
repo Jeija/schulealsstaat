@@ -1,5 +1,5 @@
 var ZBARCAM = "zbarcam";
-var WEBCAM = "/dev/video0";
+var WEBCAM = "/dev/video20";
 var ZBC_FLAGS = "--prescale=640x480"
 
 // Only in node.js (nwjs) environment

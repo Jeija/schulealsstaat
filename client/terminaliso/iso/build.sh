@@ -3,7 +3,7 @@
 set -e -u
 
 iso_name=sasterminal
-iso_label="SASTERMINAL_$(date +%Y%m)"
+iso_label="SASTERMINAL"
 iso_version=$(date +%Y.%m.%d)
 install_dir=sas
 work_dir=work
@@ -23,8 +23,6 @@ _usage ()
     echo "                        Default: ${iso_name}"
     echo "    -V <iso_version>   Set an iso version (in filename)"
     echo "                        Default: ${iso_version}"
-    echo "    -L <iso_label>     Set an iso label (disk label)"
-    echo "                        Default: ${iso_label}"
     echo "    -D <install_dir>   Set an install_dir (directory inside iso)"
     echo "                        Default: ${install_dir}"
     echo "    -w <work_dir>      Set the working directory"
@@ -215,7 +213,6 @@ while getopts 'N:V:L:D:w:o:vh' arg; do
     case "${arg}" in
         N) iso_name="${OPTARG}" ;;
         V) iso_version="${OPTARG}" ;;
-        L) iso_label="${OPTARG}" ;;
         D) install_dir="${OPTARG}" ;;
         w) work_dir="${OPTARG}" ;;
         o) out_dir="${OPTARG}" ;;

@@ -1,4 +1,3 @@
-bash
 mkinitcpio
 openssh
 wireless_tools
@@ -18,6 +17,7 @@ nodejs
 nss
 gconf
 alsa-lib
+alsa-utils
 gtk2
 ttf-font
 ttf-liberation
@@ -25,7 +25,6 @@ libnotify
 bridge-utils
 dnsmasq
 hostapd
-iproute2
 dhcp
 iptables
 iw
@@ -38,3 +37,4 @@ zbarcam
 dialog
 rfkill
 tmux
+ffmpeg
