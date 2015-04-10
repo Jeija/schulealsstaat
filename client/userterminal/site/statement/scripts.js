@@ -119,66 +119,60 @@ function render_transactions (tr, balance) {
 	);
 }
 
-$(function () {
-	$("#header").load("../header.html", function () {
-		$("#statement_link").addClass("link-selected");
-	});
+$("#balance_box_ok").click(function () {
+	$("#balance_box").fadeOut();
+	resetAll();
+});
 
-	$("#balance_box_ok").click(function () {
-		$("#balance_box").fadeOut();
-		resetAll();
-	});
+$(".confirm").click(function () {
+	// Check for client errors
+	if (!current_qrid) {
+		errorMessage("Keine Person angegeben. Wessen Kontoauszug soll" +
+			" angezeigt werden?");
+		return;
+	}
 
-	$(".confirm").click(function () {
-		// Check for client errors
-		if (!current_qrid) {
-			errorMessage("Keine Person angegeben. Wessen Kontoauszug soll" +
-				" angezeigt werden?");
+	var password = $(".password").val();
+
+	var data = {
+		qrid : current_qrid,
+		password : password,
+		amount : -1
+	};
+
+	var server_answered = false;
+	action("get_balance", data, function (res) {
+		server_answered = true;
+
+		// Check for server errors
+		if (res == "invalid_password") {
+			errorMessage("Das Passwort ist falsch.");
 			return;
 		}
 
-		var password = $(".password").val();
+		var balance = parseFloat(res);
+		if (res.indexOf("error") > -1 || isNaN(res)) {
+			errorMessage("Unbekannter Fehler: " + res + "<br/>" +
+				"Bitte melde diesen Fehler bei der Zentralbank.");
+			return;
+		}
 
-		var data = {
-			qrid : current_qrid,
-			password : password,
-			amount : -1
-		};
-
-		var server_answered = false;
-		action("get_balance", data, function (res) {
-			server_answered = true;
-
-			// Check for server errors
-			if (res == "invalid_password") {
-				errorMessage("Das Passwort ist falsch.");
-				return;
-			}
-
-			var balance = parseFloat(res);
-			if (res.indexOf("error") > -1 || isNaN(res)) {
-				errorMessage("Unbekannter Fehler: " + res + "<br/>" +
+		action("get_last_transactions", data, function (tr) {
+			if (typeof tr !== "object") {
+				errorMessage("Unbekannter Fehler: " + tr + "<br/>" +
 					"Bitte melde diesen Fehler bei der Zentralbank.");
 				return;
 			}
 
-			action("get_last_transactions", data, function (tr) {
-				if (typeof tr !== "object") {
-					errorMessage("Unbekannter Fehler: " + tr + "<br/>" +
-						"Bitte melde diesen Fehler bei der Zentralbank.");
-					return;
-				}
-
-				$("#input_all").hide();
-				render_transactions(tr, balance);
-				$("#transactions").fadeIn();
-			});
+			$("#input_all").hide();
+			render_transactions(tr, balance);
+			$("#transactions").fadeIn();
 		});
-
-		setTimeout(function () {
-			if (!server_answered)
-				errorMessage("Das Währungssystem ist zurzeit nicht verfügbar." +
-					"Bitte versuche es später noch einmal.");
-		}, 1500);
 	});
+
+	setTimeout(function () {
+		if (!server_answered)
+			errorMessage("Das Währungssystem ist zurzeit nicht verfügbar." +
+				"Bitte versuche es später noch einmal.");
+	}, 1500);
 });

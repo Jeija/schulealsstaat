@@ -1,69 +1,52 @@
-<html>
-<head>
-	<title>SaEU - Guthabenabfrage</title>
-	<script src="../bower_components/jsencrypt/bin/jsencrypt.min.js"></script>
-	<script src="../bower_components/jquery/dist/jquery.js"></script>
-	<script src="../bower_components/gibberish-aes/dist/gibberish-aes-1.0.0.min.js"></script>
-	<script src="../api.js"></script>
-	<script src="../common.js"></script>
-	<script src="scripts.js"></script>
-	<link rel="stylesheet" type="text/css" href="../common.css">
-	<link rel="stylesheet" type="text/css" href="styles.css">
-	<meta charset="utf-8"/>
-</head>
-<body>
-	<div id="header"></div>
-	<div id="description">
-		<img class="desc_key_logo" src="../key.png">
-		<div id="heading">Passwort ändern</div>
+<div id="description">
+	<img class="desc_key_logo" src="key.png">
+	<div id="heading">Passwort ändern</div>
 Hier kannst du dein altes Passwort mit einem Neuen ersetzen. Wenn du dein altes Passwort nicht mehr kennst oder falls du andere Profileigenschaften ändern willst, melde dich bei der Zentralbank.
-	</div>
-	<div id="content">
-		<form id="form_all">
+</div>
 
-		<!-- Person -->
-		<div class="studentselector section student""></div>
+<div id="content">
+	<form id="form_all">
 
-		<hr/>
+	<!-- Person -->
+	<div class="studentselector section student""></div>
 
-		<!-- Old Password -->
-		<div class="section" id="section_password">
-			<div class="section_heading">Bisheriges Passwort</div>
-			<div class="password_container">
-				<input type="password" class="old_password">
-			</div>
-		</div>
+	<hr/>
 
-		<hr/>
-
-		<!-- New Password (twice) -->
-		<div class="section" id="section_password">
-			<div class="section_heading">Neues Passwort</div>
-			<div class="new_password_container">
-				<input type="password" class="new_password1"><br/>
-				<input type="password" class="new_password2">
-			</div>
-		</div>
-
-		</form>
-
-		<!-- Confirm -->
-		<input type="button" value="Abfrage" class="confirm">
-		<input type="button" value="Abbruch" class="cancel">
-
-		<!-- Error Message Box -->
-		<div id="messagebox" hidden>
-			<div id="messagebox_heading">Fehler</div>
-			<div id="messagebox_msg"></div>
-			<input type="button" value="OK" id="messagebox_ok">
-		</div>
-
-		<!-- Success Message Box -->
-		<div id="success" hidden>
-			Passwort erfolgreich geändert!
-			<input type="button" value="OK" id="success_ok">
+	<!-- Old Password -->
+	<div class="section" id="section_password">
+		<div class="section_heading">Bisheriges Passwort</div>
+		<div class="password_container">
+			<input type="password" class="old_password">
 		</div>
 	</div>
+
+	<hr/>
+
+	<!-- New Password (twice) -->
+	<div class="section" id="section_password">
+		<div class="section_heading">Neues Passwort</div>
+		<div class="new_password_container">
+			<input type="password" class="new_password1"><br/>
+			<input type="password" class="new_password2">
+		</div>
 	</div>
-</body>
-</html>
+
+	</form>
+
+	<!-- Confirm -->
+	<input type="button" value="Abfrage" class="confirm">
+	<input type="button" value="Abbruch" class="cancel">
+
+	<!-- Error Message Box -->
+	<div id="messagebox" hidden>
+		<div id="messagebox_heading">Fehler</div>
+		<div id="messagebox_msg"></div>
+		<input type="button" value="OK" id="messagebox_ok">
+	</div>
+
+	<!-- Success Message Box -->
+	<div id="success" hidden>
+		Passwort erfolgreich geändert!
+		<input type="button" value="OK" id="success_ok">
+	</div>
+</div>

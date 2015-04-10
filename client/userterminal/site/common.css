@@ -50,9 +50,10 @@ body {
 	padding-bottom:4px;
 }
 
-#header_list li a {
+#header_list li {
 	color:#fff;
 	text-decoration:none;
+	cursor:pointer;
 }
 
 #header_list li:hover {

@@ -86,85 +86,86 @@ function student_identify(data, sectionref, cb) {
 	});
 }
 
-$(function () {
 // Hide page before finished loading
-$("body").hide();
+$("#page").hide();
 
-$(".studentselector").load("../section_student.html", function () {
+function load_common_events() {
 	// Disable dragging
 	$("img").on("dragstart", function(e) {
 		e.preventDefault();
 	});
 
-	/* Student by QR Code Scan */
-	$(".qrcode_scan").click(function () {
-		// Non-node.js environment
-		if (!process) return;
-		var sectionref = this;
-		process.exec("killall " + ZBARCAM, function () {
-			var zbar = process.exec(ZBARCAM + " " + WEBCAM + " " + ZBC_FLAGS);
+	$(".studentselector").load("section_student.html", function () {
+		/* Student by QR Code Scan */
+		$(".qrcode_scan").click(function () {
+			// Non-node.js environment
+			if (!process) return;
+			var sectionref = this;
+			process.exec("killall " + ZBARCAM, function () {
+				var zbar = process.exec(ZBARCAM + " " + WEBCAM + " " + ZBC_FLAGS);
 
-			zbar.stdout.on("data", function (read) {
-				zbar.kill();
-				student_identify({qrid : read}, sectionref, function (st) {
-					handleIdentifyAnswer(sectionref, st);
+				zbar.stdout.on("data", function (read) {
+					zbar.kill();
+					student_identify({qrid : read}, sectionref, function (st) {
+						handleIdentifyAnswer(sectionref, st);
+					});
 				});
 			});
 		});
-	});
 
-	/* Student by firstname / lastname / type */
-	$(".name_ok").click(function () {
-		// Retrieve property values from inputs
-		var firstname = $(this).closest(".section").find(".firstname").val();
-		var lastname = $(this).closest(".section").find(".lastname").val();
-		var type = $(this).closest(".section").find(".class").val();
-		var data = {}
-		if (firstname != "") data.firstname = firstname;
-		if (lastname != "") data.lastname = lastname;
-		if (type != "") data.type = type;
+		/* Student by firstname / lastname / type */
+		$(".name_ok").click(function () {
+			// Retrieve property values from inputs
+			var firstname = $(this).closest(".section").find(".firstname").val();
+			var lastname = $(this).closest(".section").find(".lastname").val();
+			var type = $(this).closest(".section").find(".class").val();
+			var data = {}
+			if (firstname != "") data.firstname = firstname;
+			if (lastname != "") data.lastname = lastname;
+			if (type != "") data.type = type;
 
-		var sectionref = this;
-		student_identify(data, sectionref, function (st) {
-			handleIdentifyAnswer(sectionref, st);
+			var sectionref = this;
+			student_identify(data, sectionref, function (st) {
+				handleIdentifyAnswer(sectionref, st);
+			});
 		});
-	});
 
-	/* Student by QR Code Input */
-	$(".qrid_ok").click(function () {
-		var sectionref = this;
-		student_identify({qrid : $(this).siblings(".qrid").val()}, this, function (st) {
-			handleIdentifyAnswer(sectionref, st);
+		/* Student by QR Code Input */
+		$(".qrid_ok").click(function () {
+			var sectionref = this;
+			student_identify({qrid : $(this).siblings(".qrid").val()}, this, function (st) {
+				handleIdentifyAnswer(sectionref, st);
+			});
 		});
+
+		/* MessageBox */
+		$("#messagebox_ok").click(function () {
+			$("#messagebox").fadeOut();
+		});
+
+		/* Success MessageBox */
+		$("#success_ok").click(function () {
+			$("#success").fadeOut();
+			resetAll();
+		});
+
+		/* Change sender / recipient value */
+		$(".section_complete").click(function () {
+			// Get Sections
+			var complete = $(this);
+			var incomplete = complete.siblings(".section_incomplete");
+
+			complete.html("");
+			incomplete.css("transform", "rotateY(0deg)");
+			complete.css("transform", "rotateY(-180deg)");
+
+			incomplete.height("auto");
+		});
+
+		/* Cancel */
+		$(".cancel").click(resetAll);
+
+		// Show page when finished loading:
+		$("#page").fadeIn(200);
 	});
-
-	/* MessageBox */
-	$("#messagebox_ok").click(function () {
-		$("#messagebox").fadeOut();
-	});
-
-	/* Success MessageBox */
-	$("#success_ok").click(function () {
-		$("#success").fadeOut();
-		resetAll();
-	});
-
-	/* Change sender / recipient value */
-	$(".section_complete").click(function () {
-		// Get Sections
-		var complete = $(this);
-		var incomplete = complete.siblings(".section_incomplete");
-
-		complete.html("");
-		incomplete.css("transform", "rotateY(0deg)");
-		complete.css("transform", "rotateY(-180deg)");
-
-		incomplete.height("auto");
-	});
-
-	/* Cancel */
-	$(".cancel").click(resetAll);
-
-	// Show page when finished loading:
-	$("body").fadeIn(200);
-});});
+}

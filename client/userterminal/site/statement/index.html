@@ -1,63 +1,44 @@
-<html>
-<head>
-	<title>SaEU - Kontoauszug</title>
-	<script src="../bower_components/jsencrypt/bin/jsencrypt.min.js"></script>
-	<script src="../bower_components/jquery/dist/jquery.js"></script>
-	<script src="../bower_components/gibberish-aes/dist/gibberish-aes-1.0.0.min.js"></script>
-	<script src="../bower_components/webui-popover/dist/jquery.webui-popover.min.js"></script>
-	<script src="../api.js"></script>
-	<script src="../common.js"></script>
-	<script src="scripts.js"></script>
-	<link rel="stylesheet" type="text/css" href="../common.css">
-	<link rel="stylesheet" type="text/css" href="styles.css">
-	<link rel="stylesheet" href="../bower_components/webui-popover/dist/jquery.webui-popover.min.css">
-	<meta charset="utf-8"/>
-</head>
-<body>
-	<div id="header"></div>
-	<div id="description">
-		<img class="desc_hgc_logo" src="../hgc.png">
-		<div id="heading">Kontoauszug</div>
-Hier kannst du deine vergangen Überweisungen einsehen.
+<div id="description">
+	<img class="desc_hgc_logo" src="hgc.png">
+	<div id="heading">Kontoauszug</div>
+	Hier kannst du deine vergangen Überweisungen einsehen.
+</div>
+
+<div id="content">
+	<div id="input_all"><form id="form_all">
+	<!-- Person -->
+	<div class="studentselector section student"></div>
+
+	<hr/>
+
+	<!-- Password -->
+	<div class="section" id="section_password">
+		<div class="section_heading">Passwort</div>
+		<div class="password_container">
+			<input type="password" class="password">
+		</div>
 	</div>
-	<div id="content">
-		<div id="input_all"><form id="form_all">
-		<!-- Person -->
-		<div class="studentselector section student"></div>
 
-		<hr/>
+	<!-- Confirm -->
+	<input type="button" value="Abfrage" class="confirm">
+	<input type="button" value="Abbruch" class="cancel">
+	</form></div>
 
-		<!-- Password -->
-		<div class="section" id="section_password">
-			<div class="section_heading">Passwort</div>
-			<div class="password_container">
-				<input type="password" class="password">
+	<!-- Error Message Box -->
+	<div id="messagebox" hidden>
+		<div id="messagebox_heading">Fehler</div>
+		<div id="messagebox_msg"></div>
+		<input type="button" value="OK" id="messagebox_ok">
+	</div>
+
+	<!-- Transactions list -->
+	<div id="transactions" hidden>
+		<div id="transactions_heading">Transaktionen</div>
+		<div id="transactions_table_container">
+			<div id="balance_container">
+				Endkontostand: <span id="balance"></span>
 			</div>
-		</div>
-
-		<!-- Confirm -->
-		<input type="button" value="Abfrage" class="confirm">
-		<input type="button" value="Abbruch" class="cancel">
-		</form></div>
-
-		<!-- Error Message Box -->
-		<div id="messagebox" hidden>
-			<div id="messagebox_heading">Fehler</div>
-			<div id="messagebox_msg"></div>
-			<input type="button" value="OK" id="messagebox_ok">
-		</div>
-
-		<!-- Transactions list -->
-		<div id="transactions" hidden>
-			<div id="transactions_heading">Transaktionen</div>
-			<div id="transactions_table_container">
-				<div id="balance_container">
-					Endkontostand: <span id="balance"></span>
-				</div>
-				<table id="transactions_table"></table>
-			</div>
+			<table id="transactions_table"></table>
 		</div>
 	</div>
-	</div>
-</body>
-</html>
+</div>

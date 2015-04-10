@@ -1,0 +1,29 @@
+<html>
+<head>
+	<title>SaEU - Userterminal</title>
+<head>
+	<title>SaEU - Guthabenabfrage</title>
+	<script src="bower_components/jsencrypt/bin/jsencrypt.min.js"></script>
+	<script src="bower_components/gibberish-aes/dist/gibberish-aes-1.0.0.min.js"></script>
+	<script src="bower_components/jquery/dist/jquery.js"></script>
+	<script src="bower_components/webui-popover/dist/jquery.webui-popover.min.js"></script>
+	<script src="api.js"></script>
+	<script src="common.js"></script>
+	<script src="index.js"></script>
+	<link rel="stylesheet" href="bower_components/webui-popover/dist/jquery.webui-popover.min.css">
+	<link rel="stylesheet" type="text/css" href="common.css">
+	<meta charset="utf-8"/>
+</head>
+<body>
+	<div id="header"><ul id="header_list">
+		<li class="mainlink" data-subdir="transaction_simple">Überweisung</li>
+		<li class="mainlink" data-subdir="balance_get">Guthaben</li>
+		<li class="mainlink" data-subdir="statement">Kontoauszug</li>
+		<li class="mainlink" data-subdir="password_change">Passwort ändern</li>
+		<img src="eu.png" id="header_eu">
+	</ul></div>
+
+	<!-- Load the actual page content in #page (AJAX) -->
+	<div id="page"></div>
+</body>
+</html>

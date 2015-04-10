@@ -1,6 +1,6 @@
 {
 	"name" : "SaEU user client",
-	"main" : "./site/transaction_simple/index.html",
+	"main" : "./site/index.html",
 	"scripts" : {
 		"start" : "nw"
 	},

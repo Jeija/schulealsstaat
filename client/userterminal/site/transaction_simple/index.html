@@ -1,83 +1,66 @@
-<html>
-<head>
-	<title>SaEU - Überweisung</title>
-	<script src="../bower_components/jsencrypt/bin/jsencrypt.min.js"></script>
-	<script src="../bower_components/jquery/dist/jquery.js"></script>
-	<script src="../bower_components/gibberish-aes/dist/gibberish-aes-1.0.0.min.js"></script>
-	<script src="../api.js"></script>
-	<script src="../common.js"></script>
-	<script src="scripts.js"></script>
-	<link rel="stylesheet" type="text/css" href="../common.css">
-	<link rel="stylesheet" type="text/css" href="styles.css">
-	<meta charset="utf-8"/>
-</head>
-<body>
-	<div id="header"></div>
-	<div id="description">
-		<img class="desc_hgc_logo" src="../hgc.png">
-		<div id="heading">Überweisung</div>
+<div id="description">
+	<img class="desc_hgc_logo" src="hgc.png">
+	<div id="heading">Überweisung</div>
 Um Geld zu überweisen, müssen hier Absender, Empfänger und Betrag eingegeben werden. Abschließend muss die Transaktion noch mithilfe des Passworts des Absenders bestätigt werden. Der Betrag ist der Bruttopreis (inkl. Steuern), der Empfänger erhält den Nettopreis.
-	</div>
-	<div id="content">
-		<form id="form_all">
-		<!-- SENDER -->
-		<div class="section_heading">Absender</div>
-		<div class="studentselector section sender"></div>
-		<hr/>
+</div>
+<div id="content">
+	<form id="form_all">
+	<!-- SENDER -->
+	<div class="section_heading">Absender</div>
+	<div class="studentselector section sender"></div>
+	<hr/>
 
-		<!-- Recipient -->
-		<div class="section_heading">Empfänger</div>
-		<div class="studentselector section recipient"></div>
-		<hr/>
+	<!-- Recipient -->
+	<div class="section_heading">Empfänger</div>
+	<div class="studentselector section recipient"></div>
+	<hr/>
 
-		<!-- Amount -->
-		<div class="section" id="section_amount">
-			<div class="section_heading">Betrag</div>
-			<div class="amount_container">
-				<input type="text" class="amount">
-				<img class="hgc_logo_amount" src="../hgc.png">
-			</div>
-		</div>
-
-		<hr/>
-
-		<!-- Comment -->
-		<div class="section" id="section_comment">
-			<div class="section_heading">Kommentar</div>
-			<div class="comment_container">
-				<textarea class="comment"></textarea>
-				<div class="comment_info">optional, max. <span id="comment_maxlen"></span> Zeichen</div>
-			</div>
-		</div>
-
-		<hr/>
-
-		<!-- Password -->
-		<div class="section" id="section_password">
-			<div class="section_heading">Passwort</div>
-			<div class="password_container">
-				<input type="password" class="password">
-			</div>
-		</div>
-		</form>
-
-		<!-- Confirm -->
-		<input type="button" value="Abschicken" class="confirm">
-		<input type="button" value="Abbruch" class="cancel">
-
-		<!-- Error Message Box -->
-		<div id="messagebox" hidden>
-			<div id="messagebox_heading">Fehler</div>
-			<div id="messagebox_msg"></div>
-			<input type="button" value="OK" id="messagebox_ok">
-		</div>
-
-		<!-- Success Message Box -->
-		<div id="success" hidden>
-			Transaktion erfolgreich!
-			<input type="button" value="OK" id="success_ok">
+	<!-- Amount -->
+	<div class="section" id="section_amount">
+		<div class="section_heading">Betrag</div>
+		<div class="amount_container">
+			<input type="text" class="amount">
+			<img class="hgc_logo_amount" src="hgc.png">
 		</div>
 	</div>
+
+	<hr/>
+
+	<!-- Comment -->
+	<div class="section" id="section_comment">
+		<div class="section_heading">Kommentar</div>
+		<div class="comment_container">
+			<textarea class="comment"></textarea>
+			<div class="comment_info">optional, max. <span id="comment_maxlen"></span> Zeichen</div>
+		</div>
 	</div>
-</body>
-</html>
+
+	<hr/>
+
+	<!-- Password -->
+	<div class="section" id="section_password">
+		<div class="section_heading">Passwort</div>
+		<div class="password_container">
+			<input type="password" class="password">
+		</div>
+	</div>
+	</form>
+
+	<!-- Confirm -->
+	<input type="button" value="Abschicken" class="confirm">
+	<input type="button" value="Abbruch" class="cancel">
+
+	<!-- Error Message Box -->
+	<div id="messagebox" hidden>
+		<div id="messagebox_heading">Fehler</div>
+		<div id="messagebox_msg"></div>
+		<input type="button" value="OK" id="messagebox_ok">
+	</div>
+
+	<!-- Success Message Box -->
+	<div id="success" hidden>
+		Transaktion erfolgreich!
+		<input type="button" value="OK" id="success_ok">
+	</div>
+</div>
+</div>
