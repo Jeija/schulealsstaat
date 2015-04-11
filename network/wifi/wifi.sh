@@ -1,5 +1,4 @@
 #!/bin/bash
-
 set -e
 
 # Abort if not run as root

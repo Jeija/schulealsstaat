@@ -29,11 +29,6 @@ DNSSERVER=$(dialog --nocancel --inputbox DNS\ Server? 10 50 192.168.2.10 2>&1 1>
 PKGSERVER=$(dialog --nocancel --inputbox Package\ Server? 10 50 http://packages.saeu:100 2>&1 1>&3)
 exec 3>&-
 
-# Set up Ethernet connection with bridge, NO WiFi configuration etc.
-# WiFi setup may require user input or supervision --> after auto-login 
-ebtables-restore < /root/ebtables.save
-rfkill unblock wifi
-
 # Setup Network
 if [ ! -d /sys/class/net/$BRIDGE_IFACE ]; then
 	brctl addbr $BRIDGE_IFACE

@@ -1,7 +1,6 @@
 #!/bin/bash
 
 CWD="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-WIFI_IFACE=saswifi0
 BR_IFACE=netbr
 
 ### Locale ###
@@ -9,18 +8,16 @@ localectl set-locale LANG=de_DE.UTF-8
 localectl set-keymap de
 localectl set-x11-keymap de
 
-### Networking ###
+### Networking / Wireless ###
+ebtables-restore < $CWD/ebtables.save
+$CWD/setupwifi.sh
 exec 3>&1
-WIFI_CHANNEL=$(dialog --nocancel --inputbox WiFi\ Channel? 10 50 6 2>&1 1>&3)
 DHCPSERVER=$(dialog --nocancel --inputbox DHCP\ Server? 10 50 192.168.2.10 2>&1 1>&3)
-TXPOWER=$(dialog --nocancel --inputbox TX\ Power\ \(mdBm\)? 10 50 100 2>&1 1>&3)
 exec 3>&-
 
 # Some debug output..
 lsusb
 ip addr
-
-iw dev $WIFI_IFACE set txpower fixed "$TXPOWER"
 
 ### Userterminal ###
 mkdir -p /tmp/userterminal
@@ -67,6 +64,7 @@ tmux select-pane -t 1; sleep 0.5
 tmux send-key "$CWD/qrloopback.sh" C-m
 
 # (2) hostapd
-#tmux send-key "TODO hostapd script" C-m
+tmux select-pane -t 2; sleep 0.5
+tmux send-key "$CWD/runwifi.sh" C-m
 
 startx
