@@ -47,6 +47,9 @@ echo $WIFI_CHANNEL > /tmp/wifi/channel
 echo $WIFI_IFACE > /tmp/wifi/iface
 echo $TXPOWER > /tmp/wifi/txpower
 
+# Allow DHCP broadcasts from wifi devices
+ebtables -A INPUT -i $WIFI_IFACE -p IPv4 --ip-dst 255.255.255.255 -j ACCEPT
+
 cat << EOF > /tmp/hostapd.conf
 ssid=saeu
 interface=$WIFI_IFACE
