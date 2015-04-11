@@ -1,18 +1,38 @@
+#statement_container {
+	width:80vw;
+	margin:0 auto;
+	margin-top:5vw;
+}
+
+#explanation {
+	font-size:7vw;
+}
+
 #statement {
-	border-collapse: collapse;
-	width: auto;
-	color: white;
-	margin-left: auto;
-	margin-right: auto;
-	
+	padding:3vw;
 }
 
-table, tr, th {
-	border: 0.3vw solid white;
+#statement .entry {
+	border:1px solid #222;
+	padding:3vw;
+	border-radius:5px;
+	margin-top:2vw;
+	box-shadow:inset 0 0 8px rgba(0, 0, 0, 0.5);
+	font-size:5vw;
 }
 
-table, tr, th, td {
-	padding: 1vw 3vw 1vw 2vw;
+#statement .entry.outgoing {
+	background:rgba(200, 50, 0, 0.3);
+}
+
+#statement .entry.incoming {
+	background:rgba(0, 200, 50, 0.3);
+}
+
+#statement .entry .amount {
+	text-align:right;
+	font-family:Monospace;
+	margin-top:-2vw;
 }
 
 h3 {
@@ -21,12 +41,14 @@ h3 {
 	font-size: 7vw;
 }
 
-#balance_number {
-	display: inline-block;
-	padding: 1vw;
-	border: solid;
-	margin: 2vw;
-	font-size: 9vw;
+#balance {
+	margin:0 auto;
+	width:100%;
+	font-size:10vw;
+	margin-top:3vw;
+	padding-top:3vw;
+	border-top:0.7vw solid #fff;
+	text-align:center;
 }
 
 #nostatement {

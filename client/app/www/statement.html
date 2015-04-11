@@ -12,18 +12,23 @@
 	<script src="bower_components/gibberish-aes/dist/gibberish-aes-1.0.0.min.js"></script>
 	<script src="js/api.js"></script>
 	<script src="js/storage.js"></script>
-	<script src="js/konto.js"></script>
+	<script src="js/statement.js"></script>
 </head>
 <body>
-	<h1 class="mainheadline">Kontoauszug</h1>
-	<table id="statement"></table>
-	<div id="nostatement">Kontoauszug ist leer!</div>
+	<!-- Headline -->
+	<div class="mainheadline"><a class="mmlink" href="mainmenu.html"></a>Kontoauszug</div>
 
-	<h3 id="balance_text">Aktueller Kontostand:<br/ ><div id="balance_number">30,24 HGC</div></h3>
+	<!-- Statement -->
+	<div id="statement_container">
+		<div id="explanation">Letze Transaktionen:</div>
+		<div id="statement"></div>
+		<div id="nostatement">Kontoauszug ist leer!</div>
+		<div id="balance"><span id="balance_number"></span> HGC</div>
+	</div>
 
+	<!-- Bottom Buttons -->
 	<div class="bottombuttons">
-		<a href="mainmenu.html" class="button left">Zurück</a>
-		<a href="konto.html" class="button right">Neu laden</a>
+		<a href="statement.html" class="button full">Neu laden</a>
 	</div>
 </body>
 </html>

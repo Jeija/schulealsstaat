@@ -1,11 +1,17 @@
+@font-face {
+    font-family: "FiraSans-Light";
+    src: url(../res/FiraSans-Light.ttf) format("truetype");
+}
+
 html {
-	font-family:Arial;
+	font-family:"FiraSans-Light", Arial;
 	background-color:#000;
 	color:white;
 	height:100%;
 }
 
 body {
+	margin:0;
 	margin-bottom:20vw;
 }
 
@@ -46,6 +52,7 @@ body {
 	text-align: center;
 	color:#000;
 	font-style:italic;
+	cursor:pointer;
 }
 
 .button:active {
@@ -77,10 +84,23 @@ body {
 }
 
 .mainheadline {
-	padding-top:0.6vw;
-	color: yellow;
-	font-size: 9vw;
-	text-align: center;
+	margin-top:0;
+	margin-left:0vw;
+	padding:2.5vw 15vw;
+	background:#181;
+	color:#eee;
+	font-size:7vw;
+}
+
+.mainheadline .mmlink {
+	position:absolute;
+	left:2vw;
+	top:1.8vw;
+	height:10vw;
+	width:10vw;
+	margin-bottom:-0.7vw;
+	background-image:url("../res/navicon.svg");
+	background-size:cover;
 }
 
 .seperation {

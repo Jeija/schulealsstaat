@@ -1,3 +1,7 @@
+function HGC_readable(val) {
+	return (Math.round(val * 100) / 100).toFixed(2);
+}
+
 $(function () {
 	// Wait for PubKey to be downloaded + processed
 	setTimeout(function () {
@@ -11,34 +15,29 @@ $(function () {
 			return;
 		}
 
-		var table = $("#statement");
-		table.html("");
+		var statement = $("#statement");
+		statement.html("");
 
 		// No transactions in history
-		if (res.length == 0) {
+		if (res.length === 0) {
 			$("#nostatement").show();
 			return;
 		}
 
-		table.append($("<tr>")
-			.append($('<th>')
-				.text("Handelspartner"))
-			.append($('<th>')
-				.text("Betrag"))
-		);
-
 		for (var i = 0; i < res.length; i++) {
-			alert(JSON.stringify(res[i]));
 			var trans = res[i];
 			var is_sender = (trans.sender === storage.get("qrid"));
-			table.append($("<tr>")
-				.append($('<td>')
+			var amount = is_sender ? -trans.amount_sent : trans.amount_received;
+			var typeclass = is_sender ? "outgoing" : "incoming";
+			statement.append($('<div class="entry ' + typeclass + '">')
+				.append($('<div class="qrid">')
 					.text(is_sender ? trans.recipient : trans.sender))
-				.append($('<td>')
-					.text(is_sender ? -trans.amount_sent : trans.amount_received))
+				.append($('<div class="amount">')
+					.text(HGC_readable(amount)))
 			);
 		}
-		
-		$("#balance_number").text(storage.get("balance") + " HGC");
+
+		var balance_string = HGC_readable(storage.get("balance"));
+		$("#balance_number").text(balance_string);
 	});}, 200);
 });
