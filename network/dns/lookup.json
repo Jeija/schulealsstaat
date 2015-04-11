@@ -4,5 +4,6 @@
 	"packages.saeu" : "192.168.2.32",
 	"centralbank.eu" : "192.168.2.40",
 	"centralbank.saeu" : "192.168.2.40",
+	"radio.saeu" : "192.168.2.50",
 	"__default" : "192.168.2.10"
 }

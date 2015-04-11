@@ -51,7 +51,7 @@ function getConfig(config, cb) {
 function resetAll() {
 	$('#form_all')[0].reset();
 	window.scrollTo(0, 0);
-	location.reload();
+	load_subdir($(".link-selected").data("subdir"));
 }
 
 function student_identify(data, sectionref, cb) {
