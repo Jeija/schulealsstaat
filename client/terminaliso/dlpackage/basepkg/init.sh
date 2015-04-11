@@ -28,7 +28,7 @@ cp -R $CWD/userterminal/* /tmp/userterminal
 cp $CWD/xinitrc /root/.xinitrc
 
 ### Audio volume ###
-amixer sset Master 90%
+amixer sset Master 100%
 
 ### TMUX interface:
 # Look at it by invoking tmux attach-session
