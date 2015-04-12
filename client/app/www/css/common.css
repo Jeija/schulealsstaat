@@ -80,6 +80,7 @@ body {
 .button.warning:active { background:#cf3; }
 
 .button.mainmenu {
+	font-style:normal;
 	margin-bottom:2vw;
 }
 
