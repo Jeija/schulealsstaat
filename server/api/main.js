@@ -37,7 +37,7 @@ http.createServer(function (req, res) {
 	} else if (query[0] == "action") {
 		res.writeHead(200, {"Content-Type": "text/plain",
 			"Access-Control-Allow-Origin" : "*"});
-		actions.execute(query[1], req, res);
+		actions(query[1], req, res);
 	} else {
 		// empty answer, but with Access-Control-Allow-Origin: *
 		res.writeHead(200, {"Content-Type": "text/plain",

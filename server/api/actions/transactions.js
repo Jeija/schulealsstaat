@@ -24,7 +24,7 @@ module.exports = function (register, register_cert) {
  * invalid_password	--> provided password was wrong
  * error:<something>	--> Some other error, e.g. with JSON parsing
  */
-register("get_balance", function (payload, answer) {
+register("get_balance", function (payload, answer, error, info) {
 	db.students.getByQrid(payload.qrid, function (st) {
 		if (!st) {
 			answer("invalid_qrid");
@@ -36,6 +36,7 @@ register("get_balance", function (payload, answer) {
 			return;
 		}
 
+		info("done for " + common.student_readable(st));
 		answer(String(st.balance));
 	});
 });
@@ -57,13 +58,12 @@ register("get_balance", function (payload, answer) {
  *				amount_received : Number,
  *				amount_tax : Number,
  *				percent_tax : Number,
- *				comment : String,
- *				NOT: sender_ip }]
+ *				comment : String }]
  * invalid_qrid		--> the provided qrid doesn't exist
  * invalid_password	--> provided password was wrong
  * error:<something>	--> Some other error, e.g. with JSON parsing
  */
-register("get_last_transactions", function (payload, answer) {
+register("get_last_transactions", function (payload, answer, error, info) {
 	db.students.getByQrid(payload.qrid, function (st) {
 		if (!st) {
 			answer("invalid_qrid");
@@ -78,6 +78,7 @@ register("get_last_transactions", function (payload, answer) {
 		db.transactions.getByIdList(st.transactions, function (tr) {
 			if (payload.amount > 0)
 				tr = tr.slice(0, payload.amount);
+			info("done for " + common.student_readable(st));
 			answer(tr);
 		});
 	});
@@ -99,14 +100,14 @@ register("get_last_transactions", function (payload, answer) {
  *				amount_received : Number,
  *				amount_tax : Number,
  *				percent_tax : Number,
- *				comment : String,
- *				sender_ip : String }]
+ *				comment : String }]
  * Array may also be empty, if no matching transactions were found
  */
-register_cert("find_transactions", ["admin_hash"], function (payload, answer) {
+register_cert("find_transactions", ["admin_hash"], function (payload, answer, error, info) {
 	db.transactions.getByProperties(payload.query, function (tr) {
 		if (payload.amount > 0)
 			tr = tr.slice(0, payload.amount);
+		info("found " + tr.length + " matches");
 		answer(tr);
 	});
 });
@@ -152,37 +153,41 @@ function net2tax(net, tax_percent) {
  * If the sender is the magic_account, the money will be spawned
  */
 function transaction(sender_qrid, recipient_qrid, amount_sent, amount_received, tax,
-		comment, sender_ip, cb) {
+		comment, answer, error, info, req) {
 	var sender, recipient, taxinc;
 	var magic_account = config.get("magic_account", "Zentralbank");
 	var spawn_money = sender_qrid == magic_account;
 	var destroy_money = recipient_qrid == magic_account;
 
 	// Check for over- or underspecification (amount_sent / amount_received)
-	if (!amount_sent && !amount_received) { cb ("underspecified"); return; }
-	if (amount_sent && amount_received) { cb ("overspecified"); return; }
+	if (!amount_sent && !amount_received) { answer("underspecified"); return; }
+	if (amount_sent && amount_received) { answer("overspecified"); return; }
 
 	// Check for invalid money amounts
 	if (amount_sent && (!Number.isFinite(amount_sent) || amount_sent <= 0))
-		{ cb("invalid_amount"); return; }
+		{ answer("invalid_amount"); return; }
 	if (amount_received && (!Number.isFinite(amount_received) || amount_received <= 0))
-		{ cb("invalid_amount"); return; }
+		{ answer("invalid_amount"); return; }
 
 	/*** Load all required database entries ***/
 	flow.exec(function () {
 		db.students.getByQrid(config.get("taxinc_qrid", "taxinc"), this);
 	}, function (st) {
-		if (!st) { cb("error: no tax income account"); return; }
+		if (!st) {
+			answer("error: no tax income account");
+			error("no tax income account");
+			return;
+		}
 		taxinc = st;
 		if (spawn_money) this(true);
 		else db.students.getByQrid(sender_qrid, this);
 	}, function (st) {
-		if (!st) { cb("invalid_sender"); return; }
+		if (!st) { answer("invalid_sender"); return; }
 		sender = st;
 		if (destroy_money) this(true);
 		else db.students.getByQrid(recipient_qrid, this);
 	}, function (st) {
-		if (!st) { cb("invalid_recipient"); return; }
+		if (!st) { answer("invalid_recipient"); return; }
 		recipient = st;
 
 		/*** Calculate amount to transfer with taxes ***/
@@ -195,7 +200,7 @@ function transaction(sender_qrid, recipient_qrid, amount_sent, amount_received, 
 		amount_received = amount_received ? amount_received : amount_sent - amount_tax;
 
 		// Check if sender still has enough money on his account + actual transaction
-		if (!spawn_money && sender.balance < amount_sent) { cb("nomoney"); return; }
+		if (!spawn_money && sender.balance < amount_sent) { answer("nomoney"); return; }
 		if (!spawn_money) sender.balance -= amount_sent;
 		recipient.balance += amount_received;
 		taxinc.balance += amount_tax;
@@ -214,7 +219,6 @@ function transaction(sender_qrid, recipient_qrid, amount_sent, amount_received, 
 				sender.country : undefined,
 			recipient_country : typeof recipient == "object" && "country" in recipient ?
 				recipient.country : undefined,
-			sender_ip : sender_ip,
 			comment : comment
 		}, function (dbtrans) {
 			if (!spawn_money) {
@@ -229,11 +233,11 @@ function transaction(sender_qrid, recipient_qrid, amount_sent, amount_received, 
 			var log_type = "Transaction";
 			if (spawn_money) log_type = "spawn_money";
 			if (destroy_money) log_type = "destroy_money";
-			log.info("BANK", log_type + " from " + sender_qrid + " to " +
-				recipient_qrid + ", with net value " + amount_received +
-				" HGC, tax income is " + amount_tax + " HGC.");
+			info(log_type + " from " + common.student_readable(sender) + " to " +
+				common.student_readable(recipient) + ", with net value "
+				+ amount_received + " HGC, tax income is " + amount_tax + " HGC.");
 			});
-			cb("ok");
+			answer("ok");
 	});
 }
 
@@ -262,7 +266,7 @@ function transaction(sender_qrid, recipient_qrid, amount_sent, amount_received, 
  * too_many_decplaces	--> Amount has more decimal places than hgc_tr_decimal_places allows
  * error:<something>	--> Some other error, e.g. with JSON parsing
  */
-function transaction_common(payload, answer, req, tax) {
+function transaction_common(payload, answer, error, info, req, tax) {
 	/*** Gather data from payload ***/
 	var sender = payload.sender;
 	var recipient = payload.recipient;
@@ -287,20 +291,19 @@ function transaction_common(payload, answer, req, tax) {
 		if (!st) { answer("invalid_sender"); return; }
 		if (!common.check_password(st, sender_password))
 			{ answer("invalid_password"); return; }
-		var ip = req.connection.remoteAddress;
-		transaction(sender, recipient, sent, received, tax, comment, ip, answer);
+		transaction(sender, recipient, sent, received, tax, comment, answer, error);
 	});
 }
 
-register("transaction", function (payload, answer, req) {
+register("transaction", function (payload, answer, error) {
 	// Tax in %
 	var tax = config.get("transaction_tax_percent", 10);
-	transaction_common(payload, answer, req, tax);
+	transaction_common(payload, answer, error, tax);
 });
 
 register_cert("transaction_taxfree", ["registration_hash", "admin_hash"],
-		function (payload, answer, req) {
-	transaction_common(payload, answer, req, 0);
+		function (payload, answer, error) {
+	transaction_common(payload, answer, error, 0);
 });
 
 /**
@@ -311,14 +314,14 @@ register_cert("transaction_taxfree", ["registration_hash", "admin_hash"],
  * }
  * response values: "ok" or "error: <something>"
  */
-register_cert("spawn_money", ["master_hash"], function (payload, answer, req) {
+register_cert("spawn_money", ["master_hash"], function (payload, answer, error, info, req) {
+	info("Creation of money!");
 	var sender = config.get("magic_account", "Zentralbank");
 	var recipient = payload.recipient;
 	var amount = payload.amount;
 	var comment = "spawn_money" + (("comment" in payload) ? " - " + payload.comment : "");
-	var ip = req.connection.remoteAddress;
 
-	transaction(sender, recipient, amount, false, 0, comment, ip, answer);
+	transaction(sender, recipient, amount, false, 0, comment, answer, error, info, req);
 });
 
 /**
@@ -329,14 +332,14 @@ register_cert("spawn_money", ["master_hash"], function (payload, answer, req) {
  * }
  * response values: "ok" or "error: <something>"
  */
-register_cert("destroy_money", ["master_hash"], function (payload, answer, req) {
+register_cert("destroy_money", ["master_hash"], function (payload, answer, error) {
+	info("Destruction of money!");
 	var recipient = config.get("magic_account", "Zentralbank");
 	var sender = payload.sender;
 	var amount = payload.amount;
 	var comment = "destroy_money" + (("comment" in payload) ? " - " + payload.comment : "");
-	var ip = req.connection.remoteAddress;
 
-	transaction(sender, recipient, amount, false, 0, comment, ip, answer);
+	transaction(sender, recipient, amount, false, 0, comment, answer, error, info, req);
 });
 
 /**
@@ -349,7 +352,8 @@ register_cert("destroy_money", ["master_hash"], function (payload, answer, req) 
  * Same answers as "transaction" action, apart from too_many_decplaces, comment_too_long
  * (these properties won't be checked)
  */
-register_cert("master_transaction", ["master_hash"], function (payload, answer, req) {
+register_cert("master_transaction", ["master_hash"], function (payload, answer, error) {
+	info("Forced (master) transaction of money!");
 	// Tax in %
 	var tax_percent = "tax_percent" in payload ?
 		payload.tax_percent : config.get("transaction_tax_percent", 10);
@@ -359,11 +363,10 @@ register_cert("master_transaction", ["master_hash"], function (payload, answer, 
 	var sent = "amount_sent" in payload ? payload.amount_sent : false;
 	var received = "amount_received" in payload ? payload.amount_received : false;
 	var comment = "comment" in payload ? payload.comment : false;
-	var ip = req.connection.remoteAddress;
 
 	// Do NOT perform password checking, comment length checking, decimal places checking
 	// for master transactions
-	transaction(sender, recipient, sent, received, tax_percent, comment, ip, answer);
+	transaction(sender, recipient, sent, received, tax_percent, comment, answer, error, info, req);
 });
 
 }; // module.exports

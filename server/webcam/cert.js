@@ -11,6 +11,12 @@ module.exports = {
 	// cb = callback to be executed when validation is successful
 	// cb_false = callback to be executed when validation is unsuccessful
 	check: function(hashfiles, cert, ip, cb, cb_false) {
+		// If hashfiles is false / null / undefined, no cert is required --> cb
+		if (!hashfiles) {
+			cb();
+			return;
+		}
+
 		var hash_correct = false;
 
 		if (cert) {

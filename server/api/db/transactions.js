@@ -20,10 +20,7 @@ var transactionSchema = new Schema({
 
 	/* Comment is an arbitrary String, up to <tr_comment_maxlen> (in config) characters,
 		can be entered by sender or is generated programmatically */
-	comment : String,
-
-	/* Optional: IP of the sender, to help track physical positions of payments */
-	sender_ip : String
+	comment : String
 });
 
 var Transaction = mongoose.model("Transaction", transactionSchema);
