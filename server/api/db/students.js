@@ -3,18 +3,18 @@ var Schema = mongoose.Schema;
 var log = require("../logging.js");
 
 var studentSchema = new Schema({
-	qrid :		String,
+	qrid :		{ type : String, index : true, unique : true },
 
 	/* Personal Information (type may be teacher / school class / ...): */
-	firstname :	String,
-	lastname :	String,
+	firstname :	{ type : String, index : true },
+	lastname :	{ type : String, index : true },
 	picname :	String,
-	country :	String,
+	country :	{ type : String, index : true },
 	birth :		Date,
-	type :		{type : String},
+	type :		{ type : String, index : true },
 
 	/* Legal person / institution / ... */
-	special_name :	String,
+	special_name :	{ type : String, index : true },
 
 	/* Checkins, Checkouts --> Appearances */
 	// type: "checkin/checkout/...", date: server time at checkin / checkout
@@ -74,4 +74,4 @@ module.exports = {
 			cb(list);
 		});
 	}
-}
+};

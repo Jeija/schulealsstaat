@@ -31,7 +31,7 @@ $(function () {
 			var typeclass = is_sender ? "outgoing" : "incoming";
 			statement.append($('<div class="entry ' + typeclass + '">')
 				.append($('<div class="qrid">')
-					.text(is_sender ? trans.recipient : trans.sender))
+					.text(is_sender ? trans.recipient.qrid : trans.sender.qrid))
 				.append($('<div class="amount">')
 					.text(HGC_readable(amount)))
 			);

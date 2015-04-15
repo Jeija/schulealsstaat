@@ -33,19 +33,18 @@ function render_transactions (trlist) {
 		.append($("<th>").text("Steuersatz"))
 		.append($("<th>").text("Steuer"))
 		.append($("<th>").text("Kommentar"))
-		.append($("<th>").text("Absender IP"))
 	);
 
 	for (var i = 0; i < trlist.length; i++) {
 		var tr = trlist[i];
 		$("#transactions").append($("<tr>")
 			.append($('<td>').text(datetime_readable(tr.time)))
-			.append($('<td>').text(tr.sender +
-				((typeof tr.sender_country != "undefined") ?
-				" (" + country_readable(tr.sender_country) + ")" : "")))
-			.append($('<td>').text(tr.recipient +
-				((typeof tr.recipient_country != "undefined") ?
-				" (" + country_readable(tr.recipient_country) + ")" : "")))
+			.append($('<td>').text(tr.sender.qrid +
+				((typeof tr.sender.country != "undefined") ?
+				" (" + country_readable(tr.sender.country) + ")" : "")))
+			.append($('<td>').text(tr.recipient.qrid +
+				((typeof tr.recipient.country != "undefined") ?
+				" (" + country_readable(tr.recipient.country) + ")" : "")))
 			.append($('<td class="num">').text(tr.amount_sent.toFixed(3)))
 			.append($('<td class="num">').text(tr.amount_received.toFixed(3)))
 			.append($('<td class="num">').text(tr.percent_tax))
@@ -54,7 +53,6 @@ function render_transactions (trlist) {
 				.attr("comment-id", i)
 				.text("anzeigen")
 			))
-			.append($("<td>").text(tr.sender_ip))
 		);
 	}
 
@@ -109,10 +107,10 @@ $("#query").click(function () {
 	};
 
 	// Load query from UI
-	addTableVal(payload.query, "sender", "#sender_qrid");
-	addTableVal(payload.query, "sender_country", "#sender_country");
-	addTableVal(payload.query, "recipient", "#recipient_qrid");
-	addTableVal(payload.query, "recipient_country", "#recipient_country");
+	addTableVal(payload.query, "sender.qrid", "#sender_qrid");
+	addTableVal(payload.query, "sender.country", "#sender_country");
+	addTableVal(payload.query, "recipient.qrid", "#recipient_qrid");
+	addTableVal(payload.query, "recipient.country", "#recipient_country");
 	addTableVal(payload.query, "percent_tax", "#percent_tax");
 	addTableVal(payload.query.time, "$lt", "#time_before", true);
 	addTableVal(payload.query.time, "$gt", "#time_after", true);

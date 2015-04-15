@@ -4,21 +4,6 @@ var db = require("../db");
 var cert = require("../cert");
 var crypto = require("crypto");
 
-// Removes all private / security-related data from a student Object
-function student_public_only(st) {
-	if (!st) return null;
-	return {
-		special_name :	st.special_name,
-		firstname :	st.firstname,
-		lastname :	st.lastname,
-		picname :	st.picname,
-		country :	st.country,
-		birth :		st.birth,
-		type :		st.type,
-		qrid :		st.qrid
-	};
-}
-
 // Generate Salt / Hash combination from password
 function generate_pwdhash(pwd) {
 	var pwdsalt = crypto.randomBytes(32).toString('hex');
@@ -206,7 +191,7 @@ register("student_identify", function (payload, answer, error, info) {
 		}
 
 		info("identified " + common.student_readable(st[0]));
-		answer(student_public_only(st[0]));
+		answer(common.student_public_only(st[0]));
 	});
 });
 
@@ -272,7 +257,7 @@ register_cert("password_change_master", ["master_hash"], function (payload, answ
 register_cert("ec_checkin", ["ec_hash", "admin_hash"], function (payload, answer, error, info) {
 	db.students.getByQrid(payload, function (st) {
 		if (!st) { answer("error: wrong qrid"); return; }
-		info("Checkin by " + common.student_redable(st));
+		info("Checkin by " + common.student_readable(st));
 		st.appear.push({type : "checkin", time : Date.now()});
 		st.save();
 		answer("ok");
@@ -282,7 +267,7 @@ register_cert("ec_checkin", ["ec_hash", "admin_hash"], function (payload, answer
 register_cert("ec_checkout", ["ec_hash", "admin_hash"], function (payload, answer, error, info) {
 	db.students.getByQrid(payload, function (st) {
 		if (!st) { answer("error: wrong qrid"); return; }
-		info("Checkout by " + common.student_redable(st));
+		info("Checkout by " + common.student_readable(st));
 		st.appear.push({type : "checkout", time : Date.now()});
 		st.save();
 		answer("ok");

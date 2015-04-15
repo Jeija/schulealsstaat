@@ -153,7 +153,7 @@ function net2tax(net, tax_percent) {
  * If the sender is the magic_account, the money will be spawned
  */
 function transaction(sender_qrid, recipient_qrid, amount_sent, amount_received, tax,
-		comment, answer, error, info, req) {
+		comment, answer, error, info) {
 	var sender, recipient, taxinc;
 	var magic_account = config.get("magic_account", "Zentralbank");
 	var spawn_money = sender_qrid == magic_account;
@@ -176,6 +176,7 @@ function transaction(sender_qrid, recipient_qrid, amount_sent, amount_received, 
 		if (!st) {
 			answer("error: no tax income account");
 			error("no tax income account");
+			log.err("API", "You MUST add a tax income account, ignoring transaction!");
 			return;
 		}
 		taxinc = st;
@@ -206,19 +207,24 @@ function transaction(sender_qrid, recipient_qrid, amount_sent, amount_received, 
 		taxinc.balance += amount_tax;
 		taxinc.save();
 
+		/*** Generate sender / recipient entries for transaction DB ***/
+		// in case of spawn_money / destroy_money
+		if (destroy_money) recipient = { qrid : magic_account };
+		if (spawn_money) sender = { qrid : magic_account };
+		var recipient_public = common.student_public_only(recipient);
+		var sender_public = common.student_public_only(sender);
+		recipient_public.reference = recipient._id;
+		sender_public.reference = sender._id;
+
 		/*** Log Transaction in Transactions DB ***/
 		db.transactions.add({
-			sender : sender_qrid,
-			recipient : recipient_qrid,
+			sender : sender_public,
+			recipient : recipient_public,
 			time : Date(),
 			amount_sent : amount_sent,
 			amount_received : amount_received,
 			amount_tax : amount_tax,
 			percent_tax : tax,
-			sender_country : typeof sender == "object" && "country" in sender ?
-				sender.country : undefined,
-			recipient_country : typeof recipient == "object" && "country" in recipient ?
-				recipient.country : undefined,
 			comment : comment
 		}, function (dbtrans) {
 			if (!spawn_money) {
@@ -230,14 +236,14 @@ function transaction(sender_qrid, recipient_qrid, amount_sent, amount_received, 
 				recipient.save();
 			}
 
-			var log_type = "Transaction";
+			var log_type = "transaction";
 			if (spawn_money) log_type = "spawn_money";
 			if (destroy_money) log_type = "destroy_money";
 			info(log_type + " from " + common.student_readable(sender) + " to " +
-				common.student_readable(recipient) + ", with net value "
-				+ amount_received + " HGC, tax income is " + amount_tax + " HGC.");
-			});
+				common.student_readable(recipient) + ", with net value " +
+				amount_received + " HGC, tax income is " + amount_tax + " HGC.");
 			answer("ok");
+		});
 	});
 }
 
@@ -266,7 +272,7 @@ function transaction(sender_qrid, recipient_qrid, amount_sent, amount_received, 
  * too_many_decplaces	--> Amount has more decimal places than hgc_tr_decimal_places allows
  * error:<something>	--> Some other error, e.g. with JSON parsing
  */
-function transaction_common(payload, answer, error, info, req, tax) {
+function transaction_common(payload, answer, error, info, tax) {
 	/*** Gather data from payload ***/
 	var sender = payload.sender;
 	var recipient = payload.recipient;
@@ -291,19 +297,19 @@ function transaction_common(payload, answer, error, info, req, tax) {
 		if (!st) { answer("invalid_sender"); return; }
 		if (!common.check_password(st, sender_password))
 			{ answer("invalid_password"); return; }
-		transaction(sender, recipient, sent, received, tax, comment, answer, error);
+		transaction(sender, recipient, sent, received, tax, comment, answer, error, info);
 	});
 }
 
-register("transaction", function (payload, answer, error) {
+register("transaction", function (payload, answer, error, info) {
 	// Tax in %
 	var tax = config.get("transaction_tax_percent", 10);
-	transaction_common(payload, answer, error, tax);
+	transaction_common(payload, answer, error, info, tax);
 });
 
 register_cert("transaction_taxfree", ["registration_hash", "admin_hash"],
-		function (payload, answer, error) {
-	transaction_common(payload, answer, error, 0);
+		function (payload, answer, error, info) {
+	transaction_common(payload, answer, error, info, 0);
 });
 
 /**
@@ -314,14 +320,14 @@ register_cert("transaction_taxfree", ["registration_hash", "admin_hash"],
  * }
  * response values: "ok" or "error: <something>"
  */
-register_cert("spawn_money", ["master_hash"], function (payload, answer, error, info, req) {
+register_cert("spawn_money", ["master_hash"], function (payload, answer, error, info) {
 	info("Creation of money!");
 	var sender = config.get("magic_account", "Zentralbank");
 	var recipient = payload.recipient;
 	var amount = payload.amount;
 	var comment = "spawn_money" + (("comment" in payload) ? " - " + payload.comment : "");
 
-	transaction(sender, recipient, amount, false, 0, comment, answer, error, info, req);
+	transaction(sender, recipient, amount, false, 0, comment, answer, error, info);
 });
 
 /**
@@ -332,14 +338,14 @@ register_cert("spawn_money", ["master_hash"], function (payload, answer, error, 
  * }
  * response values: "ok" or "error: <something>"
  */
-register_cert("destroy_money", ["master_hash"], function (payload, answer, error) {
+register_cert("destroy_money", ["master_hash"], function (payload, answer, error, info) {
 	info("Destruction of money!");
 	var recipient = config.get("magic_account", "Zentralbank");
 	var sender = payload.sender;
 	var amount = payload.amount;
 	var comment = "destroy_money" + (("comment" in payload) ? " - " + payload.comment : "");
 
-	transaction(sender, recipient, amount, false, 0, comment, answer, error, info, req);
+	transaction(sender, recipient, amount, false, 0, comment, answer, error, info);
 });
 
 /**
@@ -352,7 +358,7 @@ register_cert("destroy_money", ["master_hash"], function (payload, answer, error
  * Same answers as "transaction" action, apart from too_many_decplaces, comment_too_long
  * (these properties won't be checked)
  */
-register_cert("master_transaction", ["master_hash"], function (payload, answer, error) {
+register_cert("master_transaction", ["master_hash"], function (payload, answer, error, info) {
 	info("Forced (master) transaction of money!");
 	// Tax in %
 	var tax_percent = "tax_percent" in payload ?
@@ -366,7 +372,7 @@ register_cert("master_transaction", ["master_hash"], function (payload, answer, 
 
 	// Do NOT perform password checking, comment length checking, decimal places checking
 	// for master transactions
-	transaction(sender, recipient, sent, received, tax_percent, comment, answer, error, info, req);
+	transaction(sender, recipient, sent, received, tax_percent, comment, answer, error, info);
 });
 
 }; // module.exports

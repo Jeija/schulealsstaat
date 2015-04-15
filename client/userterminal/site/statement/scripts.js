@@ -39,10 +39,10 @@ function render_transactions (tr, balance) {
 				.text(t.amount_tax.toFixed(2).replace(".", ",")))
 			.append($('<td class="trt_tax_percent">')
 				.text(t.percent_tax))
-			.append($('<td class="trt_sender" data-qrid="' + t.sender + '">')
-				.text(t.sender))
-			.append($('<td class="trt_recipient" data-qrid="' + t.recipient + '">')
-				.text(t.recipient))
+			.append($('<td class="trt_sender" data-listid="' + i + '">')
+				.text(t.sender.qrid))
+			.append($('<td class="trt_recipient" data-listid="' + i + '">')
+				.text(t.recipient.qrid))
 			.append($('<td class="trt_comment" data-listid="' + i + '">')
 				.text("Anzeigen"))
 			.append($('<td class="trt_balance num">')
@@ -76,23 +76,21 @@ function render_transactions (tr, balance) {
 		var listid = parseInt($(this).data("listid"));
 		setTimeout(function () {
 			$(".comment_popup").text(tr[listid].comment);
-		}, 0);
+		}, 100);
 	});
 
 	$(".trt_recipient").hover(function () {
-		var qrid = $(this).data("qrid");
-		data = { qrid : qrid };
-		action("student_identify", data, function (st) {
-			$(".recipient_popup").text(student2readable(st));
-		});
+		var listid = parseInt($(this).data("listid"));
+		setTimeout(function () {
+			$(".recipient_popup").text(student2readable(tr[listid].recipient));
+		}, 100);
 	});
 
 	$(".trt_sender").hover(function () {
-		var qrid = $(this).data("qrid");
-		data = { qrid : qrid };
-		action("student_identify", data, function (st) {
-			$(".sender_popup").text(student2readable(st));
-		});
+		var listid = parseInt($(this).data("listid"));
+		setTimeout(function () {
+			$(".sender_popup").text(student2readable(tr[listid].sender));
+		}, 100);
 	});
 
 	table.prepend($("<tr>")

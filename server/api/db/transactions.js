@@ -2,17 +2,32 @@ var mongoose = require("mongoose");
 var Schema = mongoose.Schema;
 var log = require("../logging.js");
 
+var commonProfileSchema = {
+	special_name :	{ type : String, index : true },
+	firstname :	{ type : String, index : true },
+	lastname :	{ type : String, index : true },
+	country :	{ type : String, index : true },
+	type :		{ type : String, index : true },
+	qrid :		{ type : String, index : true }
+};
+
 var transactionSchema = new Schema({
-	/* QR-IDs of sender and recipient and timestamp */
-	sender : String,
-	recipient : String,
-	time : Date,
+	/**
+	 * References to sender + recipient and copies of their profiles at transaction time
+	 * If either one of them changes e.g. their country, taxes can still be calculated.
+	 * Also, if the QR card is reused or if the recipient changes their name, it can be
+	 * tracked back in case of fraud or abuse.
+	 *
+	 * Current information on sender / recipient can be accessed by tracing back their
+	 * document _id value (if available in sender.reference, recipient.reference)
+	 */
+	sender : commonProfileSchema,
+	recipient : commonProfileSchema,
 
-	/* "Countries" of sender and recipient */
-	sender_country : String,
-	recipient_country : String,
+	/* Timestamp */
+	time : { type : Date, index : true },
 
-	/* Amount in HGC, rounded to 5 comma values (12.34567) */
+	/* Amount in HGC, rounded to 5 comma values (e.g. 12.34567) */
 	amount_sent : Number,		// Amount subtracted from sender's account
 	amount_received : Number,	// Amount added to recipient's account
 	amount_tax : Number,		// Amount added to tax income account
@@ -42,26 +57,6 @@ module.exports = {
 		}).exec(function (err, tr) {
 			if (err) log.err("MongoDB", "trdb.getByIdList failed: " + err);
 			cb(tr);
-		});
-	},
-
-	updateAllQrid : function (old_qrid, new_qrid) {
-		// Sender
-		Transaction.update(
-			{ sender : old_qrid },			// Query sender
-			{ $set : { sender : new_qrid } },	// Update sender
-			{ multi : true },			// Update every transaction
-			function (err) {			// Callback
-				if (err) log.err("MongoDB", "trdb.updateAllQrid sender failed: " + err);
-		});
-
-		// Recipient
-		Transaction.update(
-			{ recipient : old_qrid },		// Query sender
-			{ $set : { recipient : new_qrid } },	// Update sender
-			{ multi : true },			// Update every transaction
-			function (err) {			// Callback
-				if (err) log.err("MongoDB", "trdb.updateAllQrid sender failed: " + err);
 		});
 	},
 
