@@ -84,7 +84,6 @@ If, however, you want to access the server from multiple devices such as from th
 * Install the following packages:
 	* Ubuntu: `sudo apt install nodejs-legacy npm git mongodb tmux`
 	* Archlinux: `sudo pacman -S nodejs git mongodb tmux`
-* Make sure npm is instructed to use python2: `npm config set python /usr/bin/python2`
 * Install the following node.js packages:
 `sudo npm install -g bower http-server node-gyp nodemon nw`
 * Clone this repository *recursively*: `git clone --recursive https://github.com/Jeija/schulealsstaat` and `cd schulealsstaat`
