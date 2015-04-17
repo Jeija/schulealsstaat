@@ -11,6 +11,9 @@ function load_subdir (dir) {
 			type: "text/css",
 			href: dir + "/styles.css"
 		}).appendTo("head");
+
+		// Unbind old events and load new oens
+		$("#page").find("*").unbind();
 		$.getScript(dir + "/scripts.js");
 	});
 }

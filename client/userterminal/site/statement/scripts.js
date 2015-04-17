@@ -19,7 +19,7 @@ function render_transactions (tr, balance) {
 	var bal_now = 0;
 	for (var i = 0; i < tr.length; i++) {
 		var t = tr[i];
-		var is_sender = (t.sender === current_qrid);
+		var is_sender = (t.sender.qrid === current_qrid);
 		var comment = "(kein Kommentar)";
 		if (t.comment)
 			comment = t.comment.replace(/\n/g, "<br/>");
