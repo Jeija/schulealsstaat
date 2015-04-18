@@ -1,6 +1,6 @@
 var fs = require("fs");
 var PWD_REQUIRED = fs.readFileSync("/tmp/password");
-var QRID_PRESETS = {"70c81ac8":"Der Crepesstand", "0c79e268":"Der Dönerstand nebenan"};
+var QRID_PRESETS = {};
 var RADIO_BASEURL = "http://radio.saeu:8000/"
 
 function load_subdir (dir) {
