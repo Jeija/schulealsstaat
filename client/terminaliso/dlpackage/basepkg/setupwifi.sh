@@ -15,10 +15,10 @@ while [ -z "$WIFI_IFACE" ]; do
 	else
 		# Give the choice to the user
 		echo "No saswifi0 connected, please choose the wireless netork yourself"
-		IWNFO=$(iw dev; echo; iw phy)
+		IWNFO="$(iw dev)"
 		sleep 2
 		if [ -n "$IWNFO" ]; then
-			echo -e $IWDEV | less
+			echo -e "$(iw dev)\n\n\n$(iw list)" | less
 			# Get list of available wireless networks
 			AVAILABLE=$(find /sys/class/net/w* | sed "s/.*\///")
 

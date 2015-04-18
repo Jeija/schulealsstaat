@@ -12,7 +12,7 @@ trap "error" ERR
 trap "exec $0" EXIT
 trap "exec $0" SIGINT
 clear
-rm -r /tmp/*
+rm -rf /tmp/*
 
 # Countdown
 echo -n "Starting CentralBank Scripts [3s]"
