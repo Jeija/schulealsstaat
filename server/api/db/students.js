@@ -20,11 +20,6 @@ var studentSchema = new Schema({
 	// type: "checkin/checkout/...", date: server time at checkin / checkout
 	appear :	[{type : { type : String}, time : Date}],
 
-	/* Finances */
-	// type: "send" or "receive", reference: to document in transactions db
-	transactions :	[Schema.Types.ObjectId],
-	balance :	Number,
-
 	/* Password: */
 	pwdhash :	String,
 	pwdsalt :	String

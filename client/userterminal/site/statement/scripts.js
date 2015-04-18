@@ -26,7 +26,7 @@ function render_transactions (tr, balance) {
 
 		bal_now += is_sender ? -t.amount_sent : t.amount_received;
 
-		table.prepend($('<tr class="' + (is_sender ? "dec" : "inc") + '">')
+		table.append($('<tr class="' + (is_sender ? "dec" : "inc") + '">')
 			.append($('<td class="trt_type">')
 				.text(is_sender ? "Zahlung" : "Eingang"))
 			.append($('<td class="trt_time">')

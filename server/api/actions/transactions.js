@@ -31,13 +31,38 @@ register("get_balance", function (payload, answer, error, info) {
 			return;
 		}
 
-		if(!payload.password || !common.check_password(st, payload.password)) {
+		if(!common.check_password(st, payload.password)) {
 			answer("invalid_password");
 			return;
 		}
 
-		info("done for " + common.student_readable(st));
-		answer(String(st.balance));
+		db.transactions.getBalance(st._id, function (balance) {
+			answer(String(balance));
+			info("done for " + common.student_readable(st));
+		});
+	});
+});
+
+/**
+ * get_balance_master
+ *	qrid : String(QR-ID)
+ *
+ * respone values:
+ * a Number (in String)	--> balance of the person with qrid if password was correct
+ * invalid_qrid		--> the provided qrid doesn't exist
+ * error:<something>	--> Some other error, e.g. with JSON parsing
+ */
+register_cert("get_balance_master", ["master_hash"], function (payload, answer, error, info) {
+	db.students.getByQrid(payload, function (st) {
+		if (!st) {
+			answer("invalid_qrid");
+			return;
+		}
+
+		db.transactions.getBalance(st._id, function (balance) {
+			answer(String(balance));
+			info("done for " + common.student_readable(st));
+		});
 	});
 });
 
@@ -75,9 +100,18 @@ register("get_last_transactions", function (payload, answer, error, info) {
 			return;
 		}
 
-		db.transactions.getByIdList(st.transactions, function (tr) {
+		db.transactions.getByProperties({
+			$or : [
+				{ "sender.reference" : st._id },
+				{ "recipient.reference" : st._id }
+			]
+		}, function (tr) {
 			if (payload.amount > 0)
-				tr = tr.slice(0, payload.amount);
+			{
+				var min = tr.length - payload.amount;
+				if (min < 0) min = 0;
+				tr = tr.slice(min, tr.length);
+			}
 			info("done for " + common.student_readable(st));
 			answer(tr);
 		});
@@ -106,7 +140,11 @@ register("get_last_transactions", function (payload, answer, error, info) {
 register_cert("find_transactions", ["admin_hash"], function (payload, answer, error, info) {
 	db.transactions.getByProperties(payload.query, function (tr) {
 		if (payload.amount > 0)
-			tr = tr.slice(0, payload.amount);
+		{
+			var min = tr.length - payload.amount;
+			if (min < 0) min = 0;
+			tr = tr.slice(min, tr.length);
+		}
 		info("found " + tr.length + " matches");
 		answer(tr);
 	});
@@ -191,26 +229,28 @@ function transaction(sender_qrid, recipient_qrid, amount_sent, amount_received, 
 		if (!st) { answer("invalid_recipient"); return; }
 		recipient = st;
 
+		/*** Get sender balance from transactions chain ***/
+		if (spawn_money) this(true);
+		db.transactions.getBalance(sender._id, this);
+	}, function (balance_sender) {
 		/*** Calculate amount to transfer with taxes ***/
 		// In dubio pro central bank - round up after hgc_decimal_places,
 		// so central bank gets more tax income and recipient gets less money
 		// or sender has to pay more money
-		var amount_tax = amount_sent ?
-			gross2tax(amount_sent, tax) : net2tax(amount_received, tax);
+		var amount_tax = amount_sent ? gross2tax(amount_sent, tax) : net2tax(amount_received, tax);
 		amount_sent = amount_sent ? amount_sent : amount_received + amount_tax;
 		amount_received = amount_received ? amount_received : amount_sent - amount_tax;
 
-		// Check if sender still has enough money on his account + actual transaction
-		if (!spawn_money && sender.balance < amount_sent) { answer("nomoney"); return; }
-		if (!spawn_money) sender.balance -= amount_sent;
-		recipient.balance += amount_received;
-		taxinc.balance += amount_tax;
-		taxinc.save();
+		if (balance_sender !== true && balance_sender < amount_sent) {
+			answer("nomoney");
+			return;
+		}
 
 		/*** Generate sender / recipient entries for transaction DB ***/
 		// in case of spawn_money / destroy_money
 		if (destroy_money) recipient = { qrid : magic_account };
 		if (spawn_money) sender = { qrid : magic_account };
+
 		var recipient_public = common.student_public_only(recipient);
 		var sender_public = common.student_public_only(sender);
 		recipient_public.reference = recipient._id;
@@ -220,30 +260,25 @@ function transaction(sender_qrid, recipient_qrid, amount_sent, amount_received, 
 		db.transactions.add({
 			sender : sender_public,
 			recipient : recipient_public,
+			tax_recipient : taxinc._id,
 			time : Date(),
+
 			amount_sent : amount_sent,
 			amount_received : amount_received,
 			amount_tax : amount_tax,
 			percent_tax : tax,
-			comment : comment
-		}, function (dbtrans) {
-			if (!spawn_money) {
-				sender.transactions.push(dbtrans._id);
-				sender.save();
-			}
-			if (!destroy_money) {
-				recipient.transactions.push(dbtrans._id);
-				recipient.save();
-			}
 
-			var log_type = "transaction";
-			if (spawn_money) log_type = "spawn_money";
-			if (destroy_money) log_type = "destroy_money";
-			info(log_type + " from " + common.student_readable(sender) + " to " +
-				common.student_readable(recipient) + ", with net value " +
-				amount_received + " HGC, tax income is " + amount_tax + " HGC.");
-			answer("ok");
+			comment : comment
 		});
+
+		/* Log to console and answer with success */
+		var log_type = "transaction";
+		if (spawn_money) log_type = "spawn_money";
+		if (destroy_money) log_type = "destroy_money";
+		info(log_type + " from " + common.student_readable(sender) + " to " +
+			common.student_readable(recipient) + ", with net value " +
+			amount_received + " HGC, tax income is " + amount_tax + " HGC.");
+		answer("ok");
 	});
 }
 

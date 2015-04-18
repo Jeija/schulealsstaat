@@ -36,7 +36,7 @@ $(".comment").on("input", function () {
 
 /* Confirm */
 $(".confirm").click(function () {
-	this.disabled = true;
+	$(this).prop("disabled", true);
 
 	if (!current_sender) {
 		errorMessage("Der Absender fehlt:<br/>" +
@@ -85,7 +85,6 @@ $(".confirm").click(function () {
 		switch(res) {
 			case "ok":
 				$("#success").fadeIn();
-				$(".confirm").attr("disabled", false);
 				break;
 
 			case "nomoney":

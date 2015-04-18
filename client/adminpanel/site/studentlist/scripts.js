@@ -62,7 +62,8 @@ function render_list(list) {
 			.append($("<td>")
 				.text(st.qrid))
 			.append($('<td class="num">')
-				.text(st.balance.toFixed(3) + " HGC"))
+				.html('<input type="button" value="laden"' +
+					'class="balance_load" data-listid="' + i + '">'))
 			.append($("<td>")
 				.append('<input type="button" value="ändern"' +
 					'class="profile_open" data-listid="' + i + '">')
@@ -124,6 +125,19 @@ function render_list(list) {
 			});
 		}
 	});
+
+	$(".balance_load").click(function () {
+		var loadbutton = $(this);
+		var st = list[$(this).data("listid")];
+		var selector = "#master_cert_input";
+		action_mastercert("get_balance_master", st.qrid, selector, function (res) {
+			if (isNaN(res)) {
+				alert("Ungültige Antwort: " + res);
+			} else {
+				loadbutton.replaceWith(parseFloat(res).toFixed(3) + "HGC");
+			}
+		});
+	});
 }
 
 $(function() {
@@ -144,7 +158,7 @@ $(function() {
 		'<td><input type="button" value="Scan" class="qrid_scan"></td>'
 	).appendTo("#qrid");
 
-	var forms_compare = ["birth", "balance"];
+	var forms_compare = ["birth"];
 	forms_compare.forEach(function (f) {
 		$(	'<td><input type="text" class="criterium"></td>' +
 			'<td><input name="compare_' + f + '" type="radio" value="greater"></td>' +
@@ -197,13 +211,13 @@ $(function() {
 	}
 
 	$("#loadfilter").click(function () {
+		$("#studentlist").html("");
 		var condition = {};
 		cond_yesno(condition, "firstname");
 		cond_yesno(condition, "lastname");
 		cond_yesno(condition, "qrid");
 		cond_yesno(condition, "type");
 		cond_yesno(condition, "country");
-		cond_compare(condition, "balance");
 		cond_compare(condition, "birth");
 
 		var cond = {}, crit, tc;
@@ -233,6 +247,7 @@ $(function() {
 	});
 
 	$("#query_go").click(function () {
+		$("#studentlist").html("");
 		var req = {query : JSON.parse($("#mongoose_query").val())};
 		action_cert("get_students", req, "admin_cert", function (res) {
 			var students = res;

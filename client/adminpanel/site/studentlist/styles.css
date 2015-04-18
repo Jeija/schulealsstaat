@@ -12,7 +12,7 @@
 .qrid_scan:hover {
 }
 
-.profile_open, .student_delete {
+.profile_open, .student_delete, .balance_load {
 	margin-right:3px;
 	border:none !important;
 	font-weight:bold;
@@ -20,7 +20,7 @@
 	font-size:16px;
 }
 
-.profile_open:hover, .student_delete:hover {
+.profile_open:hover, .student_delete:hover, .balance_load:hover {
 	background:transparent !important;
 	color:#00f;
 }
