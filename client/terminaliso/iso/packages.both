@@ -13,7 +13,6 @@ mesa-libgl
 mesa
 v4l-utils
 xterm
-nodejs
 nss
 gconf
 alsa-lib
@@ -39,3 +38,4 @@ rfkill
 tmux
 ffmpeg
 ttf-ubuntu-font-family
+ntp

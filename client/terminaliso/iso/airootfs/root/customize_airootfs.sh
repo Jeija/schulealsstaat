@@ -6,7 +6,7 @@ echo "######################"
 echo "customize_airootfs.sh"
 
 # Remove unused packages from base install
-pacman -Rns dhcpcd xfsprogs reiserfsprogs lvm2 --noconfirm
+pacman -Rns dhcpcd xfsprogs reiserfsprogs lvm2 --noconfirm || true
 
 # Locale
 sed -i 's/#\(de_DE\.UTF-8\)/\1/' /etc/locale.gen

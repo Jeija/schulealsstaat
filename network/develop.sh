@@ -39,6 +39,7 @@ ip link set up dev $BR_IFACE
 ip link set up dev $ETH_IFACE
 ip addr add dev $BR_IFACE $IP
 ip addr add dev $BR_IFACE 192.168.0.100/16 # just for development
+ip addr add dev $BR_IFACE 192.168.2.11/16 # ntp.saeu
 ip addr add dev $BR_IFACE 192.168.2.30/16 # api.saeu
 ip addr add dev $BR_IFACE 192.168.2.31/16 # cam.saeu
 ip addr add dev $BR_IFACE 192.168.2.32/16 # packages.saeu
@@ -48,12 +49,13 @@ ip route add default via $GATEWAY
 ebtables --flush
 ebtables -I INPUT -p ipv4 --ip-dst 255.255.255.255 -j DROP
 
-# Start DHCP + DNS Server + Walled Garden
-echo "Starting DHCP + DNS + Walled Garden Server"
+# Start DHCP + DNS Server + Walled Garden + NTP
+echo "Starting DHCP + DNS + Walled Garden + NTP Server"
 cp $CWD/dhcp/dhcpd.conf /etc/dhcpd.conf
 SESSION="SaEUnet"
 tmux -2 new-session -d -s "$SESSION"
 tmux rename-window "SaEU Network Management"
+tmux split-window -h -p 75
 tmux split-window -h -p 67
 tmux split-window -h
 tmux select-pane -t 0
@@ -61,10 +63,13 @@ sleep 0.5
 tmux send-key "nodemon $CWD/walledgarden/server.js" C-m
 tmux select-pane -t 1
 sleep 0.5
-tmux send-key "nodemon $CWD/dns/main.js production" C-m
+tmux send-key "nodemon $CWD/dns/main.js" C-m
 tmux select-pane -t 2
 sleep 0.5
 tmux send-key "sudo dhcpd -4 -d" C-m
+tmux select-pane -t 3
+sleep 0.5
+tmux send-key "$CWD/ntp/ntp.sh" C-m
 tmux set-option mode-mouse on
 tmux set-option mouse-select-pane on
 tmux set-option mouse-resize-pane on

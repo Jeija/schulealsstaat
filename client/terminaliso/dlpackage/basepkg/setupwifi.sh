@@ -15,24 +15,30 @@ while [ -z "$WIFI_IFACE" ]; do
 	else
 		# Give the choice to the user
 		echo "No saswifi0 connected, please choose the wireless netork yourself"
+		IWNFO=$(iw dev; echo; iw phy)
 		sleep 2
-		{ iw dev; echo; iw phy; } | less
-		# Get list of available wireless networks
-		AVAILABLE=$(find /sys/class/net/w* | sed "s/.*\///")
+		if [ -n "$IWNFO" ]; then
+			echo -e $IWDEV | less
+			# Get list of available wireless networks
+			AVAILABLE=$(find /sys/class/net/w* | sed "s/.*\///")
 
-		# Make dialog out of wireless networks list
-		LIST=()
-		while read -r line; do
-			LIST+=("$line /dev/$line")
-		done <<< "$AVAILABLE"
-
-		echo "${LIST[@]}"
-		# Show dialog
-		exec 3>&1
-		TITLE="Choose WiFi interface"
-		MSTRING="Cancel to reload available interfaces, saswifi0 is default"
-		WIFI_IFACE=$(dialog --title "$TITLE" --menu "$MSTRING" 15 80 8 ${LIST[@]} 2>&1 1>&3)
-		exec 3>&-
+			# Make dialog out of wireless networks list
+			LIST=()
+			while read -r line; do
+				LIST+=("$line /dev/$line")
+			done <<< "$AVAILABLE"
+			echo "${LIST[@]}"
+			# Show dialog
+			exec 3>&1
+			TITLE="Choose WiFi interface"
+			MSTRING="Cancel to reload available interfaces, saswifi0 is default"
+			WIFI_IFACE=$(dialog --title "$TITLE" --menu "$MSTRING" 15 80 8 ${LIST[@]} 2>&1 1>&3)
+			exec 3>&-
+		else
+			echo "No other WiFi cards found!"
+			echo "Restarting search..."
+			sleep 1
+		fi
 	fi
 done
 

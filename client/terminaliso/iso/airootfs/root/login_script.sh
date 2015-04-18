@@ -1,4 +1,6 @@
 #!/bin/bash
+PKGSERVER="http://packages.saeu:100"
+NTPSERVER="ntp.saeu"
 
 function error
 {
@@ -8,6 +10,9 @@ function error
 }
 trap "error" ERR
 trap "exec $0" EXIT
+trap "exec $0" SIGINT
+clear
+rm -r /tmp/*
 
 # Countdown
 echo -n "Starting CentralBank Scripts [3s]"
@@ -26,7 +31,6 @@ ETH_IFACE=$(find /sys/class/net/e* | sed "s/.*\///")
 exec 3>&1
 IP=$(dialog --nocancel --inputbox IP\ Address? 10 50 192.168.5.1/16 2>&1 1>&3)
 DNSSERVER=$(dialog --nocancel --inputbox DNS\ Server? 10 50 192.168.2.10 2>&1 1>&3)
-PKGSERVER=$(dialog --nocancel --inputbox Package\ Server? 10 50 http://packages.saeu:100 2>&1 1>&3)
 exec 3>&-
 
 # Setup Network
@@ -38,6 +42,20 @@ if [ ! -d /sys/class/net/$BRIDGE_IFACE ]; then
 	ip addr add dev $BRIDGE_IFACE $IP
 fi
 echo "nameserver $DNSSERVER" > /etc/resolv.conf
+
+# Wait until network is up (connection to DNS server)
+until ping -c 1 -w 2 $DNSSERVER; do
+	ip link
+	echo -e "\n\n\n--> No network connection! \n\n\n"
+	sleep 1
+done
+
+# Synchronize time
+echo -e "\n\n\nWaiting for NTP (time) synchronization from ntp.saeu / ntp2.saeu ...\n"
+ntpd -gqc /dev/null -I $BRIDGE_IFACE -4 ntp.saeu ntp2.saeu
+echo "Received time information:"
+date
+sleep 3
 
 # Setup GnuPG Keys
 echo "Importing GPG Public Key for Signature Checking"
