@@ -117,3 +117,22 @@ $(".confirm").click(function () {
 				"Bitte versuche es später noch einmal.");
 	}, 1500);
 });
+
+/** QR-ID Presets **/
+for (var target_qrid in QRID_PRESETS) {
+	var target_name = QRID_PRESETS[target_qrid];
+	$('<div class="preset" data-qrid="' + target_qrid + '">')
+		.text(target_name).appendTo($("#recipient_presets"));
+}
+
+$("#recipient_presets .preset").click(function () {
+	var presets = $(this).parent();
+	var sectionref = $(".section.recipient").children();
+	student_identify({qrid : $(this).data("qrid")}, sectionref, function (st) {
+		presets.hide();
+		$(".section.recipient .section_complete").click(function () {
+			presets.show();
+		});
+		handleIdentifyAnswer(sectionref, st);
+	});
+});

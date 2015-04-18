@@ -23,6 +23,7 @@ ip addr
 mkdir -p /tmp/userterminal
 cp -R $CWD/userterminal/* /tmp/userterminal
 cp $CWD/xinitrc /root/.xinitrc
+dialog --insecure --passwordbox "Settings password?" 10 2> /tmp/password
 
 ### Audio volume ###
 amixer sset Master 100%

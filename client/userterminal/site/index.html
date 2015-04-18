@@ -31,6 +31,15 @@
 		<img src="eu.png" id="header_eu">
 	</ul></div>
 
+	<!-- Settings dialog -->
+	<div id="settings" hidden>
+		<div class="settings-heading">Preset Target QR-IDs (JSON)</div>
+		<input type="text" id="qrid_presets" value="{}">
+		<div class="settings-heading">Settings Password</div>
+		<input type="password" id="settings_password">
+		<input type="button" id="settings_exit" value="Exit">
+	</div>
+
 	<!-- Load the actual page content in #page (AJAX) -->
 	<div id="page"></div>
 </body>

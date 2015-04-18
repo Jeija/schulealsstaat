@@ -1,1 +1,23 @@
 /* Anything that could possibly be used in multiple pages was moved to ../common.css */
+
+#recipient_presets .preset {
+	font-size:2vw;
+	padding:calc(0.3vw + 2px);
+	background:transparent;
+	width:70%;
+	margin:0 auto;
+	margin-top:0.5vw;
+	border-radius:5px;
+	border:1px solid #aaa;
+	color:#ddd;
+	cursor:pointer;
+}
+
+#recipient_presets .preset:hover {
+	background:#777;
+}
+
+#recipient_presets .preset:active {
+	padding:0.3vw;
+	border:3px solid #aaa;
+}

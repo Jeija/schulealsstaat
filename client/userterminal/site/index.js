@@ -1,3 +1,6 @@
+var fs = require("fs");
+var PWD_REQUIRED = fs.readFileSync("/tmp/password");
+var QRID_PRESETS = {"70c81ac8":"Der Crepesstand", "0c79e268":"Der Dönerstand nebenan"};
 var RADIO_BASEURL = "http://radio.saeu:8000/"
 
 function load_subdir (dir) {
@@ -53,6 +56,29 @@ $(function () {
 
 	$("#volume").on("input change", function () {
 		$("#radio").prop("volume", this.value);
+	});
+
+	// 5x click on EU flag opens configuration
+	var clicknum = 0;
+	$("#header_eu").click(function () {
+		clicknum++;
+		if (clicknum >= 5) $("#settings").show();;
+		setTimeout(function () {
+			clicknum = 0;
+		}, 1000);
+	});
+
+	$("#settings_exit").click(function () {
+		$("#settings").hide();
+		var password = $("#settings_password").val();
+		$("#settings_password").val("");
+		if (password == PWD_REQUIRED) {
+			try {
+				QRID_PRESETS = JSON.parse($("#qrid_presets").val());
+			} catch(e) {
+				alert(e);
+			}
+		}
 	});
 
 	startRadio();

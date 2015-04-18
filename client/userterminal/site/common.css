@@ -104,8 +104,55 @@ body {
 	float:right top;
 }
 
-/* Description */
+/* Settings */
+#settings {
+	text-align:center;
+	z-index:5;
+	position:fixed;
+	padding:1vw;
+	bottom:0;
+	right:0;
+	left:0;
+	top:0;
+	margin:auto;
+	height:20vw;
+	width:50vw;
+	background-color:rgba(0, 0, 0, 0.95);
+	border:3px solid #0f0;
+	color:#0f0;
+}
 
+.settings-heading {
+	font-size:2vw;
+	margin-top:2vw;
+}
+
+#settings input[type="text"], #settings input[type="password"] {
+	border:1px solid #0f0;
+	width:80%;
+	background:#000;
+	font-size:1.5vw;
+	padding:0.4vw;
+	color:#0f0;
+}
+
+#settings_exit {
+	display:block;
+	margin:auto;
+	margin-top:2vw;
+	background:#000;
+	padding:0.5vw 2vw;
+	font-size:2vw;
+	color:#0f0;
+	border:2px solid #0f0;
+	cursor:pointer;
+}
+
+#settings_exit:hover {
+	background:#050;
+}
+
+/* Description */
 #description {
 	position:relative;
 	padding:30px;
@@ -152,7 +199,6 @@ body {
 }
 
 /* Section */
-
 .section {
 	width:100%;
 	overflow:hidden;
@@ -177,7 +223,6 @@ body {
 }
 
 .section_complete {
-	background:#fff;
 	backface-visibility:hidden;
 	transition:transform 0.5s;
 	transform:rotateY(-180deg);
