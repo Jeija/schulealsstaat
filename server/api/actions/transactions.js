@@ -106,14 +106,35 @@ register("get_last_transactions", function (payload, answer, error, info) {
 				{ "recipient.reference" : st._id }
 			]
 		}, function (tr) {
-			if (payload.amount > 0)
-			{
-				var min = tr.length - payload.amount;
-				if (min < 0) min = 0;
-				tr = tr.slice(min, tr.length);
-			}
-			info("done for " + common.student_readable(st));
-			answer(tr);
+			// Little hack: If account described by qrid has received tax income,
+			// transform these tax income transactions into normal ones and display them
+			db.transactions.getByProperties({
+				"tax_recipient" : st._id
+			}, function (tr_tax) {
+				for (var i = 0; i < tr_tax.length; i++) {
+					if (tr_tax[i].amount_tax > 0) {
+						tr.push({
+							sender : tr_tax[i].sender,
+							recipient : common.student_public_only(st),
+							time : tr_tax[i].time,
+							amount_sent : tr_tax[i].amount_tax,
+							amount_received : tr_tax[i].amount_tax,
+							amount_tax : 0,
+							percent_tax : 0,
+							comment : "!!! Transformed tax income transaction !!!"
+						});
+					}
+				}
+
+				if (payload.amount > 0)
+				{
+					var min = tr.length - payload.amount;
+					if (min < 0) min = 0;
+					tr = tr.slice(min, tr.length);
+				}
+				info("done for " + common.student_readable(st));
+				answer(tr);
+			});
 		});
 	});
 });
