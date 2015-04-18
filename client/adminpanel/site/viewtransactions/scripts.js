@@ -22,6 +22,15 @@ function datetime_readable (datestring) {
 		+ " " + ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2);
 }
 
+function student_readable (st) {
+	return st.qrid +
+		(st.firstname ? (": " + st.firstname + " ") : "") +
+		(st.lastname ? (st.lastname + ", ") : "") +
+		(st.special_name ? (": " + st.special_name + ", ") : "") +
+		(st.type ? st.type + " " : "") +
+		(st.country ? "(" + st.country.toUpperCase() + ")" : "");
+}
+
 function render_transactions (trlist) {
 	$("#transactions").html("");
 	$("#transactions").append($("<tr>")
@@ -39,12 +48,8 @@ function render_transactions (trlist) {
 		var tr = trlist[i];
 		$("#transactions").append($("<tr>")
 			.append($('<td>').text(datetime_readable(tr.time)))
-			.append($('<td>').text(tr.sender.qrid +
-				((typeof tr.sender.country != "undefined") ?
-				" (" + country_readable(tr.sender.country) + ")" : "")))
-			.append($('<td>').text(tr.recipient.qrid +
-				((typeof tr.recipient.country != "undefined") ?
-				" (" + country_readable(tr.recipient.country) + ")" : "")))
+			.append($('<td class="lalign">').text(student_readable(tr.sender)))
+			.append($('<td class="lalign">').text(student_readable(tr.recipient)))
 			.append($('<td class="num">').text(tr.amount_sent.toFixed(3)))
 			.append($('<td class="num">').text(tr.amount_received.toFixed(3)))
 			.append($('<td class="num">').text(tr.percent_tax))
@@ -106,11 +111,24 @@ $("#query").click(function () {
 		}
 	};
 
-	// Load query from UI
+	/*** Load query from UI ***/
+	// Sender
 	addTableVal(payload.query, "sender.qrid", "#sender_qrid");
 	addTableVal(payload.query, "sender.country", "#sender_country");
+	addTableVal(payload.query, "sender.firstname", "#sender_firstname");
+	addTableVal(payload.query, "sender.lastname", "#sender_lastname");
+	addTableVal(payload.query, "sender.special_name", "#sender_special_name");
+	addTableVal(payload.query, "sender.type", "#sender_type");
+
+	// Recipient
 	addTableVal(payload.query, "recipient.qrid", "#recipient_qrid");
 	addTableVal(payload.query, "recipient.country", "#recipient_country");
+	addTableVal(payload.query, "recipient.firstname", "#recipient_firstname");
+	addTableVal(payload.query, "recipient.lastname", "#recipient_lastname");
+	addTableVal(payload.query, "recipient.special_name", "#recipient_special_name");
+	addTableVal(payload.query, "recipient.type", "#recipient_type");
+
+	// Monetary
 	addTableVal(payload.query, "percent_tax", "#percent_tax");
 	addTableVal(payload.query.time, "$lt", "#time_before", true);
 	addTableVal(payload.query.time, "$gt", "#time_after", true);

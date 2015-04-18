@@ -15,7 +15,7 @@
 
 #infotable_container {
 	position:relative;
-	height:280px;
+	height:320px;
 	background:#ccc;
 	box-shadow:0 0 10px #000;
 	margin-bottom:10px;
@@ -126,7 +126,7 @@
 
 #n_transactions {
 	position:absolute;
-	right:150px;
+	right:175px;
 	bottom:20px;
 	width:103px;
 }
@@ -150,6 +150,10 @@
 #transactions td {
 	padding:3px 14px;
 	border:1px solid #666;
+}
+
+#transactions td.lalign {
+	text-align:left;
 }
 
 #transactions td.num {
