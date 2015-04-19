@@ -1,8 +1,8 @@
-var openssl = require("openssl-wrapper");
 var ursa = require("ursa");
 var fs = require("fs");
 var cert = require("../cert");
 var log = require("../logging");
+var aes = require("../aes_gibberish");
 
 // Load private key to decrypt requests
 var PRIVKEY_FILE = "privkey.pem";
@@ -46,37 +46,18 @@ function decrypt_aes_key(passphrase) {
  * These function handle both encryption / decryption as well as
  * serialization / deserialization.
  */
-function decrypt_query(query_enc, aes_key, error, answer, callback) {
-	var query_buf = new Buffer(query_enc);
-	var ssl_options = {
-		"d" : true,
-		"aes-256-cbc" : true,
-		"a" : true,
-		"k" : aes_key // child_process.spawn sanitizes user input
-	};
-
-	openssl.exec("enc", query_buf, ssl_options, function (err, plain) {
-		try {
-			callback(JSON.parse(plain.toString()));
-		} catch(e) {
-			error("catch (decrypt_query): " + e);
-			answer("error: " + e);
-		}
-	});
+function decrypt_query(query_enc, aes_key, error, answer) {
+	try {
+		var plain = aes.decrypt(query_enc, aes_key);
+		return JSON.parse(plain.toString());
+	} catch(e) {
+		error("catch (decrypt_query): " + e);
+		answer("error: " + e);
+	}
 }
 
 function encrypt_query(query_plain, aes_key, callback) {
-	var query_buf = new Buffer(JSON.stringify(query_plain));
-	var ssl_options = {
-		"e" : true,
-		"aes-256-cbc" : true,
-		"a" : true,
-		"k" : aes_key // child_process.spawn sanitizes user input
-	};
-
-	openssl.exec("enc", query_buf, ssl_options, function (err, query_buf) {
-		callback(query_buf.toString());
-	});
+	return aes.encrypt(JSON.stringify(query_plain), aes_key);
 }
 
 /**
@@ -130,9 +111,7 @@ function prepare_action(name, post, req, res)
 
 	var API_answer = function (msg) {
 		if (!msg) return;
-		encrypt_query(msg, aes_key, function (enc) {
-			res.end(enc);
-		});
+		res.end(encrypt_query(msg, aes_key));
 	};
 
 	/**
@@ -140,18 +119,17 @@ function prepare_action(name, post, req, res)
 	 * Also check the certificate, cert.check will look if the action
 	 * really requires one and checks it if it does.
 	 */
-	decrypt_query(encrypted, aes_key, API_error, API_answer, function (query) {
-		cert.check(actions[name].cert, query.cert, ip, function () {
-			try {
-				actions[name].action(query.payload, API_answer, API_error, API_info, req);
-			} catch(e) {
-				API_error("catch (action): " + e);
-				API_answer("error: " + e);
-			}
-		}, function () {
-			API_error("incorrect certificate");
-			API_answer("error: incorrect certificate");
-		});
+	var query = decrypt_query(encrypted, aes_key, API_error, API_answer);
+	cert.check(actions[name].cert, query.cert, ip, function () {
+		try {
+			actions[name].action(query.payload, API_answer, API_error, API_info, req);
+		} catch(e) {
+			API_error("catch (action): " + e);
+			API_answer("error: " + e);
+		}
+	}, function () {
+		API_error("incorrect certificate");
+		API_answer("error: incorrect certificate");
 	});
 }
 

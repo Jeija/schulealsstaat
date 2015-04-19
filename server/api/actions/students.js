@@ -276,8 +276,6 @@ register_cert("ec_checkout", ["ec_hash", "admin_hash"], function (payload, answe
 
 // #################### REGISTRATION ####################
 register_cert("register_student", ["registration_hash"], function (payload, answer, error, info) {
-	info("Registering: " + common.student_readable(payload));
-
 	// Type / School class:
 	var type = payload.sclass + payload.subclass;
 
@@ -309,7 +307,7 @@ register_cert("register_student", ["registration_hash"], function (payload, answ
 		// Otherwise: register student
 		var crypt = generate_pwdhash(payload.password);
 
-		var info = {
+		var st = {
 			qrid : qrid,
 
 			firstname : payload.firstname,
@@ -321,13 +319,14 @@ register_cert("register_student", ["registration_hash"], function (payload, answ
 			type : payload.sclass + payload.subclass,
 
 			transactions : [],
-			balance : 0,
 
 			pwdhash : crypt.hash,
 			pwdsalt : crypt.salt
 		};
 
-		db.students.add(info);
+		info("Registering: " + common.student_readable(st));
+
+		db.students.add(st);
 		answer("ok");
 	}
 
