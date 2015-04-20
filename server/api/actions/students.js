@@ -36,6 +36,7 @@ register_cert("students_dump", ["admin_hash"], function (payload, answer, error,
 		});
 	} else {
 		db.students.getAll(function (list) {
+			info("got list from database");
 			answer(list);
 			info("student_dump complete");
 		});

@@ -57,14 +57,16 @@ module.exports = {
 	},
 
 	getAll : function (cb) {
-		Student.find({}, function (err, list) {
+		console.log("getAll");
+		Student.find().lean().exec(function (err, list) {
+			console.log("find complete");
 			if (err) log.err("MongoDB", "stdb.getAll failed: " + err);
 			cb(list);
 		});
 	},
 
 	getCertainAll : function (fields, cb) {
-		Student.find({}, fields, function (err, list) {
+		Student.find({}, fields).lean().exec(function (err, list) {
 			if (err) log.err("MongoDB", "stdb.getCertainAll failed: " + err);
 			cb(list);
 		});

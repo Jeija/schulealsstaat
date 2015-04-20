@@ -1,11 +1,20 @@
 var TCPPORT = 1230;
 
-var http = require("http");
 var log = require("./logging.js");
-var actions = require("./actions");
+var cluster = require("cluster");
+var http = require("http");
+var os = require("os");
 
 /**
- * Use requests as follows:
+ * ### API multi-process cluster ###
+ * This program runs multiple instances of the API server, one per CPU core.
+ * Workers will pick API requests and perform database queries asynchronously.
+ * Since critical database data (such as transactions) are only added and never
+ * modified, relevant data will be consistent nevertheless.
+ */
+
+/**
+ * ### API request Format ###
  * [IP]:[TCPPORT]/action/[ACTIONNAME], for instance:
  * 192.168.0.50:1230/action/student_checkin
  * [ACTIONNAME] is the name of the action registered via register([ACTION_NAME], function() {})
@@ -24,27 +33,43 @@ var actions = require("./actions");
  *		cert : String -- authentication certificate to authorize the action (optional)
  *	}
  * }
- */ 
-http.createServer(function (req, res) {
-	// Parse HTTP query
-	var fragments = req.url.substring(1).split("/");
-	var query = fragments.splice(0, 2);
-	query.push(fragments.join('/'));
+ */
 
-	if (query[0] == "ping") {
-		res.writeHead(204, {"Access-Control-Allow-Origin" : "*"});
-		res.end();
-	} else if (query[0] == "action") {
-		res.writeHead(200, {"Content-Type": "text/plain",
-			"Access-Control-Allow-Origin" : "*"});
-		actions(query[1], req, res);
-	} else {
-		// empty answer, but with Access-Control-Allow-Origin: *
-		res.writeHead(200, {"Content-Type": "text/plain",
-			"Access-Control-Allow-Origin" : "*"});
-		res.end();
-	}
-}).listen(TCPPORT);
+var nCPU = os.cpus().length;
 
-log.ok("NodeJS", "Server started");
-log.info("NodeJS", "listening at port " + TCPPORT);
+// Master: Spawn workers
+if (cluster.isMaster) {
+	log.info("Master", "Detected " + nCPU + " CPU cores, spawning workers");
+	for (var i = 0; i < nCPU; i++) cluster.fork();
+	cluster.on("exit", function (worker, code, signal) {
+		log.err("Master", "Worker " + worker.process.pid + " exited with " + signal + "!");
+	});
+	log.ok("Master", "All workers spawned!");
+
+// Worker: Run API server on shared TCP socket
+} else {
+	var actions = require("./actions");
+
+	log.ok("Worker", "(" + process.pid + ") Process Created!");
+	http.createServer(function (req, res) {
+		// Parse HTTP query
+		var fragments = req.url.substring(1).split("/");
+		var query = fragments.splice(0, 2);
+		query.push(fragments.join('/'));
+
+		if (query[0] == "ping") {
+			res.writeHead(204, {"Access-Control-Allow-Origin" : "*"});
+			res.end();
+		} else if (query[0] == "action") {
+			res.writeHead(200, {"Content-Type": "text/plain",
+				"Access-Control-Allow-Origin" : "*"});
+			actions(query[1], req, res);
+		} else {
+			// empty answer, but with Access-Control-Allow-Origin: *
+			res.writeHead(200, {"Content-Type": "text/plain",
+				"Access-Control-Allow-Origin" : "*"});
+			res.end();
+		}
+	}).listen(TCPPORT);
+	log.ok("Worker", "(" + process.pid + ") Listening on shared TCP Port " + TCPPORT);
+}

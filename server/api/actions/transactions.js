@@ -73,6 +73,8 @@ register_cert("get_balance_master", ["master_hash"], function (payload, answer, 
  *	amount : Number (returns <amount> last transactions or all transactions if amount <= 0)
  * }
  *
+ * If there are incoming tax transactions and normal transactions, it will show the last <amount> of each of them.
+ *
  * respone values:
  * Array		--> transactions of the person with qrid if password was correct
  *			--> Form: [{
@@ -105,12 +107,12 @@ register("get_last_transactions", function (payload, answer, error, info) {
 				{ "sender.reference" : st._id },
 				{ "recipient.reference" : st._id }
 			]
-		}, function (tr) {
+		}, payload.amount, function (tr) {
 			// Little hack: If account described by qrid has received tax income,
 			// transform these tax income transactions into normal ones and display them
 			db.transactions.getByProperties({
 				"tax_recipient" : st._id
-			}, function (tr_tax) {
+			}, payload.amount, function (tr_tax) {
 				for (var i = 0; i < tr_tax.length; i++) {
 					if (tr_tax[i].amount_tax > 0) {
 						tr.push({
@@ -126,12 +128,6 @@ register("get_last_transactions", function (payload, answer, error, info) {
 					}
 				}
 
-				if (payload.amount > 0)
-				{
-					var min = tr.length - payload.amount;
-					if (min < 0) min = 0;
-					tr = tr.slice(min, tr.length);
-				}
 				info("done for " + common.student_readable(st));
 				answer(tr);
 			});
@@ -159,7 +155,7 @@ register("get_last_transactions", function (payload, answer, error, info) {
  * Array may also be empty, if no matching transactions were found
  */
 register_cert("find_transactions", ["admin_hash"], function (payload, answer, error, info) {
-	db.transactions.getByProperties(payload.query, function (tr) {
+	db.transactions.getByProperties(payload.query, payload.amount, function (tr) {
 		if (payload.amount > 0)
 		{
 			var min = tr.length - payload.amount;
@@ -328,6 +324,11 @@ function transaction(sender_qrid, recipient_qrid, amount_sent, amount_received, 
  * too_many_decplaces	--> Amount has more decimal places than hgc_tr_decimal_places allows
  * error:<something>	--> Some other error, e.g. with JSON parsing
  */
+function nDecimals(number) {
+	var decimals = number.toString().split(".")[1];
+	return decimals ? decimals.length : 0;
+}
+
 function transaction_common(payload, answer, error, info, tax) {
 	/*** Gather data from payload ***/
 	var sender = payload.sender;
@@ -343,9 +344,9 @@ function transaction_common(payload, answer, error, info, tax) {
 
 	/*** Check if amount has more than hgc_tr_decimal_places decimals ***/
 	var tr_decplaces = config.get("hgc_tr_decimal_places", 2);
-	if (sent && (sent * Math.pow(10, tr_decplaces)) % 1 !== 0)
+	if (sent && nDecimals(sent) > tr_decplaces)
 		{ answer("too_many_decplaces"); return; }
-	if (received && (received * Math.pow(10, tr_decplaces)) % 1 !== 0)
+	if (received && nDecimals(received) > tr_decplaces)
 		{ answer("too_many_decplaces"); return; }
 
 	/*** Check sender password + perform transaction ***/

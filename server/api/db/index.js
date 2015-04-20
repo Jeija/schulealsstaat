@@ -9,7 +9,7 @@ db.on("error", function (err) {
 });
 
 db.once("open", function () {
-	log.ok("MongoDB", "Connection established");
+	log.ok("Worker", "(" + process.pid + ")" + " MongoDB Connection established");
 });
 
 module.exports = {

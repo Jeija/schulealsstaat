@@ -110,7 +110,6 @@ function prepare_action(name, post, req, res)
 	}
 
 	var API_answer = function (msg) {
-		if (!msg) return;
 		res.end(encrypt_query(msg, aes_key));
 	};
 

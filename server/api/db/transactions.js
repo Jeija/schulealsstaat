@@ -54,13 +54,22 @@ module.exports = {
 		});
 	},
 
-	getByProperties : function (properties, cb) {
-		Transaction.find(properties).sort({
-			"time" : "ascending"
-		}).exec(function (err, st) {
-			if (err) log.err("MongoDB", "stdb.getByProperties failed: " + err);
-			cb(st);
-		});
+	getByProperties : function (properties, limit, cb) {
+		if (!limit || limit < 0) {
+			Transaction.find(properties).sort({
+				"time" : "descending"
+			}).lean().exec(function (err, st) {
+				if (err) log.err("MongoDB", "stdb.getByProperties failed: " + err);
+				cb(st);
+			});
+		} else {
+			Transaction.find(properties).sort({
+				"time" : "descending"
+			}).limit(limit).lean().exec(function (err, st) {
+				if (err) log.err("MongoDB", "stdb.getByProperties failed: " + err);
+				cb(st);
+			});
+		}
 	},
 
 	getBalance : function (id, cb) {

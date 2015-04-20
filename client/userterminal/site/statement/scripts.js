@@ -17,7 +17,7 @@ function render_transactions (tr, balance) {
 	table.html("");
 
 	var bal_now = 0;
-	for (var i = 0; i < tr.length; i++) {
+	for (var i = tr.length - 1; i >= 0; i--) {
 		var t = tr[i];
 		var is_sender = (t.sender.qrid === current_qrid);
 		var comment = "(kein Kommentar)";
