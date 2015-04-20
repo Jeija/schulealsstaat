@@ -24,6 +24,7 @@ echo -ne "$PUBKEY" > $ROOT/client/registration/site/pubkey.pem
 echo -ne "$PUBKEY" > $ROOT/client/userterminal/site/pubkey.pem
 echo -ne "$PUBKEY" > $ROOT/client/genrequest/site/pubkey.pem
 echo -ne "$PUBKEY" > $ROOT/testing/api/pubkey.pem
+echo -ne "$PUBKEY" > $ROOT/testing/autotest/pubkey.pem
 
 # Generate certificates
 $ROOT/util/gencert.sh
@@ -36,6 +37,7 @@ cp $ROOT/client/common/api.js $ROOT/client/adminpanel/site/
 cp $ROOT/client/common/api.js $ROOT/client/entrycheck/site/
 cp $ROOT/client/common/api.js $ROOT/client/app/www/js/
 cp $ROOT/client/common/api.js $ROOT/testing/api/
+cp $ROOT/client/common/api.js $ROOT/testing/autotest/
 
 # Copy cert.js + logging.js to all server applications that use it
 cp $ROOT/server/common/cert.js $ROOT/server/api/cert.js

@@ -1,0 +1,15 @@
+{
+  "name": "sas_api",
+  "description": "Schule als EU Database API Server",
+  "author": "Computer AG",
+  "dependencies": {
+    "jsdom": "^5.0.1",
+    "najax": "^0.1.5",
+    "openssl-wrapper": "^0.2.1",
+    "ursa": "^0.8.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Jeija/schulealsstaat"
+  }
+}
