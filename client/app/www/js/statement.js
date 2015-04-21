@@ -11,7 +11,7 @@ $(function () {
 		amount : 5
 	}, function (res) {
 		if (typeof res != "object") {
-			alert("Error: " + res);
+			errorMessage("Error: " + res);
 			return;
 		}
 
@@ -26,14 +26,16 @@ $(function () {
 
 		for (var i = 0; i < res.length; i++) {
 			var trans = res[i];
-			var is_sender = (trans.sender === storage.get("qrid"));
+			var is_sender = (trans.sender.qrid === storage.get("qrid"));
 			var amount = is_sender ? -trans.amount_sent : trans.amount_received;
 			var typeclass = is_sender ? "outgoing" : "incoming";
-			statement.append($('<div class="entry ' + typeclass + '">')
+			statement.prepend($('<div class="entry ' + typeclass + '">')
+				.append($('<div class="description">')
+					.text(student2readable(is_sender ? trans.recipient : trans.sender)))
 				.append($('<div class="qrid">')
 					.text(is_sender ? trans.recipient.qrid : trans.sender.qrid))
 				.append($('<div class="amount">')
-					.text(HGC_readable(amount)))
+					.text(HGC_readable(amount) + " HGC"))
 			);
 		}
 

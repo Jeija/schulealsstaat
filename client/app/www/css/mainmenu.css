@@ -1,39 +1,59 @@
-#statusbar {
-	border-bottom:0.4vw solid #fff;
-	height:5vw;
-	font-size:4.5vw;
-}
-
-#qrid {
+.mainheadline > .qrid {
+	font-size:4vw;
 	position:absolute;
-	display:block;
-	left:4vw;
+	right:2vw;
+	top:4vw;
 }
 
-#version {
-	position:absolute;
+#saeu {
 	display:block;
-	right:4vw;
-}
-
-#hgc {
-	float: left;
-	width: 50vw
+	width:20vw;
+	margin:5vw auto 0 auto;
 }
 
 #infocontainer {
-	display: inline-block;
-	width: 95vw;
-	background-color: #444;
-	border-radius: 1vw;
-	padding: 1vw;
-	margin-top: 2vw;
+	text-align:center;
 }
 
-#hgc_container, #last_transaction {
-	display: inline-block;
-	padding: 2vw;
-	float: right;
-	width: 40vw;
-	font-size: 5vw;
+#balance {
+	background-color:rgba(0, 0, 0, 0.2);
+	box-shadow:inset 0 0 8px rgba(0, 0, 0, 0.5);
+	display:inline-block;
+	position:relative;
+	width:80vw;
+	margin:5vw auto;
+	font-size:6vw;
+	height:10vw;
+	line-height:10vw;
+	padding:3vw;
+	text-align:left;
+	border:1px solid #aaa;
+	border-radius:2vw;
+}
+
+#balance .loadbalance {
+	width:10vw;
+	position:absolute;
+	bottom:0;
+	right:0;
+	left:0;
+	top:0;
+	margin:auto;
+}
+
+#balance:active {
+	box-shadow:none;
+	background:transparent;;
+}
+
+#balance #hgc {
+	position:absolute;
+	height:10vw;
+	right:4vw;
+}
+
+#balance .right {
+	display:inline-block;
+	float:right;
+	margin-right:15vw;
 }

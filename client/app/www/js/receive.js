@@ -2,9 +2,8 @@ var COMMENT_MAXLEN = 300;
 var HGC_TR_DECIMAL_PLACES = 2;
 
 // Will be set to QR-ID values when student_identify is called for the relevant section
-var sender = storage.get("qrid");
-var password = storage.get("password");
-var current_recipient = null;
+var recipient = storage.get("qrid");
+var current_sender = null;
 var amount = null;
 var comment = null;
 
@@ -32,24 +31,24 @@ $(function() {
 	$("#scanbutton").click(function () {
 		QridScan(function(qrid) {
 			$("#scanbutton").hide();
-			$("#qrid_rec").val(qrid);
+			$("#qrid_snd").val(qrid);
 			$("#scan_result").text(qrid);
 		});
 	});
 
 	$("#confirm").click(function () {
-		var recipient_qrid = $("#qrid_rec").val();
-		var recipient_firstname = $("#firstname").val();
-		var recipient_lastname = $("#lastname").val();
-		var recipient_type = $("#type").val();
+		var sender_qrid = $("#qrid_snd").val();
+		var sender_firstname = $("#firstname").val();
+		var sender_lastname = $("#lastname").val();
+		var sender_type = $("#type").val();
 		comment = $("#comment").val();
 		amount = parseFloat($("#amount").val());
 
 		var data = {};
-		if (recipient_firstname !== "") data.firstname = recipient_firstname;
-		if (recipient_lastname !== "") data.lastname = recipient_lastname;
-		if (recipient_type !== "") data.type = recipient_type;
-		if (recipient_qrid !== "") data.qrid = recipient_qrid;
+		if (sender_firstname !== "") data.firstname = sender_firstname;
+		if (sender_lastname !== "") data.lastname = sender_lastname;
+		if (sender_type !== "") data.type = sender_type;
+		if (sender_qrid !== "") data.qrid = sender_qrid;
 
 		action_app("student_identify", data, function (res) {
 			if (res == "multiple") {
@@ -68,9 +67,9 @@ $(function() {
 				errorMessage("Der angegebene Betrag ist ungültig.");
 				return;
 			}
-			current_recipient = res;
+			current_sender = res;
 
-			$("#confirm_recipient").text(student2readable(current_recipient));
+			$("#confirm_sender").text(student2readable(current_sender));
 			$("#confirm_amount").text(amount);
 			$("#confirm_comment").text(comment);
 			$("#confirm_back").click(function () {
@@ -81,10 +80,12 @@ $(function() {
 	});
 
 	$("#confirm_submit").click(function() {
+		var password = $("#password").val();
+		console.log(password);
 		var data = {
 			amount_sent : amount,
-			sender : sender,
-			recipient : current_recipient.qrid,
+			sender : current_sender.qrid,
+			recipient : recipient,
 			comment : comment,
 			sender_password : password
 		};

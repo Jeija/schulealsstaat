@@ -114,4 +114,12 @@ $(function () {
 	$('input[type="text"], input[type="password"], textarea, input[type="number"]').focusout(function () {
 		$(".bottombuttons").show();
 	});
+
+	// Same thing for cordova on Android, also triggers when keyboard is just hidden, but focus remains
+	$(document).on("hidekeyboard", function () {
+		$(".bottombuttons").show();
+	});
+	$(document).on("showkeyboard", function () {
+		$(".bottombuttons").hide();
+	});
 });

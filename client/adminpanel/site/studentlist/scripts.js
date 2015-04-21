@@ -142,7 +142,7 @@ function render_list(list) {
 
 $(function() {
 	// #################### Prepare page ####################
-	var forms = ["firstname", "lastname", "type", "country"];
+	var forms = ["firstname", "lastname", "special_name", "type", "country"];
 	forms.forEach(function (f) {
 		$(	'<td><input type="text" class="criterium"></td>' +
 			'<td><input type="radio" name="yesno_' + f + '" value="yes" /></td>' +
@@ -215,6 +215,7 @@ $(function() {
 		var condition = {};
 		cond_yesno(condition, "firstname");
 		cond_yesno(condition, "lastname");
+		cond_yesno(condition, "special_name");
 		cond_yesno(condition, "qrid");
 		cond_yesno(condition, "type");
 		cond_yesno(condition, "country");

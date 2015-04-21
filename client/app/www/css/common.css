@@ -5,7 +5,7 @@
 
 html {
 	font-family:"FiraSans-Light", Arial;
-	background-color:#000;
+	background-color:#3a3f3a;
 	color:white;
 	height:100%;
 }
@@ -13,6 +13,12 @@ html {
 body {
 	margin:0;
 	margin-bottom:20vw;
+	-webkit-touch-callout:none;
+	-webkit-user-select:none;
+	-khtml-user-select:none;
+	-moz-user-select:none;
+	-ms-user-select:none;
+	user-select:none;
 }
 
 #logo {
@@ -104,33 +110,6 @@ body {
 	background-size:cover;
 }
 
-.seperation {
-	background-color: #555;
-	width: 90vw;
-	border-radius: 1vw;
-	padding: 2vw;
-	padding-bottom: 1.5vw;
-	margin: auto;
-	margin-top: 1.5vw;
-	margin-bottom: 1.5vw;
-	font-size: 5vw;
-	left: 0;
-	right: 0;
-}
-
-#loading {
-	position: absolute;
-	left:0;
-	right:0;
-	top:0;
-	bottom:0;
-	margin: auto;
-	height: 8vw;
-	width: 80vw;
-	font-size: 8vw;
-	text-align: center;
-}
-
 /*** Error Message ***/
 #error {
 	position:fixed;
@@ -156,7 +135,7 @@ body {
 
 /*** Confirm Window ***/
 #confirm_window {
-	position:absolute;
+	position:fixed;
 	top:0;
 	left:0;
 	width:100%;
@@ -186,7 +165,7 @@ body {
 /*** Success Window ***/
 #success {
 	z-index:2;
-	position:absolute;
+	position:fixed;
 	top:0;
 	left:0;
 	width:100%;

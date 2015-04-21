@@ -1,19 +1,12 @@
-#logo {
-	width: 70%;
-	display: block;
-	margin-left: auto;
-	margin-right: auto;
-	margin-top: 10px;
-	margin-bottom: 20px;
-}
-
-#statusbar {
-	padding-bottom: 5px;
-	border-bottom-style: solid;
-	border-bottom-width: 1px;
-}
-
-#qrid {
-	display: inline-block;
-	float: right;
+#loading {
+	position:absolute;
+	left:0;
+	right:0;
+	top:0;
+	bottom:0;
+	margin:auto;
+	height:8vw;
+	width:80vw;
+	font-size:7vw;
+	text-align:center;
 }

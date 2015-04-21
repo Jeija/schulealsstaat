@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+	<meta charset="UTF-8">
+        <meta name="theme-color" content="#191">
+	<link rel="stylesheet" href="css/common.css" type="text/css">
+	<link rel="stylesheet" href="css/transactions_common.css" type="text/css">
+	<script src="cordova.js"></script>
+	<script src="bower_components/jsencrypt/bin/jsencrypt.min.js"></script>
+	<script src="bower_components/jquery/dist/jquery.js"></script>
+	<script src="bower_components/gibberish-aes/dist/gibberish-aes-1.0.0.min.js"></script>
+	<script src="QRScanJS/qrscan.js"></script>
+	<script src="js/api.js"></script>
+	<script src="js/storage.js"></script>
+	<script src="js/common.js"></script>
+	<script src="js/receive.js"></script>
+	<title>Zahlung annehmen</title>
+</head>
+
+<body>
+	<div id="content">
+		<div class="mainheadline"><a class="mmlink" href="mainmenu.html"></a>Zahlung annehmen</div>
+
+		<div class="section">
+			<div class="section_heading">Sender</div>
+			<div class="subsection hidden">
+				<div class="subsection_heading subsection_scan">Code scannen</div>
+				<div class="hiddenpart" hidden>
+					<button id="scanbutton">
+						<img src="res/qrcode.svg"><br/>
+						Scan
+					</button>
+					<div id="scan_result"></div>
+				</div>
+			</div>
+
+			<div class="subsection hidden">
+				<div class="subsection_heading">Kontonummer eingeben</div>
+				<div class="hiddenpart" hidden>
+					<input type="text" id="qrid_snd" placeholder="Kontonummer">
+				</div>
+			</div>
+
+			<div class="subsection hidden">
+				<div class="subsection_heading">Name eingeben</div>
+				<div class="hiddenpart" hidden>
+					<input type="text" id="firstname" placeholder="Vorname">
+					<input type="text" id="lastname" placeholder="Nachname">
+					<input type="text" id="type" placeholder="Klasse">
+				</div>
+			</div>
+
+		</div>
+
+		<div class="section amount_section">
+			<div class="section_heading">Betrag</div>
+			<div class="amount_container">
+				<input type="number" min="0" step="0.01" id="amount">
+				<img src="res/icon.png" class="hgc">
+			</div>
+		</div>
+
+		<div class="section">
+			<div class="section_heading">Kommentar</div>
+			<textarea id="comment" placeholder="max. 300 Zeichen" maxlength="300"></textarea>
+		</div>
+
+		<div class="section">
+			<div class="section_heading">Passwort</div>
+			<div class="section_heading_description">(Absender)</div>
+			<input type="password" id="password">
+		</div>
+
+		<div class="bottombuttons">
+			<a href="transaction.html" class="button left">Zurück</a>
+			<a id="confirm" class="button right">Prüfen</a>
+		</div>
+	</div>
+
+	<div id="confirm_window" hidden>
+		<div id="confirm_window_padding">
+			<div class="confirm_subsection">Empfänger</div>
+			<div class="confirm_text" id="confirm_sender"></div>
+			<div class="confirm_subsection">Betrag</div>
+			<div class="confirm_text" id="confirm_amount"></div>
+			<div class="confirm_subsection">Kommentar</div>
+			<div class="confirm_text" id="confirm_comment"></div>
+		</div>
+
+		<div class="bottombuttons">
+			<a id="confirm_back" class="button left">Zurück</a>
+			<a id="confirm_submit" class="button right warning">Abschicken</a>
+		</div>
+	</div>
+
+	<div id="success" hidden>
+		<div id="success_text">Transaktion erfolgreich!</div>
+		<div id="success_bottom">
+			<a class="button full mainmenu" href="mainmenu.html" id="success_mainmenu">Hauptmenü</a>
+			<a class="button full mainmenu" href="transaction.html" id="success_transaction">Überweisung</a>
+		</div>
+	</div>
+</body>
+</html>

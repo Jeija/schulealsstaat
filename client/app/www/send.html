@@ -5,7 +5,7 @@
 	<meta charset="UTF-8">
         <meta name="theme-color" content="#191">
 	<link rel="stylesheet" href="css/common.css" type="text/css">
-	<link rel="stylesheet" href="css/transaction.css" type="text/css">
+	<link rel="stylesheet" href="css/transactions_common.css" type="text/css">
 	<script src="cordova.js"></script>
 	<script src="bower_components/jsencrypt/bin/jsencrypt.min.js"></script>
 	<script src="bower_components/jquery/dist/jquery.js"></script>
@@ -22,32 +22,50 @@
 	<div id="content">
 		<div class="mainheadline"><a class="mmlink" href="mainmenu.html"></a>Zahlung tätigen</div>
 
-		<div id="alt">
-		<div>
-			<h4 class="ta_sub">Empfänger:</h4>
-			<input id="scan_card" type="button" class="button full" value="Karte Scannen" />
-				Kontonummer: <input type="text" id="qrid_rec" placeholder="Kontonummer">
-			</div>	
-				<span>ODER</span>
-			<div>Vor-/Nachname:<div id="inline">
-				<input type="text" id="firstname" placeholder="Vorname"><br/>
-				<input type="text" id="lastname" placeholder="Nachname"><br/>
+		<div class="section">
+			<div class="section_heading">Empfänger</div>
+			<div class="subsection hidden">
+				<div class="subsection_heading subsection_scan">Code scannen</div>
+				<div class="hiddenpart" hidden>
+					<button id="scanbutton">
+						<img src="res/qrcode.svg"><br/>
+						Scan
+					</button>
+					<div id="scan_result"></div>
+				</div>
 			</div>
-			Klasse: <input type="text" id="type" placeholder="Klasse">
-		</div>
+
+			<div class="subsection hidden">
+				<div class="subsection_heading">Kontonummer eingeben</div>
+				<div class="hiddenpart" hidden>
+					<input type="text" id="qrid_rec" placeholder="Kontonummer">
+				</div>
+			</div>
+
+			<div class="subsection hidden">
+				<div class="subsection_heading">Name eingeben</div>
+				<div class="hiddenpart" hidden>
+					<input type="text" id="firstname" placeholder="Vorname">
+					<input type="text" id="lastname" placeholder="Nachname">
+					<input type="text" id="type" placeholder="Klasse">
+				</div>
+			</div>
+
 		</div>
 
-		<div class="seperation">
-			<h4 class="ta_sub">Betrag:</h4>
-			<div class="value">
-				<input type="number" min="0" step="0.01" id="amount">HGC
+		<div class="section amount_section">
+			<div class="section_heading">Betrag</div>
+			<div class="amount_container">
+				<input type="number" min="0" step="0.01" id="amount">
+				<img src="res/icon.png" class="hgc">
 			</div>
 		</div>
-	
-		<div class="seperation">
-			<h4 class="ta_sub">Kommentar:</h4>
+
+		<div class="section">
+			<div class="section_heading">Kommentar</div>
 			<textarea id="comment" placeholder="max. 300 Zeichen" maxlength="300"></textarea>
 		</div>
+
 		<div class="bottombuttons">
 			<a href="transaction.html" class="button left">Zurück</a>
 			<a id="confirm" class="button right">Prüfen</a>

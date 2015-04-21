@@ -8,6 +8,10 @@
 	font-size:7vw;
 }
 
+#subexplanation {
+	font-size:4.5vw;
+}
+
 #statement {
 	padding:3vw;
 }
@@ -18,7 +22,10 @@
 	border-radius:5px;
 	margin-top:2vw;
 	box-shadow:inset 0 0 8px rgba(0, 0, 0, 0.5);
-	font-size:5vw;
+	font-size:5.5vw;
+	height:15vw;
+	position:relative;
+	padding:4vw;
 }
 
 #statement .entry.outgoing {
@@ -29,10 +36,24 @@
 	background:rgba(0, 200, 50, 0.3);
 }
 
+#statement .entry .qrid {
+	font-family:Monospace;
+	position:absolute;
+	font-size:3vw;
+	right:4vw;
+	top:2vw;
+}
+
 #statement .entry .amount {
 	text-align:right;
-	font-family:Monospace;
-	margin-top:-2vw;
+	position:absolute;
+	right:4vw;
+	bottom:2vw;
+}
+
+#statement .entry .description {
+	font-size:4.5vw;
+	width:37vw;
 }
 
 h3 {

@@ -1,49 +1,47 @@
-function flashLightOn() {
-	window.plugins.flashlight.available(function(isAvailable) {
-		if (isAvailable) {
-			window.plugins.flashlight.switchOn();
-		}
-	});
-}
-
-function flashLightOff() {
-	window.plugins.flashlight.available(function(isAvailable) {
-		if (isAvailable) {
-			window.plugins.flashlight.switchOn();
-		}
-	});
-}
-
 setInterval(function () {
 	var balance = Math.floor(parseFloat(storage.get("balance")) * 100 + 0.5) / 100;
-	$("#value").text(balance);
-	$("#qrid").text("Konto: " + storage.get("qrid"));
+	$("#value").text(balance.toFixed(2).replace(".", ","));
+	$(".mainheadline > .qrid").text("Konto: " + storage.get("qrid"));
 }, 200);
 
 $(function () {
-
-function onDeviceReady() {
-	navigator.splashscreen.hide();
-}
-document.addEventListener("deviceready", onDeviceReady, false);
-
-if (!storage.get("qrid")) {
-	window.location = "authenticate.html";
-}
-
-$("#infocontainer").click(function () {
-	var req = {
-		password : storage.get("password"),
-		qrid : storage.get("qrid")
-	};
-
-	action("get_balance", req, function (res) {
-		if (isNaN(res)) {
-			alert("Unbekannter Fehler: " + res);
-		} else {
-			storage.set("balance", res);
-		}
+	$(document).on("deviceready", function () {
+		navigator.splashscreen.hide();
 	});
-});
 
+	if (!storage.get("qrid")) {
+		window.location = "authenticate.html";
+	}
+
+	/** Refresh balance **/
+	$("#infocontainer").click(refresh_balance);
+
+	function refresh_balance() {
+		$("#infocontainer").unbind();
+		$("#balance .showbalance").fadeOut(200, function () {
+			$("#balance .showbalance").show();
+			$("#balance .showbalance").css("opacity", "0.0");
+		});
+		$("#balance .loadbalance").fadeIn(200);
+		var req = {
+			password : storage.get("password"),
+			qrid : storage.get("qrid")
+		};
+
+		setTimeout(function () {
+			$("#infocontainer").click(refresh_balance);
+			action("get_balance", req, function (res) {
+				$("#balance .loadbalance").fadeOut(200, function () {
+					$("#balance .showbalance").css("opacity", "1.0");
+					$("#balance .showbalance").hide();
+					$("#balance .showbalance").fadeIn(200);
+				});
+				if (isNaN(res)) {
+					errorMessage("Unbekannter Fehler: " + res);
+				} else {
+					storage.set("balance", res);
+				}
+			});
+		}, 200);
+	}
 });

@@ -12,22 +12,26 @@
 	<script src="bower_components/gibberish-aes/dist/gibberish-aes-1.0.0.min.js"></script>
 	<script src="js/api.js"></script>
 	<script src="js/storage.js"></script>
+	<script src="js/common.js"></script>
 	<script src="js/mainmenu.js"></script>
 	<title>HöGyCoin Menü</title>
 </head>
 <body>
-	<div class="mainheadline"><a class="mmlink" href="mainmenu.html"></a>HöGyCoin</div>
-	<div id="statusbar">
-		<span id="qrid"></span>
-		<span id="version">Version: 0.1</span>
+	<div class="mainheadline">
+		<a class="mmlink" href="mainmenu.html"></a>HöGyCoin
+		<span class="qrid"></span>
 	</div>
+	<img src="res/saeu.png" id="saeu">
 	<div id="infocontainer">
-		<img src="res/icon.png" id="hgc">
-		<div id="hgc_container">
-			Guthaben: <br/> <span id="value"></span> HGC
-		</div>
-		<div id="last_transaction">
-			Hier kommt die letzte Transaktion hin
+		<div id="balance">
+			<img class="loadbalance" src="res/loader.svg" hidden>
+			<div class="showbalance">
+				Guthaben:
+				<div class="right">
+					<span id="value"></span>
+				</div>
+				<img src="res/icon.png" id="hgc">
+			</div>
 		</div>
 	</div>
 

@@ -10,9 +10,6 @@
 [submodule "client/app/plugins/com.phonegap.plugins.barcodescanner"]
 	path = client/app/plugins/com.phonegap.plugins.barcodescanner
 	url = https://github.com/wildabeast/BarcodeScanner
-[submodule "client/app/plugins/nl.x-services.plugins.flashlight"]
-	path = client/app/plugins/nl.x-services.plugins.flashlight
-	url = https://github.com/EddyVerbruggen/Flashlight-PhoneGap-Plugin
 [submodule "client/app/www/QRScanJS"]
 	path = client/app/www/QRScanJS
 	url = https://github.com/Jeija/QRScanJS
