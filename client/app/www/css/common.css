@@ -139,64 +139,6 @@ body {
 	font-size:5vw;
 }
 
-/*** Confirm Window ***/
-#confirm_window {
-	position:fixed;
-	top:0;
-	left:0;
-	width:100%;
-	height:100%;
-	background:#000;
-}
-
-#confirm_window_padding {
-	padding:12vw;
-	padding-top:15vw;
-}
-
-.confirm_subsection {
-	font-size:8vw;
-	color:yellow;
-}
-
-.confirm_text {
-	margin-top:1vw;
-	margin-bottom:6vw;
-	font-size:4.5vw;
-	font-style:italic;
-	width:100%;
-	overflow:hidden;
-}
-
-/*** Success Window ***/
-#success {
-	z-index:2;
-	position:fixed;
-	top:0;
-	left:0;
-	width:100%;
-	height:100%;
-	background:#000;
-	font-style:italic;
-	font-size:11vw;
-}
-
-#success_text {
-	position:absolute;
-	top:0;
-	bottom:0;
-	margin:auto;
-	height:25vw;
-	text-align:center;
-}
-
-#success_bottom {
-	position:absolute;
-	height:40vw;
-	bottom:0;
-	width:100vw;
-}
-
 /** Scanner Popup **/
 #scanner_popup {
 	position:fixed;

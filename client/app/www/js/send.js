@@ -71,7 +71,7 @@ $(function() {
 			current_recipient = res;
 
 			$("#confirm_recipient").text(student2readable(current_recipient));
-			$("#confirm_amount").text(amount);
+			$("#confirm_amount").text(amount.toFixed(2) + " HGC");
 			$("#confirm_comment").text(comment);
 			$("#confirm_back").click(function () {
 				$("#confirm_window").fadeOut();

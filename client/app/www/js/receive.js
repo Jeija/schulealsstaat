@@ -70,7 +70,7 @@ $(function() {
 			current_sender = res;
 
 			$("#confirm_sender").text(student2readable(current_sender));
-			$("#confirm_amount").text(amount);
+			$("#confirm_amount").text(amount.toFixed(2) + " HGC");
 			$("#confirm_comment").text(comment);
 			$("#confirm_back").click(function () {
 				$("#confirm_window").fadeOut();

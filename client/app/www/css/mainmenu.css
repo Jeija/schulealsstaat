@@ -1,8 +1,9 @@
 .mainheadline > .qrid {
-	font-size:4vw;
+	font-size:4.5vw;
+	line-height:14vw;
 	position:absolute;
-	right:2vw;
-	top:4vw;
+	right:4vw;
+	top:0;
 }
 
 #saeu {
