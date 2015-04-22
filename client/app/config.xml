@@ -15,19 +15,7 @@
 	<feature name="BarcodeScanner">
 		<param name="id" value="com.phonegap.plugins.barcodescanner" />
 	</feature>
-	<feature name="Flashlight">
-		<param name="id" value="nl.x-services.plugins.flashlight" />
-	</feature>
-	<feature name="Splashscreen">
-		<param name="id" value="org.apache.cordova.splashscreen" />
-	</feature>
 
 	<!-- Platforms -->
-	<platform name="android">
-		<splash src="splash.png" density="port-xhdpi"/>
-	</platform>
-
-	<preference name="SplashScreen" value="screen" />
-	<preference name="SplashScreenDelay" value="30000" />
 	<icon src="icon.png" />
 </widget>

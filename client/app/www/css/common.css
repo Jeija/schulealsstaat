@@ -92,7 +92,7 @@ body {
 
 .mainheadline {
 	margin-top:0;
-	margin-left:0vw;
+	margin-left:0;
 	padding:2.5vw 15vw;
 	background:#181;
 	color:#eee;
@@ -101,13 +101,19 @@ body {
 
 .mainheadline .mmlink {
 	position:absolute;
-	left:2vw;
-	top:1.8vw;
-	height:10vw;
-	width:10vw;
+	left:0vw;
+	top:0vw;
+	height:13.3vw;
+	width:15vw;
 	margin-bottom:-0.7vw;
 	background-image:url("../res/navicon.svg");
-	background-size:cover;
+	background-size:50%;
+	background-repeat:no-repeat;
+	background-position:center;
+}
+
+.mainheadline .mmlink:hover {
+	background-color:rgba(255, 255, 255, 0.3);
 }
 
 /*** Error Message ***/

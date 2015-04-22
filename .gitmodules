@@ -9,7 +9,7 @@
 	url = https://github.com/apache/cordova-plugin-splashscreen
 [submodule "client/app/plugins/com.phonegap.plugins.barcodescanner"]
 	path = client/app/plugins/com.phonegap.plugins.barcodescanner
-	url = https://github.com/wildabeast/BarcodeScanner
+	url = https://github.com/Dbuggerx/BarcodeScanner
 [submodule "client/app/www/QRScanJS"]
 	path = client/app/www/QRScanJS
 	url = https://github.com/Jeija/QRScanJS

@@ -106,20 +106,22 @@ function errorMessage(message) {
 }
 
 $(function () {
-	// Hide bottom box when focusing on textbox (--> keyboard visible)
-	$('input[type="text"], input[type="password"], textarea, input[type="number"]').focus(function () {
-		$(".bottombuttons").hide();
-	});
+	if (typeof cordova == "undefined") {
+		// Hide bottom box when focusing on textbox (--> keyboard visible)
+		$('input[type="text"], input[type="password"], textarea, input[type="number"]').focus(function () {
+			$(".bottombuttons").hide();
+		});
 
-	$('input[type="text"], input[type="password"], textarea, input[type="number"]').focusout(function () {
-		$(".bottombuttons").show();
-	});
-
-	// Same thing for cordova on Android, also triggers when keyboard is just hidden, but focus remains
-	$(document).on("hidekeyboard", function () {
-		$(".bottombuttons").show();
-	});
-	$(document).on("showkeyboard", function () {
-		$(".bottombuttons").hide();
-	});
+		$('input[type="text"], input[type="password"], textarea, input[type="number"]').focusout(function () {
+			$(".bottombuttons").show();
+		});
+	} else {
+		// Same thing for cordova on Android, also triggers when keyboard is just hidden, but focus remains
+		$(document).on("hidekeyboard", function () {
+			$(".bottombuttons").show();
+		});
+		$(document).on("showkeyboard", function () {
+			$(".bottombuttons").hide();
+		});
+	}
 });
