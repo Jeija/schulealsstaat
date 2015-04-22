@@ -17,5 +17,5 @@
 	</feature>
 
 	<!-- Platforms -->
-	<icon src="icon.png" />
+	<icon src="icon128.png" />
 </widget>

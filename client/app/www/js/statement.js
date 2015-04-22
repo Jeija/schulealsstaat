@@ -25,6 +25,8 @@ $(function () {
 		}
 
 		for (var i = 0; i < res.length; i++) {
+			$("#loading").fadeOut();
+			$("#complete").fadeIn();
 			var trans = res[i];
 			var is_sender = (trans.sender.qrid === storage.get("qrid"));
 			var amount = is_sender ? -trans.amount_sent : trans.amount_received;

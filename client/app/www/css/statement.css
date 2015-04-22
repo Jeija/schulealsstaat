@@ -1,3 +1,14 @@
+#loading .spinner {
+	position:absolute;
+	top:0;
+	left:0;
+	right:0;
+	bottom:0;
+	width:30vw;
+	height:30vw;
+	margin:auto;
+}
+
 #statement_container {
 	width:80vw;
 	margin:0 auto;
