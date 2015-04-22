@@ -10,7 +10,7 @@ fi
 if [ -z "$1" ]; then
 	echo "You must specify an architecture to install crosswalk for"
 	echo "Usage:"
-	echo "  $ crosswalk.sh <arch>"
+	echo "  $ init_cordova.sh <arch>"
 	echo "Valid architectures are: arm x86"
 	exit 1
 fi
