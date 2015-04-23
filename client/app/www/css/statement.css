@@ -88,3 +88,30 @@ h3 {
 	text-align:center;
 	font-size:7vw;
 }
+
+/** Comment Preview **/
+#comment_preview {
+	width:80vw;
+	height:60vw;
+	position:fixed;
+	top:0;
+	left:0;
+	right:0;
+	bottom:0;
+	margin:auto;
+	background:rgba(100, 100, 100, 0.9);
+	border:2px solid #000;
+	border-radius:3vw;
+	cursor:pointer;
+	padding:5vw;
+}
+
+#comment_preview_heading {
+	text-align:center;
+	font-size:8vw;
+}
+
+#comment_preview_content {
+	text-align:center;
+	font-size:4vw;
+}

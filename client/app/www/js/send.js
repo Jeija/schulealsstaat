@@ -65,7 +65,7 @@ $(function() {
 			}
 
 			if (amount === "" || !amount || isNaN(amount) || amount <= 0) {
-				errorMessage("Der angegebene Betrag ist ungültig.");
+				errorMessage("Der angegebene Betrag ist ungültig (Punkt statt Komma verwenden!)");
 				return;
 			}
 			current_recipient = res;

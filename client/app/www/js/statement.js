@@ -32,7 +32,7 @@ $(function () {
 			var is_sender = (trans.sender.qrid === storage.get("qrid"));
 			var amount = is_sender ? -trans.amount_sent : trans.amount_received;
 			var typeclass = is_sender ? "outgoing" : "incoming";
-			statement.prepend($('<div class="entry ' + typeclass + '">')
+			statement.prepend($('<div class="entry ' + typeclass + '" data-listid="' + i + '">')
 				.append($('<div class="description">')
 					.text(student2readable(is_sender ? trans.recipient : trans.sender)))
 				.append($('<div class="qrid">')
@@ -44,5 +44,19 @@ $(function () {
 
 		var balance_string = HGC_readable(storage.get("balance"));
 		$("#balance_number").text(balance_string);
+
+		/** Comment previews **/
+		$(".entry").click(function () {
+			var tr = res[$(this).data("listid")];
+			$("#comment_preview_content").text(tr.comment);
+			if (tr.comment.length <= 0) {
+				$("#comment_preview_content").html("<i>(Kein Kommentar)</i>");
+			}
+			$("#comment_preview").fadeIn(100);
+		});
+
+		$("#comment_preview").click(function () {
+			$(this).fadeOut(100);
+		});
 	});}, 200);
 });

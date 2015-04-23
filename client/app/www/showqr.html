@@ -6,25 +6,22 @@
 	<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1">
         <meta name="theme-color" content="#191">
 	<link rel="stylesheet" href="css/common.css" type="text/css">
-	<link rel="stylesheet" href="css/card_logout.css" type="text/css">
-	<script src="cordova.js"></script>
+	<link rel="stylesheet" href="css/showqr.css" type="text/css">
 	<script src="bower_components/jsencrypt/bin/jsencrypt.min.js"></script>
 	<script src="bower_components/jquery/dist/jquery.js"></script>
 	<script src="bower_components/gibberish-aes/dist/gibberish-aes-1.0.0.min.js"></script>
+	<script src="bower_components/qr-js/qr.min.js"></script>
 	<script src="js/api.js"></script>
 	<script src="js/storage.js"></script>
 	<script src="js/common.js"></script>
-	<script src="js/card_logout.js"></script>
-	<title>HöGyCoin Menü</title>
+	<script src="js/showqr.js"></script>
+	<title>Eigener QR-Code</title>
 </head>
 <body>
-	<div class="mainheadline"><a class="mmlink" href="mainmenu.html"></a>Karte abmelden</div>
-	<div id="explanation">
-		Wenn du auf "Bestätigen" klickst, wird deine Karte von diesem Handy abgemeldet.
-		Du kannst natürlich weiterhin deine Karte verwenden oder sie wieder anmelden.
-	</div>
+	<div class="mainheadline"><a class="mmlink" href="mainmenu.html"></a>Eigener QR-Code</div>
+	<img id="qrcode">
 	<div class="bottombuttons">
-		<a id="confirm" class="button full warning">Bestätigen</a>
+		<a href="mainmenu.html" class="button full">Abbrechen</a>
 	</div>
 </body>
 </html>

@@ -1,0 +1,16 @@
+html {
+	background:#fff;
+}
+
+#qrcode {
+	position:absolute;
+	width:75vw;
+	height:75vw;
+	max-height:50vh;
+	max-width:50vh;
+	bottom:0;
+	right:0;
+	left:5vw;
+	top:0;
+	margin:auto;
+}

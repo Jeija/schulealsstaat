@@ -47,14 +47,17 @@ register("transactions_poll", function (payload, answer, error, info) {
 			return;
 		}
 
+		info("polling " + payload.qrid);
 		var idx = polls.push({
 			answer : answer,
 			info : info,
 			date : payload.date,
 			qrid : payload.qrid
-		});
+		}) - 1;
 
 		setTimeout(function () {
+			if (!polls[idx]) return;
+			info("timeout " + payload.qrid);
 			answer({});
 			delete polls[idx];
 		}, config.get("poll_timeout", 30000));

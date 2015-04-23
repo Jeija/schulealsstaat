@@ -5,5 +5,6 @@
 	"poll_max": 5,
 	"magic_account": "Zentralbank",
 	"hgc_decimal_places": 5,
-	"transaction_tax_percent": ""
+	"transaction_tax_percent": "",
+	"hgc_tr_decimal_places": 2
 }
