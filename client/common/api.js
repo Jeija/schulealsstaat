@@ -28,6 +28,7 @@ var WEBCAMPORT = 1233;
 var TIMEOUT_INTRANET = 1500;
 var TIMEOUT_INTERNET = 4000;
 var TIMEOUT_QUERY = 5000;
+var TIMEOUT_POLLING = 30000;
 
 var APIURL = "http://" + APISERVER + ":" + APIPORT + "/";
 var PROXYURL = "http://" + PROXYSERVER + ":" + PROXYPORT + "/";
@@ -119,7 +120,7 @@ function decrypt_answer(passphrase, answer) {
  * This function takes care of generating a random passphrase, encrypting the payload string
  * as AES and then encrypting the random passphrase with the RSA public key.
  */
-function send_query(name, query, cb) {
+function send_query(name, query, cb, polling) {
 	// Generate AES passphrase
 	var passphrase = randomString(32);
 	var passphrase_encrypted = encrypt_passphrase(passphrase);
@@ -135,7 +136,7 @@ function send_query(name, query, cb) {
 			type : "POST",
 			url : URL + "action/" + name,
 			data : post,
-			timeout : TIMEOUT_QUERY,
+			timeout : polling ? TIMEOUT_POLLING : TIMEOUT_QUERY,
 			success : function (res) {
 				var decrypt = decrypt_answer(passphrase, res);
 				if (!decrypt.success) {
@@ -190,6 +191,9 @@ function send_query(name, query, cb) {
  *		ERROR_SPOOF is thrown if the server responded, but not with the 204 HTTP status
  *		code which may be a sign for spoofing
  *
+ * action_poll(name, payload, cb)
+ *	same as action(name, payload, cb), but with higher timeout
+ *
  * action_cert(name, payload, certname, cb)
  *	name, payload, cb same as action
  *	certname: The filename of the certificate file in the cert/ subdirectory that will also
@@ -203,6 +207,10 @@ function send_query(name, query, cb) {
  */
 function action(name, payload, cb) {
 	send_query(name, { payload : payload }, cb);
+}
+
+function action_poll(name, payload, cb) {
+	send_query(name, { payload : payload }, cb, true);
 }
 
 function action_cert(name, payload, certname, cb) {

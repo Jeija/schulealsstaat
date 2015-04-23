@@ -16,6 +16,7 @@
     "type": "privileged",
     "permissions": {
         "systemXHR": { "description": "Zur Kommunikation mit dem Währungsserver" },
-        "video-capture": { "description": "Um QR-Codes zu lesen" }
+        "video-capture": { "description": "Um QR-Codes zu lesen" },
+        "desktop-notification" : { "description" : "Benachrichtigungen für eingehende Transaktionen" }
     }
 }

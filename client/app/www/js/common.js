@@ -1,5 +1,5 @@
 function student2readable(st) {
-	if (!st.type) return "Keine genaue Beschreibung verfügbar";
+	if (!st.type) return "Kontonummer '" + st.qrid + "'";
 
 	if (st.type != "visitor" && st.type != "teacher" && st.type != "legalentity" &&
 		st.type != "other")
@@ -106,8 +106,18 @@ function errorMessage(message) {
 }
 
 $(function () {
+	function onShowKeyboard() {
+		$(".bottombuttons").hide();
+		$(document).unbind("showkeyboard");
+		$(document).on("hidekeyboard", function () {
+			$(document).unbind("hidekeyboard");
+			$(document).on("showkeyboard", onShowKeyboard);
+			$(".bottombuttons").show();
+		});
+	}
+
+	// Hide bottom box when focusing on textbox (--> keyboard visible)
 	if (typeof cordova == "undefined") {
-		// Hide bottom box when focusing on textbox (--> keyboard visible)
 		$('input[type="text"], input[type="password"], textarea, input[type="number"]').focus(function () {
 			$(".bottombuttons").hide();
 		});
@@ -115,13 +125,52 @@ $(function () {
 		$('input[type="text"], input[type="password"], textarea, input[type="number"]').focusout(function () {
 			$(".bottombuttons").show();
 		});
+
+	// Same thing for cordova on Android, also triggers when keyboard is just hidden, but focus remains
 	} else {
-		// Same thing for cordova on Android, also triggers when keyboard is just hidden, but focus remains
-		$(document).on("hidekeyboard", function () {
-			$(".bottombuttons").show();
-		});
-		$(document).on("showkeyboard", function () {
-			$(".bottombuttons").hide();
-		});
+		$(document).on("showkeyboard", onShowKeyboard);
 	}
+
+	// Long-poll for new transactions
+	Notification.requestPermission();
+
+	setInterval(function () {
+		if (storage.get("polling")) return;
+		storage.set("polling", true);
+		var last_sync = storage.get("last_sync");
+		if (!last_sync) last_sync = 0;
+
+		action_poll("transactions_poll", {
+			qrid : storage.get("qrid"),
+			password : storage.get("password"),
+			date : last_sync
+		}, function (res) {
+			storage.set("polling", false);
+
+			// No visible reporting here, this is a background process
+			if (typeof res !== "object") {
+				console.log("polling error: " + res);
+				return;
+			}
+			if (!res || res.length <= 0 || !res[0]) return;
+
+			var new_sync = Date.parse(res[0].time);
+			storage.set("last_sync", new_sync);
+			update_balance();
+
+			// Push notification
+			res.forEach(function (tr) {
+				new Notification("Du hast " + tr.amount_received.toFixed(2) +
+					" HGC von '" + student2readable(tr.sender) + "' erhalten.", {
+						icon : "res/icon128.png"
+					});
+			});
+		});
+	}, 5000);
+	// (interval of 5000ms so that the app doesn't dos the server in case it happens to close
+	// the connection instantly)
+});
+
+$(window).on("beforeunload", function () {
+	storage.set("polling", false);
 });

@@ -21,14 +21,14 @@ var polls = [];
  * transactions_poll {
  *	qrid : String (QR-ID of polling recipient),
  *	password : String (password of recipient),
- *	date : Number (milliseconds timestamp of last transaction, max. age: 5 minutes)
- *		if it is missing, date 5 minutes before is default
+ *	date : Number (milliseconds timestamp of last transaction)
  * }
  *
  * response values:
  * an Array of objects	--> list of transactions since last refresh
  * invalid_qrid		--> the provided qrid doesn't exist
  * invalid_password	--> provided password was wrong
+ * invalid_date		--> provided date cannot be interpreted as a JS timestamp
  */
 register("transactions_poll", function (payload, answer, error, info) {
 	db.students.getByQrid(payload.qrid, function (st) {
@@ -42,22 +42,20 @@ register("transactions_poll", function (payload, answer, error, info) {
 			return;
 		}
 
-		var date = payload.date;
-		var date_minimum = Date.now() - 1000 * config.get("poll_max_age", 60 * 5);
-		if (!date || !Number.isFinite(date) || date < date_minimum) {
-			date = date_minimum;
+		if (!("date" in payload) || isNaN(payload.date) || !Number.isFinite(payload.date)) {
+			answer("invalid_date");
+			return;
 		}
 
 		var idx = polls.push({
 			answer : answer,
 			info : info,
-			date : date,
+			date : payload.date,
 			qrid : payload.qrid
 		});
 
 		setTimeout(function () {
 			answer({});
-			info("timeout");
 			delete polls[idx];
 		}, config.get("poll_timeout", 30000));
 	});
@@ -72,7 +70,7 @@ function handleDbPollAnswer(tr, idx) {
 	if (!tr || tr.length <= 0) return;
 	if (!polls[idx]) return;
 	polls[idx].answer(tr);
-	polls[idx].info("found new transaction, replying");
+	polls[idx].info("found new transaction, replying to " + polls[idx].qrid);
 	delete polls[idx];
 }
 
