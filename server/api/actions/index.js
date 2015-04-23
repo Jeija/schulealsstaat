@@ -134,6 +134,7 @@ function prepare_action(name, post, req, res)
 
 require("./misc.js")(register_action, register_action_cert);
 require("./config.js")(register_action, register_action_cert);
+require("./polling.js")(register_action, register_action_cert);
 require("./students.js")(register_action, register_action_cert);
 require("./transactions.js")(register_action, register_action_cert);
 

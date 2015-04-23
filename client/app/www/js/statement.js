@@ -19,8 +19,9 @@ $(function () {
 		statement.html("");
 
 		// No transactions in history
-		if (res.length === 0) {
-			$("#nostatement").show();
+		if (!res.length) {
+			$("#loading").fadeOut(200);
+			$("#nostatement").fadeIn(200);
 			return;
 		}
 

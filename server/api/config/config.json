@@ -1,8 +1,9 @@
 {
-	"transaction_tax_percent": "10",
-	"hgc_decimal_places": 5,
+	"poll_db_update_interval": 1000,
 	"taxinc_qrid": "taxinc",
-	"tr_comment_maxlen": "300",
-	"hgc_tr_decimal_places": "2",
-	"magic_account": "Zentralbank"
+	"poll_max_age": 300,
+	"poll_timeout": 30000,
+	"poll_max": 5,
+	"magic_account": "Zentralbank",
+	"hgc_decimal_places": 5
 }

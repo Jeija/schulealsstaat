@@ -84,5 +84,7 @@ h3 {
 }
 
 #nostatement {
-	display:none;
+	padding-top:10vw;
+	text-align:center;
+	font-size:7vw;
 }

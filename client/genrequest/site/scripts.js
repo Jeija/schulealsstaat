@@ -15,12 +15,21 @@ function getMessage() {
 
 $(function () {
 	$("#confirm").click(function () {
+		$("#response").text("");
 		action($("#action_name").val(), getMessage(), function (res) {
 			printMessageReadable(res);
 		});
 	});
 
+	$("#confirm_polling").click(function () {
+		$("#response").text("");
+		action_poll($("#action_name").val(), getMessage(), function (res) {
+			printMessageReadable(res);
+		});
+	});
+
 	$("#confirm_cert").click(function () {
+		$("#response").text("");
 		action_mastercert($("#action_name").val(), getMessage(), "#cert_input", function (res) {
 			printMessageReadable(res);
 		});
