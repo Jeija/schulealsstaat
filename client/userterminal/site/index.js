@@ -4,7 +4,11 @@ var QRID_PRESETS = {};
 var RADIO_BASEURL = "http://radio.saeu:8000/"
 
 function load_subdir (dir) {
+	// Destroy old page including events
+	$("#page").find("*").unbind();
 	$("#page").hide();
+	$("#page").html("");
+
 	$('.mainlink').removeClass("link-selected");
 	$('.mainlink[data-subdir="' + dir + '"]').addClass("link-selected");
 	$("#page").load(dir + "/index.html", function () {
@@ -15,8 +19,7 @@ function load_subdir (dir) {
 			href: dir + "/styles.css"
 		}).appendTo("head");
 
-		// Unbind old events and load new oens
-		$("#page").find("*").unbind();
+		// ULoad new ones events
 		$.getScript(dir + "/scripts.js");
 	});
 }
