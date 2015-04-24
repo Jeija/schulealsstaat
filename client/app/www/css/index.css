@@ -1,3 +1,15 @@
+@font-face {
+    font-family: "FiraSans-Light";
+    src: url(../res/FiraSans-Light.ttf) format("truetype");
+}
+
+body {
+	font-family:"FiraSans-Light", Arial;
+	background:#000;
+	color:#fff;
+	margin:0;
+}
+
 #loading {
 	position:absolute;
 	left:0;
@@ -9,4 +21,12 @@
 	width:80vw;
 	font-size:7vw;
 	text-align:center;
+}
+
+#content_frame {
+	position:absolute;
+	left:0;
+	top:0;
+	width:100vw;
+	height:100vh;
 }
