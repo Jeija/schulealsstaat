@@ -7,6 +7,8 @@
     "url": "https://github.com/Jeija/schulealsstaat"
   },
   "dependencies": {
+    "colors": "^1.0.3",
+    "najax": "^0.1.5",
     "native-dns": "^0.7.0"
   }
 }

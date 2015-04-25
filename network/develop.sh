@@ -41,7 +41,7 @@ ip addr add dev $BR_IFACE $IP
 ip addr add dev $BR_IFACE 192.168.0.100/16 # just for development
 ip addr add dev $BR_IFACE 192.168.2.11/16 # ntp.saeu
 ip addr add dev $BR_IFACE 192.168.2.30/16 # api.saeu
-ip addr add dev $BR_IFACE 192.168.2.31/16 # cam.saeu
+ip addr add dev $BR_IFACE 192.168.2.60/16 # cam.saeu
 ip addr add dev $BR_IFACE 192.168.2.32/16 # packages.saeu
 ip addr add dev $BR_IFACE 192.168.2.40/16 # centralbank.eu (just testing)
 ip addr add dev $BR_IFACE 192.168.2.50/16 # radio.saeu

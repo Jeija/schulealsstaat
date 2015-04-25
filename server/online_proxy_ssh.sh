@@ -19,6 +19,7 @@ if [ -z "$2" ]; then
 	exit 1
 fi
 
+RESET_COMMAND="killall sshd && sleep 3 && service sshd restart"
 REMOTE_SERVER=centralbank.eu
 REMOTE_USER=root
 REMOTE_PORT=443
@@ -26,4 +27,8 @@ LOCAL_SERVER=$1
 LOCAL_PORT=1230
 SSH_KEYFILE=$2
 
-autossh -M 20000 -N -R \*:$REMOTE_PORT:$LOCAL_SERVER:$LOCAL_PORT $REMOTE_USER@$REMOTE_SERVER -i $SSH_KEYFILE -v
+ssh -f -i $SSH_KEYFILE $REMOTE_USER@$REMOTE_SERVER "$RESET_COMMAND"
+sleep 5
+autossh -M 0 -N -R \*:$REMOTE_PORT:$LOCAL_SERVER:$LOCAL_PORT \
+	$REMOTE_USER@$REMOTE_SERVER -i $SSH_KEYFILE -v \
+	-o "ServerAliveInterval 10" -o "ServerAliveCountMax 2"
