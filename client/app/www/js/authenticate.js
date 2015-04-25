@@ -20,20 +20,29 @@ $(function () {
 		};
 
 		action_app("get_balance", req, function (res) {
-			console.log("got res: " + res);
 			if (res == "invalid_qrid") {
-				console.log("WÜRGS");
 				errorMessage("Kontonummer nicht gefunden!");
+				return;
 			} else if (res == "invalid_password") {
 				errorMessage("Das Passwort ist falsch!");
+				return;
 			} else if (res.indexOf("error") > -1) {
 				errorMessage("Server-Error: " + res);
-			} else {
+				return;
+			}
+
+			action_app("student_identify", { qrid : qrid }, function (idres) {
+				if (typeof idres !== "object") {
+					errorMessage("Server-Error: " + idres);
+					return;
+				}
+
 				storage.set("qrid", qrid);
 				storage.set("password", password);
 				storage.set("balance", res);
+				storage.set("profile", idres);
 				window.location = "index.html";
-			}
+			});
 		});
 	});
 });

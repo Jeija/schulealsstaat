@@ -36,7 +36,7 @@ $(function () {
 					$("#balance .showbalance").hide();
 					$("#balance .showbalance").fadeIn(200);
 				});
-				if (isNaN(res)) {
+				if (isNaN(res) || !res) {
 					errorMessage("Unbekannter Fehler: " + res);
 				} else {
 					storage.set("balance", res);

@@ -43,7 +43,7 @@ $(function() {
 		var recipient_lastname = $("#lastname").val();
 		var recipient_type = $("#type").val();
 		comment = $("#comment").val();
-		amount = parseFloat($("#amount").val());
+		amount = parseFloat($("#amount").val().replace(",", "."));
 
 		var data = {};
 		if (recipient_firstname !== "") data.firstname = recipient_firstname;

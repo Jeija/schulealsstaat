@@ -60,7 +60,7 @@ register("transactions_poll", function (payload, answer, error, info) {
 			info("timeout " + payload.qrid);
 			answer({});
 			delete polls[idx];
-		}, config.get("poll_timeout", 30000));
+		}, config.get("poll_timeout", 40000));
 	});
 });
 

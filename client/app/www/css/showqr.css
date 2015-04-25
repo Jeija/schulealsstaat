@@ -2,15 +2,37 @@ html {
 	background:#fff;
 }
 
-#qrcode {
+#qrcode_container {
 	position:absolute;
-	width:75vw;
-	height:75vw;
-	max-height:50vh;
-	max-width:50vh;
-	bottom:0;
+	width:95vw;
+	height:100vw;
+	max-height:60vh;
+	max-width:60vh;
+	bottom:5vw;
 	right:0;
-	left:5vw;
+	left:0;
 	top:0;
 	margin:auto;
+	text-align:center;
+}
+
+#qrcode {
+	display:inline-block;
+	margin-left:5vw;
+	max-height:45vh;
+	max-width:45vh;
+	width:90vw;
+	height:90vw;
+}
+
+#qrid {
+	color:#000;
+	font-family:Monospace, Arial;
+	margin-top:-3vw;
+	font-size:6.5vw;
+}
+
+#readable {
+	color:#000;
+	font-size:5vw;
 }
