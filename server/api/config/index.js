@@ -1,61 +1,55 @@
-var CONFIG_FILE = __dirname + "/config.json";
-
+var db = require("../db");
+var log = require("../logging");
 var fs = require("fs");
 var cert = require("../cert");
 
 var config = {}
 
-var config_towrite = {};
-var config_todelete = [];
-
-var is_writing = false;
-
-// (Re-)read config from file
-function read() {
-	config = JSON.parse(fs.readFileSync(CONFIG_FILE, "utf8"));
-}
-
-// Save config file, may overwrite changes
-function save() {
-	is_writing = true;
-	fs.writeFile(CONFIG_FILE, JSON.stringify(config, null, "\t"), "utf8", function () {
-		for (var k in config_towrite) config[i] = config_towrite[k];
-		for (var i = 0; i <= config_todelete; i++) delete config[config_todelete[i]];
-		is_writing = false;
-		if (config_towrite.length > 0 || config_todelete.length > 0) {
-			save();
-			config_towrite = {};
-			config_todelete = [];
+/**
+ * Regularly read configuration from database
+ * That way, multiple API instances can be synchronized and configuration
+ * changes are logged in the database.
+ */
+function update_config(cb) {
+	db.config.load(function (cfg_new) {
+		for (var i = 0; i < cfg_new.length; i++) {
+			var key = cfg_new[i].key;
+			var value = cfg_new[i].value;
+			if (value === null && key in config) {
+				log.info("Config", "Removed " + key);
+				delete config[key];
+			} else if (value !== null && config[key] !== value) {
+				log.info("Config", "Set " + key + " to " + value);
+				config[key] = value;
+			}
 		}
+		if (cb) cb();
 	});
 }
 
 // Set config entry to value
 function set(key, value) {
-	if (is_writing) {
-		config_towrite[key] = value;
-	} else {
-		config[key] = value;
-		save();
-	}
+	db.config.set(key, value);
 }
 
 // Delete config entry
 function del(key) {
-	if (is_writing) {
-		config_todelete.push(key);
-	} else {
-		delete config[key];
-		save();
-	}
+	db.config.set(key, null);
+	delete config[key];
 }
 
-// Returns config value or alt_val if not found
+/**
+ * Returns config value or alt_val if not found
+ * Requested key-alt_val-pair is added to config if not found in db,
+ * so that future requests with the same key will always get the same
+ * value back (no matter their alt_val) and so that the config option
+ * is user-visible in the adminpanel/config client.
+ */
 function get(key, alt_val) {
-	if (key in config)	return config[key];
-	else {
+	if (key in config) {
+		return config[key];
+	} else {
 		config[key] = alt_val;
-		save();
 		return alt_val;
 	}
 }
@@ -64,7 +58,9 @@ function getAll() {
 	return config;
 }
 
-read();
+update_config(function () {
+	setInterval(update_config, get("update_config_interval", 40000));
+});
 
 module.exports = {
 	set : set,

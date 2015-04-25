@@ -41,7 +41,7 @@ function render_config(conf) {
 		};
 		action_mastercert("config_set", arg, "#master_cert_input", function (res) {
 			if (res == "ok") {
-				reload_config();
+				$("#config").html("");
 			} else {
 				alert("error: " + res);
 			}
@@ -52,7 +52,7 @@ function render_config(conf) {
 		var key = $(this).data("property");
 		action_mastercert("config_del", key, "#master_cert_input", function (res) {
 			if (res == "ok") {
-				reload_config();
+				$("#config").html("");
 			} else {
 				alert("error: " + res);
 			}
@@ -74,7 +74,7 @@ $(function () {
 		};
 		action_mastercert("config_set", arg, "#master_cert_input", function (res) {
 			if (res == "ok") {
-				reload_config();
+				$("#config").html("");
 			} else {
 				alert("error: " + res);
 			}

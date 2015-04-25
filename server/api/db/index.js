@@ -13,6 +13,7 @@ db.once("open", function () {
 });
 
 module.exports = {
+	config : require("./config.js"),
 	students : require("./students.js"),
 	transactions : require("./transactions.js")
 };

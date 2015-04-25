@@ -4,26 +4,27 @@ var config = require("../config");
 
 module.exports = function (register, register_cert) {
 	// Warning: Reading configuration is unprotected!
+	// There shouldn't be any relevant data inside anyways
 	register("config_get", function (payload, answer) {
-		log.info("API", "config_get for " + payload);
 		var value = config.get(payload, "");
-		answer(value.toString());
+		answer(value);
+		log.info("request " + payload + " answered with " + value.toString());
 	});
 
-	register_cert("config_set", ["master_hash"], function (payload, answer) {
-		log.info("API", "config_set " + payload.key + " = " + payload.value);
+	register_cert("config_set", ["master_hash"], function (payload, answer, error, info) {
 		config.set(payload.key, payload.value);
 		answer("ok");
+		info("set " + payload.key + " to " + payload.value);
 	});
 
-	register_cert("config_del", ["master_hash"], function (payload, answer) {
-		log.info("API", "config_del " + payload);
+	register_cert("config_del", ["master_hash"], function (payload, answer, error, info) {
 		config.del(payload);
 		answer("ok");
+		info("deleting " + payload);
 	});
 
-	register("config_getall", function (payload, answer) {
-		log.info("API", "config_getall");
+	register("config_getall", function (payload, answer, error, info) {
 		answer(config.getAll());
+		info("done");
 	});
 }
