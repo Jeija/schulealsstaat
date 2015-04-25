@@ -25,7 +25,7 @@ module.exports = function (register, register_cert) {
  * error:<something>	--> Some other error, e.g. with JSON parsing
  */
 register("get_balance", function (payload, answer, error, info) {
-	db.students.getByQrid(payload.qrid, function (st) {
+	db.students.getByQridLean(payload.qrid, function (st) {
 		if (!st) {
 			answer("invalid_qrid");
 			return;
@@ -53,7 +53,7 @@ register("get_balance", function (payload, answer, error, info) {
  * error:<something>	--> Some other error, e.g. with JSON parsing
  */
 register_cert("get_balance_master", ["master_hash"], function (payload, answer, error, info) {
-	db.students.getByQrid(payload, function (st) {
+	db.students.getByQridLean(payload, function (st) {
 		if (!st) {
 			answer("invalid_qrid");
 			return;
@@ -91,7 +91,7 @@ register_cert("get_balance_master", ["master_hash"], function (payload, answer, 
  * error:<something>	--> Some other error, e.g. with JSON parsing
  */
 register("get_last_transactions", function (payload, answer, error, info) {
-	db.students.getByQrid(payload.qrid, function (st) {
+	db.students.getByQridLean(payload.qrid, function (st) {
 		if (!st) {
 			answer("invalid_qrid");
 			return;
@@ -170,7 +170,7 @@ register_cert("find_transactions", ["admin_hash"], function (payload, answer, er
 /**
  * On startup: Check if tax income account exists
  */
-db.students.getByQrid(config.get("taxinc_qrid", "taxinc"), function (taxinc) {
+db.students.getByQridLean(config.get("taxinc_qrid", "taxinc"), function (taxinc) {
 	if (!taxinc)
 		log.err("BANK", "Tax income account not found. You MUST create a tax income" + 
 			"account in order to collect any taxes.");
@@ -226,7 +226,7 @@ function transaction(sender_qrid, recipient_qrid, amount_sent, amount_received, 
 
 	/*** Load all required database entries ***/
 	flow.exec(function () {
-		db.students.getByQrid(config.get("taxinc_qrid", "taxinc"), this);
+		db.students.getByQridLean(config.get("taxinc_qrid", "taxinc"), this);
 	}, function (st) {
 		if (!st) {
 			answer("error: no tax income account");
@@ -236,12 +236,12 @@ function transaction(sender_qrid, recipient_qrid, amount_sent, amount_received, 
 		}
 		taxinc = st;
 		if (spawn_money) this(true);
-		else db.students.getByQrid(sender_qrid, this);
+		else db.students.getByQridLean(sender_qrid, this);
 	}, function (st) {
 		if (!st) { answer("invalid_sender"); return; }
 		sender = st;
 		if (destroy_money) this(true);
-		else db.students.getByQrid(recipient_qrid, this);
+		else db.students.getByQridLean(recipient_qrid, this);
 	}, function (st) {
 		if (!st) { answer("invalid_recipient"); return; }
 		recipient = st;
@@ -350,7 +350,7 @@ function transaction_common(payload, answer, error, info, tax) {
 		{ answer("too_many_decplaces"); return; }
 
 	/*** Check sender password + perform transaction ***/
-	db.students.getByQrid(sender, function (st) {
+	db.students.getByQridLean(sender, function (st) {
 		if (!st) { answer("invalid_sender"); return; }
 		if (!common.check_password(st, sender_password))
 			{ answer("invalid_password"); return; }

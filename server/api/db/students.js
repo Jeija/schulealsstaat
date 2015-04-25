@@ -42,8 +42,9 @@ module.exports = {
 		});
 	},
 
+	/** getCertainByProperties is always lean! **/
 	getCertainByProperties : function (properties, fields, cb) {
-		Student.find(properties, fields, function (err, st) {
+		Student.find(properties, fields).lean().exec(function (err, st) {
 			if (err) log.err("MongoDB", "stdb.getCertainByProperties failed: " + err);
 			cb(st);
 		});
@@ -52,6 +53,13 @@ module.exports = {
 	getByQrid : function (qrid, cb) {
 		Student.findOne({qrid : qrid}, function (err, st) {
 			if (err) log.err("MongoDB", "stdb.getByQrid failed: " + err);
+			cb(st);
+		});
+	},
+
+	getByQridLean : function (qrid, cb) {
+		Student.findOne({qrid : qrid}).lean().exec(function (err, st) {
+			if (err) log.err("MongoDB", "stdb.getByQridLean failed: " + err);
 			cb(st);
 		});
 	},

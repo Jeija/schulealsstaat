@@ -180,7 +180,7 @@ register("student_identify", function (payload, answer, error, info) {
 	if (payload.type)
 		payload.type = new RegExp("^" + payload.type + "$", "i");
 
-	db.students.getByProperties(payload, function (st) {
+	db.students.getCertainByProperties(payload, common.student_public_fields, function (st) {
 		if (!st[0]) {
 			answer("error: not found");
 			return;
@@ -192,7 +192,7 @@ register("student_identify", function (payload, answer, error, info) {
 		}
 
 		info("identified " + common.student_readable(st[0]));
-		answer(common.student_public_only(st[0]));
+		answer(st[0]);
 	});
 });
 

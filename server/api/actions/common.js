@@ -41,5 +41,20 @@ module.exports = {
 			type :		st.type,
 			qrid :		st.qrid
 		};
+	},
+
+	/**
+	 * Fields to be extracted from the database that can be public,
+	 * e.g. when calling student_identify
+	 */
+	student_public_fields : {
+		special_name :	1,
+		firstname :	1,
+		lastname :	1,
+		picname :	1,
+		country :	1,
+		birth :		1,
+		type :		1,
+		qrid :		1
 	}
 };
