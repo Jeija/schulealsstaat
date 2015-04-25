@@ -133,6 +133,8 @@
 .student.ok		{ background:#cfc; }
 .student.wasthere 	{ background:#ffc; }
 .student.notthere	{ background:#fcc; }
+.student td.end_present { background:#f00; }
+
 
 /* Details Popup */
 #details_popup {

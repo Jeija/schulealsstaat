@@ -71,7 +71,7 @@ function calc_checkin_time(st) {
 		time_inside += intervals[i].checkout - intervals[i].checkin;
 	}
 
-	return Math.round(time_inside);
+	return { time : Math.round(time_inside), present_at_end : is_checkedin };
 }
 
 function render_students(list) {
@@ -85,13 +85,17 @@ function render_students(list) {
 			.text("Klasse"))
 		.append($("<th>")
 			.text("Anwesenheit (Minuten)"))
+		.append($("<th>")
+			.text("Am Ende"))
 	);
 
 	for (var i = 0; i < list.length; i++) {
 		var st = list[i];
 
 		// In minutes, rounded up
-		var checkin_time = Math.ceil(calc_checkin_time(st) / 60);
+		var spec = calc_checkin_time(st);
+		var checkin_time = Math.ceil(spec.time / 60);
+		var present_at_end = spec.present_at_end;
 
 		var group = "";
 		if (checkin_time >= $("#selector_time").val()) {
@@ -113,6 +117,8 @@ function render_students(list) {
 				.text(st.type))
 			.append($("<td>")
 				.text(checkin_time))
+			.append($('<td class="' + (present_at_end ? "end_present" : "end_notpresent") + '">')
+				.text(present_at_end ? "Anwesend" : "Abwesend"))
 		);
 	}
 
