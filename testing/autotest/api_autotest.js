@@ -15,7 +15,7 @@ var APIPORT = 1230;
 /** Ping / Query Timeouts: Abort request if server doesn't answer within given time **/
 var TIMEOUT_INTRANET = 1500;
 var TIMEOUT_INTERNET = 4000;
-var TIMEOUT_QUERY = 5000;
+var TIMEOUT_QUERY = 50000;
 
 var APIURL = "http://" + APISERVER + ":" + APIPORT + "/";
 
