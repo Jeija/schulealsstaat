@@ -18,8 +18,8 @@ All the software is written in JavaScript, CSS, HTML and a bunch of bash scripts
 * **The Webcam Server** (`server/webcam`)
 	The Webcam Server stores passport images (PNG files) of the registered students. It is seperated from the API server as traffic from or to this server is unencrypted and in order to split up bandwidth between multiple machines. That way, the webcam server can be positioned at the place where most queries to it are sent. While the API requests are just a few kilobytes of data, a picture on the Webcam Server can be of multiple Megabytes of size.
 
-* **The Proxy Server** (`server/proxy`)
-	This is just a small utility that consists of an internet and an intranet component. The internet component can be installed on a publicly accessible domain, such as [centralbank.eu](http://centralbank.eu). Even if the client is not in the intranet, it can then send requests to the API Server to the internet component. The intranet component regularly asks for new API requests and forwards them to the real API Server. Instead, an HTTP-over-SSH tunnel may also be used, but the method with the Proxy Server has the advantage of being able to cache requests if the API server is offline or when switching the API server from one machine to another.
+* **The Proxy Script** (`server/online_proxy_ssh.sh`)
+	This is just a small utility that forwards connections to the online server (centralbank.eu) to the local server (which is behind a Firewall / NAT). That way, all data is in a central spot and any user data, private keys etc. don't need to be uploaded to the internet.
 
 * **The Management Client** (`client/adminpanel`)
 	The Management client can be used to add, remove and modify students and to force transactions as well as for other administrative tasks. You may get asked to provide a master certificate ("Master-Zertifikat"), you can find that in `util/cert/master_cert`. This is the "key" for some tasks that require additional authentication.
