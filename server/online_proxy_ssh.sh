@@ -22,7 +22,7 @@ fi
 RESET_COMMAND="killall sshd && sleep 3 && service sshd restart"
 REMOTE_SERVER=centralbank.eu
 REMOTE_USER=root
-REMOTE_PORT=443
+REMOTE_PORT=1230
 LOCAL_SERVER=$1
 LOCAL_PORT=1230
 SSH_KEYFILE=$2

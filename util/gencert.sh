@@ -1,5 +1,5 @@
 #!/bin/bash
-
+set -xe
 ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/.."
 
 # Certificate length in bytes
@@ -8,7 +8,6 @@ MASTER_CERT_LEN=1024
 ADMIN_CERT_LEN=512
 EC_CERT_LEN=256
 WEBCAM_CERT_LEN=128
-PROXY_CERT_LEN=128
 
 # Hash function
 HASHFUNC="sha256sum | head -c 64"
@@ -43,26 +42,17 @@ EC_CERT=$(xxd -l $EC_CERT_LEN -p /dev/urandom | tr -d "\n")
 EC_HASH=$(echo -n "$EC_CERT" | eval $HASHFUNC)
 echo -e "\b\b\bOK]"
 
-# Generate proxy server certificate + hash
-echo -ne "Generating PROXY certifiacte + hash        [..]"
-PROXY_CERT=$(xxd -l $PROXY_CERT_LEN -p /dev/urandom | tr -d "\n")
-PROXY_HASH=$(echo -n "$PROXY_CERT" | eval $HASHFUNC)
-echo -e "\b\b\bOK]"
-
 # Save all hashes to their destinations
 echo -ne "Saving all hashes to files                 [..]"
 API_CERT_DIR=$ROOT/server/api/cert
 WEBCAMSERV_CERT_DIR=$ROOT/server/webcam/cert
-PROXY_INTERNET_CERT_DIR=$ROOT/server/proxy/internet/cert
 mkdir -p $API_CERT_DIR
 mkdir -p $WEBCAMSERV_CERT_DIR
-mkdir -p $PROXY_INTERNET_CERT_DIR
 echo "$REGISTRATION_HASH" > $API_CERT_DIR/registration_hash
 echo "$MASTER_HASH" > $API_CERT_DIR/master_hash
 echo "$ADMIN_HASH" > $API_CERT_DIR/admin_hash
 echo "$EC_HASH" > $API_CERT_DIR/ec_hash
 echo "$WEBCAM_HASH" > $WEBCAMSERV_CERT_DIR/webcam_hash
-echo "$PROXY_HASH" > $PROXY_INTERNET_CERT_DIR/proxy_hash
 echo -e "\b\b\bOK]"
 
 # Save all certificates to their destinations
@@ -93,10 +83,6 @@ echo "$WEBCAM_CERT" > $WEBCAM_CERT_DIR_ADM/webcam_cert
 WEBCAM_CERT_DIR_EC=$ROOT/client/entrycheck/site/cert
 mkdir -p $WEBCAM_CERT_DIR_EC
 echo "$WEBCAM_CERT" > $WEBCAM_CERT_DIR_EC/webcam_cert
-
-PROXY_INTRANET_CERT_DIR=$ROOT/server/proxy/intranet/cert
-mkdir -p $PROXY_INTRANET_CERT_DIR
-echo "$PROXY_CERT" > $PROXY_INTRANET_CERT_DIR/proxy_cert
 
 echo -e "\b\b\bOK]"
 echo "DONE!"

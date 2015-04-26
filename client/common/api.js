@@ -14,11 +14,9 @@
 var APISERVER = "api.saeu";
 var APIPORT = 1230;
 
-/** The server address and port for the API internet proxy server **/
-/** This is NOT HTTPS Traffic, but uses port 443 because that should certainly be
-	open in any mobile network / behind a firewall somewhere **/
+/** The server address and port for the API internet proxy server (SSH tunnel) **/
 var PROXYSERVER = "centralbank.eu";
-var PROXYPORT = 443;
+var PROXYPORT = 1230;
 
 /** The server address and port for the Webcam server - edit this if you need to! **/
 var WEBCAMSERVER = "cam.saeu";
