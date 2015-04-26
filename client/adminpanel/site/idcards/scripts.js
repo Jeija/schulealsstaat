@@ -88,7 +88,9 @@ function student_readable(student) {
 	var lines = [];
 	if (!("type") in student) throw "type is missing";
 	var cl = student.type.toUpperCase();
-	if (cl == "LEGALENTITY") {
+	if (cl == "REPLACEMENT") {
+		lines.push("Ersatzkarte");
+	} else if (cl == "LEGALENTITY") {
 		assert("special_name", student);
 		lines.push(student.special_name);
 		lines.push("(juristische Person)");
