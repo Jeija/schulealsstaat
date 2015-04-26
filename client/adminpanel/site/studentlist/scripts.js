@@ -1,4 +1,17 @@
 var current_profile = null;
+var studentlist = {};
+
+// Fields that are neccessary to display the list
+var reqfields = {
+	"qrid" : 1,
+	"firstname" : 1,
+	"lastname" : 1,
+	"picname" : 1,
+	"country" : 1,
+	"birth" : 1,
+	"type" : 1,
+	"special_name" : 1
+};
 
 function calcAge(bday) {
 	var today = new Date();
@@ -16,7 +29,15 @@ function date_readable (birth) {
 	return bdate.getDate() + "." + (bdate.getMonth() + 1) + "." + bdate.getFullYear();
 }
 
-function render_list(list) {
+function downloadData(filename, data) {
+	var dl = $("<a>").attr("href", "data:text/plain;charset=utf-8," + encodeURIComponent(data));
+	dl.attr("download", filename);
+	$(document.body).append(dl);
+	dl[0].click();
+	dl.remove();
+}
+
+function render_list() {
 	$("#studentlist").html("");
 	$("#studentlist").append($("<tr>")
 		.append($("<th>")
@@ -41,8 +62,8 @@ function render_list(list) {
 			.text("Aktionen"))
 	);
 
-	for (var i = 0; i < list.length; i++) {
-		var st = list[i];
+	for (var i = 0; i < studentlist.length; i++) {
+		var st = studentlist[i];
 
 		$("#studentlist").append($("<tr>")
 			.append($("<td>")
@@ -74,7 +95,7 @@ function render_list(list) {
 
 	// Show student's profile
 	$(".profile_open").click(function () {
-		var st = list[$(this).data("listid")];
+		var st = studentlist[$(this).data("listid")];
 		current_profile = st;
 		$("#profile").fadeIn(200);
 
@@ -116,7 +137,7 @@ function render_list(list) {
 	});
 
 	$(".student_delete").click(function () {
-		var st = list[$(this).data("listid")];
+		var st = studentlist[$(this).data("listid")];
 		if (window.confirm(st.firstname + " " + st.lastname + " wirklich löschen?")) {
 			var selector = "#master_cert_input";
 			action_mastercert("student_delete", st.qrid, selector, function (res) {
@@ -128,7 +149,7 @@ function render_list(list) {
 
 	$(".balance_load").click(function () {
 		var loadbutton = $(this);
-		var st = list[$(this).data("listid")];
+		var st = studentlist[$(this).data("listid")];
 		var selector = "#master_cert_input";
 		action_mastercert("get_balance_master", st.qrid, selector, function (res) {
 			if (isNaN(res)) {
@@ -240,20 +261,24 @@ $(function() {
 			}
 		}
 
-		var req = {query : cond};
+		var req = {query : cond, fields : reqfields};
 		action_cert("get_students", req, "admin_cert", function (res) {
-			var students = res;
-			render_list(students);
+			studentlist = res;
+			render_list();
 		});	
 	});
 
 	$("#query_go").click(function () {
 		$("#studentlist").html("");
-		var req = {query : JSON.parse($("#mongoose_query").val())};
-		action_cert("get_students", req, "admin_cert", function (res) {
-			var students = res;
-			render_list(students);
-		});
+		try {
+			var req = {query : JSON.parse($("#mongoose_query").val()), fields : reqfields};
+			action_cert("get_students", req, "admin_cert", function (res) {
+				studentlist = res;
+				render_list();
+			});
+		} catch(e) {
+			alert("Query error: " + e);
+		}
 	});
 
 	$("#profile_close").click(function () {
@@ -325,5 +350,9 @@ $(function() {
 
 	$("#qr_popup_abort").click(function() {
 		$("#qr_popup").fadeOut(200);
+	});
+
+	$("#downloadlist").click(function () {
+		downloadData("students.json", JSON.stringify(studentlist, null, 2));
 	});
 });

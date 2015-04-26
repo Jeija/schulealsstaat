@@ -9,9 +9,6 @@
 	padding:1px 13px !important;
 }
 
-.qrid_scan:hover {
-}
-
 .profile_open, .student_delete, .balance_load {
 	margin-right:3px;
 	border:none !important;
@@ -276,6 +273,14 @@ h3 {
 	left:0;
 	right:0;
 	margin:auto;
+}
+
+#downloadlist {
+	font-size:15px;
+	position:absolute;
+	bottom:15px;
+	right:20px;
+	padding:5px;
 }
 
 .profile_subheading {
