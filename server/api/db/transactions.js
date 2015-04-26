@@ -54,20 +54,27 @@ module.exports = {
 		});
 	},
 
+	getById : function (id, cb) {
+		Transaction.findOne({_id : mongoose.Types.ObjectId(id)}, function (err, tr) {
+			if (err) log.err("MongoDB", "trdb.getById failed: " + err);
+			cb(tr);
+		});
+	},
+
 	getByProperties : function (properties, limit, cb) {
 		if (!limit || limit < 0) {
 			Transaction.find(properties).sort({
 				"time" : "descending"
-			}).lean().exec(function (err, st) {
-				if (err) log.err("MongoDB", "stdb.getByProperties failed: " + err);
-				cb(st);
+			}).lean().exec(function (err, tr) {
+				if (err) log.err("MongoDB", "trdb.getByProperties failed: " + err);
+				cb(tr);
 			});
 		} else {
 			Transaction.find(properties).sort({
 				"time" : "descending"
-			}).limit(limit).lean().exec(function (err, st) {
-				if (err) log.err("MongoDB", "stdb.getByProperties failed: " + err);
-				cb(st);
+			}).limit(limit).lean().exec(function (err, tr) {
+				if (err) log.err("MongoDB", "trdb.getByProperties failed: " + err);
+				cb(tr);
 			});
 		}
 	},
@@ -81,7 +88,7 @@ module.exports = {
 				income : { $sum : "$amount_received" }
 			}}
 		], function (err, aggr_i) {
-			if (err) log.err("MongoDB", "stdb.getBalance failed (1): "+ err);
+			if (err) log.err("MongoDB", "trdb.getBalance failed (1): "+ err);
 			var income = aggr_i[0] ? aggr_i[0].income : 0;
 
 			// Aggregate payments
@@ -92,7 +99,7 @@ module.exports = {
 					payments : { $sum : "$amount_sent" }
 				}},
 			], function (err, aggr_p) {
-				if (err) log.err("MongoDB", "stdb.getBalance failed (2): "+ err);
+				if (err) log.err("MongoDB", "trdb.getBalance failed (2): "+ err);
 				var payments = aggr_p[0] ? aggr_p[0].payments : 0;
 
 				// Aggregate tax income (this may be a tax income account)
@@ -103,7 +110,7 @@ module.exports = {
 						taxincome : { $sum : "$amount_tax" }
 					}},
 				], function (err, aggr_ti) {
-					if (err) log.err("MongoDB", "stdb.getBalance failed (3): "+ err);
+					if (err) log.err("MongoDB", "trdb.getBalance failed (3): "+ err);
 					var taxincome = aggr_ti[0] ? aggr_ti[0].taxincome : 0;
 					cb(income + taxincome - payments);
 				});

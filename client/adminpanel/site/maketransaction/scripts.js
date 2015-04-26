@@ -377,6 +377,12 @@ $("#start").click(function () {
 		$("#start").prop("disabled", false);
 	}, 1000);
 
+	/*** Make sure a master_cert file is selected before starting ***/
+	if (!$("#master_cert_input")[0].files[0]) {
+		alert("Kein Master-Zertifikat gewählt!");
+		return;
+	}
+
 	for (var i = 0; i < transactions.length; i++) {
 		var tr = transactions[i];
 		if (tr.state != "pending") continue;

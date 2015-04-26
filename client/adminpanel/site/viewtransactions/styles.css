@@ -163,13 +163,13 @@
 	font-size:15px;
 }
 
-#transactions .showcomment {
+#transactions .showcomment, #transactions .delete {
 	color:#33a;
 	cursor:pointer;
 	font-weight:bold;
 }
 
-#transactions .showcomment:hover {
+#transactions .showcomment:hover,  #transactions .delete:hover {
 	color:#00f;
 }
 
@@ -261,4 +261,26 @@
 	font-family:Monospace;
 	font-size:18px;
 	text-align:right;
+}
+
+/*** Master certificate bar ***/
+#master_cert_container {
+	position:fixed;
+	bottom:0;
+	left:0;
+	height:40px;
+	width:100%;
+	background:rgba(40, 50, 140, 0.5);
+	text-align:center;
+	color:#fff;
+	padding-top:5px;
+	font-size:17px;
+	font-weight:bold;
+}
+
+#master_cert_input {
+	font-size:17px;
+	border: 1px dashed #ccc;
+	background:rgba(100, 100, 100, 0.5);
+	padding:3px;
 }

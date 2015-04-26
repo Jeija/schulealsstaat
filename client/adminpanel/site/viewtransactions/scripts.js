@@ -41,7 +41,7 @@ function render_transactions (trlist) {
 		.append($("<th>").text("Netto"))
 		.append($("<th>").text("Steuersatz"))
 		.append($("<th>").text("Steuer"))
-		.append($("<th>").text("Kommentar"))
+		.append($("<th>").text("Aktionen"))
 	);
 
 	for (var i = 0; i < trlist.length; i++) {
@@ -54,17 +54,37 @@ function render_transactions (trlist) {
 			.append($('<td class="num">').text(tr.amount_received.toFixed(3)))
 			.append($('<td class="num">').text(tr.percent_tax))
 			.append($('<td class="num">').text(tr.amount_tax.toFixed(3)))
-			.append($('<td>').append($('<div class="showcomment">')
-				.attr("comment-id", i)
-				.text("anzeigen")
-			))
+			.append($('<td>')
+				.append($('<div class="showcomment">')
+					.attr("comment-id", i)
+					.text("Kommentar")
+				)
+				.append($('<div class="delete">')
+					.attr("comment-id", i)
+					.text("löschen")
+				)
+			)
 		);
 	}
 
+	/*** Actions (show comment / delete student ***/
 	$(".showcomment").click(function () {
 		$("#comment_text").text(trlist[$(this).attr("comment-id")].comment);
 		$("#comment_preview").fadeIn();
 	});
+
+	$(".delete").click(function () {
+		var tr = trlist[$(this).attr("comment-id")];
+		var msg = "Transaktion von " + tr.sender.qrid + " an " + tr.recipient.qrid + " wirklich löschen?";
+		if (window.confirm(msg)) {
+			var selector = "#master_cert_input";
+			action_mastercert("transaction_delete", tr._id, selector, function (res) {
+				if (res == "ok") alert("Transaktion gelöscht.");
+				else alert("Fehler: " + res);
+			});
+		}
+	});
+
 
 	/*** Calculate stats ***/
 	var total_sent = 0, total_received = 0, total_tax = 0, total_number = 0;

@@ -432,4 +432,26 @@ register_cert("master_transaction", ["master_hash"], function (payload, answer, 
 	transaction(sender, recipient, sent, received, tax_percent, comment, answer, error, info);
 });
 
+/**
+ * master_hash --> delete_transaction
+ *	payload : ObjectID (ObjectID of transaction in DB)
+ *
+ * response values:
+ * invalid_id	--> transaction with that _id couldn't be found
+ * ok		--> transaction successfully deleted
+ */
+register_cert("transaction_delete", ["master_hash"], function (payload, answer, error, info) {
+	db.transactions.getById(payload, function (tr) {
+		if (!tr) {
+			answer("invalid_id");
+			return;
+		}
+		info("Deleting transaction from " + common.student_readable(tr.sender) + " to " +
+			common.student_readable(tr.recipient) + ", gross value " + tr.amount_sent +
+			", id is " + tr._id);
+		tr.remove();
+		answer("ok");
+	});
+});
+
 }; // module.exports
