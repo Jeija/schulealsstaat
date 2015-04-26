@@ -6,7 +6,7 @@ var crypto = require("crypto");
 
 // Generate Salt / Hash combination from password
 function generate_pwdhash(pwd) {
-	var pwdsalt = crypto.randomBytes(32).toString('hex');
+	var pwdsalt = crypto.randomBytes(32).toString("hex");
 	var pwdhash = crypto.createHash("sha256").update(pwd + pwdsalt).digest("hex");
 	return { salt : pwdsalt, hash : pwdhash };	
 }
@@ -299,7 +299,7 @@ register_cert("register_student", ["registration_hash"], function (payload, answ
 			if (payload.qrid) {
 				qrid = payload.qrid;
 			} else {
-				qrid = crypto.randomBytes(4).toString('hex');
+				qrid = crypto.randomBytes(4).toString("hex");
 				db.students.getByQrid(qrid, regStudent);
 				return;
 			}
