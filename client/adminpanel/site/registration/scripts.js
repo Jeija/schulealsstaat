@@ -1,11 +1,7 @@
 var WEBCAM_WIDTH = 800;
 var WEBCAM_HEIGHT = 600;
 
-var PWD_MINLEN = 10;
-
 $(function() {
-
-$("#pwd_minlen").html(PWD_MINLEN);
 
 var webcam = document.querySelector("#webcam");
 var webcam_shot = document.querySelector("#webcam_shot");
@@ -90,27 +86,6 @@ $("#hgc_preload_value").on("keydown change", function() {
 		$("#hgc_preload_enter_value").hide();
 });
 
-function highlight_pwd() {
-	if ($("#password").val().length < PWD_MINLEN) {
-		$("#password").css("box-shadow", "0px 0px 5px #d00");
-		$("#password_repeat").css("box-shadow", "0px 0px 5px #d00");
-	} else if ($("#password").val() != $("#password_repeat").val()) {
-		$("#password").css("box-shadow", "0px 0px 5px #0d0");
-		$("#password_repeat").css("box-shadow", "0px 0px 5px #d00");
-	} else {
-		$("#password").css("box-shadow", "0px 0px 5px #0d0");
-		$("#password_repeat").css("box-shadow", "0px 0px 5px #0d0");
-	}
-
-	if ($("#password_repeat").val().length < 1)
-		$("#password_repeat").css("box-shadow", "none");
-	if ($("#password").val().length < 1)
-		$("#password").css("box-shadow", "none");
-}
-
-$("#password").on("input", highlight_pwd);
-$("#password_repeat").on("input", highlight_pwd);
-
 /*** QR Scan Popup ***/
 $("#qr_popup_abort").click(function () {
 	$("#qr_popup").fadeOut();
@@ -192,12 +167,6 @@ $("#send").click(function() {
 		return;
 	}
 
-	if (pwd.length < PWD_MINLEN) {
-		alert("Fehler: Das Passwort muss mindestens " + PWD_MINLEN +
-			" Zeichen lang sein.");
-		return;
-	}
-
 	var pictureData = $("#webcam_shot")[0].toDataURL();
 	var picname = (Math.random()*1e17+Math.random()*1e35).toString(36);
 
@@ -234,7 +203,6 @@ $("#send").click(function() {
 			alert("Registrierung erfolgreich!");
 			preload_money();
 			$("#main_form")[0].reset();
-			highlight_pwd();
 			webcam_shot.getContext("2d").clearRect(0, 0,
 				webcam_shot.width, webcam_shot.height);
 			window.scrollTo(0, 0);

@@ -1,7 +1,7 @@
 var WEBCAM_WIDTH = 800;
 var WEBCAM_HEIGHT = 600;
 
-var PWD_MINLEN = 10;
+var PWD_MINLEN = 6;
 
 $(function() {
 
