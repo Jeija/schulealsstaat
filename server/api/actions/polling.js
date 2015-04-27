@@ -60,7 +60,7 @@ register("transactions_poll", function (payload, answer, error, info) {
 			info("timeout " + payload.qrid);
 			answer({});
 			delete polls[idx];
-		}, config.get("poll_timeout", 40000));
+		}, config.get("poll_timeout"));
 	});
 });
 
@@ -85,10 +85,10 @@ setInterval(function () {
 			"recipient.qrid" : p.qrid
 		};
 
-		db.transactions.getByProperties(query, config.get("poll_max", 5), function (tr) {
+		db.transactions.getByProperties(query, config.get("poll_max"), function (tr) {
 			handleDbPollAnswer(tr, idx);
 		});
 	});
-}, config.get("poll_db_update_interval", 1000));
+}, config.get("poll_db_update_interval"));
 
 };

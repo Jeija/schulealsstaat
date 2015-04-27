@@ -15,6 +15,9 @@ exec 3>&1
 DHCPSERVER=$(dialog --nocancel --inputbox DHCP\ Server? 10 50 192.168.2.10 2>&1 1>&3)
 exec 3>&-
 
+### Webcam ###
+$CWD/setupwebcam.sh
+
 # Some debug output..
 lsusb
 ip addr
@@ -23,7 +26,11 @@ ip addr
 mkdir -p /tmp/userterminal
 cp -R $CWD/userterminal/* /tmp/userterminal
 cp $CWD/xinitrc /root/.xinitrc
+
+### Root password and userterminal configuration password ###
 dialog --insecure --passwordbox "Settings password?" 10 40 2> /tmp/password
+PASS=$(cat /tmp/password)
+echo "root:$PASS" | chpasswd
 
 ### Audio volume ###
 amixer sset Master 100%

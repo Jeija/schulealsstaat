@@ -1,0 +1,12 @@
+{
+	"hgc_tr_decimal_places" : 2,
+	"hgc_decimal_places" : 5,
+	"taxinc_qrid" : "taxinc",
+	"update_config_interval" : 30000,
+	"transaction_tax_percent" : 10,
+	"tr_comment_maxlen" : 300,
+	"magic_account" : "Zentralbank",
+	"poll_timeout" : 40000,
+	"poll_max" : 5,
+	"poll_db_update_interval" : 1000
+}

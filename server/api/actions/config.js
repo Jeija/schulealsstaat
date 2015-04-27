@@ -6,9 +6,9 @@ module.exports = function (register, register_cert) {
 	// Warning: Reading configuration is unprotected!
 	// There shouldn't be any relevant data inside anyways
 	register("config_get", function (payload, answer) {
-		var value = config.get(payload, "");
+		var value = config.get(payload);
 		answer(value);
-		log.info("request " + payload + " answered with " + value.toString());
+		log.info("request " + payload + " answered with " + JSON.stringify(value));
 	});
 
 	register_cert("config_set", ["master_hash"], function (payload, answer, error, info) {

@@ -127,6 +127,8 @@ $(".qrid_scan").click(function () {
 });
 
 function preload_money() {
+	if ($("#class").val() != "visitor") return;
+
 	// Load settings: Account to transfer money from
 	var settings;
 	try {
@@ -136,7 +138,6 @@ function preload_money() {
 		return;
 	}
 
-	if ($("#class").val() != "visitor") return;
 	var hgc_value = $("#hgc_preload_value").val();
 	if (hgc_value == "enter_value")
 		hgc_value = $("#hgc_preload_enter_value").val().replace(",", ".");

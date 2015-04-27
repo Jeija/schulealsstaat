@@ -6,7 +6,8 @@
 # 'GatewayPorts yes'
 # And restart the SSH server
 #
-# You must also generate a 
+# You must also generate an SSH keypair to use this, with the private key
+# on the client and the signature on the remote server.
 
 set -e
 

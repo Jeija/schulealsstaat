@@ -1,4 +1,5 @@
 #!/bin/bash
+SERVER_IP_RANGE=192.168.2.0/24
 
 # NoWifi packages: exit
 CWD="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
@@ -25,9 +26,9 @@ while [ -z "$WIFI_IFACE" ]; do
 			# Make dialog out of wireless networks list
 			LIST=()
 			while read -r line; do
-				LIST+=("$line /dev/$line")
+				LIST+=("$line $line")
 			done <<< "$AVAILABLE"
-			echo "${LIST[@]}"
+
 			# Show dialog
 			exec 3>&1
 			TITLE="Choose WiFi interface"
@@ -53,8 +54,12 @@ echo $WIFI_CHANNEL > /tmp/wifi/channel
 echo $WIFI_IFACE > /tmp/wifi/iface
 echo $TXPOWER > /tmp/wifi/txpower
 
-# Allow DHCP broadcasts from wifi devices
+# Allow receiving DHCP broadcasts from wifi devices (--> dhcrelay forwards them)
 ebtables -A INPUT -i $WIFI_IFACE -p IPv4 --ip-dst 255.255.255.255 -j ACCEPT
+
+# Allow all packages from the wired connection in 192.168.2.0/24 through, but not from WiFi
+ebtables -A FORWARD -i ! $WIFI_IFACE -p ARP --arp-ip-src $SERVER_IP_RANGE -j ACCEPT
+ebtables -A FORWARD -i ! $WIFI_IFACE -p IPv4 --ip-src $SERVER_IP_RANGE -j ACCEPT
 
 cat << EOF > /tmp/hostapd.conf
 ssid=saeu

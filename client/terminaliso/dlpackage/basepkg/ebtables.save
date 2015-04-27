@@ -4,10 +4,7 @@
 :OUTPUT DROP
 -A INPUT -p ARP --arp-ip-src 192.168.2.0/24 -j ACCEPT
 -A INPUT -p IPv4 --ip-src 192.168.2.0/24 -j ACCEPT
--A FORWARD -p ARP --arp-ip-src 192.168.2.0/24 -j ACCEPT
 -A FORWARD -p ARP --arp-ip-dst 192.168.2.0/24 -j ACCEPT
--A FORWARD -p IPv4 --ip-dst ! 192.168.0.0/16 -j DROP
 -A FORWARD -p IPv4 --ip-dst 192.168.2.0/24 -j ACCEPT
--A FORWARD -p IPv4 --ip-src 192.168.2.0/24 -j ACCEPT
 -A OUTPUT -p ARP --arp-ip-dst 192.168.2.0/24 -j ACCEPT
 -A OUTPUT -p IPv4 --ip-dst 192.168.2.0/24 -j ACCEPT

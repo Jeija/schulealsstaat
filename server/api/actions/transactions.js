@@ -7,7 +7,7 @@ var common = require("./common.js");
 
 // Round a currency value
 function HGC_roundup(value) {
-	var decplaces = config.get("hgc_decimal_places", 5);
+	var decplaces = config.get("hgc_decimal_places");
 	return Math.ceil(value * Math.pow(10, decplaces)) / Math.pow(10, decplaces);
 }
 
@@ -170,7 +170,7 @@ register_cert("find_transactions", ["admin_hash"], function (payload, answer, er
 /**
  * On startup: Check if tax income account exists
  */
-db.students.getByQridLean(config.get("taxinc_qrid", "taxinc"), function (taxinc) {
+db.students.getByQridLean(config.get("taxinc_qrid"), function (taxinc) {
 	if (!taxinc)
 		log.err("BANK", "Tax income account not found. You MUST create a tax income" + 
 			"account in order to collect any taxes.");
@@ -210,7 +210,7 @@ function net2tax(net, tax_percent) {
 function transaction(sender_qrid, recipient_qrid, amount_sent, amount_received, tax,
 		comment, answer, error, info) {
 	var sender, recipient, taxinc;
-	var magic_account = config.get("magic_account", "Zentralbank");
+	var magic_account = config.get("magic_account");
 	var spawn_money = sender_qrid == magic_account;
 	var destroy_money = recipient_qrid == magic_account;
 
@@ -226,7 +226,7 @@ function transaction(sender_qrid, recipient_qrid, amount_sent, amount_received, 
 
 	/*** Load all required database entries ***/
 	flow.exec(function () {
-		db.students.getByQridLean(config.get("taxinc_qrid", "taxinc"), this);
+		db.students.getByQridLean(config.get("taxinc_qrid"), this);
 	}, function (st) {
 		if (!st) {
 			answer("error: no tax income account");
@@ -339,11 +339,11 @@ function transaction_common(payload, answer, error, info, tax) {
 	var received = "amount_received" in payload ? payload.amount_received : false;
 
 	/*** Check comment length ***/
-	if (comment && comment.length > config.get("tr_comment_maxlen", 300))
+	if (comment && comment.length > config.get("tr_comment_maxlen"))
 		{ answer("comment_too_long"); return; }
 
 	/*** Check if amount has more than hgc_tr_decimal_places decimals ***/
-	var tr_decplaces = config.get("hgc_tr_decimal_places", 2);
+	var tr_decplaces = config.get("hgc_tr_decimal_places");
 	if (sent && nDecimals(sent) > tr_decplaces)
 		{ answer("too_many_decplaces"); return; }
 	if (received && nDecimals(received) > tr_decplaces)
@@ -360,7 +360,7 @@ function transaction_common(payload, answer, error, info, tax) {
 
 register("transaction", function (payload, answer, error, info) {
 	// Tax in %
-	var tax = config.get("transaction_tax_percent", 10);
+	var tax = config.get("transaction_tax_percent");
 	transaction_common(payload, answer, error, info, tax);
 });
 
@@ -379,7 +379,7 @@ register_cert("transaction_taxfree", ["registration_hash", "admin_hash"],
  */
 register_cert("spawn_money", ["master_hash"], function (payload, answer, error, info) {
 	info("Creation of money!");
-	var sender = config.get("magic_account", "Zentralbank");
+	var sender = config.get("magic_account");
 	var recipient = payload.recipient;
 	var amount = payload.amount;
 	var comment = "spawn_money" + (("comment" in payload) ? " - " + payload.comment : "");
@@ -397,7 +397,7 @@ register_cert("spawn_money", ["master_hash"], function (payload, answer, error, 
  */
 register_cert("destroy_money", ["master_hash"], function (payload, answer, error, info) {
 	info("Destruction of money!");
-	var recipient = config.get("magic_account", "Zentralbank");
+	var recipient = config.get("magic_account");
 	var sender = payload.sender;
 	var amount = payload.amount;
 	var comment = "destroy_money" + (("comment" in payload) ? " - " + payload.comment : "");
@@ -419,7 +419,7 @@ register_cert("master_transaction", ["master_hash"], function (payload, answer, 
 	info("Forced (master) transaction of money!");
 	// Tax in %
 	var tax_percent = "tax_percent" in payload ?
-		payload.tax_percent : config.get("transaction_tax_percent", 10);
+		payload.tax_percent : config.get("transaction_tax_percent");
 	if (tax_percent < 0) { answer("error: invalid tax_percent"); return; }
 	var sender = payload.sender;
 	var recipient = payload.recipient;

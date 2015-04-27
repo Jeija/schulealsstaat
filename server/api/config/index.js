@@ -3,7 +3,7 @@ var log = require("../logging");
 var fs = require("fs");
 var cert = require("../cert");
 
-var config = {}
+var config = require("./defaults.json");
 
 /**
  * Regularly read configuration from database
@@ -45,13 +45,8 @@ function del(key) {
  * value back (no matter their alt_val) and so that the config option
  * is user-visible in the adminpanel/config client.
  */
-function get(key, alt_val) {
-	if (key in config) {
-		return config[key];
-	} else {
-		config[key] = alt_val;
-		return alt_val;
-	}
+function get(key) {
+	return config[key];
 }
 
 function getAll() {
@@ -59,7 +54,7 @@ function getAll() {
 }
 
 update_config(function () {
-	setInterval(update_config, get("update_config_interval", 40000));
+	setInterval(update_config, get("update_config_interval"));
 });
 
 module.exports = {
