@@ -55,11 +55,12 @@ function render_transactions (trlist) {
 			.append($('<td class="num">').text(tr.percent_tax))
 			.append($('<td class="num">').text(tr.amount_tax.toFixed(3)))
 			.append($('<td>')
-				.append($('<div class="showcomment">')
+				.append($('<span class="showcomment">')
 					.attr("comment-id", i)
 					.text("Kommentar")
 				)
-				.append($('<div class="delete">')
+				.append($("<span>").text(" / "))
+				.append($('<span class="delete">')
 					.attr("comment-id", i)
 					.text("löschen")
 				)
@@ -70,7 +71,7 @@ function render_transactions (trlist) {
 	/*** Actions (show comment / delete student ***/
 	$(".showcomment").click(function () {
 		$("#comment_text").text(trlist[$(this).attr("comment-id")].comment);
-		$("#comment_preview").fadeIn();
+		$("#comment_preview").fadeIn(200);
 	});
 
 	$(".delete").click(function () {
@@ -116,7 +117,7 @@ function render_transactions (trlist) {
 }
 
 $("#comment_preview_ok").click(function () {
-	$("#comment_preview").fadeOut();
+	$("#comment_preview").fadeOut(200);
 });
 
 $("#query").click(function () {
