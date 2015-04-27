@@ -54,10 +54,14 @@ echo $WIFI_CHANNEL > /tmp/wifi/channel
 echo $WIFI_IFACE > /tmp/wifi/iface
 echo $TXPOWER > /tmp/wifi/txpower
 
-# Allow receiving DHCP broadcasts from wifi devices (--> dhcrelay forwards them)
+# Only allow (any) wired connections or DHCP broadcasts as input
 ebtables -A INPUT -i $WIFI_IFACE -p IPv4 --ip-dst 255.255.255.255 -j ACCEPT
+ebtables -A INPUT -i ! $WIFI_IFACE -j ACCEPT
 
-# Allow all packages from the wired connection in 192.168.2.0/24 through, but not from WiFi
+# Allow any output to WiFi (DHCP)
+ebtables -A OUTPUT -o $WIFI_IFACE -j ACCEPT
+
+# Forward packages from any of the servers to wifi clients (no "servers" on wifi though)
 ebtables -A FORWARD -i ! $WIFI_IFACE -p ARP --arp-ip-src $SERVER_IP_RANGE -j ACCEPT
 ebtables -A FORWARD -i ! $WIFI_IFACE -p IPv4 --ip-src $SERVER_IP_RANGE -j ACCEPT
 
