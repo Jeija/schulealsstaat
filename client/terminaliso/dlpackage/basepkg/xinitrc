@@ -12,4 +12,6 @@ SCREENY=$(xdpyinfo | grep dimensions | awk '{print $2}' | awk -Fx '{print $2}')
 
 sed -i "/width/c\\\t\t\"width\"\:\ $SCREENX," /tmp/userterminal/package.json
 sed -i "/height/c\\\t\t\"height\"\:\ $SCREENY" /tmp/userterminal/package.json
+xset -dpms
+xset s off
 cd /tmp && nw userterminal
