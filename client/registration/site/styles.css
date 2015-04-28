@@ -33,13 +33,28 @@ body {
 	text-align:center;
 }
 
-#webcam_container #webcam_heading {
+#webcam_container #webcam_half {
+	position:relative;
 	display:inline-block;
 }
 
-#webcam_container #webcam_heading h3 {
+#webcam_container #webcam_half h3 {
 	font-size:30px;
 	margin:10px 0;
+}
+
+#webcam_container #webcam_half #webcamerror {
+	z-index:5;
+	font-size:30px;
+	color:#fff;
+	position:absolute;
+	width:300px;
+	height:70px;
+	bottom:0;
+	right:0;
+	left:0;
+	top:50px;
+	margin:auto;
 }
 
 #webcam_container input[type="button"] {

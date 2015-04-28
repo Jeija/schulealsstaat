@@ -27,7 +27,7 @@ function handleVideo(stream) {
 }
 
 navigator.getUserMedia({video: true}, handleVideo, function (err) {
-	alert("Webcam konnte nicht gefunden werden!");
+	$("#webcamerror").show();
 });
 
 function update_subclass() {
