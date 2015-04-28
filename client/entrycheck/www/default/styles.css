@@ -18,13 +18,24 @@ html, body {
 	width:50vw;
 }
 
+#nowebcam {
+	position:absolute;
+	right:0;
+	left:0;
+	top:3vw;
+	font-size:4vw;
+	margin:auto;
+	width:50vw;
+}
+
 /** Credentials / User information **/
 .card {
-	width:340px;
+	width:70vw;
+	max-width:340px;
 	margin:auto;
 	display:inline-block;
 	margin:20px 5px;
-	margin-right:30px;
+	margin-left:5vw;
 	padding:20px;
 	border:1px solid #555;
 	height:90%;
@@ -34,7 +45,8 @@ html, body {
 }
 
 .pass {
-	width:320px;
+	width:75vw;
+	max-width:320px;
 	height:240px;
 	background:#000;
 	display:inline-block;
@@ -43,7 +55,7 @@ html, body {
 
 .prop_table {
 	margin-left:10px;
-	font-size:30px;
+	font-size:20px;
 	text-align:left;
 	margin-bottom:20px;
 }
@@ -56,13 +68,10 @@ html, body {
 
 .close {
 	position:absolute;
-	right:-20px;
-	top:-20px;
-	font-size:20px;
-	background:#fff;
-	border:2px solid #555;
-	border-radius:30px;
-	width:30px;
+	right:0;
+	top:0;
+	font-size:30px;
+	width:40px;
 	height:30px;
 	text-align:center;
 	line-height:30px;
@@ -70,12 +79,17 @@ html, body {
 	-webkit-user-select: none;
 	-moz-user-select: none;
 	user-select: none;
+	background:rgba(255, 150, 150, 0.2);
 	color:#000;
+	cursor:pointer;
 }
 
 .close:hover {
-	background:#aaa;
-	cursor:pointer;
+	background:rgba(255, 75, 75, 0.4);
+}
+
+.close:active {
+	background:rgba(255, 75, 75, 0.9);
 }
 
 .notfound {

@@ -1,6 +1,6 @@
 {
 	"name" : "SaEU Zugangskontrolle",
-	"main" : "./site/default/index.html",
+	"main" : "./www/default/index.html",
 	"scripts" : {
 		"start" : "nw"
 	},

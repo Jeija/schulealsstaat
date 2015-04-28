@@ -8,13 +8,14 @@
  */
 
 var ZBARCAM = "zbarcam";
-var WEBCAM = "/dev/video3";
-var ZBC_FLAGS = "--prescale=640x480"
+var ZBC_FLAGS = "--prescale=640x480";
 
 // In node.js (nwjs) environment: Spawn ZBarCam instead of QRScanJS
-var process = undefined;
+var process = null;
 if (typeof require !== "undefined") {
+	var WEBCAM = prompt("Welche Webcam soll verwendet werden [/dev/video0]?");
 	process = require("child_process");
+	if (process === "") process = "/dev/video0";
 }
 
 // Prevent duplicate scanning by storing the last scanned ID cards for 5 seconds
@@ -32,7 +33,6 @@ function calcAge(bday) {
 }
 
 function addActionCard(qrid) {
-	console.log(qrid);
 	// Make sure this is not a duplicate scan
 	if (last_qrids.indexOf(qrid) > -1) return;
 	last_qrids.push(qrid);
@@ -51,7 +51,7 @@ function addActionCard(qrid) {
 		if (typeof student != "object") {
 			card.find(".qrid").text(qrid);
 			card.find(".notfound").show();
-			return
+			return;
 		} else {
 			card.find(".found").show();
 		}
@@ -68,23 +68,34 @@ function addActionCard(qrid) {
 }
 
 $(function() {
+	// QRScanJS scanning function, used below
+	function scan (qrid) {
+		addActionCard(qrid);
+		QRReader.scan(scan);
+	}
+
 	// NW.js - ZBarCam:
 	if (process) {
-		$("#webcam_scanner").hide();
-		var zbar = process.exec(ZBARCAM + " " + WEBCAM + " " + ZBC_FLAGS);
-		zbar.stdout.on("data", function (qrid_raw) {
-			var qrids = qrid_raw.split("\n");
-			console.log(qrids);
-			for (var i = 0; i < qrids.length - 1; i++)
-				addActionCard(qrids[i]);
-		});
+		process.execSync("killall zbarcam || true");
+		setTimeout(function () {
+			$("#webcam_scanner").hide();
+			var zbar = process.exec(ZBARCAM + " " + WEBCAM + " " + ZBC_FLAGS);
+			zbar.stdout.on("data", function (qrid_raw) {
+				var qrids = qrid_raw.split("\n");
+				for (var i = 0; i < qrids.length - 1; i++)
+					addActionCard(qrids[i]);
+			});
+		}, 1000);
 
 	// Native JavaScript QRScanJS
 	} else {
-		function scan (qrid) {
-			addActionCard(qrid);
-			QRReader.scan(scan);
-		}
+		setInterval(function () {
+			if ($("#webcam")[0].paused) {
+				$("#nowebcam").show()
+			} else {
+				$("#nowebcam").hide()
+			}
+		}, 100);
 
 		QRReader.init("#webcam", "../QRScanJS/");
 		QRReader.scan(scan);

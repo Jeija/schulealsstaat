@@ -3,17 +3,19 @@
 <html>
 <head>
 	<title>SaEU - Zugangskontrolle</title>
+	<meta name="viewport" content="initial-scale=1">
 	<script src="../bower_components/jsencrypt/bin/jsencrypt.min.js"></script>
 	<script src="../bower_components/jquery/dist/jquery.js"></script>
 	<script src="../bower_components/gibberish-aes/dist/gibberish-aes-1.0.0.min.js"></script>
 	<script src="../QRScanJS/qrscan.js"></script>
 	<script src="../api.js"></script>
 	<script src="scripts.js"></script>
-	<link rel="stylesheet" type="text/css" href="styles.css">
+	<link rel="stylesheet" type="text/css" href="styles.css"></link>
 	<meta charset="utf-8"/>
 </head>
 <body>
 	<div id="webcam_scanner">
+		<div id="nowebcam">Webcam konnte nicht gefunden werden!</div>
 		<video autoplay="true" id="webcam"></video>
 	</div>
 
@@ -22,6 +24,7 @@
 		<div class="card" id="card_prototype" style="display:none">
 			<div class="notfound" hidden>
 				QR-ID <span class="qrid"></span>: Nicht gefunden!
+				<a class="close">&#x2715;</a>
 			</div>
 			<div class="found" hidden>
 				<img class="pass" alt="Wird geladen...">

@@ -72,7 +72,7 @@ ADMINPANEL_CERT_DIR=$ROOT/client/adminpanel/site/cert
 mkdir -p $ADMINPANEL_CERT_DIR
 echo "$ADMIN_CERT" > $ADMINPANEL_CERT_DIR/admin_cert
 
-EC_CERT_DIR=$ROOT/client/entrycheck/site/cert
+EC_CERT_DIR=$ROOT/client/entrycheck/www/cert
 mkdir -p $EC_CERT_DIR
 echo "$EC_CERT" > $EC_CERT_DIR/ec_cert
 
@@ -80,7 +80,7 @@ WEBCAM_CERT_DIR_ADM=$ROOT/client/adminpanel/site/cert
 mkdir -p $WEBCAM_CERT_DIR_ADM
 echo "$WEBCAM_CERT" > $WEBCAM_CERT_DIR_ADM/webcam_cert
 
-WEBCAM_CERT_DIR_EC=$ROOT/client/entrycheck/site/cert
+WEBCAM_CERT_DIR_EC=$ROOT/client/entrycheck/www/cert
 mkdir -p $WEBCAM_CERT_DIR_EC
 echo "$WEBCAM_CERT" > $WEBCAM_CERT_DIR_EC/webcam_cert
 

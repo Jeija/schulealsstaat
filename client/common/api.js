@@ -175,6 +175,18 @@ function send_query(name, query, cb, polling) {
 }
 
 /**
+ * AJAX wrapper for getting certificates
+ */
+function get_cert(certname, cb) {
+	var cert = new XMLHttpRequest({ mozSystem : true });
+	cert.open("GET", "../cert/" + certname, true);
+	cert.onload = function () {
+		cb(cert.responseText);
+	};
+	cert.send();
+}
+
+/**
  * High-level API action calls
  * action(name, payload, cb)
  *	name: The name of the action to be executed on the server (unencrypted)
@@ -212,7 +224,7 @@ function action_poll(name, payload, cb) {
 }
 
 function action_cert(name, payload, certname, cb) {
-	$.get("../cert/" + certname, function (cert) {
+	get_cert(certname, function (cert) {
 		send_query(name, { payload : payload, cert : cert }, cb);
 	});
 }
@@ -239,7 +251,7 @@ function action_mastercert(name, payload, certfile_selector, cb) {
  */
 function webcamserv_get(picname, cb) {
 	var url = WEBCAMURL + "get/" + picname;
-	$.get("../cert/webcam_cert", function (cert) {
+	get_cert("webcam_cert", function (cert) {
 		$.ajax({
 			type : "POST",
 			url : url,

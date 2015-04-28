@@ -10,7 +10,7 @@ PUBKEY=$( openssl rsa -pubout -in $ROOT/server/api/privkey.pem )
 echo -e "Generated RSA public key:\n$PUBKEY"
 echo -ne "$PUBKEY" > $ROOT/client/adminpanel/site/pubkey.pem
 echo -ne "$PUBKEY" > $ROOT/client/app/www/pubkey.pem
-echo -ne "$PUBKEY" > $ROOT/client/entrycheck/site/pubkey.pem
+echo -ne "$PUBKEY" > $ROOT/client/entrycheck/www/pubkey.pem
 echo -ne "$PUBKEY" > $ROOT/client/registration/site/pubkey.pem
 echo -ne "$PUBKEY" > $ROOT/client/userterminal/site/pubkey.pem
 echo -ne "$PUBKEY" > $ROOT/client/genrequest/site/pubkey.pem

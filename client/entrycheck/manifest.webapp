@@ -1,0 +1,20 @@
+{
+    "version": "0.1",
+    "name": "Zugangskontrolle",
+    "description": "Schule als EU Zugangskontrolle",
+    "launch_path": "/www/default/index.html",
+    "icons": {
+        "128": "/icon.png"
+    },
+    "developer": {
+        "name": "Schule als EU Computer AG"
+    },
+    "orientation": [ "portrait" ],
+    "installs_allowed_from": ["*"],
+    "default_locale": "de",
+    "type": "privileged",
+    "permissions": {
+        "systemXHR": { "description": "Zur Kommunikation mit dem Server" },
+        "video-capture": { "description": "Um QR-Codes zu lesen" }
+    }
+}

@@ -15,7 +15,5 @@
 	<feature name="BarcodeScanner">
 		<param name="id" value="com.phonegap.plugins.barcodescanner" />
 	</feature>
-
-	<!-- Platforms -->
 	<icon src="icon128.png" />
 </widget>

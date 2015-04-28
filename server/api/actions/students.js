@@ -103,11 +103,6 @@ register_cert("profile_edit", ["admin_hash"], function (payload, answer, error, 
 		info("Edit " + payload.prop + " of " + common.student_readable(st) + ", from " +
 			st[payload.prop] + " to " + payload.value);
 
-		// If qrid was edited, change it in transactions DB
-		if (payload.prop == "qrid")
-			db.transactions.updateAllQrid
-				(st[payload.prop], payload.value);
-
 		st[payload.prop] = payload.value;
 		st.save();
 		answer("ok");

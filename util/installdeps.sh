@@ -19,7 +19,7 @@ ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/.."
 # Install client dependencies
 ( cd $ROOT/client/adminpanel/site ; bower install )
 ( cd $ROOT/client/app/www ; bower install )
-( cd $ROOT/client/entrycheck/site ; bower install )
+( cd $ROOT/client/entrycheck/www ; bower install )
 ( cd $ROOT/client/registration/site ; bower install )
 ( cd $ROOT/client/userterminal/site ; bower install )
 ( cd $ROOT/client/genrequest/site ; bower install )

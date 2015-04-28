@@ -9,7 +9,7 @@ cp $ROOT/client/common/api.js $ROOT/client/userterminal/site/
 cp $ROOT/client/common/api.js $ROOT/client/registration/site/
 cp $ROOT/client/common/api.js $ROOT/client/genrequest/site/
 cp $ROOT/client/common/api.js $ROOT/client/adminpanel/site/
-cp $ROOT/client/common/api.js $ROOT/client/entrycheck/site/
+cp $ROOT/client/common/api.js $ROOT/client/entrycheck/www/
 cp $ROOT/client/common/api.js $ROOT/client/app/www/js/
 cp $ROOT/client/common/api.js $ROOT/testing/api/
 
