@@ -86,6 +86,7 @@ If, however, you want to access the server from multiple devices such as from th
 	* Archlinux: `sudo pacman -S nodejs git mongodb tmux`
 * Install the following node.js packages:
 `sudo npm install -g bower http-server node-gyp nodemon nw`
+* If there are some npm-errors try to install each npm-package alone.
 * Clone this repository *recursively*: `git clone --recursive https://github.com/Jeija/schulealsstaat` and `cd schulealsstaat`
 * Let the included script set up your development environment and install project-internal dependencies: `./init.sh`
 * Start up API and Webcam Servers and launch HTTP Servers for the client applications: `./develop.sh`
