@@ -93,10 +93,11 @@ If, however, you want to access the server from multiple devices such as from th
 #### Usage
 You can now access the client applications at
 
-* [http://localhost:80](http://localhost:80) (Registration client)
 * [http://localhost:81](http://localhost:81) (Entrycheck client)
 * [http://localhost:82](http://localhost:82) (Management client)
 * [http://localhost:83](http://localhost:83) (`genrequest` client)
+* [http://localhost:84](http://localhost:84) (Registration client)
+
 
 ## Security
 As you can buy real goods with this digital currency, the currency system is of particular interest to attackers. Secondly, the collected data has to be well protected, as it contains records of more than a thousand people. We are very aware of this and have developed a number of counter-measures to fight manipulations.
@@ -104,8 +105,8 @@ As you can buy real goods with this digital currency, the currency system is of 
 #### Encryption
 Even though this project does not use HTTPS for client-server communication, all requests to the API server are encrypted. The clients have an RSA Public Key of the API Server and use it to encrypt a password. This password this then used to encrypt the actual payload of the requests with AES and is also used to encrypt the answer again by the server. In this case the main downside of JavaScirpt cryptography, the often insecure channel of distributing the encryption key and files, is irrelevant since the software on the Laptops is cryptographically signed and the App software is distributed in advance. Also, an attacker that might e.g. try to sniff user's passwords by intercepting WiFi traffic could only be amongst a relatively small number of people in the intranet.
 
-#### Certificate System
-Simple passwords can easily be cracked, therefore HöGyCoin uses a system of certificate files that contain long arbitrary strings that serve as passwords. These files are included with the respective management client packets, so it has to be made sure that only the person on the computer running the management software has access to the files (e.g. only listen for requests on the loopback interface, not on any public interface). If a certificate got stolen, they can easily be regenerated. The server only stores hashes and compares them.
+#### Keyfile System
+Humand-made passwords can easily be cracked, therefore HöGyCoin uses a system of keyfiles ("admin_cert, master_cert, ...") that contain long arbitrary strings that serve as passwords. These files are included with the respective management client packets, so it has to be made sure that only the person on the computer running the management software has access to the files (e.g. only listen for requests on the loopback interface, not on any public interface). If a certificate got stolen, they can easily be regenerated. The server only stores hashes and compares them.
 
 # Other notes
 
