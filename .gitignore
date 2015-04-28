@@ -17,10 +17,6 @@ node_modules/
 /client/app/platforms
 /client/app/plugins/*.json
 /client/app/.cordova
-/client/entrycheck/build
-/client/entrycheck/hooks
-/client/entrycheck/platforms
-/client/entrycheck/.cordova
 
 # Terminal ISO: Publish PKGBUILDs and build scripts, no prebuilt packages and binaries
 /client/terminaliso/iso/work
