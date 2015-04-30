@@ -46,6 +46,7 @@ ip addr add dev $BR_IFACE 192.168.2.60/16 # cam.saeu
 ip addr add dev $BR_IFACE 192.168.2.32/16 # packages.saeu
 ip addr add dev $BR_IFACE 192.168.2.40/16 # centralbank.eu (just testing)
 ip addr add dev $BR_IFACE 192.168.2.50/16 # radio.saeu
+ip addr add dev $BR_IFACE 10.10.5.10/8 # Primary database server
 ip route add default via $GATEWAY
 ebtables --flush
 ebtables -I INPUT -p ipv4 --ip-dst 255.255.255.255 -j DROP
