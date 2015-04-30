@@ -22,6 +22,15 @@ ETH_IFACE=$(dialog --nocancel --inputbox Ethernet\ Interface? 10 50 enp2s0 2>&1 
 SUBNET=$(dialog --nocancel --inputbox Subnet? 10 50 8 2>&1 1>&3)
 exec 3>&-
 
+### Networking Setup
+cat << EOF > /etc/systemd/network/wired.network
+[Match]
+Name=$ETH_IFACE
+
+[Address]
+Address=$SERVERIP/$SUBNET
+EOF
+
 ### MongoDB Setup
 cat << EOF > /etc/mongodb.conf
 bind_ip = $SERVERIP,127.0.0.1

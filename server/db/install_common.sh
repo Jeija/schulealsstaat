@@ -2,15 +2,6 @@
 
 CWD="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-### Networking Setup
-cat << EOF > /etc/systemd/network/wired.network
-[Match]
-Name=$ETH_IFACE
-
-[Address]
-Address=$SERVERIP/$SUBNET
-EOF
-
 ### Snapshots Setup ###
 ### Service
 cat << EOF > /etc/systemd/system/sasdb_snapshot.service
