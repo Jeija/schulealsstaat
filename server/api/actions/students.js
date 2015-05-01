@@ -252,22 +252,30 @@ register_cert("password_change_master", ["master_hash"], function (payload, answ
 
 // #################### ENTRY CHECK ####################
 register_cert("ec_checkin", ["ec_hash", "admin_hash"], function (payload, answer, info) {
-	db.students.getByQrid(payload, answer, function (st) {
-		if (!st) { answer("error: wrong qrid"); return; }
-		info("Checkin by " + common.student_readable(st));
-		st.appear.push({type : "checkin", time : Date.now()});
-		st.save();
-		answer("ok");
+	db.students.add_appear(payload, {
+		type : "checkin",
+		time : Date.now()
+	}, answer, function (success) {
+		if (success) {
+			answer("ok");
+			info("Checkin by " + payload);
+		} else {
+			answer("error: invalid qrid");
+		}
 	});
 });
 
 register_cert("ec_checkout", ["ec_hash", "admin_hash"], function (payload, answer, info) {
-	db.students.getByQrid(payload, answer, function (st) {
-		if (!st) { answer("error: wrong qrid"); return; }
-		info("Checkout by " + common.student_readable(st));
-		st.appear.push({type : "checkout", time : Date.now()});
-		st.save();
-		answer("ok");
+	db.students.add_appear(payload, {
+		type : "checkout",
+		time : Date.now()
+	}, answer, function (success) {
+		if (success) {
+			answer("ok");
+			info("Checkout by " + payload);
+		} else {
+			answer("error: invalid qrid");
+		}
 	});
 });
 
@@ -296,7 +304,7 @@ register_cert("register_student", ["registration_hash"], function (payload, answ
 				qrid = payload.qrid;
 			} else {
 				qrid = crypto.randomBytes(4).toString("hex");
-				db.students.getByQrid(qrid, answer, regStudent);
+				db.students.getByQridLean(qrid, answer, regStudent);
 				return;
 			}
 		}
@@ -304,7 +312,7 @@ register_cert("register_student", ["registration_hash"], function (payload, answ
 		// Otherwise: register student
 		var crypt = generate_pwdhash(payload.password);
 
-		var st = {
+		var regst = {
 			qrid : qrid,
 
 			firstname : payload.firstname,
@@ -321,7 +329,7 @@ register_cert("register_student", ["registration_hash"], function (payload, answ
 			pwdsalt : crypt.salt
 		};
 
-		db.students.add(st, answer, function () {
+		db.students.add(regst, answer, function () {
 			answer("ok");
 			info("Registered successfully: " + common.student_readable(st));
 		});
@@ -329,7 +337,7 @@ register_cert("register_student", ["registration_hash"], function (payload, answ
 
 	// Check if given preset QR ID already exists
 	if (payload.qrid) {
-		db.students.getByQrid(payload.qrid, answer, function (student) {
+		db.students.getByQridLean(payload.qrid, answer, function (student) {
 			if (student)
 				answer("error: QR ID " + payload.qrid + " already exists");
 			else

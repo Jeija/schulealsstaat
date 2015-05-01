@@ -39,6 +39,23 @@ module.exports = function (error) { return {
 		});
 	},
 
+	add_appear : function (qrid, spec, answer, cb) {
+		Student.update({
+			qrid : qrid
+		}, {
+			$push : { appear : spec }
+		}, function (err, result) {
+			if (err) {
+				error("stdb.add_appear", answer, err);
+			} else {
+				if (result.nModified > 0)
+					cb(true);
+				else
+					cb(false);
+			}
+		})
+	},
+
 	getByProperties : function (properties, answer, cb) {
 		Student.find(properties, function (err, st) {
 			if (err) {

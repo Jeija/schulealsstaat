@@ -1,5 +1,6 @@
 /** Register Students automatically, random names etc. **/
 var NUM_QUERIES = 10;
+var open = 0;
 
 var prefix = process.argv[2];
 var number_str = process.argv[3];
@@ -23,12 +24,18 @@ function prefaceZeros (str, zeros) {
 }
 
 function query() {
+	open++;
 	i++;
 	var qrid = prefix + prefaceZeros(Math.floor(Math.random() * number + 1).toString(), 7);
 	var type = Math.random() < 0.5 ? "ec_checkin" : "ec_checkout";
 	api.action_cert(type, qrid, "admin_cert", function (res, servertime_ms) {
 		console.log("[" + i + "]", type, qrid, ", answer was", res,
 			", took", servertime_ms, "ms");
+		open--;
 	});
 }
 setInterval(query, interval);
+
+setInterval(function () {
+	console.log("OPEN", open);
+}, 500);
