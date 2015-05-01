@@ -1,7 +1,7 @@
 var mongoose = require("mongoose");
 var log = require("../logging.js");
 
-mongoose.connect("mongodb://localhost/sas");
+mongoose.connect("mongodb://10.10.5.10/sas");
 var db = mongoose.connection;
 
 db.on("error", function (err) {

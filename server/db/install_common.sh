@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 CWD="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 ### Snapshots Setup ###
@@ -34,9 +36,25 @@ EOF
 ### Copy snapshot script
 cp $CWD/dbsnapshot.sh /opt/dbsnapshot.sh
 
-systemctl stop NetworkManager
-systemctl disable NetworkManager
+### Disable transparent_hugepages ###
+cat << EOF > /etc/systemd/system/disable_hp.service
+[Unit]
+Description=Disable transparent_hugepages (MongoDB)
+Before=mongodb.service
+
+[Service]
+Type=oneshot
+ExecStart=/bin/sh -c "/usr/bin/echo never | /usr/bin/tee /sys/kernel/mm/transparent_hugepage/enabled"
+ExecStart=/bin/sh -c "/usr/bin/echo never | /usr/bin/tee /sys/kernel/mm/transparent_hugepage/defrag"
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+systemctl stop NetworkManager -q || true
+systemctl disable NetworkManager -q || true
 systemctl enable systemd-networkd
+systemctl enable disable_hp.service
 systemctl enable mongodb
 systemctl enable sasdb_snapshot.timer
 
