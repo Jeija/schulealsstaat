@@ -11,19 +11,19 @@ module.exports = function (register, register_cert) {
 		log.info("request " + payload + " answered with " + JSON.stringify(value));
 	});
 
-	register_cert("config_set", ["master_hash"], function (payload, answer, error, info) {
+	register_cert("config_set", ["master_hash"], function (payload, answer, info) {
 		config.set(payload.key, payload.value);
 		answer("ok");
 		info("set " + payload.key + " to " + payload.value);
 	});
 
-	register_cert("config_del", ["master_hash"], function (payload, answer, error, info) {
+	register_cert("config_del", ["master_hash"], function (payload, answer, info) {
 		config.del(payload);
 		answer("ok");
 		info("deleting " + payload);
 	});
 
-	register("config_getall", function (payload, answer, error, info) {
+	register("config_getall", function (payload, answer, info) {
 		answer(config.getAll());
 		info("done");
 	});

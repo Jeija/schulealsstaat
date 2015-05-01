@@ -34,7 +34,6 @@ EOF
 
 ### MongoDB Setup
 cat << EOF > /etc/mongodb.conf
-bind_ip = 0.0.0.0
 quiet = false
 dbpath = /var/lib/mongodb
 logpath = /var/log/mongodb/mongod.log

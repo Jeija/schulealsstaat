@@ -24,8 +24,8 @@ module.exports = function (register, register_cert) {
  * invalid_password	--> provided password was wrong
  * error:<something>	--> Some other error, e.g. with JSON parsing
  */
-register("get_balance", function (payload, answer, error, info) {
-	db.students.getByQridLean(payload.qrid, function (st) {
+register("get_balance", function (payload, answer, info) {
+	db.students.getByQridLean(payload.qrid, answer, function (st) {
 		if (!st) {
 			answer("invalid_qrid");
 			return;
@@ -36,7 +36,7 @@ register("get_balance", function (payload, answer, error, info) {
 			return;
 		}
 
-		db.transactions.getBalance(st._id, function (balance) {
+		db.transactions.getBalance(st._id, answer, function (balance) {
 			answer(String(balance));
 			info("done for " + common.student_readable(st));
 		});
@@ -52,14 +52,14 @@ register("get_balance", function (payload, answer, error, info) {
  * invalid_qrid		--> the provided qrid doesn't exist
  * error:<something>	--> Some other error, e.g. with JSON parsing
  */
-register_cert("get_balance_master", ["master_hash"], function (payload, answer, error, info) {
-	db.students.getByQridLean(payload, function (st) {
+register_cert("get_balance_master", ["master_hash"], function (payload, answer, info) {
+	db.students.getByQridLean(payload, answer, function (st) {
 		if (!st) {
 			answer("invalid_qrid");
 			return;
 		}
 
-		db.transactions.getBalance(st._id, function (balance) {
+		db.transactions.getBalance(st._id, answer, function (balance) {
 			answer(String(balance));
 			info("done for " + common.student_readable(st));
 		});
@@ -90,8 +90,8 @@ register_cert("get_balance_master", ["master_hash"], function (payload, answer, 
  * invalid_password	--> provided password was wrong
  * error:<something>	--> Some other error, e.g. with JSON parsing
  */
-register("get_last_transactions", function (payload, answer, error, info) {
-	db.students.getByQridLean(payload.qrid, function (st) {
+register("get_last_transactions", function (payload, answer, info) {
+	db.students.getByQridLean(payload.qrid, answer, function (st) {
 		if (!st) {
 			answer("invalid_qrid");
 			return;
@@ -107,12 +107,12 @@ register("get_last_transactions", function (payload, answer, error, info) {
 				{ "sender.reference" : st._id },
 				{ "recipient.reference" : st._id }
 			]
-		}, payload.amount, function (tr) {
+		}, payload.amount, answer, function (tr) {
 			// Little hack: If account described by qrid has received tax income,
 			// transform these tax income transactions into normal ones and display them
 			db.transactions.getByProperties({
 				"tax_recipient" : st._id
-			}, payload.amount, function (tr_tax) {
+			}, payload.amount, answer, function (tr_tax) {
 				for (var i = 0; i < tr_tax.length; i++) {
 					if (tr_tax[i].amount_tax > 0) {
 						tr.push({
@@ -154,8 +154,8 @@ register("get_last_transactions", function (payload, answer, error, info) {
  *				comment : String }]
  * Array may also be empty, if no matching transactions were found
  */
-register_cert("find_transactions", ["admin_hash"], function (payload, answer, error, info) {
-	db.transactions.getByProperties(payload.query, payload.amount, function (tr) {
+register_cert("find_transactions", ["admin_hash"], function (payload, answer, info) {
+	db.transactions.getByProperties(payload.query, payload.amount, answer, function (tr) {
 		if (payload.amount > 0)
 		{
 			var min = tr.length - payload.amount;
@@ -168,12 +168,12 @@ register_cert("find_transactions", ["admin_hash"], function (payload, answer, er
 });
 
 /**
- * On startup: Check if tax income account exists
+ * On startup: Check if tax income account exists (wait for Database init before)
  */
-db.students.getByQridLean(config.get("taxinc_qrid"), function (taxinc) {
+db.students.getByQridLean(config.get("taxinc_qrid"), function () {}, function (taxinc) {
 	if (!taxinc)
-		log.err("BANK", "Tax income account not found. You MUST create a tax income" + 
-			"account in order to collect any taxes.");
+		log.err("BANK", "Tax income account not found. You MUST create a tax " + 
+			"income account in order to collect any taxes.");
 });
 
 /**
@@ -208,7 +208,7 @@ function net2tax(net, tax_percent) {
  * If the sender is the magic_account, the money will be spawned
  */
 function transaction(sender_qrid, recipient_qrid, amount_sent, amount_received, tax,
-		comment, answer, error, info) {
+		comment, answer, info) {
 	var sender, recipient, taxinc;
 	var magic_account = config.get("magic_account");
 	var spawn_money = sender_qrid == magic_account;
@@ -226,29 +226,28 @@ function transaction(sender_qrid, recipient_qrid, amount_sent, amount_received, 
 
 	/*** Load all required database entries ***/
 	flow.exec(function () {
-		db.students.getByQridLean(config.get("taxinc_qrid"), this);
+		db.students.getByQridLean(config.get("taxinc_qrid"), answer, this);
 	}, function (st) {
 		if (!st) {
 			answer("error: no tax income account");
-			error("no tax income account");
 			log.err("API", "You MUST add a tax income account, ignoring transaction!");
 			return;
 		}
 		taxinc = st;
 		if (spawn_money) this(true);
-		else db.students.getByQridLean(sender_qrid, this);
+		else db.students.getByQridLean(sender_qrid, answer, this);
 	}, function (st) {
 		if (!st) { answer("invalid_sender"); return; }
 		sender = st;
 		if (destroy_money) this(true);
-		else db.students.getByQridLean(recipient_qrid, this);
+		else db.students.getByQridLean(recipient_qrid, answer, this);
 	}, function (st) {
 		if (!st) { answer("invalid_recipient"); return; }
 		recipient = st;
 
 		/*** Get sender balance from transactions chain ***/
 		if (spawn_money) this(true);
-		db.transactions.getBalance(sender._id, this);
+		db.transactions.getBalance(sender._id, answer, this);
 	}, function (balance_sender) {
 		/*** Calculate amount to transfer with taxes ***/
 		// In dubio pro central bank - round up after hgc_decimal_places,
@@ -286,16 +285,16 @@ function transaction(sender_qrid, recipient_qrid, amount_sent, amount_received, 
 			percent_tax : tax,
 
 			comment : comment
+		}, answer, function () {
+			/* Log to console and answer with success */
+			var log_type = "transaction";
+			if (spawn_money) log_type = "spawn_money";
+			if (destroy_money) log_type = "destroy_money";
+			info(log_type + " from " + common.student_readable(sender) + " to " +
+				common.student_readable(recipient) + ", with net value " +
+				amount_received + " HGC, tax income is " + amount_tax + " HGC.");
+			answer("ok");
 		});
-
-		/* Log to console and answer with success */
-		var log_type = "transaction";
-		if (spawn_money) log_type = "spawn_money";
-		if (destroy_money) log_type = "destroy_money";
-		info(log_type + " from " + common.student_readable(sender) + " to " +
-			common.student_readable(recipient) + ", with net value " +
-			amount_received + " HGC, tax income is " + amount_tax + " HGC.");
-		answer("ok");
 	});
 }
 
@@ -329,7 +328,7 @@ function nDecimals(number) {
 	return decimals ? decimals.length : 0;
 }
 
-function transaction_common(payload, answer, error, info, tax) {
+function transaction_common(payload, answer, info, tax) {
 	/*** Gather data from payload ***/
 	var sender = payload.sender;
 	var recipient = payload.recipient;
@@ -350,23 +349,23 @@ function transaction_common(payload, answer, error, info, tax) {
 		{ answer("too_many_decplaces"); return; }
 
 	/*** Check sender password + perform transaction ***/
-	db.students.getByQridLean(sender, function (st) {
+	db.students.getByQridLean(sender, answer, function (st) {
 		if (!st) { answer("invalid_sender"); return; }
 		if (!common.check_password(st, sender_password))
 			{ answer("invalid_password"); return; }
-		transaction(sender, recipient, sent, received, tax, comment, answer, error, info);
+		transaction(sender, recipient, sent, received, tax, comment, answer, info);
 	});
 }
 
-register("transaction", function (payload, answer, error, info) {
+register("transaction", function (payload, answer, info) {
 	// Tax in %
 	var tax = config.get("transaction_tax_percent");
-	transaction_common(payload, answer, error, info, tax);
+	transaction_common(payload, answer, info, tax);
 });
 
 register_cert("transaction_taxfree", ["registration_hash", "admin_hash"],
-		function (payload, answer, error, info) {
-	transaction_common(payload, answer, error, info, 0);
+		function (payload, answer, info) {
+	transaction_common(payload, answer, info, 0);
 });
 
 /**
@@ -377,14 +376,14 @@ register_cert("transaction_taxfree", ["registration_hash", "admin_hash"],
  * }
  * response values: "ok" or "error: <something>"
  */
-register_cert("spawn_money", ["master_hash"], function (payload, answer, error, info) {
+register_cert("spawn_money", ["master_hash"], function (payload, answer, info) {
 	info("Creation of money!");
 	var sender = config.get("magic_account");
 	var recipient = payload.recipient;
 	var amount = payload.amount;
 	var comment = "spawn_money" + (("comment" in payload) ? " - " + payload.comment : "");
 
-	transaction(sender, recipient, amount, false, 0, comment, answer, error, info);
+	transaction(sender, recipient, amount, false, 0, comment, answer, info);
 });
 
 /**
@@ -395,14 +394,14 @@ register_cert("spawn_money", ["master_hash"], function (payload, answer, error, 
  * }
  * response values: "ok" or "error: <something>"
  */
-register_cert("destroy_money", ["master_hash"], function (payload, answer, error, info) {
+register_cert("destroy_money", ["master_hash"], function (payload, answer, info) {
 	info("Destruction of money!");
 	var recipient = config.get("magic_account");
 	var sender = payload.sender;
 	var amount = payload.amount;
 	var comment = "destroy_money" + (("comment" in payload) ? " - " + payload.comment : "");
 
-	transaction(sender, recipient, amount, false, 0, comment, answer, error, info);
+	transaction(sender, recipient, amount, false, 0, comment, answer, info);
 });
 
 /**
@@ -415,7 +414,7 @@ register_cert("destroy_money", ["master_hash"], function (payload, answer, error
  * Same answers as "transaction" action, apart from too_many_decplaces, comment_too_long
  * (these properties won't be checked)
  */
-register_cert("master_transaction", ["master_hash"], function (payload, answer, error, info) {
+register_cert("master_transaction", ["master_hash"], function (payload, answer, info) {
 	info("Forced (master) transaction of money!");
 	// Tax in %
 	var tax_percent = "tax_percent" in payload ?
@@ -429,7 +428,7 @@ register_cert("master_transaction", ["master_hash"], function (payload, answer, 
 
 	// Do NOT perform password checking, comment length checking, decimal places checking
 	// for master transactions
-	transaction(sender, recipient, sent, received, tax_percent, comment, answer, error, info);
+	transaction(sender, recipient, sent, received, tax_percent, comment, answer, info);
 });
 
 /**
@@ -440,8 +439,8 @@ register_cert("master_transaction", ["master_hash"], function (payload, answer, 
  * invalid_id	--> transaction with that _id couldn't be found
  * ok		--> transaction successfully deleted
  */
-register_cert("transaction_delete", ["master_hash"], function (payload, answer, error, info) {
-	db.transactions.getById(payload, function (tr) {
+register_cert("transaction_delete", ["master_hash"], function (payload, answer, info) {
+	db.transactions.getById(payload, answer, function (tr) {
 		if (!tr) {
 			answer("invalid_id");
 			return;

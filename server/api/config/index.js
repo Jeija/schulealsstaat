@@ -2,6 +2,7 @@ var db = require("../db");
 var log = require("../logging");
 var fs = require("fs");
 var cert = require("../cert");
+var settings = require("../settings.js");
 
 var config = require("./defaults.json");
 
@@ -10,7 +11,7 @@ var config = require("./defaults.json");
  * That way, multiple API instances can be synchronized and configuration
  * changes are logged in the database.
  */
-function update_config(cb) {
+function update_config() {
 	db.config.load(function (cfg_new) {
 		for (var i = 0; i < cfg_new.length; i++) {
 			var key = cfg_new[i].key;
@@ -23,7 +24,6 @@ function update_config(cb) {
 				config[key] = value;
 			}
 		}
-		if (cb) cb();
 	});
 }
 
@@ -53,9 +53,8 @@ function getAll() {
 	return config;
 }
 
-update_config(function () {
-	setInterval(update_config, get("update_config_interval"));
-});
+update_config();
+setInterval(update_config, settings.config_load_interval);
 
 module.exports = {
 	set : set,

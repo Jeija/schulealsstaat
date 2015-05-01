@@ -26,16 +26,16 @@ module.exports = function (register, register_cert) {
  * none (error) or dump of db.students, with all properties:
  * [{<student1>}, {<student2>}, ...]
  */
-register_cert("students_dump", ["admin_hash"], function (payload, answer, error, info) {
+register_cert("students_dump", ["admin_hash"], function (payload, answer, info) {
 	info("this may take a while");
 	var fields = payload;
 	if (fields) {
-		db.students.getCertainAll(fields, function (list) {
+		db.students.getCertainAll(fields, answer, function (list) {
 			answer(list);
 			info("student_dump complete");
 		});
 	} else {
-		db.students.getAll(function (list) {
+		db.students.getAll(answer, function (list) {
 			info("got list from database");
 			answer(list);
 			info("student_dump complete");
@@ -63,7 +63,7 @@ register_cert("students_dump", ["admin_hash"], function (payload, answer, error,
  * none (error) or list of student that match given criteria:
  * [{<student1>}, {<student2>}, ...]
  */
-register_cert("get_students", ["admin_hash"], function (payload, answer, error, info) {
+register_cert("get_students", ["admin_hash"], function (payload, answer, info) {
 	function log_and_answer(list) {
 		info("found " + list.length + " matches");
 		answer(list);
@@ -71,9 +71,10 @@ register_cert("get_students", ["admin_hash"], function (payload, answer, error, 
 
 	// Payload contains an attribute list that may fit none, one or multiple students
 	if ("fields" in payload)
-		db.students.getCertainByProperties(payload.query, payload.fields, log_and_answer);
+		db.students.getCertainByProperties(payload.query, payload.fields, answer,
+			log_and_answer);
 	else
-		db.students.getByProperties(payload.query, log_and_answer);
+		db.students.getByProperties(payload.query, answer, log_and_answer);
 });
 
 /**
@@ -91,8 +92,8 @@ register_cert("get_students", ["admin_hash"], function (payload, answer, error, 
  * response value:
  * "ok" or "error: <something>"
  */
-register_cert("profile_edit", ["admin_hash"], function (payload, answer, error, info) {
-	db.students.getByQrid(payload.qrid, function (st) {
+register_cert("profile_edit", ["admin_hash"], function (payload, answer, info) {
+	db.students.getByQrid(payload.qrid, answer, function (st) {
 		if (!st) { answer("error: wrong qrid"); return; }
 		var allow_edit = ["firstname", "lastname", "qrid", "picname",
 			"birth", "type", "special_name", "country"];
@@ -119,8 +120,8 @@ register_cert("profile_edit", ["admin_hash"], function (payload, answer, error, 
  * response value:
  * "ok" or "error: <something>"
  */
-register_cert("student_delete", ["master_hash"], function (payload, answer, error, info) {
-	db.students.getByQrid(payload, function (st) {
+register_cert("student_delete", ["master_hash"], function (payload, answer, info) {
+	db.students.getByQrid(payload, answer, function (st) {
 		if (st) {
 			info("removed " + common.student_readable(st));
 			st.remove();
@@ -159,7 +160,7 @@ register_cert("student_delete", ["master_hash"], function (payload, answer, erro
  *	picname : String
  * }
  */
-register("student_identify", function (payload, answer, error, info) {
+register("student_identify", function (payload, answer, info) {
 	if (!(payload.firstname || payload.lastname || payload.special_name ||
 		payload.qrid || payload.type)) {
 		answer ("error: underspecification");
@@ -175,7 +176,8 @@ register("student_identify", function (payload, answer, error, info) {
 	if (payload.type)
 		payload.type = new RegExp("^" + payload.type + "$", "i");
 
-	db.students.getCertainByProperties(payload, common.student_public_fields, function (st) {
+	db.students.getCertainByProperties(payload, common.student_public_fields,
+			answer, function (st) {
 		if (!st[0]) {
 			answer("error: not found");
 			return;
@@ -216,8 +218,8 @@ function change_password (st, new_password) {
 	st.save();
 }
 
-register("password_change", function (payload, answer, error, info) {
-	db.students.getByQrid(payload.qrid, function (st) {
+register("password_change", function (payload, answer, info) {
+	db.students.getByQrid(payload.qrid, answer, function (st) {
 		if (!st) {
 			answer("invalid_qrid");
 			return;
@@ -228,7 +230,6 @@ register("password_change", function (payload, answer, error, info) {
 			info("changing password of " + common.student_readable(st));
 			answer("ok");
 		} else {
-			error("invalid old password provided");
 			answer("invalid_password");
 		}
 	});
@@ -237,8 +238,8 @@ register("password_change", function (payload, answer, error, info) {
 /**
  * Just like password_change, but requires master_hash instead of old_password
  */
-register_cert("password_change_master", ["master_hash"], function (payload, answer, error, info) {
-	db.students.getByQrid(payload.qrid, function (st) {
+register_cert("password_change_master", ["master_hash"], function (payload, answer, info) {
+	db.students.getByQrid(payload.qrid, answer, function (st) {
 		if (!st) {
 			answer("invalid_qrid");
 			return;
@@ -250,8 +251,8 @@ register_cert("password_change_master", ["master_hash"], function (payload, answ
 });
 
 // #################### ENTRY CHECK ####################
-register_cert("ec_checkin", ["ec_hash", "admin_hash"], function (payload, answer, error, info) {
-	db.students.getByQrid(payload, function (st) {
+register_cert("ec_checkin", ["ec_hash", "admin_hash"], function (payload, answer, info) {
+	db.students.getByQrid(payload, answer, function (st) {
 		if (!st) { answer("error: wrong qrid"); return; }
 		info("Checkin by " + common.student_readable(st));
 		st.appear.push({type : "checkin", time : Date.now()});
@@ -260,8 +261,8 @@ register_cert("ec_checkin", ["ec_hash", "admin_hash"], function (payload, answer
 	});
 });
 
-register_cert("ec_checkout", ["ec_hash", "admin_hash"], function (payload, answer, error, info) {
-	db.students.getByQrid(payload, function (st) {
+register_cert("ec_checkout", ["ec_hash", "admin_hash"], function (payload, answer, info) {
+	db.students.getByQrid(payload, answer, function (st) {
 		if (!st) { answer("error: wrong qrid"); return; }
 		info("Checkout by " + common.student_readable(st));
 		st.appear.push({type : "checkout", time : Date.now()});
@@ -271,7 +272,7 @@ register_cert("ec_checkout", ["ec_hash", "admin_hash"], function (payload, answe
 });
 
 // #################### REGISTRATION ####################
-register_cert("register_student", ["registration_hash"], function (payload, answer, error, info) {
+register_cert("register_student", ["registration_hash"], function (payload, answer, info) {
 	// Type / School class:
 	var type = payload.sclass + payload.subclass;
 
@@ -295,7 +296,7 @@ register_cert("register_student", ["registration_hash"], function (payload, answ
 				qrid = payload.qrid;
 			} else {
 				qrid = crypto.randomBytes(4).toString("hex");
-				db.students.getByQrid(qrid, regStudent);
+				db.students.getByQrid(qrid, answer, regStudent);
 				return;
 			}
 		}
@@ -320,15 +321,15 @@ register_cert("register_student", ["registration_hash"], function (payload, answ
 			pwdsalt : crypt.salt
 		};
 
-		info("Registering: " + common.student_readable(st));
-
-		db.students.add(st);
-		answer("ok");
+		db.students.add(st, answer, function () {
+			answer("ok");
+			info("Registered successfully: " + common.student_readable(st));
+		});
 	}
 
 	// Check if given preset QR ID already exists
 	if (payload.qrid) {
-		db.students.getByQrid(payload.qrid, function (student) {
+		db.students.getByQrid(payload.qrid, answer, function (student) {
 			if (student)
 				answer("error: QR ID " + payload.qrid + " already exists");
 			else

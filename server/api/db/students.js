@@ -27,54 +27,76 @@ var studentSchema = new Schema({
 
 var Student = mongoose.model("Student", studentSchema);
 
-module.exports = {
-	add : function (info) {
+module.exports = function (error) { return {
+	add : function (info, answer, cb) {
 		var ns = new Student(info);
 		ns.save(function (err) {
-			if (err) log.err("MongoDB", "stdb.add failed: " + err);
+			if (err) {
+				error("stdb.add", answer, err);
+			} else {
+				cb();
+			}
 		});
 	},
 
-	getByProperties : function (properties, cb) {
+	getByProperties : function (properties, answer, cb) {
 		Student.find(properties, function (err, st) {
-			if (err) log.err("MongoDB", "stdb.getByProperties failed: " + err);
-			cb(st);
+			if (err) {
+				error("stdb.getByProperties", answer, err);
+			} else {
+				cb(st);
+			}
 		});
 	},
 
 	/** getCertainByProperties is always lean! **/
-	getCertainByProperties : function (properties, fields, cb) {
+	getCertainByProperties : function (properties, fields, answer, cb) {
 		Student.find(properties, fields).lean().exec(function (err, st) {
-			if (err) log.err("MongoDB", "stdb.getCertainByProperties failed: " + err);
-			cb(st);
+			if (err) {
+				error("stdb.getCertainByProperties", answer, err);
+			} else {
+				cb(st);
+			}
 		});
 	},
 
-	getByQrid : function (qrid, cb) {
+	getByQrid : function (qrid, answer, cb) {
 		Student.findOne({qrid : qrid}, function (err, st) {
-			if (err) log.err("MongoDB", "stdb.getByQrid failed: " + err);
-			cb(st);
+			if (err) {
+				error("stdb.getByQrid", answer, err);
+			} else {
+				cb(st);
+			}
 		});
 	},
 
-	getByQridLean : function (qrid, cb) {
+	getByQridLean : function (qrid, answer, cb) {
 		Student.findOne({qrid : qrid}).lean().exec(function (err, st) {
-			if (err) log.err("MongoDB", "stdb.getByQridLean failed: " + err);
-			cb(st);
+			if (err) {
+				error("stdb.getByQridLean", answer, err);
+			} else {
+				cb(st);
+			}
 		});
 	},
 
-	getAll : function (cb) {
+	getAll : function (answer, cb) {
 		Student.find().lean().exec(function (err, list) {
-			if (err) log.err("MongoDB", "stdb.getAll failed: " + err);
-			cb(list);
+			if (err) {
+				error("stdb.getAll", answer, err);
+			} else {
+				cb(list);
+			}
 		});
 	},
 
-	getCertainAll : function (fields, cb) {
+	getCertainAll : function (fields, answer, cb) {
 		Student.find({}, fields).lean().exec(function (err, list) {
-			if (err) log.err("MongoDB", "stdb.getCertainAll failed: " + err);
-			cb(list);
+			if (err) {
+				error("stdb.getCertainAll", answer, err);
+			} else {
+				cb(list);
+			}
 		});
 	}
-};
+}};

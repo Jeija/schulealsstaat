@@ -121,7 +121,7 @@ function prepare_action(name, post, req, res)
 	var query = decrypt_query(encrypted, aes_key, API_error, API_answer);
 	cert.check(actions[name].cert, query.cert, ip, function () {
 		try {
-			actions[name].action(query.payload, API_answer, API_error, API_info, req);
+			actions[name].action(query.payload, API_answer, API_info, req);
 		} catch(e) {
 			API_error("catch (action): " + e);
 			API_answer("error: " + e);
