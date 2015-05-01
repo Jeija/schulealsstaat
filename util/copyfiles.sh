@@ -19,3 +19,7 @@ cp $ROOT/server/common/cert.js $ROOT/server/webcam/cert.js
 cp $ROOT/server/common/logging.js $ROOT/server/api/logging.js
 cp $ROOT/server/common/logging.js $ROOT/server/webcam/logging.js
 cp $ROOT/server/common/logging.js $ROOT/network/dns/logging.js
+
+# Copy aes_gibberish.js to API server and autotest
+cp $ROOT/server/common/aes_gibberish.js $ROOT/server/api/aes_gibberish.js
+cp $ROOT/server/common/aes_gibberish.js $ROOT/testing/autotest/aes_gibberish.js

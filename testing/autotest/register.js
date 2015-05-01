@@ -5,7 +5,7 @@ var prefix = process.argv[2];
 var number_str = process.argv[3];
 if (isNaN(number_str)) {
 	console.log("Invalid command! Usage:");
-	console.log("   node register.js <prefix>");
+	console.log("   node register.js <prefix> <number>");
 	console.log("   > prefix: qrid prefix, e.g. abcd");
 	console.log("   > number: number of students to register");
 	process.exit(1);

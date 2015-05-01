@@ -1,7 +1,7 @@
 /**
  * modified api.js for automatic testing, uses native code
  */
-var aes = require("../../server/api/aes_gibberish");
+var aes = require("./aes_gibberish");
 var najax = require("najax");
 var path = require("path");
 var ursa = require("ursa");

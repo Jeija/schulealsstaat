@@ -36,7 +36,10 @@ node_modules/
 # Only publish some files once in */common/, prepare.sh will copy it to all appropriate places
 api.js
 !/client/common/api.js
+
+aes_gibberish.js
 logging.js
 cert.js
+!/server/common/aes_gibberish.js
 !/server/common/logging.js
 !/server/common/cert.js
