@@ -18,11 +18,14 @@ var settings = {};
 // Timeout after which the connection to the MongoDB database will be reset (milliseconds).
 settings.config_load_timeout = 3000;
 
+// Inteval in which the API will try to re-connect to the MongoDB server after a connection failure
+settings.reconnect_interval = 3000;
+
 // Interval in which config options are reloaded from the database (milliseconds).
 // This also defines how often the server checks wheter the DB is up and running.
 // A MongoDB connection reset will be performed after max.
 // config_load_timeout + config_load_interval milliseconds
-settings.config_load_interval = 5000;
+settings.config_load_interval = 7000;
 
 /** Production-specific settings **/
 if (process.argv[2] == "production") {

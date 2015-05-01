@@ -53,8 +53,11 @@ function getAll() {
 	return config;
 }
 
-update_config();
-setInterval(update_config, settings.config_load_interval);
+var update_config_initial = setInterval(function () {
+	if (!db.ready) return;
+	clearInterval(update_config_initial);
+	setInterval(update_config, settings.config_load_interval);
+}, 10);
 
 module.exports = {
 	set : set,

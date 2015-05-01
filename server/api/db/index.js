@@ -5,16 +5,17 @@ var failedstate = false;
 var settings = require("../settings.js");
 
 var db_connect = function () {
+	mongoose.connection.close();
 	mongoose.connect(settings.mongodb_connection, {
 		server : {
-			auto_reconnect : true,
-			socketTimeoutMS : 1000
+			autoReconnect : false
 		}
 	}, function (err) {
 		if (err) {
 			if (!failedstate) {
 				log.err("MongoDB", "Connection: " + err)
-				reconnect_interval = setInterval(db_connect, 2000);
+				reconnect_interval = setInterval(db_connect,
+					settings.mongodb_reconnect_interval);
 			}
 			failedstate = true;
 		}
@@ -62,15 +63,17 @@ mongoose.connection.on("reconnected", function () {
 function DB_error(component, answer, err) {
 	if (answer) answer("error: database error [" + component + "] " + err);
 	if (!failedstate) {
-		mongoose.connection.close();
 		log.err("MongoDB", "[" + component + "] " + err + ", reconnecting");
 		reconnect_interval = setInterval(db_connect, 2000);
 	}
 	failedstate = true;
 }
 
-module.exports.students = require("./students.js")(DB_error);
-module.exports.config = require("./config.js")(DB_error);
-module.exports.transactions = require("./transactions.js")(DB_error);
+mongoose.connection.once("open", function () {
+	module.exports.students = require("./students.js")(DB_error);
+	module.exports.config = require("./config.js")(DB_error);
+	module.exports.transactions = require("./transactions.js")(DB_error);
+	module.exports.ready = true;
+});
 
 db_connect();

@@ -13,7 +13,7 @@ var configSchema = new Schema({
 	key : String,
 	value : Schema.Types.Mixed,
 	time : Date
-});
+}, { bufferCommands : false });
 
 var Config = mongoose.model("Config", configSchema);
 

@@ -170,10 +170,14 @@ register_cert("find_transactions", ["admin_hash"], function (payload, answer, in
 /**
  * On startup: Check if tax income account exists (wait for Database init before)
  */
-db.students.getByQridLean(config.get("taxinc_qrid"), function () {}, function (taxinc) {
-	if (!taxinc)
-		log.err("BANK", "Tax income account not found. You MUST create a tax " + 
-			"income account in order to collect any taxes.");
+var taxinc_check_initial = setInterval(function () {
+	if (!db.ready) return;
+	clearInterval(taxinc_check_initial);
+	db.students.getByQridLean(config.get("taxinc_qrid"), function () {}, function (taxinc) {
+		if (!taxinc)
+			log.err("BANK", "Tax income account not found. You MUST create a tax " + 
+				"income account in order to collect any taxes.");
+	});
 });
 
 /**

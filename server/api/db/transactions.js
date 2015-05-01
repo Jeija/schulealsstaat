@@ -42,7 +42,7 @@ var transactionSchema = new Schema({
 	/* Comment is an arbitrary String, up to <tr_comment_maxlen> (in config) characters,
 		can be entered by sender or is generated programmatically */
 	comment : String
-});
+}, { bufferCommands : false });
 
 var Transaction = mongoose.model("Transaction", transactionSchema);
 

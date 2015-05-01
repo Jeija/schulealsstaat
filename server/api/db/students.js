@@ -23,7 +23,7 @@ var studentSchema = new Schema({
 	/* Password: */
 	pwdhash :	String,
 	pwdsalt :	String
-});
+}, { bufferCommands : false });
 
 var Student = mongoose.model("Student", studentSchema);
 
@@ -51,7 +51,7 @@ module.exports = function (error) { return {
 
 	/** getCertainByProperties is always lean! **/
 	getCertainByProperties : function (properties, fields, answer, cb) {
-		Student.find(properties, fields).lean().exec(function (err, st) {
+		Student.find(properties, fields, { maxTime : 10 }).lean().exec(function (err, st) {
 			if (err) {
 				error("stdb.getCertainByProperties", answer, err);
 			} else {
