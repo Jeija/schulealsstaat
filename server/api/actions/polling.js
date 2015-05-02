@@ -30,8 +30,12 @@ var polls = [];
  * invalid_password	--> provided password was wrong
  * invalid_date		--> provided date cannot be interpreted as a JS timestamp
  */
-register("transactions_poll", function (payload, answer, error, info) {
-	db.students.getByQrid(payload.qrid, function (st) {
+register("transactions_poll", function (payload, answer, info) {
+	db.students.getCertainByQridLean(payload.qrid, {
+		_id : 1,
+		pwdhash : 1,
+		pwdsalt : 1
+	}, answer, function (st) {
 		if (!st) {
 			answer("invalid_qrid");
 			return;
@@ -85,7 +89,9 @@ setInterval(function () {
 			"recipient.qrid" : p.qrid
 		};
 
-		db.transactions.getByProperties(query, config.get("poll_max"), function (tr) {
+		db.transactions.getByProperties(query, function () {
+			// don't answer db errors to polling clients
+		}, config.get("poll_max"), function (tr) {
 			handleDbPollAnswer(tr, idx);
 		});
 	});

@@ -252,7 +252,7 @@ register_cert("password_change_master", ["master_hash"], function (payload, answ
 
 // #################### ENTRY CHECK ####################
 register_cert("ec_checkin", ["ec_hash", "admin_hash"], function (payload, answer, info) {
-	db.students.add_appear(payload, {
+	db.students.addAppear(payload, {
 		type : "checkin",
 		time : Date.now()
 	}, answer, function (success) {
@@ -266,7 +266,7 @@ register_cert("ec_checkin", ["ec_hash", "admin_hash"], function (payload, answer
 });
 
 register_cert("ec_checkout", ["ec_hash", "admin_hash"], function (payload, answer, info) {
-	db.students.add_appear(payload, {
+	db.students.addAppear(payload, {
 		type : "checkout",
 		time : Date.now()
 	}, answer, function (success) {

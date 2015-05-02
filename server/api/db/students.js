@@ -39,14 +39,14 @@ module.exports = function (error) { return {
 		});
 	},
 
-	add_appear : function (qrid, spec, answer, cb) {
+	addAppear : function (qrid, spec, answer, cb) {
 		Student.update({
 			qrid : qrid
 		}, {
 			$push : { appear : spec }
 		}, function (err, result) {
 			if (err) {
-				error("stdb.add_appear", answer, err);
+				error("stdb.addAppear", answer, err);
 			} else {
 				if (result.nModified > 0)
 					cb(true);
@@ -91,6 +91,16 @@ module.exports = function (error) { return {
 		Student.findOne({qrid : qrid}).lean().exec(function (err, st) {
 			if (err) {
 				error("stdb.getByQridLean", answer, err);
+			} else {
+				cb(st);
+			}
+		});
+	},
+
+	getCertainByQridLean : function (qrid, fields, answer, cb) {
+		Student.findOne({qrid : qrid}, fields).lean().exec(function (err, st) {
+			if (err) {
+				error("stdb.getCertainByQridLean", answer, err);
 			} else {
 				cb(st);
 			}
