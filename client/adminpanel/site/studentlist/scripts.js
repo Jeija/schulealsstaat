@@ -150,8 +150,7 @@ function render_list() {
 	$(".balance_load").click(function () {
 		var loadbutton = $(this);
 		var st = studentlist[$(this).data("listid")];
-		var selector = "#master_cert_input";
-		action_mastercert("get_balance_master", st.qrid, selector, function (res) {
+		action_cert("get_balance_master", st.qrid, "admin_cert", function (res) {
 			if (isNaN(res)) {
 				alert("Ungültige Antwort: " + res);
 			} else {

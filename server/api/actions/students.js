@@ -12,7 +12,6 @@ function generate_pwdhash(pwd) {
 }
 
 module.exports = function (register, register_cert) {
-// #################### ADMIN PANEL #####################
 /**
  * Returns JSON of all students in DB.
  *
@@ -119,7 +118,6 @@ register_cert("student_delete", ["master_hash"], function (payload, answer, info
 	});
 });
 
-// #################### GENERAL ####################
 /**
  * Identifies a single student / person by his / her public public properties:
  * qrid, firstname, lastname, special_name and type
@@ -237,7 +235,6 @@ register_cert("password_change_master", ["master_hash"], function (payload, answ
 	});
 });
 
-// #################### ENTRY CHECK ####################
 register_cert("ec_checkin", ["ec_hash", "admin_hash"], function (payload, answer, info) {
 	db.students.addAppear(payload, {
 		type : "checkin",
@@ -266,7 +263,6 @@ register_cert("ec_checkout", ["ec_hash", "admin_hash"], function (payload, answe
 	});
 });
 
-// #################### REGISTRATION ####################
 register_cert("register_student", ["registration_hash"], function (payload, answer, info) {
 	// Type / School class:
 	var type = payload.sclass + payload.subclass;

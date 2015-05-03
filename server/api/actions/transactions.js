@@ -53,7 +53,7 @@ register("get_balance", function (payload, answer, info) {
  * invalid_qrid		--> the provided qrid doesn't exist
  * error:<something>	--> Some other error, e.g. with JSON parsing
  */
-register_cert("get_balance_master", ["master_hash"], function (payload, answer, info) {
+register_cert("get_balance_master", ["admin_hash"], function (payload, answer, info) {
 	db.students.getByQridLean(payload, answer, function (st) {
 		if (!st) {
 			answer("invalid_qrid");
