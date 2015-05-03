@@ -49,7 +49,7 @@ function getConfig(config, cb) {
 }
 
 function resetAll() {
-	$('#form_all')[0].reset();
+	if ($("#form_all")[0]) $("#form_all")[0].reset();
 	window.scrollTo(0, 0);
 	load_subdir($(".link-selected").data("subdir"));
 }
