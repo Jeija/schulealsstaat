@@ -1,6 +1,5 @@
 #!/bin/bash
-PKGSERVER="http://packages.saeu:100"
-NTPSERVER="ntp.saeu"
+PKGSERVER="http://net1.saeu:100"
 
 function error
 {
@@ -30,7 +29,6 @@ ETH_IFACE=$(find /sys/class/net/e* | sed "s/.*\///")
 # User input of required network information
 exec 3>&1
 IP=$(dialog --nocancel --inputbox IP\ Address? 10 50 192.168.5.1/16 2>&1 1>&3)
-DNSSERVER=$(dialog --nocancel --inputbox DNS\ Server? 10 50 192.168.2.10 2>&1 1>&3)
 exec 3>&-
 
 # Setup Network
@@ -41,18 +39,22 @@ if [ ! -d /sys/class/net/$BRIDGE_IFACE ]; then
 	ip link set up dev $ETH_IFACE
 	ip addr add dev $BRIDGE_IFACE $IP
 fi
-echo "nameserver $DNSSERVER" > /etc/resolv.conf
 
-# Wait until network is up (connection to DNS server)
-until ping -c 1 -w 2 $DNSSERVER; do
+NETMANSERVERS=($(cat /tmp/net_management))
+for NS in ${NETMANSERVERS[@]}; do
+	echo "nameserver $NS" > /etc/resolv.conf
+done
+
+# Wait until network is up (connection to *first* DNS server)
+until ping -c 1 -w 2 ${NETMANSERVERS[0]}; do
 	ip link
 	echo -e "\n\n\n--> No network connection! \n\n\n"
 	sleep 1
 done
 
 # Synchronize time
-echo -e "\n\n\nWaiting for NTP (time) synchronization from ntp.saeu / ntp2.saeu ...\n"
-ntpd -gqc /dev/null -I $BRIDGE_IFACE -4 ntp.saeu ntp2.saeu
+echo -e "\n\n\nWaiting for NTP (time) synchronization from network management servers ...\n"
+ntpd -gqc /dev/null -I $BRIDGE_IFACE -4 ${NETMANSERVERS[@]}
 echo "Received time information:"
 date
 sleep 3

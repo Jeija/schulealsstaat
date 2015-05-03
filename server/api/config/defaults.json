@@ -7,5 +7,6 @@
 	"tr_comment_maxlen" : 300,
 	"magic_account" : "Zentralbank",
 	"poll_timeout" : 40000,
-	"poll_max" : 5
+	"poll_max" : 5,
+	"pending_timeout" : 180
 }

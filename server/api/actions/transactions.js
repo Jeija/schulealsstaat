@@ -1,11 +1,12 @@
-var log = require("../logging.js");
-var db = require("../db");
-var cert = require("../cert");
-var config = require("../config");
-var flow = require("flow");
+var settings = require("../settings.js");
 var common = require("./common.js");
+var log = require("../logging.js");
+var config = require("../config");
+var cert = require("../cert");
+var flow = require("flow");
+var db = require("../db");
 
-// Round a currency value
+// Round a currency value up
 function HGC_roundup(value) {
 	var decplaces = config.get("hgc_decimal_places");
 	return Math.ceil(value * Math.pow(10, decplaces)) / Math.pow(10, decplaces);
@@ -202,33 +203,98 @@ function net2tax(net, tax_percent) {
 }
 
 /**
- * Perform transaction
- * Takes care of money transfer + logging
+ * When dealing with transactions, it is important to make sure no two transactions
+ * can be executed at the same time, as this may cause the system to deduct money
+ * from accounts that have no money left (due to a multithreading race condition).
+ *
+ * Therefore, when performing a transaction, the system basically only announces a
+ * write_intent to the database. The actual transaction only takes places when the
+ * transaction with write_intent is the first in the list of transactions. If, however,
+ * the sender doesn't have enough money left on their account, the transaction with the
+ * write_intent is removed.
+ */
+var pending_transactions = [];
+function transaction_queue(trid, sender, entry, answer, info) {
+	pending_transactions.push({
+		trid : trid,
+		sender : sender,
+		entry : entry,
+		answer : answer,
+		info : info
+	});
+}
+
+function transaction_write(entry, answer, info, cb) {
+	/**
+	 * Calculate sender balance
+	 * Sender balance aggregation can now be safely issued since this is
+	 * the only newly written transaction at this time.
+	 */
+	db.transactions.write(entry, answer, function () {
+		/*** Log to console and answer with success ***/
+		info("Transaction from " + common.student_readable(entry.sender) + " to " +
+			common.student_readable(entry.recipient) + ", with net value " +
+			entry.amount_received + " HGC, tax income is " + entry.amount_tax + " HGC.");
+		answer("ok");
+		if (cb) cb();
+	});
+}
+
+setInterval(function () {
+	function onWritePermission(i, trid, answer) {
+		var pe = pending_transactions[i];
+		if (!pe) return; // (other callback was faster)
+		db.transactions.getBalance(pe.sender, pe.answer, function (bal) {
+			if (bal - pe.entry.amount_sent < 0) {
+				pe.answer("nomoney");
+				db.transactions.writeComplete(trid);
+				delete pending_transactions[i];
+			} else {
+				transaction_write(pe.entry, pe.answer, pe.info, function () {
+					delete pending_transactions[i];
+					db.transactions.writeComplete(trid);
+				});
+			}
+		}); 
+	}
+
+	for (var i = 0; i < pending_transactions.length; i++) {
+		var pe = pending_transactions[i];
+		if (!pe) continue;
+		db.transactions.checkWritePermission(pe.trid, pe.sender, pe.answer,
+			onWritePermission.bind(null, i, pe.trid, pe.answer));
+	}
+}, settings.transaction_interval);
+
+/**
+ * Add transaction intent to database, but wait for permission before performing
+ * Takes care of making sure sender and recipient exist and gathering data from
+ * the students database.
+ *
  * Does NOT perform any security checks, so there is no need for a password
  * Does NOT sanitize all of user input, like number of decimal places or comment length
- * Calls cb(res), where res is a paremeter indication success ("ok") or errors:
- * "ok", "nomoney", "invalid_sender", "invalid_recipient", "overspecified", "invalid_amount"
  * If the recipient is the magic_account, the money will be destroyed
  * If the sender is the magic_account, the money will be spawned
  */
-function transaction(sender_qrid, recipient_qrid, amount_sent, amount_received, tax,
+function transaction(sender_qrid, recipient_qrid,
+		amount_sent, amount_received, tax,
 		comment, answer, info) {
 	var sender, recipient, taxinc;
 	var magic_account = config.get("magic_account");
 	var spawn_money = sender_qrid == magic_account;
 	var destroy_money = recipient_qrid == magic_account;
 
-	// Check for over- or underspecification (amount_sent / amount_received)
+	/*** Check for over- or underspecification (amount_sent / amount_received) ***/
 	if (!amount_sent && !amount_received) { answer("underspecified"); return; }
 	if (amount_sent && amount_received) { answer("overspecified"); return; }
 
-	// Check for invalid money amounts
+	/*** Check for invalid money amounts ***/
 	if (amount_sent && (!Number.isFinite(amount_sent) || amount_sent <= 0))
 		{ answer("invalid_amount"); return; }
 	if (amount_received && (!Number.isFinite(amount_received) || amount_received <= 0))
 		{ answer("invalid_amount"); return; }
 
-	/*** Load all required database entries ***/
+	/*** Gather data from students database ***/
 	flow.exec(function () {
 		db.students.getByQridLean(config.get("taxinc_qrid"), answer, this);
 	}, function (st) {
@@ -249,25 +315,16 @@ function transaction(sender_qrid, recipient_qrid, amount_sent, amount_received, 
 		if (!st) { answer("invalid_recipient"); return; }
 		recipient = st;
 
-		/*** Get sender balance from transactions chain ***/
-		if (spawn_money) this(true);
-		db.transactions.getBalance(sender._id, answer, this);
-	}, function (balance_sender) {
-		/*** Calculate amount to transfer with taxes ***/
-		// In dubio pro central bank - round up after hgc_decimal_places,
-		// so central bank gets more tax income and recipient gets less money
-		// or sender has to pay more money
+		/* Calculate amount to transfer with taxes:
+		 * In dubio pro central bank - round up after hgc_decimal_places,
+		 * so central bank gets more tax income and recipient gets less money
+		 * or sender has to pay more money
+		 */
 		var amount_tax = amount_sent ? gross2tax(amount_sent, tax) : net2tax(amount_received, tax);
 		amount_sent = amount_sent ? amount_sent : amount_received + amount_tax;
 		amount_received = amount_received ? amount_received : amount_sent - amount_tax;
 
-		if (balance_sender !== true && balance_sender < amount_sent) {
-			answer("nomoney");
-			return;
-		}
-
 		/*** Generate sender / recipient entries for transaction DB ***/
-		// in case of spawn_money / destroy_money
 		if (destroy_money) recipient = { qrid : magic_account };
 		if (spawn_money) sender = { qrid : magic_account };
 
@@ -276,8 +333,7 @@ function transaction(sender_qrid, recipient_qrid, amount_sent, amount_received, 
 		recipient_public.reference = recipient._id;
 		sender_public.reference = sender._id;
 
-		/*** Log Transaction in Transactions DB ***/
-		db.transactions.add({
+		var entry = {
 			sender : sender_public,
 			recipient : recipient_public,
 			tax_recipient : taxinc._id,
@@ -289,15 +345,19 @@ function transaction(sender_qrid, recipient_qrid, amount_sent, amount_received, 
 			percent_tax : tax,
 
 			comment : comment
-		}, answer, function () {
-			/* Log to console and answer with success */
-			var log_type = "transaction";
-			if (spawn_money) log_type = "spawn_money";
-			if (destroy_money) log_type = "destroy_money";
-			info(log_type + " from " + common.student_readable(sender) + " to " +
-				common.student_readable(recipient) + ", with net value " +
-				amount_received + " HGC, tax income is " + amount_tax + " HGC.");
-			answer("ok");
+		};
+
+		/*** Add write_intent to transactions database to request permission ***/
+		if (spawn_money) {
+			transaction_write(entry, answer, function () {
+				info("done for " + common.student_readable(recipient_public));
+				answer("ok");
+			});
+			return;
+		}
+
+		db.transactions.intent(sender._id, answer, function (trid) {
+			transaction_queue(trid, sender._id, entry, answer, info);
 		});
 	});
 }
@@ -332,7 +392,7 @@ function nDecimals(number) {
 	return decimals ? decimals.length : 0;
 }
 
-function transaction_common(payload, answer, info, tax) {
+function transaction_normal(payload, answer, info, tax) {
 	/*** Gather data from payload ***/
 	var sender = payload.sender;
 	var recipient = payload.recipient;
@@ -364,12 +424,12 @@ function transaction_common(payload, answer, info, tax) {
 register("transaction", function (payload, answer, info) {
 	// Tax in %
 	var tax = config.get("transaction_tax_percent");
-	transaction_common(payload, answer, info, tax);
+	transaction_normal(payload, answer, info, tax);
 });
 
 register_cert("transaction_taxfree", ["registration_hash", "admin_hash"],
 		function (payload, answer, info) {
-	transaction_common(payload, answer, info, 0);
+	transaction_normal(payload, answer, info, 0);
 });
 
 /**

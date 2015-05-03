@@ -1,6 +1,7 @@
+var config = require("../config");
+var log = require("../logging.js");
 var mongoose = require("mongoose");
 var Schema = mongoose.Schema;
-var log = require("../logging.js");
 
 var commonProfileSchema = {
 	reference :	{ type : Schema.Types.ObjectId, index : true },
@@ -46,14 +47,68 @@ var transactionSchema = new Schema({
 
 var Transaction = mongoose.model("Transaction", transactionSchema);
 
+/**
+ * Pending transactions are stored in a collection to make sure only the very
+ * first transaction per sender may be executed at a time.
+ * Since the API server may crash / be shut down / ... while transactions are pending,
+ * objects in the pendingtransactions collection will be removed after pending_timeout.
+ * That value (in seconds) shouldn't be too low, otherwise transactions may not function
+ * at all under high server load.
+ *
+ * That way, many transactions with the same sender at the same time won't cause the
+ * server to deduct them even though the balance should be less than 0.
+ */
+var pendingTransactionSchema = new Schema({
+	sender : { type : Schema.Types.ObjectId, index : true },
+	time : { type : Date, default: Date.now, expires : config.get("pending_timeout") }
+});
+
+var pendingTransaction = mongoose.model("pendingTransaction", pendingTransactionSchema);
+
 module.exports = function (error) { return {
-	add : function (info, answer, cb) {
-		var nt = new Transaction(info);
-		nt.save(function (err) {
+	intent : function (sender_id, answer, cb) {
+		var pt = new pendingTransaction({
+			sender : sender_id
+		});
+
+		pt.save(function (err) {
 			if (err) {
 				error("trdb.add", answer, err);
 			} else {
+				cb(pt._id);
+			}
+		});
+	},
+
+	checkWritePermission : function (trid, sender_id, answer, cb) {
+		pendingTransaction.find({
+			"sender" : sender_id
+		}, { _id : 1 }).sort({
+			"time" : "ascending"
+		}).limit(1).lean().exec(function (err, pt) {
+			if (err) {
+				error("trdb.checkWritePermission", answer, err);
+			} else {
+				if (pt[0] && pt[0]._id.equals(trid)) cb();
+			}
+		});
+	},
+
+	write : function (entry, answer, cb) {
+		var tr = new Transaction(entry);
+		tr.save(function (err) {
+			if (err) {
+				error("trdb.write", answer, err);
+			} else {
 				cb();
+			}
+		});
+	},
+
+	writeComplete : function (trid) {
+		pendingTransaction.findOneAndRemove({ "_id" : trid }, function (err, pt) {
+			if (err) {
+				error("trdb.writeComplete", null, err);
 			}
 		});
 	},
@@ -140,4 +195,4 @@ module.exports = function (error) { return {
 			});
 		});
 	}
-}};
+}; };

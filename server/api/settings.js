@@ -27,6 +27,10 @@ settings.reconnect_interval = 3000;
 // config_load_timeout + config_load_interval milliseconds
 settings.config_load_interval = 7000;
 
+// Interval in which transactions will be executed. This is necessary since transactions
+// may get queued to ensure no invalid transactions are made, in milliseconds.
+settings.transaction_interval = 50;
+
 /** Production-specific settings **/
 if (process.argv[2] == "production") {
 	log.info("API", "Running in production mode");

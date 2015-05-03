@@ -53,7 +53,7 @@ module.exports = function (error) { return {
 				else
 					cb(false);
 			}
-		})
+		});
 	},
 
 	getByProperties : function (properties, answer, cb) {
@@ -126,4 +126,4 @@ module.exports = function (error) { return {
 			}
 		});
 	}
-}};
+}; };

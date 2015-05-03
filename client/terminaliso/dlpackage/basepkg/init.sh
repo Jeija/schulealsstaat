@@ -11,9 +11,8 @@ localectl set-x11-keymap de
 ### Networking / Wireless ###
 ebtables-restore < $CWD/ebtables.save
 $CWD/setupwifi.sh
-exec 3>&1
-DHCPSERVER=$(dialog --nocancel --inputbox DHCP\ Server? 10 50 192.168.2.10 2>&1 1>&3)
-exec 3>&-
+dialog --nocancel --inputbox Network\ Management\ Servers? 10 50 "net1.saeu net2.saeu" 2> /tmp/net_management
+NETMANSERVERS=$(cat /tmp/net_management)
 
 ### Webcam ###
 $CWD/setupwebcam.sh
@@ -65,7 +64,7 @@ tmux split-window -v
 # Execute commands:
 # (0) dhcrelay
 tmux select-pane -t 0; sleep 0.5
-tmux send-key "dhcrelay -4 -d -i $BR_IFACE $DHCPSERVER" C-m
+tmux send-key "dhcrelay -4 -d -i $BR_IFACE $NETMANSERVERS" C-m
 
 # (1) ffmpeg
 tmux select-pane -t 1; sleep 0.5
