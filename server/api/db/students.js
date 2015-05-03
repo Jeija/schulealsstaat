@@ -56,19 +56,10 @@ module.exports = function (error) { return {
 		});
 	},
 
-	getByProperties : function (properties, answer, cb) {
-		Student.find(properties, function (err, st) {
-			if (err) {
-				error("stdb.getByProperties", answer, err);
-			} else {
-				cb(st);
-			}
-		});
-	},
-
-	/** getCertainByProperties is always lean! **/
-	getCertainByProperties : function (properties, fields, answer, cb) {
-		Student.find(properties, fields, { maxTime : 10 }).lean().exec(function (err, st) {
+	getByProperties : function (properties, fields, limit, answer, cb) {
+		if (!fields) fields = {};
+		if (!limit || limit < 0) limit = Infinity;
+		Student.find(properties, fields).lean().limit(limit).exec(function (err, st) {
 			if (err) {
 				error("stdb.getCertainByProperties", answer, err);
 			} else {
@@ -103,26 +94,6 @@ module.exports = function (error) { return {
 				error("stdb.getCertainByQridLean", answer, err);
 			} else {
 				cb(st);
-			}
-		});
-	},
-
-	getAll : function (answer, cb) {
-		Student.find().lean().exec(function (err, list) {
-			if (err) {
-				error("stdb.getAll", answer, err);
-			} else {
-				cb(list);
-			}
-		});
-	},
-
-	getCertainAll : function (fields, answer, cb) {
-		Student.find({}, fields).lean().exec(function (err, list) {
-			if (err) {
-				error("stdb.getCertainAll", answer, err);
-			} else {
-				cb(list);
 			}
 		});
 	}

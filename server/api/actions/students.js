@@ -28,19 +28,11 @@ module.exports = function (register, register_cert) {
  */
 register_cert("students_dump", ["admin_hash"], function (payload, answer, info) {
 	info("this may take a while");
-	var fields = payload;
-	if (fields) {
-		db.students.getCertainAll(fields, answer, function (list) {
-			answer(list);
-			info("student_dump complete");
-		});
-	} else {
-		db.students.getAll(answer, function (list) {
-			info("got list from database");
-			answer(list);
-			info("student_dump complete");
-		});
-	}
+	db.students.getByProperties({}, payload, null, answer, function (list) {
+		info("got list from database");
+		answer(list);
+		info("student_dump complete");
+	});
 });
 
 /**
@@ -51,8 +43,9 @@ register_cert("students_dump", ["admin_hash"], function (payload, answer, info) 
  *	query : {
  *		key1 : value1 (both Strings),
  *		key2 : value2 (both Strings)
- *	}
- *	fields : <explanation see below>
+ *	},
+ *	fields : <explanation see below>,
+ *	limit : Number (if exists and positive, only returns that number of students)
  * }
  *
  * fields: optional (get everything) or object specifying inclusion / exclusion of fields:
@@ -64,17 +57,11 @@ register_cert("students_dump", ["admin_hash"], function (payload, answer, info) 
  * [{<student1>}, {<student2>}, ...]
  */
 register_cert("get_students", ["admin_hash"], function (payload, answer, info) {
-	function log_and_answer(list) {
+	db.students.getByProperties(payload.query, payload.fields, payload.limit, answer,
+			function (list) {
 		info("found " + list.length + " matches");
 		answer(list);
-	}
-
-	// Payload contains an attribute list that may fit none, one or multiple students
-	if ("fields" in payload)
-		db.students.getCertainByProperties(payload.query, payload.fields, answer,
-			log_and_answer);
-	else
-		db.students.getByProperties(payload.query, answer, log_and_answer);
+	});
 });
 
 /**
@@ -176,7 +163,7 @@ register("student_identify", function (payload, answer, info) {
 	if (payload.type)
 		payload.type = new RegExp("^" + payload.type + "$", "i");
 
-	db.students.getCertainByProperties(payload, common.student_public_fields,
+	db.students.getByProperties(payload, {}, null, common.student_public_fields,
 			answer, function (st) {
 		if (!st[0]) {
 			answer("error: not found");

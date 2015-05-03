@@ -124,27 +124,16 @@ module.exports = function (error) { return {
 	},
 
 	getByProperties : function (properties, limit, answer, cb) {
-		if (!limit || limit < 0) {
-			Transaction.find(properties).sort({
-				"time" : "descending"
-			}).lean().exec(function (err, tr) {
-				if (err) {
-					error("trdb.getByProperties (1)", answer, err);
-				} else {
-					cb(tr);
-				}
-			});
-		} else {
-			Transaction.find(properties).sort({
-				"time" : "descending"
-			}).limit(limit).lean().exec(function (err, tr) {
-				if (err) {
-					error("trdb.getByProperties (2)", answer, err);
-				} else {
-					cb(tr);
-				}
-			});
-		}
+		if (!limit || limit < 0) limit = Infinity;
+		Transaction.find(properties).sort({
+			"time" : "descending"
+		}).limit(limit).lean().exec(function (err, tr) {
+			if (err) {
+				error("trdb.getByProperties (2)", answer, err);
+			} else {
+				cb(tr);
+			}
+		});
 	},
 
 	getBalance : function (id, answer, cb) {

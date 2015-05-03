@@ -275,6 +275,31 @@ h3 {
 	margin:auto;
 }
 
+#n_students {
+	width:128px;
+	padding:1px;
+	font-size:13px;
+	padding:3px;
+	border:1px solid #000;
+	background:#fff;
+}
+
+#n_students_desc {
+	position:absolute;
+	right:180px;
+	bottom:50px;
+	width:103px;
+	font-size:16px;
+	font-style:italic;
+}
+
+#n_students {
+	position:absolute;
+	right:175px;
+	bottom:17px;
+	width:103px;
+}
+
 #downloadlist {
 	font-size:15px;
 	position:absolute;

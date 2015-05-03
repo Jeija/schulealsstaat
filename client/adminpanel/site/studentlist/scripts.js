@@ -262,6 +262,10 @@ $(function() {
 		}
 
 		var req = {query : cond, fields : reqfields};
+
+		var limit = $("#n_students").val();
+		if (limit !== "all") req.limit = parseInt(limit);
+
 		action_cert("get_students", req, "admin_cert", function (res) {
 			studentlist = res;
 			render_list();
