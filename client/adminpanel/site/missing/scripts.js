@@ -1,3 +1,9 @@
+function datetime_readable (datestring) {
+	var d = new Date(datestring);
+	return d.getDate() + "." + (d.getMonth() + 1)
+		+ " " + ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2);
+}
+
 /**
  * Calculate the time a student was checked in witin the selected period
  * \param st The student to calculate the value for, whole db entry
@@ -144,17 +150,10 @@ function render_students(list) {
 		});
 		for (var i = 0; i < checks.length; i++) {
 			var type = ((checks[i].type == "checkin") ? "Check In" : "Check Out");
-			var date = new Date(checks[i].time);
-			var date_readable =
-				  ("0" + date.getDate() ).slice(-2) + "."
-				+ ("0" + date.getMonth()).slice(-2) + ". "
-				+ date.getFullYear() + ", "
-				+ ("0" + date.getHours()).slice(-2) + ":"
-				+ ("0" + date.getMinutes()).slice(-2);
 
 			$("#details").append($('<tr class="detail_' + checks[i].type + '">')
 				.append($("<td>")
-					.text(date_readable))
+					.text(datetime_readable(checks[i].time)))
 				.append($("<td>")
 					.text(type))
 			);
