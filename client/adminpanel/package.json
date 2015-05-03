@@ -1,0 +1,13 @@
+{
+	"name" : "SaEU Administration",
+	"main" : "./site/index.html",
+	"scripts" : {
+		"start" : "nw"
+	},
+	"window": {
+		"toolbar": false,
+		"frame": true,
+		"width":1024,
+		"height":768
+	}
+}

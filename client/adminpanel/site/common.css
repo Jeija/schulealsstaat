@@ -6,10 +6,6 @@ body {
 	margin-top:80px;
 }
 
-html {
-	box-shadow:inset 0 0 100px rgba(0, 0, 0, 0.5);
-}
-
 #bg {
 	z-index:-1;
 	width:100vw;
@@ -17,14 +13,16 @@ html {
 	position:fixed;
 	top:0;
 	left:0;
-	background:url(/euflag.svg) no-repeat center center fixed;
+	background:url(euflag.svg) no-repeat center center fixed;
         background-size:cover;
 	opacity:0.25;
+	box-shadow:inset 0 0 100px rgba(0, 0, 0, 0.5);
 }
 
 #heading {
 	position:fixed;
 	top:0;
+	left:0;
 	z-index:2;
 	font-family:Arial;
 	height:35px;
