@@ -12,6 +12,9 @@ cp $ROOT/client/common/api.js $ROOT/client/adminpanel/site/
 cp $ROOT/client/common/api.js $ROOT/client/entrycheck/www/
 cp $ROOT/client/common/api.js $ROOT/client/app/www/js/
 cp $ROOT/client/common/api.js $ROOT/testing/api/
+cp $ROOT/client/common/checkintime.js $ROOT/client/entrycheck/www/default
+cp $ROOT/client/common/checkintime.js $ROOT/client/adminpanel/site/missing
+
 
 # Copy cert.js + logging.js to all server applications that use it
 cp $ROOT/server/common/cert.js $ROOT/server/api/cert.js

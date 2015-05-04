@@ -265,7 +265,7 @@ $(function() {
 		var limit = $("#n_students").val();
 		if (limit !== "all") req.limit = parseInt(limit);
 
-		action_cert("get_students", req, "admin_cert", function (res) {
+		action_cert("students_get", req, "admin_cert", function (res) {
 			studentlist = res;
 			render_list();
 		});	
@@ -275,7 +275,7 @@ $(function() {
 		$("#studentlist").html("");
 		try {
 			var req = {query : JSON.parse($("#mongoose_query").val()), fields : reqfields};
-			action_cert("get_students", req, "admin_cert", function (res) {
+			action_cert("students_get", req, "admin_cert", function (res) {
 				studentlist = res;
 				render_list();
 			});

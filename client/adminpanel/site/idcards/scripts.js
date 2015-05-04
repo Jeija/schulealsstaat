@@ -210,7 +210,7 @@ $("#type_ok").click(function () {
 			"qrid" : 1, "picname" : 1, "birth" : 1, "special_name" : 1}
 	};
 	if (type == "*") condition.query = {};
-	action_cert("get_students", condition, "admin_cert", function (res) {
+	action_cert("students_get", condition, "admin_cert", function (res) {
 		makepdf(res);
 	});
 });

@@ -35,7 +35,6 @@ module.exports = {
 			special_name :	st.special_name,
 			firstname :	st.firstname,
 			lastname :	st.lastname,
-			picname :	st.picname,
 			country :	st.country,
 			birth :		st.birth,
 			type :		st.type,

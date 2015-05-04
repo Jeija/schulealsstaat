@@ -57,7 +57,7 @@ module.exports = function (error) { return {
 	},
 
 	getByProperties : function (properties, fields, limit, answer, cb) {
-		if (!fields) fields = {};
+		if (!fields) fields = null;
 		if (!limit || limit < 0) limit = Infinity;
 		Student.find(properties, fields).lean().limit(limit).exec(function (err, st) {
 			if (err) {

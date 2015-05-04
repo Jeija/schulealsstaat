@@ -9,6 +9,7 @@
 
 var ZBARCAM = "zbarcam";
 var ZBC_FLAGS = "--prescale=640x480";
+var PRESENCE_SINCE = 12 * 60 * 60; // in seconds before now
 
 // In node.js (nwjs) environment: Spawn ZBarCam instead of QRScanJS
 var process = null;
@@ -42,7 +43,7 @@ function addActionCard(qrid) {
 
 	// Get more information on the student based by sending the unique QR-ID to the
 	// API Server
-	action("student_identify", { qrid : qrid }, function(student) {
+	action_cert("ec_student_get", qrid, "ec_cert", function(student) {
 		// Show student information card
 		var card = $("#card_prototype").clone(true).appendTo("#cardlist");
 		card.show();
@@ -56,10 +57,21 @@ function addActionCard(qrid) {
 			card.find(".found").show();
 		}
 
+		// Show information on attendance time and wheter the student is currently
+		// checked in --> Make sure hardware clock is correct!!
+		var now = Date.now();
+		var since = now - PRESENCE_SINCE * 1000;
+		var spec = calc_checkin_time(student, since, now);
+		if (spec.present_at_end)
+			card.addClass("inside");
+		else
+			card.addClass("outside");
+
 		// Load data into attribute card
-		card.find(".td_name").html(student.firstname + " " + student.lastname);
-		card.find(".td_class").html(student.type);
-		card.find(".td_age").html(calcAge(student.birth));
+		card.find(".td_minutes").text(Math.floor(spec.time / 60));
+		card.find(".td_name").text(student.firstname + " " + student.lastname);
+		card.find(".td_class").text(student.type);
+		card.find(".td_age").text(calcAge(student.birth));
 		card.find(".pass").attr("src", "");
 		webcamserv_get(student.picname, function (imgbase64) {
 			card.find(".pass").attr("src", "data:image/png;base64," + imgbase64);
@@ -104,6 +116,7 @@ $(function() {
 
 	$(".checkin").click(function () {
 		var card = $(this).parent().parent();
+		if (card.attr("id") == "card_prototype") return;
 		action_cert("ec_checkin", card.data("qrid"), "ec_cert", function (res) {
 			if (res != "ok") alert("Fehler! Server-Antwort: " + res);
 			else card.remove();
@@ -112,6 +125,7 @@ $(function() {
 
 	$(".checkout").click(function () {
 		var card = $(this).parent().parent();
+		if (card.attr("id") == "card_prototype") return;
 		action_cert("ec_checkout", card.data("qrid"), "ec_cert", function (res) {
 			if (res != "ok") alert("Fehler! Server-Antwort: " + res);
 			else card.remove();
@@ -120,5 +134,12 @@ $(function() {
 
 	$(".close").click(function () {
 		$(this).parent().parent().remove();
+	});
+
+	$(document).keypress(function (ev) {
+		// i key for checking all in, o key for checking all out
+		if (ev.charCode == 105) $(".checkin").click();
+		if (ev.charCode == 111) $(".checkout").click();
+		console.log(ev);
 	});
 });

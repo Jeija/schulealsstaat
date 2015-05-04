@@ -16,7 +16,7 @@ var actions = {};
  * register_action: registers an API action
  * register_action_cert: like register_action, but requires a certificate to be executed
  *
- * name: The [ACTIONNAME] in the URL, such as "get_students" for [URL]/actions/get_students
+ * name: The [ACTIONNAME] in the URL, such as "students_get" for [URL]/actions/students_get
  * action: A function that is executed if the action is called
  *		type: function (payload, answer, error, info)
  * cert: An array of certificate hash files that suffice for authentication
@@ -62,7 +62,7 @@ function encrypt_query(query_plain, aes_key, callback) {
 
 /**
  * Decrypt action and provide API_answer / API_error callbacks to actions
- * name: The [ACTIONNAME] in the URL, such as "get_students" for [URL]/actions/get_students
+ * name: The [ACTIONNAME] in the URL, such as "students_get" for [URL]/actions/students_get
  * req: Node.js HTTP request object
  * res: Node.js HTTP response object
  */

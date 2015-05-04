@@ -7,7 +7,7 @@ var active_queries = 0;
 function query() {
 	if (active_queries >= NUM_QUERIES) return;
 	active_queries++;
-	api.action_cert("students_dump", null, "admin_cert", function (res, servertime_ms) {
+	api.action_cert("students_get", { query : {} }, "admin_cert", function (res, servertime_ms) {
 		i++;
 		active_queries--;
 		console.log(servertime_ms.toFixed(1));

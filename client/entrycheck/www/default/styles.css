@@ -39,9 +39,17 @@ html, body {
 	padding:20px;
 	border:1px solid #555;
 	height:90%;
-	background:#111;
 	text-align:center;
 	position:relative;
+	background:#111;
+}
+
+.card.inside {
+	background:#151;
+}
+
+.card.outside {
+	background:#511;
 }
 
 .pass {

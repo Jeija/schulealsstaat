@@ -13,32 +13,10 @@ function generate_pwdhash(pwd) {
 
 module.exports = function (register, register_cert) {
 /**
- * Returns JSON of all students in DB.
- *
- * admin_hash --> students_dump
- *
- * Parameter: none (invalid JSON) or object specifying inclusion / exclusion of fields:
- *	inclusion:	{ "firstname" : 1, "lastname" : 1 }	--> only included
- *	exlusion:	{ "appear" : 0, "transactions" : 0 }	--> only excluded
- *
- * response value:
- * none (error) or dump of db.students, with all properties:
- * [{<student1>}, {<student2>}, ...]
- */
-register_cert("students_dump", ["admin_hash"], function (payload, answer, info) {
-	info("this may take a while");
-	db.students.getByProperties({}, payload, null, answer, function (list) {
-		info("got list from database");
-		answer(list);
-		info("student_dump complete");
-	});
-});
-
-/**
  * Finds student by given key-value pairs in DB, also supports mongoose-style
  * properties like $ne, $or, ...
  *
- * admin_hash --> get_students {
+ * admin_hash --> students_get {
  *	query : {
  *		key1 : value1 (both Strings),
  *		key2 : value2 (both Strings)
@@ -55,7 +33,7 @@ register_cert("students_dump", ["admin_hash"], function (payload, answer, info) 
  * none (error) or list of student that match given criteria:
  * [{<student1>}, {<student2>}, ...]
  */
-register_cert("get_students", ["admin_hash"], function (payload, answer, info) {
+register_cert("students_get", ["admin_hash"], function (payload, answer, info) {
 	db.students.getByProperties(payload.query, payload.fields, payload.limit, answer,
 			function (list) {
 		info("found " + list.length + " matches");
@@ -161,7 +139,7 @@ register("student_identify", function (payload, answer, info) {
 	if (payload.type)
 		payload.type = new RegExp("^" + payload.type + "$", "i");
 
-	db.students.getByProperties(payload, {}, null, common.student_public_fields,
+	db.students.getByProperties(payload, common.student_public_fields, null,
 			answer, function (st) {
 		if (!st[0]) {
 			answer("error: not found");
@@ -174,6 +152,7 @@ register("student_identify", function (payload, answer, info) {
 		}
 
 		info("identified " + common.student_readable(st[0]));
+		console.log(st[0]);
 		answer(st[0]);
 	});
 });
@@ -235,6 +214,54 @@ register_cert("password_change_master", ["master_hash"], function (payload, answ
 	});
 });
 
+/**
+ * Identifies student for getting to profile in the entrycheck client,
+ * will also return entries in the appear field since appear_since,
+ * requires entrycheck keyfile
+ *
+ * ec_student_get --> qrid (String)
+ * }
+ *
+ * response value: JSON consisting of {
+ *	firstname : String,
+ *	lastname : String,
+ *	special_name : String,
+ *	qrid : String (QR-ID),
+ *	type : String,
+ *	birth : Date,
+ *	picname : String,
+ * }
+ */
+register_cert("ec_student_get", ["ec_hash", "admin_hash"], function (payload, answer, info) {
+	db.students.getCertainByQridLean(payload, {
+		firstname : 1,
+		lastname : 1,
+		type : 1,
+		qrid : 1,
+		birth : 1,
+		appear : 1,
+		picname : 1
+	}, answer, function (st) {
+		if (!st) {
+			answer("error: not found");
+			return;
+		}
+
+		info("identified " + common.student_readable(st));
+		answer(st);
+	});
+});
+
+
+/**
+ * ec_checkin / ec_checkout
+ * Checks student in or out, to report how long that student has been present at school.
+ *
+ * ec_checkin / ec_checkout --> qrid (String)
+ *
+ * response values:
+ * "ok" or "error: <something>"
+ */
 register_cert("ec_checkin", ["ec_hash", "admin_hash"], function (payload, answer, info) {
 	db.students.addAppear(payload, {
 		type : "checkin",
