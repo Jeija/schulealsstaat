@@ -152,7 +152,6 @@ register("student_identify", function (payload, answer, info) {
 		}
 
 		info("identified " + common.student_readable(st[0]));
-		console.log(st[0]);
 		answer(st[0]);
 	});
 });

@@ -1,18 +1,22 @@
 var ZBARCAM = "zbarcam";
 var WEBCAM = "/dev/video20";
-var ZBC_FLAGS = "--prescale=640x480"
+var ZBC_FLAGS = "--prescale=640x480";
+
+var process = null;
+var fs = null;
 
 // Only in node.js (nwjs) environment
 if (typeof require !== "undefined") {
-	var process = require("child_process");
+	process = require("child_process");
+	fs = require("fs");
 }
 
 /* Common utils */
 function student2readable(st) {
 	if (!st.type) return "Keine genaue Beschreibung verfügbar";
 
-	if (st.type != "visitor" && st.type != "teacher" && st.type != "legalentity"
-		&& st.type != "other")
+	if (st.type != "visitor" && st.type != "teacher" && st.type != "legalentity" &&
+			st.type != "other")
 		return st.firstname + " " + st.lastname + ", Klasse " + st.type.toUpperCase();
 
 	if (st.type == "visitor")
@@ -44,7 +48,7 @@ function errorMessage(msg) {
 
 function getConfig(config, cb) {
 	action("config_get", config, function (res) {
-		if (res != "") cb(res);
+		if (res !== "") cb(res);
 	});
 }
 
@@ -62,18 +66,18 @@ function student_identify(data, sectionref, cb) {
 	// Ask server for identification of student by inputs
 	action("student_identify", data, function (st) {
 		if (st === "multiple") {
-			errorMessage("Die Eingabe ist nicht eindeutig:<br/>"
-				+ "Es gibt mehrere Personen, die auf die Kriterien passen.");
+			errorMessage("Die Eingabe ist nicht eindeutig:<br/>" +
+				"Es gibt mehrere Personen, die auf die Kriterien passen.");
 			return;
 		}
 
 		if (typeof st !== "object") {
-			errorMessage("Konnte Person nicht finden:<br/>"
-				+ "Die angegebenen Kriterien passen auf keine Person.");
+			errorMessage("Konnte Person nicht finden:<br/>" +
+				"Die angegebenen Kriterien passen auf keine Person.");
 			return;
 		}
 
-		complete.html(student2readable(st));
+		complete.text(student2readable(st));
 		incomplete.css("transform", "rotateY(180deg)");
 		complete.css("transform", "rotateY(0deg)");
 
@@ -86,9 +90,6 @@ function student_identify(data, sectionref, cb) {
 	});
 }
 
-// Hide page before finished loading
-$("#page").hide();
-
 function load_common_events() {
 	// Disable dragging
 	$("img").on("dragstart", function(e) {
@@ -97,7 +98,7 @@ function load_common_events() {
 
 	$(".studentselector").load("section_student.html", function () {
 		/* Student by QR Code Scan */
-		$(".qrcode_scan").click(function () {
+		$(".qrcode_scan").off("click").on("click", function () {
 			// Non-node.js environment
 			if (!process) return;
 			var sectionref = this;
@@ -114,15 +115,15 @@ function load_common_events() {
 		});
 
 		/* Student by firstname / lastname / type */
-		$(".name_ok").click(function () {
+		$(".name_ok").off("click").on("click", function () {
 			// Retrieve property values from inputs
 			var firstname = $(this).closest(".section").find(".firstname").val();
 			var lastname = $(this).closest(".section").find(".lastname").val();
 			var type = $(this).closest(".section").find(".class").val();
-			var data = {}
-			if (firstname != "") data.firstname = firstname;
-			if (lastname != "") data.lastname = lastname;
-			if (type != "") data.type = type;
+			var data = {};
+			if (firstname !== "") data.firstname = firstname;
+			if (lastname !== "") data.lastname = lastname;
+			if (type !== "") data.type = type;
 
 			var sectionref = this;
 			student_identify(data, sectionref, function (st) {
@@ -131,7 +132,7 @@ function load_common_events() {
 		});
 
 		/* Student by QR Code Input */
-		$(".qrid_ok").click(function () {
+		$(".qrid_ok").off("click").on("click", function () {
 			var sectionref = this;
 			student_identify({qrid : $(this).siblings(".qrid").val()}, this, function (st) {
 				handleIdentifyAnswer(sectionref, st);
@@ -139,18 +140,18 @@ function load_common_events() {
 		});
 
 		/* MessageBox */
-		$("#messagebox_ok").click(function () {
+		$("#messagebox_ok").off("click").on("click", function () {
 			$("#messagebox").fadeOut();
 		});
 
 		/* Success MessageBox */
-		$("#success_ok").click(function () {
+		$("#success_ok").off("click").on("click", function () {
 			$("#success").fadeOut();
 			resetAll();
 		});
 
 		/* Change sender / recipient value */
-		$(".section_complete").click(function () {
+		$(".section_complete").off("click").on("click", function () {
 			// Get Sections
 			var complete = $(this);
 			var incomplete = complete.siblings(".section_incomplete");
@@ -163,9 +164,14 @@ function load_common_events() {
 		});
 
 		/* Cancel */
-		$(".cancel").click(resetAll);
+		$(".cancel").off("click").on("click", resetAll);
 
 		// Show page when finished loading:
-		$("#page").fadeIn(200);
+		$("#page").fadeIn(300);
+
+		if (!fs || !fs.existsSync(WEBCAM)) {
+			$(".by_qr").hide();
+			$(".or.left").hide();
+		}
 	});
 }

@@ -6,14 +6,14 @@ var current_sender = null;
 var current_recipient = null;
 
 handleIdentifyAnswer = function(sectionref, st) {
-	if ($(sectionref).closest(".section_incomplete").parent(".recipient").length) {
+	if ($(sectionref).closest(".section_incomplete").parent().parent(".recipient").length) {
 		$("#recipient_presets").hide()
 		$(".section.recipient .section_complete").click(function () {
 			$("#recipient_presets").show();
 		});
 		current_recipient = st.qrid;
 	}
-	if ($(sectionref).closest(".section_incomplete").parent(".sender").length)
+	if ($(sectionref).closest(".section_incomplete").parent().parent(".sender").length)
 		current_sender = st.qrid;
 };
 
@@ -131,7 +131,7 @@ for (var target_qrid in QRID_PRESETS) {
 }
 
 $("#recipient_presets .preset").click(function () {
-	var sectionref = $(".section.recipient").children();
+	var sectionref = $(".section.recipient").find(".section_incomplete");
 	student_identify({qrid : $(this).data("qrid")}, sectionref, function (st) {
 		handleIdentifyAnswer(sectionref, st);
 	});

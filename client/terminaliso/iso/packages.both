@@ -18,8 +18,6 @@ gconf
 alsa-lib
 alsa-utils
 gtk2
-ttf-font
-ttf-liberation
 libnotify
 bridge-utils
 dnsmasq
@@ -38,4 +36,6 @@ rfkill
 tmux
 ffmpeg
 ttf-ubuntu-font-family
+ttf-fira-sans
+irssi
 ntp

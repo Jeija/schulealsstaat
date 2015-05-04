@@ -97,8 +97,7 @@
 }
 
 #transactions_table td.num {
-	font-weight:bold;
-	font-family:Monospace;
+	font-family:Fira Mono;
 	text-align:right;
 }
 

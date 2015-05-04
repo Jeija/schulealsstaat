@@ -20,15 +20,24 @@ function render_transactions (tr, balance) {
 	for (var i = tr.length - 1; i >= 0; i--) {
 		var t = tr[i];
 		var is_sender = (t.sender.qrid === current_qrid);
+		var is_recipient = (t.recipient.qrid === current_qrid);
 		var comment = "(kein Kommentar)";
 		if (t.comment)
 			comment = t.comment.replace(/\n/g, "<br/>");
 
-		bal_now += is_sender ? -t.amount_sent : t.amount_received;
+		/* Also handle transactions to yourself - even though that doesn't event
+			make any sense */
+		if (is_sender) bal_now -= t.amount_sent;
+		if (is_recipient) bal_now += t.amount_received;
+
+		var description = "Veraltet";
+		if (is_sender) description = "Zahlung";
+		if (is_recipient) description = "Eingang";
+		if (is_sender && is_recipient) description = "Unsinn";
 
 		table.append($('<tr class="' + (is_sender ? "dec" : "inc") + '">')
 			.append($('<td class="trt_type">')
-				.text(is_sender ? "Zahlung" : "Eingang"))
+				.text(description))
 			.append($('<td class="trt_time">')
 				.text(datetime_readable(t.time)))
 			.append($('<td class="trt_amount_sent num">')

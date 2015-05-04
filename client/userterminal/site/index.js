@@ -1,26 +1,41 @@
-var fs = require("fs");
-var PWD_REQUIRED = fs.readFileSync("/tmp/password");
+var PWD_REQUIRED = "";
+if (typeof require !== "undefined") {
+	PWD_REQUIRED = require("fs").readFileSync("/tmp/password");
+}
 var QRID_PRESETS = {};
 var RADIO_BASEURL = "http://radio.saeu:8000/"
 
 function load_subdir (dir) {
 	// Destroy old page including events
 	$("#page").find("*").unbind();
-	$("#page").hide();
-	$("#page").html("");
+	var pagehtml = null, interval = null;
 
-	$('.mainlink').removeClass("link-selected");
-	$('.mainlink[data-subdir="' + dir + '"]').addClass("link-selected");
-	$("#page").load(dir + "/index.html", function () {
-		load_common_events();
-		$("<link>", {
-			rel: "stylesheet",
-			type: "text/css",
-			href: dir + "/styles.css"
-		}).appendTo("head");
+	$.get(dir + "/index.html", function (res) {
+		pagehtml = res;
+	});
 
-		// ULoad new ones events
-		$.getScript(dir + "/scripts.js");
+	function show_new_page () {
+		if (!pagehtml) return;
+		clearInterval(interval);
+		$("#page").html("");
+
+		$('.mainlink').removeClass("link-selected");
+		$('.mainlink[data-subdir="' + dir + '"]').addClass("link-selected");
+		$("#page").html(pagehtml).ready(function () {
+			load_common_events();
+			$("<link>", {
+				rel: "stylesheet",
+				type: "text/css",
+				href: dir + "/styles.css"
+			}).appendTo("head");
+
+			// Load new events
+			$.getScript(dir + "/scripts.js");
+		});
+	}
+
+	$("#page").fadeOut(300, function () {
+		interval = setInterval(show_new_page, 100);
 	});
 }
 

@@ -1,10 +1,11 @@
 html {
 	box-shadow:inset 0 0 100px rgba(0, 0, 0, 0.5);
 	background:#555;
+	width:100vw;
+	font-family:Fira Sans Light;
 }
 
 body {
-	font-family:Helvetica;
 	margin:0;
 	-webkit-user-select: none;
 	cursor:default;
@@ -98,6 +99,9 @@ body {
 }
 
 #radiometa {
+	font-size:16px;
+	line-height:14px;
+	margin-bottom:2px;
 	color:#fff;
 	min-width:80px;
 	width:10vw;
@@ -219,7 +223,11 @@ body {
 	transition:transform 0.5s linear, height 0.5s linear;
 	transform-style: preserve-3d;
 	overflow:hidden;
-	display:block;
+	display:inline-block;
+}
+
+.center_section {
+	text-align:center;
 }
 
 .section_complete {
@@ -250,15 +258,15 @@ hr {
 .by_qr, .by_name, .by_qrid, .or {
 	height:13vw;
 	float:left;
+	display:block;
 }
 
 .by_qr, .by_name, .by_qrid {
-	width:25%;
+	width:18vw;
 }
 
 .by_qr {
 	background:#cff;
-	margin-left:calc((100% - 91%) / 2);
 }
 
 .by_name {
@@ -274,13 +282,13 @@ hr {
 	font-style:italic;
 	line-height:13vw;
 	font-size:2vw;
-	width:8%;
+	width:6vw;
 }
 
 .subsection_heading {
 	font-size:2vw;
-	padding-top:3px;
-	padding-bottom:3px;
+	padding-top:0.1vw;
+	padding-bottom:0.1vw;
 	margin-bottom:0.5vw;
 	width:100%;
 	overflow:hidden;
@@ -290,7 +298,7 @@ hr {
 /* QR Code Scan Subsection */
 .qrcode_scan {
 	display:inline-block;
-	padding:2px;
+	padding:0.1vw;
 	background:rgba(255, 255, 255, 0.3);
 	border:1px solid #aaa;
 	cursor:pointer;
@@ -610,7 +618,7 @@ hr {
 }
 
 #messagebox_heading {
-	font-size:3vw;
+	font-size:2.5vw;
 }
 
 #messagebox_ok {
@@ -635,7 +643,7 @@ hr {
 }
 
 #messagebox_msg {
-	font-size:2vw;
+	font-size:1.5vw;
 }
 
 /* Success Message Box */
@@ -651,7 +659,7 @@ hr {
 	background-image:-webkit-linear-gradient(top, rgba(220,255,220,0.9), rgba(220,255,225,0.9));
 	background-image:-moz-linear-gradient(top, rgba(220,255,220,0.9), rgba(220,255,225,0.9));
 	border-radius:5px;
-	font-size:2.5vw;
+	font-size:1.9vw;
 }
 
 #success_ok {
