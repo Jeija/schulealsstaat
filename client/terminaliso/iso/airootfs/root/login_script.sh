@@ -48,6 +48,7 @@ done
 
 # Wait until network is up (connection to any network management server)
 OFFLINE=true
+trap - ERR
 while [ "$OFFLINE" == "true" ]; do
 	for NS in ${NETMANSERVERS[@]}; do
 		ping -c 1 -w 2 $NS;
@@ -59,6 +60,7 @@ while [ "$OFFLINE" == "true" ]; do
 	ip link
 	echo -ne "\n\n\n--> No network connection!\n\n\n"
 done
+trap "error" ERR
 echo "Connection established!"
 
 # Synchronize time

@@ -14,6 +14,6 @@ exec 3>&1
 NICK=$(dialog --nocancel --inputbox IRC\ Nick? 10 50 laptop 2>&1 1>&3)
 exec 3>&-
 
-while true do
+while true; do
 	irssi -n $NICK -c irc.saeu
-fi
+done

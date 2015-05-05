@@ -63,7 +63,8 @@ tmux split-window -v
 # Execute commands:
 # (0) dhcrelay
 tmux select-pane -t 0; sleep 0.5
-tmux send-key "dhcrelay -4 -d -i $BR_IFACE ${NETMANSERVERS[@]}" C-m
+LIST=${NETMANSERVERS[@]}
+tmux send-key "dhcrelay -4 -d -i $BR_IFACE $LIST" C-m
 
 # (1) ffmpeg
 tmux select-pane -t 1; sleep 0.5
