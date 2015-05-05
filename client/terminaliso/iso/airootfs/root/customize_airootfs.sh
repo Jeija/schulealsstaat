@@ -34,6 +34,7 @@ systemctl set-default multi-user.target
 systemctl enable sshd
 
 echo "if [ \$(tty) = \"/dev/tty1\" ]; then /root/login_script.sh; fi" >> /root/.bash_profile
+echo "if [ \$(tty) = \"/dev/tty3\" ]; then /root/login_irssi.sh; fi" >> /root/.bash_profile
 chmod +x /root/.bash_profile
 
 echo "######################"

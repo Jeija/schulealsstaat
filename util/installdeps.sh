@@ -13,8 +13,11 @@ set -xe
 ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/.."
 
 # Install server dependencies
-( cd $ROOT/server/api ; sudo npm install --python=python2.7 )
-( cd $ROOT/server/webcam ; sudo npm install --python=python2.7 )
+( cd $ROOT/server/api ; npm install --python=python2.7 )
+( cd $ROOT/server/webcam ; npm install )
+
+# Install network dependencies
+( cd $ROOT/network/dns; sudo npm install )
 
 # Install client dependencies
 ( cd $ROOT/client/adminpanel/site ; bower install )
@@ -25,9 +28,9 @@ ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/.."
 ( cd $ROOT/client/genrequest/site ; bower install )
 
 # Install networking dependencies
-( cd $ROOT/network/dns ; npm install --python=python2.7 )
+( cd $ROOT/network/dns ; npm install )
 
-# Workaround for missing libudev.so.0 on most systems, for nodewebkit
+# Workaround for missing libudev.so.0 on most systems, for nw.js
 if [ ! -f /lib/x86_64-linux-gnu/libudev.so.0 ] && [ ! -f /lib/libudev.so.0 ]; then
 	# Most debian-based systems
 	if [ -f /lib/x86_64-linux-gnu/libudev.so.1 ]; then

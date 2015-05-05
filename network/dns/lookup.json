@@ -5,13 +5,12 @@
 			"192.168.2.31" : ":1230/ping"
 		}
 	},
-	"mongodb1.saeu" : "192.168.2.70",
-	"mongodb2.saeu" : "192.168.2.71",
 	"cam.saeu" : "192.168.2.60",
-	"ntp.saeu" : "192.168.2.11",
+	"primary.saeu" : "192.168.2.10",
+	"secondary.saeu" : "192.168.2.11",
 	"packages.saeu" : "192.168.2.32",
-	"centralbank.eu" : "192.168.2.40",
-	"centralbank.saeu" : "192.168.2.40",
 	"radio.saeu" : "192.168.2.50",
+	"irc.saeu" : "192.168.2.70",
+	"mumble.saeu" : "192.168.2.70",
 	"__default" : "192.168.2.10"
 }

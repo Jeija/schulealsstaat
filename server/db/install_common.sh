@@ -22,11 +22,11 @@ EOF
 ### Timer
 cat << EOF > /etc/systemd/system/sasdb_snapshot.timer
 [Unit]
-Description=Make SaEU database snapshots every 3 minutes
+Description=Make SaEU database snapshots every 5 minutes
 
 [Timer]
 OnBootSec=5min
-OnCalendar=*:0/3
+OnCalendar=*:0/5
 Unit=sasdb_snapshot.service
 
 [Install]

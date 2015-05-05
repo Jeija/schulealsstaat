@@ -1,0 +1,12 @@
+[Unit]
+Description=SaS DHCP server (unicast-only, thanks to sas_block_broadcast.service)
+After=network.target sas_block_broadcast.service
+
+[Service]
+TimeoutStartSec=0
+ExecStart=/usr/bin/dhcpd -4 -d
+Restart=always
+RestartSec=1
+
+[Install]
+WantedBy=multi-user.target

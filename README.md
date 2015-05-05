@@ -112,26 +112,25 @@ Humand-made passwords can easily be cracked, therefore HöGyCoin uses a system o
 # Other notes
 
 ## IPs
-* 192.168.2.100 - 192.168.30.250 for clients
-* 192.168.2.10: Network management server, consisting of:
+* 192.168.2.* is reserved for servers
+* 192.168.5.* - 192.168.9.* is reserved for laptops (terminals)
+* 192.168.10.100 - 192.168.200.250 for mobile clients
+* 192.168.2.10 + 192.168.2.11: Network management servers (failover), consisting of:
   - DHCP Server
   - DNS Server
-  - DNS blocking redirect server, non-internal domain DNS requests will be redirected to this server, displays STOP!-sign
-
-  These servers can optionally be split up to run on multiple machines, having all of them on the same machine is easier for development though.
-
-* 192.168.2.30: API Server
-* 192.168.2.31: Passport Picture Server (webcamserver)
-* 192.168.2.40: Client-facing central bank web portal website
+  - Captive portal / walled garden: Non-internal domain DNS requests will be redirected to that
+  - Package server: Servers software for terminal computers to download (enables patching by reboot)
+* 192.168.2.30 + 192.168.2.31: API Servers (failover + load balancing)
+* 192.168.2.60: Passport Picture Server (webcamserver)
+* 192.168.2.70: Communication server
 
 ## Internet Filtering
-Userterminals will create their wifi networks using the script in `network/wifi/wifi.sh`.
-They must `ebtables-restore < ebtables.save` (`ebtables.save` is in `network/wifi`) immediately after setting up their WiFi access point.
+Userterminals will create their wifi networks. They set up some firewalling rules with ebtables to prevent access from mobile clients to servers other than those in the IP range 192.168.2.0/24.
 
 ## Known attacks
-### Get access to passport photos
+### Get access to passport photos (kind of fixed)
 * Intercept webcam_cert by intercepting WiFi traffic
-* Use student_identify to identify picname of arbitrary students
+* New: Requires guessing picname of arbitrary students, which is a long random string, so the attack has become very unlikely
 * Call [WebcamServerIP]:[WebcamServerPort]/get/[picname] for student
 * Retrieve picture
 
@@ -143,6 +142,7 @@ They must `ebtables-restore < ebtables.save` (`ebtables.save` is in `network/wif
 ### DDoS / Spam the webcam server by uploading arbitrary data as images
 * [WebcamServerIP]:[WebcamServerPort]/upload/[filename]
 * Send arbitrary data as POST data
+* The webcam server is no critical infrastructure, so this is a low priority issue
 
 **Solutions**
 * Disable the picture upload feature during the project

@@ -7,7 +7,7 @@ var FAILOVER_PING_INTERVAL = 3; // in seconds
 
 var lookup = require("./lookup.json");
 
-if (process.env.USER != "root") {
+if (process.env.USER != "root" && process.env.USER) {
 	console.log("The DNS Server must be run as root, exiting.");
 	return;
 }

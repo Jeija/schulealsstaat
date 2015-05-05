@@ -1,5 +1,5 @@
 #!/bin/bash
-PKGSERVER="http://net1.saeu:100"
+PKGSERVER="http://primary.saeu:100"
 
 function error
 {
@@ -30,6 +30,7 @@ ETH_IFACE=$(find /sys/class/net/e* | sed "s/.*\///")
 exec 3>&1
 IP=$(dialog --nocancel --inputbox IP\ Address? 10 50 192.168.5.1/16 2>&1 1>&3)
 exec 3>&-
+dialog --nocancel --inputbox Network\ Management\ Servers? 10 50 "192.168.2.10 192.168.2.11" 2> /tmp/net_management
 
 # Setup Network
 if [ ! -d /sys/class/net/$BRIDGE_IFACE ]; then
@@ -45,12 +46,20 @@ for NS in ${NETMANSERVERS[@]}; do
 	echo "nameserver $NS" > /etc/resolv.conf
 done
 
-# Wait until network is up (connection to *first* DNS server)
-until ping -c 1 -w 2 ${NETMANSERVERS[0]}; do
+# Wait until network is up (connection to any network management server)
+OFFLINE=true
+while [ "$OFFLINE" == "true" ]; do
+	for NS in ${NETMANSERVERS[@]}; do
+		ping -c 1 -w 2 $NS;
+		if [ $? = 0 ]; then
+			OFFLINE=false
+			break
+		fi
+	done
 	ip link
-	echo -e "\n\n\n--> No network connection! \n\n\n"
-	sleep 1
+	echo -ne "\n\n\n--> No network connection!\n\n\n"
 done
+echo "Connection established!"
 
 # Synchronize time
 echo -e "\n\n\nWaiting for NTP (time) synchronization from network management servers ...\n"

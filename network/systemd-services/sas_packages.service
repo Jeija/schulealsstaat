@@ -1,0 +1,12 @@
+[Unit]
+Description=SaS terminal packages server
+After=network.target
+
+[Service]
+TimeoutStartSec=0
+ExecStart=/usr/bin/hs -p 100 /opt/sas_terminal_packages/
+Restart=always
+RestartSec=1
+
+[Install]
+WantedBy=multi-user.target

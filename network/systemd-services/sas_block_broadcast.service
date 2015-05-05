@@ -1,0 +1,9 @@
+[Unit]
+Description=SaS ebtables, block IP broadcasts (DHCP)
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/ebtables -I INPUT -p ipv4 --ip-dst 255.255.255.255 -j DROP
+
+[Install]
+WantedBy=multi-user.target
