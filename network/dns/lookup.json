@@ -8,7 +8,6 @@
 	"cam.saeu" : "192.168.2.60",
 	"primary.saeu" : "192.168.2.10",
 	"secondary.saeu" : "192.168.2.11",
-	"packages.saeu" : "192.168.2.32",
 	"radio.saeu" : "192.168.2.50",
 	"irc.saeu" : "192.168.2.70",
 	"mumble.saeu" : "192.168.2.70",
