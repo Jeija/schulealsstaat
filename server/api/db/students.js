@@ -34,7 +34,7 @@ module.exports = function (error) { return {
 			if (err) {
 				error("stdb.add", answer, err);
 			} else {
-				cb();
+				cb(ns);
 			}
 		});
 	},

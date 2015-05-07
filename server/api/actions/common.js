@@ -17,7 +17,7 @@ module.exports = {
 	 * returns: Readable string
 	 */
 	student_readable : function (st) {
-		return st.qrid + ": " +
+		return (st.qrid ? st.qrid : "<no qrid>") + ": " +
 			(st.firstname ? (st.firstname + "/") : "") +
 			(st.lastname ? (st.lastname + "/") : "") +
 			(st.special_name ? (st.special_name + "/") : "") +
