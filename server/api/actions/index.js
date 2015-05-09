@@ -1,8 +1,9 @@
+var aes = require("../aes_gibberish");
+var monitor = require("../monitor");
+var log = require("../logging");
+var cert = require("../cert");
 var ursa = require("ursa");
 var fs = require("fs");
-var cert = require("../cert");
-var log = require("../logging");
-var aes = require("../aes_gibberish");
 
 // Load private key to decrypt requests
 var PRIVKEY_FILE = "privkey.pem";
@@ -21,13 +22,11 @@ var actions = {};
  *		type: function (payload, answer, error, info)
  * cert: An array of certificate hash files that suffice for authentication
  */
-function register_action(name, action)
-{
+function register_action(name, action) {
 	actions[name] = { cert : false, action : action };
 }
 
-function register_action_cert(name, cert, action)
-{
+function register_action_cert(name, cert, action) {
 	actions[name] = { cert : cert, action : action };
 }
 
@@ -66,8 +65,9 @@ function encrypt_query(query_plain, aes_key, callback) {
  * req: Node.js HTTP request object
  * res: Node.js HTTP response object
  */
-function prepare_action(name, post, req, res)
-{
+function prepare_action(name, post, req, res) {
+	var reqid = monitor.req_begin();
+
 	/**
 	 * Success / Failure functions:
 	 * API_answer (below, after key decryption):
@@ -110,7 +110,9 @@ function prepare_action(name, post, req, res)
 	}
 
 	var API_answer = function (msg) {
+		monitor.req_after_action(reqid);
 		res.end(encrypt_query(msg, aes_key));
+		monitor.req_end(reqid);
 	};
 
 	/**
@@ -119,6 +121,7 @@ function prepare_action(name, post, req, res)
 	 * really requires one and checks it if it does.
 	 */
 	var query = decrypt_query(encrypted, aes_key, API_error, API_answer);
+	monitor.req_after_decrypt(reqid);
 	cert.check(actions[name].cert, query.cert, ip, function () {
 		try {
 			actions[name].action(query.payload, API_answer, API_info, req);

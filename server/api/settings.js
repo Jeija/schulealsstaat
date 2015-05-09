@@ -31,8 +31,14 @@ settings.config_load_interval = 7000;
 // may get queued to ensure no invalid transactions are made, in milliseconds.
 settings.transaction_interval = 50;
 
-// Timeout for restarting a worker in case it crahsed, in milliseconds
+// Timeout for restarting a worker in case it crahsed (milliseconds)
 settings.worker_restart = 2000;
+
+// Interval in which to log performance reports to the console (milliseconds)
+settings.report_interval = 5000;
+
+// Time after which API performance data is deprecated (milliseconds)
+settings.report_deprecate = 120000;
 
 /** Production-specific settings **/
 if (process.argv[2] == "production") {

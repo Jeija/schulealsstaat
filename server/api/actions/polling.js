@@ -89,9 +89,9 @@ setInterval(function () {
 			"recipient.qrid" : p.qrid
 		};
 
-		db.transactions.getByProperties(query, function () {
+		db.transactions.getByProperties(query, config.get("poll_max"), function () {
 			// don't answer db errors to polling clients
-		}, config.get("poll_max"), function (tr) {
+		}, function (tr) {
 			handleDbPollAnswer(tr, idx);
 		});
 	});
