@@ -31,6 +31,9 @@ settings.config_load_interval = 7000;
 // may get queued to ensure no invalid transactions are made, in milliseconds.
 settings.transaction_interval = 50;
 
+// Timeout for restarting a worker in case it crahsed, in milliseconds
+settings.worker_restart = 2000;
+
 /** Production-specific settings **/
 if (process.argv[2] == "production") {
 	log.info("API", "Running in production mode");

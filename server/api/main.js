@@ -1,5 +1,6 @@
 var TCPPORT = 1230;
 
+var settings = require("./settings.js");
 var log = require("./logging.js");
 var cluster = require("cluster");
 var http = require("http");
@@ -42,7 +43,9 @@ if (cluster.isMaster) {
 	log.info("Master", "Detected " + nCPU + " CPU cores, spawning workers");
 	for (var i = 0; i < nCPU; i++) cluster.fork();
 	cluster.on("exit", function (worker, code, signal) {
-		log.err("Master", "Worker " + worker.process.pid + " exited with " + signal + "!");
+		log.err("Master", "Worker " + worker.process.pid + " exited with " + signal + "!" +
+			" Restarting after " + settings.worker_restart + " ms");
+		setTimeout(cluster.fork, settings.worker_restart);
 	});
 	log.ok("Master", "All workers spawned!");
 

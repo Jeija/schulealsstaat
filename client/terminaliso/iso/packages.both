@@ -36,6 +36,7 @@ rfkill
 tmux
 ffmpeg
 ttf-ubuntu-font-family
+ttf-liberation
 ttf-fira-sans
 irssi
 ntp
