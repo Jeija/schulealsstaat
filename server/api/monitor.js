@@ -2,6 +2,11 @@ var settings = require("./settings");
 var cluster = require("cluster");
 var log = require("./logging");
 
+// Action names not to collect data on
+var blacklist = [
+	"transactions_poll"
+];
+
 /**
  * perfdata: A list of per-request objects that contains relevant data on API performance
  * {
@@ -97,7 +102,8 @@ if (cluster.isMaster) {
 	var count = 0;
 
 	module.exports = {};
-	module.exports.req_begin = function () {
+	module.exports.req_begin = function (name) {
+		if (blacklist.indexOf(name) > -1) return;
 		var id = process.pid + "_" + count++;
 
 		process.send({
@@ -108,21 +114,24 @@ if (cluster.isMaster) {
 		return id;
 	};
 
-	module.exports.req_after_decrypt = function (id) {
+	module.exports.req_after_decrypt = function (id, name) {
+		if (blacklist.indexOf(name) > -1) return;
 		process.send({
 			type : "req_after_decrypt",
 			id : id
 		});
 	};
 
-	module.exports.req_after_action = function (id) {
+	module.exports.req_after_action = function (id, name) {
+		if (blacklist.indexOf(name) > -1) return;
 		process.send({
 			type : "req_after_action",
 			id : id
 		});
 	};
 
-	module.exports.req_end = function (id) {
+	module.exports.req_end = function (id, name) {
+		if (blacklist.indexOf(name) > -1) return;
 		process.send({
 			type : "req_end",
 			id : id

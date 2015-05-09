@@ -66,7 +66,7 @@ function encrypt_query(query_plain, aes_key, callback) {
  * res: Node.js HTTP response object
  */
 function prepare_action(name, post, req, res) {
-	var reqid = monitor.req_begin();
+	var reqid = monitor.req_begin(name);
 
 	/**
 	 * Success / Failure functions:
@@ -110,9 +110,9 @@ function prepare_action(name, post, req, res) {
 	}
 
 	var API_answer = function (msg) {
-		monitor.req_after_action(reqid);
+		monitor.req_after_action(reqid, name);
 		res.end(encrypt_query(msg, aes_key));
-		monitor.req_end(reqid);
+		monitor.req_end(reqid, name);
 	};
 
 	/**
@@ -121,7 +121,7 @@ function prepare_action(name, post, req, res) {
 	 * really requires one and checks it if it does.
 	 */
 	var query = decrypt_query(encrypted, aes_key, API_error, API_answer);
-	monitor.req_after_decrypt(reqid);
+	monitor.req_after_decrypt(reqid, name);
 	cert.check(actions[name].cert, query.cert, ip, function () {
 		try {
 			actions[name].action(query.payload, API_answer, API_info, req);
