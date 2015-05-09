@@ -4,6 +4,8 @@
  * how often to check for new configuration options.
  * In comparison, configs are per-deployment settings that may be changed without
  * restarting the API server and that are usually useful for the client to know.
+ * So in general, settings are irrelevant for the operation of clients, while
+ * configs directly influence clients.
  *
  * If you invoke the server like
  *	node main.js production
@@ -39,6 +41,9 @@ settings.report_interval = 5000;
 
 // Time after which API performance data is deprecated (milliseconds)
 settings.report_deprecate = 120000;
+
+// Interval in which each API worker polls the database for new transactions (milliseconds)
+settings.poll_db_update_interval = 1000;
 
 /** Production-specific settings **/
 if (process.argv[2] == "production") {

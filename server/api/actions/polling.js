@@ -1,7 +1,8 @@
-var log = require("../logging.js");
-var db = require("../db");
+var settings = require("../settings");
 var config = require("../config");
-var common = require("./common.js");
+var common = require("./common");
+var log = require("../logging");
+var db = require("../db");
 
 module.exports = function (register, register_cert) {
 
@@ -73,28 +74,46 @@ register("transactions_poll", function (payload, answer, info) {
  * That way, multiple API instances can use the same database and
  * send proper polling answers synchronously.
  */
-function handleDbPollAnswer(tr, idx) {
-	if (!tr || tr.length <= 0) return;
+function handleDbPollAnswer(trgroup, idx) {
 	if (!polls[idx]) return;
-	polls[idx].answer(tr);
+	polls[idx].answer(trgroup);
 	polls[idx].info("found new transaction, replying to " + polls[idx].qrid);
 	delete polls[idx];
 }
 
 setInterval(function () {
-	// One database query for each polling client
+	if (polls.length == 0) return;
+
+	// One database query for every polling client on this worker
+	var qrid_to_index = {};
+	var query = { $or : [] };
+
 	polls.forEach(function (p, idx) {
-		var query = {
+		query.$or.push({
 			time : { $gt : new Date(p.date) },
 			"recipient.qrid" : p.qrid
-		};
-
-		db.transactions.getByProperties(query, config.get("poll_max"), function () {
-			// don't answer db errors to polling clients
-		}, function (tr) {
-			handleDbPollAnswer(tr, idx);
 		});
+		qrid_to_index[p.qrid] = idx;
 	});
-}, config.get("poll_db_update_interval"));
+
+	// DB connection currently closed
+	if (!db.transactions) return;
+
+	if (query.$or.length == 0) return;
+	db.transactions.getByProperties(query, config.get("poll_max"), function () {
+		// don't answer db errors to polling clients
+	}, function (trlist) {
+		// Group transactions per-qrid (to answer in bulk later on)
+		var groups = {};
+		trlist.forEach(function (tr) {
+			if (!groups[tr.recipient.qrid]) groups[tr.recipient.qrid] = [];
+			groups[tr.recipient.qrid].push(tr);
+		});
+
+		for (qrid in groups) {
+			handleDbPollAnswer(groups[qrid], qrid_to_index[qrid]);
+		};
+	});
+}, settings.poll_db_update_interval);
 
 };
