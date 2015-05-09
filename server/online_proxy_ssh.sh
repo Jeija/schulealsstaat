@@ -11,22 +11,22 @@
 
 set -e
 
-if [ -z "$2" ]; then
+if [ -z "$3" ]; then
 	echo "You must specify the local URL of the API server to use"
 	echo "and the SSH key to use."
 	echo "Usage:"
-	echo "  $ online_proxy_ssh.sh <apiurl> <sshkey>"
-	echo "e.g. online_proxy_ssh.sh api.saeu ~/.ssh/id_rsa_saeuproxy"
+	echo "  $ online_proxy_ssh.sh <remote> <apiaddr> <sshkey>"
+	echo "e.g. online_proxy_ssh.sh centralbank.eu api.saeu ~/.ssh/id_rsa_saeuproxy"
 	exit 1
 fi
 
 RESET_COMMAND="killall sshd && sleep 3 && service sshd restart"
-REMOTE_SERVER=centralbank.eu
+REMOTE_SERVER=$1
 REMOTE_USER=root
 REMOTE_PORT=1230
-LOCAL_SERVER=$1
+LOCAL_SERVER=$2
 LOCAL_PORT=1230
-SSH_KEYFILE=$2
+SSH_KEYFILE=$3
 
 ssh -f -i $SSH_KEYFILE $REMOTE_USER@$REMOTE_SERVER "$RESET_COMMAND"
 sleep 5

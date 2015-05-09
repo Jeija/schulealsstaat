@@ -11,9 +11,9 @@ fi
 
 CWD="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-echo "#########################"
-echo "Master server installtion"
-echo "#########################"
+echo "##########################"
+echo "Master server installation"
+echo "##########################"
 sleep 1.5
 
 exec 3>&1
