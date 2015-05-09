@@ -70,7 +70,7 @@ if (cluster.isMaster) {
 			if (pending[i].begin && !pending[i].after_decrypt) pending_decrypt++;
 			if (pending[i].after_decrypt && !pending[i].after_action) pending_action++;
 			if (pending[i].after_action && !pending[i].end) pending_encrypt++;
-			total_pending_since += Date.now() - pending.begin;
+			total_pending_since += Date.now() - pending[i].begin;
 		}
 
 		var mean_pending_time = total_pending_since / n_pending;
