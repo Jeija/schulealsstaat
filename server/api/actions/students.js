@@ -338,7 +338,7 @@ register_cert("register_student", ["registration_hash"], function (payload, answ
 			pwdsalt : crypt.salt
 		};
 
-		db.students.add(regst, answer, function () {
+		db.students.add(regst, answer, function (st) {
 			answer("ok");
 			info("Registered successfully: " + common.student_readable(st));
 		});
