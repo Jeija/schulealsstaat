@@ -14,9 +14,11 @@
 var APISERVER = "api.saeu";
 var APIPORT = 1230;
 
-/** The server address and port for the API internet proxy server (SSH tunnel) **/
-var PROXYSERVER = "centralbank.eu";
-var PROXYPORT = 1230;
+/** The URLs of the internet proxy servers / gateways (SSH tunnel), will be chosen randomly **/
+var GATEWAYS = [
+	"http://frankfurt.centralbank.eu:1230/",
+	"http://amsterdam.centralbank.eu:1230/"
+];
 
 /** The server address and port for the Webcam server - edit this if you need to! **/
 var WEBCAMSERVER = "cam.saeu";
@@ -29,7 +31,6 @@ var TIMEOUT_QUERY = 5000;
 var TIMEOUT_POLLING = 60000;
 
 var APIURL = "http://" + APISERVER + ":" + APIPORT + "/";
-var PROXYURL = "http://" + PROXYSERVER + ":" + PROXYPORT + "/";
 var WEBCAMURL = "http://" + WEBCAMSERVER + ":" + WEBCAMPORT + "/";
 
 /** Query status codes **/
@@ -168,9 +169,19 @@ function send_query(name, query, cb, polling) {
 	}
 
 	ping_and_perform(APIURL, TIMEOUT_INTRANET, function () {
-		ping_and_perform(PROXYURL, TIMEOUT_INTERNET, function () {
-			cb(null, ERROR);
+		// Choose a random gateway:
+		GATEWAYS.sort(function () {
+			return Math.random() > 0.5;
 		});
+
+		var gwidx = 0;
+		function next() {
+			ping_and_perform(GATEWAYS[gwidx++], TIMEOUT_INTERNET, function () {
+				if (gwidx < GATEWAYS.length) next();
+				else cb(null, ERROR);
+			});
+		}
+		next();
 	});
 }
 

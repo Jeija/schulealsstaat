@@ -20,6 +20,7 @@ exec 3>&1
 PUBLIC_IP=$(dialog --nocancel --inputbox Public\ IP? 10 50 192.168.2.30 2>&1 1>&3)
 PUBLIC_IFACE=$(dialog --nocancel --inputbox Public\ Ethernet\ Interface? 10 50 enp2s0 2>&1 1>&3)
 PUBLIC_SUBNET=$(dialog --nocancel --inputbox Public\ Subnet? 10 50 16 2>&1 1>&3)
+PUBLIC_GATEWAY=$(dialog --nocancel --inputbox Public\ Gateway? 10 50 192.168.1.0 2>&1 1>&3)
 
 PRIVATE_IP=$(dialog --nocancel --inputbox Private\ IP? 10 50 10.10.0.100 2>&1 1>&3)
 PRIVATE_IFACE=$(dialog --nocancel --inputbox Private\ Ethernet\ Interface? 10 50 enp5s0 2>&1 1>&3)
@@ -36,6 +37,9 @@ Name=$PUBLIC_IFACE
 
 [Address]
 Address=$PUBLIC_IP/$PUBLIC_SUBNET
+
+[Network]
+Gateway=$PUBLIC_GATEWAY
 EOF
 
 # Private
@@ -85,5 +89,8 @@ echo "(make sure the database server address is correct)"
 echo "Also, in order to use the online gateway, copy your private"
 echo "SSH key for it to /opt/id_rsa_proxy and configure the server"
 echo "(no timeout, GatewayPorts yes)"
+echo
+echo "Then, manually connect to the gateway and check the fingerprint:"
+echo "ssh root@$GATEWAY_ADDR"
 echo
 echo "When that is done, reboot!"
