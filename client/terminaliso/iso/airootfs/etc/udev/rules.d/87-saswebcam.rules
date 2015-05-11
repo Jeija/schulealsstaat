@@ -1,0 +1,1 @@
+KERNEL=="video[0-9]*", SUBSYSTEM=="video4linux", SUBSYSTEMS=="usb", ATTRS{idVendor}=="1908", ATTRS{idProduct}=="2311", SYMLINK+="qrreader0"
