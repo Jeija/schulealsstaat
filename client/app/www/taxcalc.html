@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" href="css/common.css" type="text/css">
+	<link rel="stylesheet" href="css/taxcalc.css" type="text/css">
+	<script src="cordova.js"></script>
+	<script src="bower_components/jsencrypt/bin/jsencrypt.min.js"></script>
+	<script src="bower_components/jquery/dist/jquery.js"></script>
+	<script src="bower_components/gibberish-aes/dist/gibberish-aes-1.0.0.min.js"></script>
+	<script src="js/api.js"></script>
+	<script src="js/common.js"></script>
+	<script src="js/taxcalc.js"></script>
+	<title>Steuerrechner</title>
+</head>
+
+<body class="bottommargin">
+	<div class="mainheadline"><a class="mmlink" href="mainmenu.html"></a>Steuerrechner</div>
+	<div id="taxcalc">
+		<p id="description">
+		Bei jeder Überweisung geht ein Teil des Geldes durch die Transaktionssteuer
+		an den Staat.<br/>
+		Der Geldwert, der vom Konto des Senders abgebucht wird, ist der <b>Bruttowert</b>.
+		Der Empfänger erhält dann den <b>Nettowert</b>, der Staat den <b>Steuerwert</b>.
+		</p>
+
+		<div id="taxcalc_center">
+			<div class="taxcalc_heading">Steuersatz</div>
+			<div class="section_container">
+				<input type="number" min="0" step="0.01" id="tax_percent" class="taxcalc_value" value="10">
+				<div class="button right" id="taxval_get">Abfragen</div>
+			</div>
+
+			<div class="taxcalc_heading">Brutto &rarr; Netto</div>
+			<div class="section_container calc">
+				<div class="valsec">Brutto
+					<input type="number" min="0" step="0.01" id="from_gross" class="taxcalc_value right" value="1">
+				</div>
+				<div class="valsec">Netto
+					<input type="text" id="to_net" class="taxcalc_value right" disabled>
+				</div>
+			</div>
+
+			<div class="taxcalc_heading">Netto &rarr; Brutto</div>
+			<div class="section_container calc">
+				<div class="valsec">Netto
+					<input type="number" min="0" step="0.01" id="from_net" class="taxcalc_value right" value="1">
+				</div>
+				<div class="valsec">Brutto
+					<input type="text" id="to_gross" class="taxcalc_value right" disabled>
+				</div>
+			</div>
+
+			<div class="taxcalc_heading">Netto &rarr; Steuerwert</div>
+			<div class="section_container calc">
+				<div class="valsec">Netto
+					<input type="number" min="0" step="0.01" id="tax_from_net" class="taxcalc_value right" value="1">
+				</div>
+				<div class="valsec">Steuerwert
+					<input type="text" id="net_to_tax" class="taxcalc_value right" disabled>
+				</div>
+			</div>
+
+			<div class="taxcalc_heading">Brutto &rarr; Steuerwert</div>
+			<div class="section_container calc">
+				<div class="valsec">Netto
+					<input type="number" min="0" step="0.01" id="tax_from_gross" class="taxcalc_value right" value="1">
+				</div>
+				<div class="valsec">Steuerwert
+					<input type="text" id="gross_to_tax" class="taxcalc_value right" disabled>
+				</div>
+			</div>
+		</div>
+
+		<div class="bottombuttons">
+			<a href="features.html" class="button full">Abbrechen</a>
+		</div>
+	</div>
+</body>

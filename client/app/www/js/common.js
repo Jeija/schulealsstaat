@@ -21,30 +21,35 @@ function student2readable(st) {
 }
 
 /**
- * action_app(name, payload, cb)
+ * action_app(name, payload, cb, cb_error)
  * Same as action(name, payload, cb),
  * but also handles connection errors
  */
-function action_app(name, payload, cb) {
+function action_app(name, payload, cb, cb_error) {
 	action(name, payload, function (res, status) {
 		if (status == ERROR) {
 			errorMessage("Verbindung zum Zentralbank-Server konnte nicht" +
 				" aufgebaut werden (" + status + ")");
+			if (cb_error) cb_error(status);
 		} else if (status == ERROR_UNKNOWN) {
 			errorMessage("Der Zentralbank-Server antwortet nicht auf die Anfrage" +
 				" der App (" + status + ")");
+			if (cb_error) cb_error(status);
 		} else if (status == ERROR_SPOOF) {
 			errorMessage("Konnte nicht mit dem echten Zentralbank-Server" +
 				" kommunizieren. Bitte melde diesen Fehler! (" + status + ")");
+			if (cb_error) cb_error(status);
 		} else if (status == ERROR_ENCRYPTION) {
 			errorMessage("Kommunikation mit Zentralbank-Server fehlgeschlagen: " +
 				"Verschlüsselung nicht akzeptiert. Bitte schaue nach Updates " + 
 				"für die App und lösche deinen Browsercache. " +
 				"Besteht das Problem weiterhin, bitte melde es bei der Zentralbank.");
+			if (cb_error) cb_error(status);
 		} else if (status == SUCCESS_INTRANET || status == SUCCESS_INTERNET) {
-			cb(res);
+			if (cb) cb(res);
 		} else {
 			errorMessage("Unbekannter Server-API-Statuscode: " + status);
+			if (cb_error) cb_error(status);
 		}
 	});
 }

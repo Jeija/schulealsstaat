@@ -30,7 +30,7 @@ $(function () {
 
 		setTimeout(function () {
 			$("#infocontainer").click(refresh_balance);
-			action("get_balance", req, function (res) {
+			action_app("get_balance", req, function (res) {
 				$("#balance .loadbalance").fadeOut(200, function () {
 					$("#balance .showbalance").css("opacity", "1.0");
 					$("#balance .showbalance").hide();
@@ -41,6 +41,9 @@ $(function () {
 				} else {
 					storage.set("balance", res);
 				}
+			}, function () {
+				$("#balance .loadbalance").hide();
+				$("#balance .showbalance").css("opacity", "1.0");
 			});
 		}, 200);
 	}

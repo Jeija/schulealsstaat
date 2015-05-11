@@ -12,13 +12,16 @@ html {
 
 body {
 	margin:0;
-	margin-bottom:20vw;
 	-webkit-touch-callout:none;
 	-webkit-user-select:none;
 	-khtml-user-select:none;
 	-moz-user-select:none;
 	-ms-user-select:none;
 	user-select:none;
+}
+
+body.bottommargin {
+	margin-bottom:20vw;
 }
 
 #logo {
@@ -55,7 +58,7 @@ body {
 	border:none;
 	border-radius:6vw;
 	display:block;
-	text-align: center;
+	text-align:center;
 	color:#000;
 	font-style:italic;
 	cursor:pointer;

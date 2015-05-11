@@ -5,13 +5,16 @@ function HGC_readable(val) {
 $(function () {
 	// Wait for PubKey to be downloaded + processed
 	setTimeout(function () {
-	action("get_last_transactions", {
+	action_app("get_last_transactions", {
 		qrid : storage.get("qrid"),
 		password : storage.get("password"),
 		amount : 5
 	}, function (res) {
 		if (typeof res != "object") {
 			errorMessage("Error: " + res);
+			$("#loading").hide();
+			$("#statement_container").hide();
+			$("#complete").show();
 			return;
 		}
 
@@ -58,5 +61,9 @@ $(function () {
 		$("#comment_preview").click(function () {
 			$(this).fadeOut(100);
 		});
+	}, function () {
+		$("#loading").hide();
+		$("#statement_container").hide();
+		$("#complete").show();
 	});}, 200);
 });
