@@ -37,7 +37,7 @@ $(function() {
 		});
 	});
 
-	$("#confirm").click(function () {
+	function onConfirmClick () {
 		var recipient_qrid = $("#qrid_rec").val();
 		var recipient_firstname = $("#firstname").val();
 		var recipient_lastname = $("#lastname").val();
@@ -52,6 +52,7 @@ $(function() {
 		if (recipient_qrid !== "") data.qrid = recipient_qrid;
 
 		action_app("student_identify", data, function (res) {
+			$("#confirm").one("click", onConfirmClick);
 			if (res == "multiple") {
 				errorMessage("Die Eingabe ist nicht eindeutig: " +
 					"Es gibt mehrere Personen, die auf die Kriterien passen.");
@@ -77,10 +78,13 @@ $(function() {
 				$("#confirm_window").fadeOut();
 			});
 			$("#confirm_window").fadeIn();
+		}, function () {
+			$("#confirm").one("click", onConfirmClick);
 		});
-	});
+	}
+	$("#confirm").one("click", onConfirmClick);
 
-	$("#confirm_submit").click(function() {
+	function onSubmitClick () {
 		var data = {
 			amount_sent : amount,
 			sender : sender,
@@ -90,6 +94,7 @@ $(function() {
 		};
 
 		action_app("transaction", data, function (res) {
+			$("#confirm_submit").one("click", onSubmitClick);
 			if (res == "nomoney") {
 				errorMessage("Nicht genug Geld auf dem Senderkonto!");
 				return;
@@ -108,7 +113,11 @@ $(function() {
 			update_balance();
 			$("#confirm_window").hide();
 			$("#success").show();
+		}, function () {
+			$("#confirm_submit").one("click", onSubmitClick);
 		});
-	});
+	}
+
+	$("#confirm_submit").one("click", onSubmitClick);
 });
 
