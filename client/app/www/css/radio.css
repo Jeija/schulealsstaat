@@ -1,0 +1,31 @@
+#playpause {
+	display:block;
+	width:60vw;
+	margin:auto;
+	margin-top:5vw;
+	text-align:center;
+	border-radius:100%;
+}
+
+#playpause:active {
+	box-shadow:0 0 4vw rgba(255, 255, 255, 0.8);
+	background:rgba(255, 255, 255, 0.2);
+}
+
+#radiometa {
+	display:block;
+	background-color:rgba(0, 0, 0, 0.2);
+	box-shadow:inset 0 0 8px rgba(0, 0, 0, 0.5);
+	width:80vw;
+	margin:5vw auto;
+	font-size:6vw;
+	height:10vw;
+	line-height:10vw;
+	padding:3vw;
+	border-radius:2vw;
+}
+
+#description {
+	font-size:4vw;
+	margin:0 10vw;
+}

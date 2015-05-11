@@ -1,0 +1,33 @@
+#hgclogo {
+	display:block;
+	margin:0 auto;
+	width:50vw;
+	margin-top:5vw;
+}
+
+#heading {
+	font-size:12vw;
+	text-align:center;
+}
+
+.section {
+	font-size:4vw;
+	margin:0 8vw;
+	margin-bottom:6vw;
+}
+
+.section_heading {
+	font-size:6vw;
+	text-align:center;
+}
+
+.section ul {
+	margin-top:1vw;
+}
+
+.section a {
+	color:#ccf;
+	text-decoration:none;
+	display:block;
+	text-align:center;
+}
