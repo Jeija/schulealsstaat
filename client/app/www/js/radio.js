@@ -1,5 +1,5 @@
-var STREAMURL = "http://192.168.0.100:8000/stream.ogg";
-var METAURL = "http://192.168.0.100:8000/status-json.xsl";
+var STREAMURL = "http://hoegyonair.eu:8000/stream.ogg";
+var METAURL = "http://hoegyonair.eu:8000/status-json.xsl";
 var isPlaying = false;
 var player = null;
 
