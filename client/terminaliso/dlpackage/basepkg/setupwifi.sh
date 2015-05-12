@@ -5,6 +5,7 @@ SERVER_IP_RANGE=192.168.2.0/24
 CWD="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 if [ -e $CWD/disable_wifi ]; then
 	echo "WiFi disabled by package"
+	ebtables -A INPUT -j ACCEPT
 	exit
 fi
 

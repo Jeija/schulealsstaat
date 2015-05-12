@@ -2,12 +2,12 @@ var ZBARCAM = "zbarcam";
 var WEBCAM = "/dev/video20";
 var ZBC_FLAGS = "--prescale=640x480";
 
-var process = null;
+var childp = null;
 var fs = null;
 
 // Only in node.js (nwjs) environment
 if (typeof require !== "undefined") {
-	process = require("child_process");
+	childp = require("child_process");
 	fs = require("fs");
 }
 
@@ -100,10 +100,10 @@ function load_common_events() {
 		/* Student by QR Code Scan */
 		$(".qrcode_scan").off("click").on("click", function () {
 			// Non-node.js environment
-			if (!process) return;
+			if (!childp) return;
 			var sectionref = this;
-			process.exec("killall " + ZBARCAM, function () {
-				var zbar = process.exec(ZBARCAM + " " + WEBCAM + " " + ZBC_FLAGS);
+			childp.exec("killall " + ZBARCAM, function () {
+				var zbar = childp.exec(ZBARCAM + " " + WEBCAM + " " + ZBC_FLAGS);
 
 				zbar.stdout.on("data", function (read) {
 					zbar.kill();

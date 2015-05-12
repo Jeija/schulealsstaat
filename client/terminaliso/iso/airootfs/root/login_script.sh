@@ -22,6 +22,8 @@ echo -ne "\b\b\b1s]"
 sleep 1
 echo -e "\b\b\b0s]"
 
+loadkeys de
+
 # Make bridge interface and connect ethernet to it
 BRIDGE_IFACE=netbr
 ETH_IFACE=$(find /sys/class/net/e* | sed "s/.*\///")

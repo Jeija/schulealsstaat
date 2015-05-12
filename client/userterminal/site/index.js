@@ -1,9 +1,21 @@
 var PWD_REQUIRED = "";
+var childp = null;
+var mplayer = null;
+
 if (typeof require !== "undefined") {
 	PWD_REQUIRED = require("fs").readFileSync("/tmp/password");
+	var childp = require("child_process");
 }
+
 var QRID_PRESETS = {};
-var RADIO_BASEURL = "http://radio.saeu:8000/"
+var RADIO_STREAMURL = "http://radio.saeu:8000/stream.ogg";
+var RADIO_METAURL = "http://radio.saeu:8000/status-json.xsl";
+
+if (process) {
+	process.on("exit", function () {
+		if (mplayer) mplayer.kill();
+	});
+}
 
 function load_subdir (dir) {
 	// Destroy old page including events
@@ -41,24 +53,23 @@ function load_subdir (dir) {
 
 // Start audio playback or resume if internet is lost
 function startRadio() {
-	var player = $("#radio")[0];
-	var isPlaying = player ? !player.paused && !player.ended && player.currentTime > 0 : false;
-	if (!isPlaying) {
-		$("#radio").remove();
-		$("<audio>", {
-			id : "radio",
-			src : RADIO_BASEURL + "stream.ogg",
-			type : "audio/ogg"
-		}).appendTo("#radio_container");
-		$("#radio").prop("volume", $("#volume").val());
-		$("#radio")[0].play();
-	}
+	if (!childp) return;
+	mplayer = childp.spawn("mplayer", [ "-cache", "200", "-cache-min", "50", "-slave", "-softvol",
+		"-quiet", "-volume", "50", RADIO_STREAMURL ]);
+	mplayer.on('close', function () {
+		setTimeout(startRadio, 2000);
+	});
+	mplayer.stdout.on("data", function (data) {
+		console.log("[mp] " + data);
+	});
 }
 
 // Radio Metadata
 function updateRadioMeta() {
-	$.get(RADIO_BASEURL + "status-json.xsl", function (meta) {
-		var name = meta.icestats.source.artist != "" ?
+	$.get(RADIO_METAURL, function (meta) {
+		if (!meta) return;
+		if (!meta.icestats.source) return;
+		var name = meta.icestats.source.artist !== "" ?
 			meta.icestats.source.artist + " - " + meta.icestats.source.title :
 			meta.icestats.source.title;
 		$("#radiometa").text(name);
@@ -66,6 +77,7 @@ function updateRadioMeta() {
 }
 
 $(function () {
+	load_subdir("use_master");
 	load_subdir("transaction_simple");
 
 	$(".mainlink").click(function () {
@@ -73,14 +85,16 @@ $(function () {
 	});
 
 	$("#volume").on("input change", function () {
-		$("#radio").prop("volume", this.value);
+		if (!mplayer) return;
+		console.log("volume " + this.value + " 1\n");
+		mplayer.stdin.write("volume " + this.value + " 1\n");
 	});
 
 	// 5x click on EU flag opens configuration
 	var clicknum = 0;
 	$("#header_eu").click(function () {
 		clicknum++;
-		if (clicknum >= 5) $("#settings").show();;
+		if (clicknum >= 5) $("#settings").show();
 		setTimeout(function () {
 			clicknum = 0;
 		}, 1000);
@@ -102,5 +116,4 @@ $(function () {
 	startRadio();
 	updateRadioMeta();
 	setInterval(updateRadioMeta, 300);
-	setInterval(startRadio, 3000);
 });

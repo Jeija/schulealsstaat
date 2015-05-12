@@ -2,16 +2,16 @@
 
 CWD="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-### Webcam Loopback on /dev/video20 ###
-LOOPBACK_VIDEO=20
-modprobe v4l2loopback video_nr="$LOOPBACK_VIDEO"
-
 FEED=$(cat /tmp/webcam)
 if [ "$FEED" = "ignore" ]; then
 	dialog --msgbox "Feed set to ignore. Enter to restart webcam setup." 8 50
 	$CWD/setupwebcam.sh
 	exec $0
 fi
+
+### Webcam Loopback on /dev/video20 ###
+LOOPBACK_VIDEO=20
+modprobe v4l2loopback video_nr="$LOOPBACK_VIDEO"
 
 echo "Using webcam device $FEED"
 while true; do
