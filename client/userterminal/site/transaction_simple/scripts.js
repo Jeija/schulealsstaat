@@ -5,6 +5,11 @@ var HGC_TR_DECIMAL_PLACES = 2;
 var current_sender = null;
 var current_recipient = null;
 
+function nDecimals(number) {
+	var decimals = number.toString().split(".")[1];
+	return decimals ? decimals.length : 0;
+}
+
 handleIdentifyAnswer = function(sectionref, st) {
 	if ($(sectionref).closest(".section_incomplete").parent().parent(".recipient").length) {
 		$("#recipient_presets").hide()
@@ -67,7 +72,7 @@ $(".confirm").click(function () {
 	var amount = parseFloat(amount_str);
 
 	// Check if amount has more than HGC_TR_DECIMAL_PLACES decimals
-	if ((amount * Math.pow(10, HGC_TR_DECIMAL_PLACES)) % 1 !== 0) {
+	if (nDecimals(amount) > HGC_TR_DECIMAL_PLACES) {
 		errorMessage("Betrag enthält mehr als die erlaubten " +
 			HGC_TR_DECIMAL_PLACES + " Dezimalstellen.");
 		return;

@@ -59,9 +59,9 @@ function startRadio() {
 	mplayer.on('close', function () {
 		setTimeout(startRadio, 2000);
 	});
-	mplayer.stdout.on("data", function (data) {
-		console.log("[mp] " + data);
-	});
+	//mplayer.stdout.on("data", function (data) {
+	//	console.log("[mp] " + data);
+	//});
 }
 
 // Radio Metadata
