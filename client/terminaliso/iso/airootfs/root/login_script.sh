@@ -1,5 +1,6 @@
 #!/bin/bash
 PKGSERVER="http://primary.saeu:100"
+NTP_TIMEOUT=8
 
 function error
 {
@@ -44,8 +45,13 @@ if [ ! -d /sys/class/net/$BRIDGE_IFACE ]; then
 fi
 
 NETMANSERVERS=($(cat /tmp/net_management))
+cat << EOF > /etc/resolv.conf
+option rotate
+option attempts: 1
+option timeout: 1
+EOF
 for NS in ${NETMANSERVERS[@]}; do
-	echo "nameserver $NS" > /etc/resolv.conf
+	echo "nameserver $NS" >> /etc/resolv.conf
 done
 
 # Wait until network is up (connection to any network management server)
@@ -67,7 +73,18 @@ echo "Connection established!"
 
 # Synchronize time
 echo -e "\n\n\nWaiting for NTP (time) synchronization from network management servers ...\n"
-ntpd -gqc /dev/null -I $BRIDGE_IFACE -4 ${NETMANSERVERS[@]}
+trap - ERR
+TIME_SYNCED=false
+while [ $TIME_SYNCED -eq false ]; do
+	for NTPS in ${NETMANSERVERS[@]}; do
+		timeout $NTP_TIMEOUT ntpd -gqc /dev/null -I $BRIDGE_IFACE -4 $NTPS
+		if [ $? -eq 0 ]; then
+			TIME_SYNCED=true
+			break
+		fi
+	done
+done
+trap "error" ERR
 echo "Received time information:"
 date
 sleep 3
