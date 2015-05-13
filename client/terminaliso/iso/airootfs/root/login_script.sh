@@ -1,6 +1,5 @@
 #!/bin/bash
 PKGSERVER="http://primary.saeu:100"
-NTP_TIMEOUT=8
 
 function error
 {
@@ -71,27 +70,9 @@ done
 trap "error" ERR
 echo "Connection established!"
 
-# Synchronize time
-echo -e "\n\n\nWaiting for NTP (time) synchronization from network management servers ...\n"
-trap - ERR
-TIME_SYNCED=false
-while [ $TIME_SYNCED -eq false ]; do
-	for NTPS in ${NETMANSERVERS[@]}; do
-		timeout $NTP_TIMEOUT ntpd -gqc /dev/null -I $BRIDGE_IFACE -4 $NTPS
-		if [ $? -eq 0 ]; then
-			TIME_SYNCED=true
-			break
-		fi
-	done
-done
-trap "error" ERR
-echo "Received time information:"
-date
-sleep 3
-
 # Setup GnuPG Keys
 echo "Importing GPG Public Key for Signature Checking"
-gpg --import /root/packetkey.pub
+gpg --ignore-time-conflict --ignore-valid-from --import /root/packetkey.pub 
 gpg --list-keys
 
 # Download list + let user select profile
@@ -111,7 +92,7 @@ dialog --title "Select Profile Package" --nocancel --menu "Available software pa
 curl -f $PKGSERVER/$(cat /tmp/tpkg_selection) > /tmp/tpkg.pkg.gpg
 
 trap - ERR
-gpg --verify /tmp/tpkg.pkg.gpg
+gpg --ignore-time-conflict --ignore-valid-from --verify /tmp/tpkg.pkg.gpg
 if [ ! $? -eq 0 ]; then
 	echo "FALSE cryptographic signature for download package!"
 	echo "This can be caused by AN ATTACK ON THE SYSTEM"
@@ -123,7 +104,7 @@ if [ ! $? -eq 0 ]; then
 fi
 trap "error" ERR
 
-gpg --output /tmp/tpkg.pkg --yes --decrypt /tmp/tpkg.pkg.gpg
+gpg --ignore-time-conflict --ignore-valid-from --output /tmp/tpkg.pkg --yes --decrypt /tmp/tpkg.pkg.gpg
 
 # Extract + run package
 mkdir -p /tmp/tpkg

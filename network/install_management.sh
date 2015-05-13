@@ -1,7 +1,7 @@
 #!/bin/bash
 # This script installs all required services and files for a
 # working production network management server, wich runs
-# DHCP, DNS, NTP, the walled garden / captive portal page
+# DHCP, DNS, the walled garden / captive portal page
 # and the package server.
 
 set -e
@@ -99,7 +99,7 @@ sed -i "/__default/c\\"${TAB}"\"__default\" : \""$IP_ADDR"\"" /opt/dns/lookup.js
 # Enable new configuration
 cp $CWD/systemd-services/* /etc/systemd/system
 systemctl enable systemd-networkd
-systemctl enable sas_ntpd
+#systemctl enable sas_ntpd
 systemctl enable sas_block_broadcast
 systemctl enable sas_walledgarden
 systemctl enable sas_dns
