@@ -2,6 +2,7 @@ var WEBCAM_WIDTH = 800;
 var WEBCAM_HEIGHT = 600;
 
 var PWD_MINLEN = 6;
+var SANITIZE_NAMES_ENABLE = true;
 
 $(function() {
 
@@ -57,6 +58,49 @@ function update_subclass() {
 }
 $("#class").change(update_subclass);
 update_subclass();
+
+function sanitize_namestring (name) {
+	if (!name[0]) return "";
+
+	// Make sure uppercase / lowercase spelling is correct
+	function setChar (i, nc) {
+		return name.substr(0, i) + nc + name.substr(i + 1);
+	}
+
+	name = setChar(0, name[0].toUpperCase());
+	while (name[0] == " ") name = name.substr(1);
+	var uppercase_after = ["-", " ", "'"];
+	var i;
+	for (i = 0; i < name.length; i++) {
+		if (uppercase_after.indexOf(name[i]) > -1) {
+			if (!name[i + 1]) break;
+			name = setChar(i + 1, name[i + 1].toUpperCase());
+		}
+	}
+
+	// Name may only contain characters that can easily be typed on German keyboards
+	var legal_chars = "abcdefghijklmnopqrstuvwxyzäöüß-' ";
+	for (i = 0; i < name.length; i++) {
+		if (legal_chars.indexOf(name[i]) < 0 &&
+				legal_chars.toUpperCase().indexOf(name[i]) < 0) {
+			name = setChar(i, "");
+		}
+	}
+
+	return name;
+}
+
+function sanitize_names () {
+	if (!SANITIZE_NAMES_ENABLE) return;
+	$("#firstname").val(sanitize_namestring($("#firstname").val()));
+	$("#lastname").val(sanitize_namestring($("#lastname").val()));
+}
+
+$("#firstname").keyup(sanitize_names);
+$("#lastname").keyup(sanitize_names);
+$("#firstname").change(sanitize_names);
+$("#lastname").change(sanitize_names);
+setInterval(sanitize_names, 100);
 
 function highlight_pwd() {
 	if ($("#password").val().length < PWD_MINLEN)
