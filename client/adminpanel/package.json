@@ -4,6 +4,7 @@
 	"scripts" : {
 		"start" : "nw"
 	},
+	"single-instance" : false,
 	"window": {
 		"toolbar": false,
 		"frame": true,

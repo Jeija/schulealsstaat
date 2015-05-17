@@ -29,6 +29,7 @@ var TIMEOUT_INTRANET = 1500;
 var TIMEOUT_INTERNET = 4000;
 var TIMEOUT_QUERY = 5000;
 var TIMEOUT_POLLING = 60000;
+var TIMEOUT_WEBCAM_UPLOAD = 10000;
 
 var APIURL = "http://" + APISERVER + ":" + APIPORT + "/";
 var WEBCAMURL = "http://" + WEBCAMSERVER + ":" + WEBCAMPORT + "/";
@@ -279,11 +280,17 @@ function webcamserv_get(picname, cb) {
  * pictureData: base64-encoded PNG picture data
  * cb: The function that is called when an answer is received. First parameter: Server response,
  *	should be "ok"
+ * If an error occured, the first parameter is null, the second parameter is the error text
  */
 function webcamserv_upload(picname, pictureData, cb) {
 	$.ajax({
-		type:		"POST",
-		url:		WEBCAMURL + "upload/",
-		data:		JSON.stringify({name : picname, pic : pictureData})
-	}).done(cb);
+		type : "POST",
+		url : WEBCAMURL + "upload/",
+		data : JSON.stringify({name : picname, pic : pictureData}),
+		timeout : TIMEOUT_WEBCAM_UPLOAD,
+		success : cb,
+		error : function (err) {
+			cb(null, err);
+		}
+	});
 }

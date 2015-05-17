@@ -67,16 +67,17 @@ function sanitize_namestring (name) {
 		return name.substr(0, i) + nc + name.substr(i + 1);
 	}
 
-	name = setChar(0, name[0].toUpperCase());
-	while (name[0] == " ") name = name.substr(1);
 	var uppercase_after = ["-", " ", "'"];
 	var i;
 	for (i = 0; i < name.length; i++) {
+		if (!name[i + 1]) break;
 		if (uppercase_after.indexOf(name[i]) > -1) {
-			if (!name[i + 1]) break;
 			name = setChar(i + 1, name[i + 1].toUpperCase());
+		} else {
+			name = setChar(i + 1, name[i + 1].toLowerCase());
 		}
 	}
+	name = setChar(0, name[0].toUpperCase());
 
 	// Name may only contain characters that can easily be typed on German keyboards
 	var legal_chars = "abcdefghijklmnopqrstuvwxyzäöüß-' ";
@@ -96,10 +97,24 @@ function sanitize_names () {
 	$("#lastname").val(sanitize_namestring($("#lastname").val()));
 }
 
+function remove_whitespace () {
+	if (!SANITIZE_NAMES_ENABLE) return;
+	var firstname = $("#firstname").val();
+	var lastname = $("#lastname").val();
+
+	while(firstname.indexOf("  ") >= 0) firstname = firstname.replace("  ", " ");
+	while(lastname.indexOf("  ") >= 0) lastname = lastname.replace("  ", " ");
+
+	$("#firstname").val(firstname.trim());
+	$("#lastname").val(lastname.trim());
+}
+
 $("#firstname").keyup(sanitize_names);
 $("#lastname").keyup(sanitize_names);
 $("#firstname").change(sanitize_names);
 $("#lastname").change(sanitize_names);
+$("#firstname").blur(remove_whitespace);
+$("#lastname").blur(remove_whitespace);
 setInterval(sanitize_names, 100);
 
 function highlight_pwd() {
@@ -129,16 +144,28 @@ $("#password").on("input", highlight_pwd);
 
 $("#password_repeat").on("input", highlight_pwd);
 
-$("#send").click(function() {
+$("#message_close").click(function () {
+	$("#message").hide();
+	$("#send").attr("disabled", false);
+	$("#send").one("dblclick", onSendClick);
+});
+
+function onSendClick () {
+	$("#send").attr("disabled", true);
+	function show_result(msg) {
+		$("#message_content").text(msg);
+		$("#message").show();
+	}
+
 	// Retrieve & Check password before sending anything
 	var pwd = $("#password").val();
 	if (pwd != $("#password_repeat").val()) {
-		alert("Fehler: Die Passwörter stimmen nicht überein.");
+		show_result("Fehler: Die Passwörter stimmen nicht überein.");
 		return;
 	}
 
 	if (pwd.length < PWD_MINLEN) {
-		alert("Fehler: Das Passwort muss mindestens " + PWD_MINLEN +
+		show_result("Fehler: Das Passwort muss mindestens " + PWD_MINLEN +
 			" Zeichen lang sein.");
 		return;
 	}
@@ -161,20 +188,20 @@ $("#send").click(function() {
 	};
 
 	// Send Picture, then API registration
-	webcamserv_upload(picname, pictureData, function (photores) {
+	webcamserv_upload(picname, pictureData, function (photores, err) {
 		if  (photores !== "ok") {
-			alert("Passfoto-Upload-Error: " + photores);
+			show_result("Passfoto-Upload-Error: " + photores + "/" + err);
 			return;
 		}
 
 		action_cert("register_student", rgdat, "registration_cert", function (apires) {
 			if (apires !== "ok") {
-				alert("Registrierung fehlgeschlagen, API-Fehler: " +
+				show_result("Registrierung fehlgeschlagen, API-Fehler: " +
 					apires);
 				return;
 			}
 
-			alert("Registrierung erfolgreich!");
+			show_result("Registrierung erfolgreich!");
 			$("#main_form")[0].reset();
 			highlight_pwd();
 			webcam_shot.getContext("2d").clearRect(0, 0,
@@ -182,6 +209,8 @@ $("#send").click(function() {
 			window.scrollTo(0, 0);
 		});
 	});
-});
+}
+
+$("#send").one("dblclick", onSendClick);
 
 });
