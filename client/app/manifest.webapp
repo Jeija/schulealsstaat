@@ -1,11 +1,10 @@
 {
-    "version": "0.1",
+    "version": "0.1.1",
     "name": "HöGyCoin",
     "description": "Schule als EU HöGyCoin",
     "launch_path": "/www/index.html",
     "icons": {
-        "128": "/icon128.png",
-        "900": "/icon.png"
+        "128": "/icon128.png"
     },
     "developer": {
         "name": "Schule als EU Computer AG"
