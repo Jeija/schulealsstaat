@@ -64,7 +64,7 @@
 	box-shadow:0 0 5px #000;
 	border-radius:4px;
 	width:600px;
-	height:630px;
+	height:690px;
 	position:fixed;
 	right:0;
 	left:0;
@@ -179,14 +179,49 @@
 	padding:3px 5px;
 }
 
+#checkinout {
+	display:inline-block;
+	margin-top:10px;
+	width:200px;
+	padding:8px;
+	background:#eee;
+	border-radius:5px;
+}
+
 #profile_checkin, #profile_checkout {
+	width:100%;
 	font-size:15px;
-	padding: 4px 8px;
+	padding:5px;
 	font-weight:bold;
 }
 
-#profile_checkin { background: rgba(0, 255, 0, 0.1); }
-#profile_checkout { background: rgba(255, 0, 0, 0.1); }
+#profile_checkin { background: rgba(0, 255, 0, 0.3); margin-bottom:3px; }
+#profile_checkout { background: rgba(255, 0, 0, 0.3); }
+#profile_checkin:hover { background: rgba(0, 255, 0, 0.6); }
+#profile_checkout:hover { background: rgba(255, 0, 0, 0.5); }
+#profile_checkin:active { background: rgba(0, 255, 0, 0.9); }
+#profile_checkout:active { background: rgba(255, 0, 0, 0.8); }
+
+#fee {
+	display:inline-block;
+	vertical-align:top;
+	padding:8px;
+	background:#eee;
+	border-radius:5px;
+	margin-top:10px;
+}
+
+#fee_amount {
+	border:1px solid #aaa;
+	padding:4px;
+	margin-bottom:3px;
+	width:120px;
+}
+
+#fee_deduct {
+	padding:4px;
+	width:130px;
+}
 
 .content {
 	position:relative;
@@ -306,11 +341,6 @@ h3 {
 	bottom:15px;
 	right:20px;
 	padding:5px;
-}
-
-.profile_subheading {
-	font-size:20px;
-	margin-top:10px;
 }
 
 /*** Student list ***/

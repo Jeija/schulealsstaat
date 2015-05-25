@@ -1,3 +1,4 @@
+var FEE_TARGET_ACCOUNT="centralbank";
 var current_profile = null;
 var studentlist = {};
 
@@ -97,7 +98,7 @@ function render_list() {
 	$(".profile_open").click(function () {
 		var st = studentlist[$(this).data("listid")];
 		current_profile = st;
-		$("#profile").fadeIn(200);
+		$("#profile").fadeIn(100);
 
 		$("#profile_pass").attr("src", "");
 		$("#profile_table").html("");
@@ -298,7 +299,7 @@ $(function() {
 	$(".qrid_scan").click(function () {
 		var qrid_scan_target = $(this).parent().parent().find(".qrid_scan_target");
 		QRReader.init("#qr_webcam", "../QRScanJS/");
-		$("#qr_popup").fadeIn(200);
+		$("#qr_popup").fadeIn(100);
 		QRReader.scan(function (qrid) {
 			$("#qr_popup").fadeOut(200);
 			qrid_scan_target.val(qrid);
@@ -349,6 +350,21 @@ $(function() {
 				(fullname.length > 1 ? " von " + fullname : "") + " erfolgreich!");
 			else alert("Fehler " + res);
 		});
+	});
+
+	$("#fee_deduct").click(function () {
+			action_mastercert("master_transaction", {
+				sender : current_profile.qrid,
+				recipient : FEE_TARGET_ACCOUNT,
+				amount_sent : parseFloat($("#fee_amount").val()),
+				comment : "Bearbeitungsgebühr"
+			}, "#master_cert_input", function (res) {
+				if (res == "ok") {
+					alert("Gebühr eingezogen!");
+				} else {
+					alert("Fehler: " + JSON.stringify(res));
+				}
+			});
 	});
 
 	$("#qr_popup_abort").click(function() {
