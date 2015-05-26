@@ -62,6 +62,13 @@ echo -e "\b\b\bOK]"
 
 # Save all certificates to their destinations
 echo -ne "Saving all certificates to files           [..]"
+AUTOTEST_CERT_DIR=$ROOT/testing/autotest/cert
+mkdir -p $AUTOTEST_CERT_DIR
+echo "$EC_CERT" > $AUTOTEST_CERT_DIR/ec_cert
+echo "$ADMIN_CERT" > $AUTOTEST_CERT_DIR/admin_cert
+echo "$MASTER_CERT" > $AUTOTEST_CERT_DIR/master_cert
+echo "$REGISTRATION_CERT" > $AUTOTEST_CERT_DIR/registration_cert
+
 REGISTRATION_CERT_DIR1=$ROOT/client/registration/site/cert
 REGISTRATION_CERT_DIR2=$ROOT/client/adminpanel/site/cert
 mkdir -p $REGISTRATION_CERT_DIR1

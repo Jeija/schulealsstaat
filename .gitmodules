@@ -13,3 +13,6 @@
 [submodule "client/app/www/QRScanJS"]
 	path = client/app/www/QRScanJS
 	url = https://github.com/Jeija/QRScanJS
+[submodule "client/business/site/QRScanJS"]
+	path = client/business/site/QRScanJS
+	url = https://github.com/Jeija/QRScanJS
