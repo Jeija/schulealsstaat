@@ -1,6 +1,11 @@
 #!/bin/bash
-set -xe
+set -e
 ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/.."
+
+type xxd >/dev/null 2>&1 || {
+	echo >&2 "Command xxd is not installed, cannot generate certificates. Aborting.";
+	exit 1;
+}
 
 # Certificate length in bytes
 REGISTRATION_CERT_LEN=512

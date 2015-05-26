@@ -82,8 +82,8 @@ If, however, you want to access the server from multiple devices such as from th
 
 #### Setup
 * Install the following packages:
-	* Ubuntu: `sudo apt install nodejs-legacy npm git mongodb tmux g++`
-	* Archlinux: `sudo pacman -S nodejs npm git mongodb tmux`
+	* Ubuntu: `sudo apt install nodejs-legacy npm git mongodb tmux vim g++`
+	* Archlinux: `sudo pacman -S base-devel nodejs npm git mongodb tmux vim`
 * Install the following node.js packages:
 `sudo npm install -g bower http-server node-gyp nodemon nw`
 * If there are some npm-errors try to install each npm-package alone.
