@@ -9,5 +9,6 @@
 	"poll_timeout" : "40000",
 	"poll_max" : "50",
 	"pending_timeout" : "180",
-	"hgc_per_euro" : "0.8"
+	"hgc_per_euro" : "0.8",
+	"fee_target_account" : "cb-fees"
 }

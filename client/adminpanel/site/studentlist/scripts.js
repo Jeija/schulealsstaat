@@ -167,6 +167,13 @@ function render_list() {
 }
 
 $(function() {
+	// SetTimeout: Wait for private key to be loaded
+	setTimeout(function () {
+		getConfig("fee_target_account", function (res) {
+			FEE_TARGET_ACCOUNT = res;
+		});
+	}, 400);
+
 	// #################### Prepare page ####################
 	var forms = ["firstname", "lastname", "special_name", "type", "country"];
 	forms.forEach(function (f) {
