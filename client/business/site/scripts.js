@@ -295,7 +295,7 @@ $("#make_pending").click(function () {
 
 $(".qrid_scan").click(function () {
 	var qrid_scan_target = $(this).parent().parent().find(".qrid_scan_target");
-	QRReader.init("#qr_webcam", "../QRScanJS/");
+	QRReader.init("#qr_webcam", "QRScanJS/");
 	$("#qr_popup").fadeIn(200);
 	QRReader.scan(function (qrid) {
 		$("#qr_popup").fadeOut(200);
