@@ -1,0 +1,14 @@
+{
+	"name" : "HöGyCoin Business",
+	"main" : "./site/index.html",
+	"scripts" : {
+		"start" : "nw"
+	},
+	"single-instance" : false,
+	"window": {
+		"toolbar": false,
+		"frame": true,
+		"width":1024,
+		"height":768
+	}
+}

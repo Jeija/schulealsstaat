@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+	<title>HöGyCoin Business</title>
+	<script src="bower_components/jsencrypt/bin/jsencrypt.min.js"></script>
+	<script src="bower_components/jquery/dist/jquery.js"></script>
+	<script src="bower_components/gibberish-aes/dist/gibberish-aes-1.0.0.min.js"></script>
+	<script src="QRScanJS/qrscan.js"></script>
+	<script src="api.js"></script>
+	<script src="scripts.js"></script>
+	<link rel="stylesheet" type="text/css" href="styles.css">
+	<meta charset="utf-8"/>
+</head>
+<body>
+	<div id="header"><img src="centralbank_logo.svg">HöGyCoin Business</div>
+	<div id="content">
+	<div id="infotable_container">
+
+	<!-- Sender input table -->
+	<table id="accounts" class="infotable">
+		<tr><th colspan="2">Accounts</th></tr>
+		<tr>
+			<td>Sender-Kto.-Nr.</td>
+			<td><input type="text" id="sender" class="qrid_scan_target"></td>
+			<td><input type="button" value="Scan" class="qrid_scan"></td>
+		</tr><tr>
+			<td>Empfänger-Kto.-Nr.</td>
+			<td><input type="text" id="recipient" class="qrid_scan_target"></td>
+			<td><input type="button" value="Scan" class="qrid_scan"></td>
+		</tr><tr id="recipient_qrid">
+			<td>Sender-Passwort</td>
+			<td><input colspan="2" type="password" id="password"></td>
+		</tr>
+	</table>
+
+	<!-- Transaction input table -->
+	<table id="transaction_info" class="infotable">
+		<tr><th colspan="2">Transaktion</th></tr>
+		<tr>
+			<td>Brutto</td>
+			<td><input type="text" id="amount_sent" class="value"> HGC</td>
+			<td><input type="radio" name="amounttype" value="sent" checked="checked"></td>
+		</tr><tr>
+			<td>Netto</td>
+			<td><input type="text" id="amount_received" class="value"> HGC</td>
+			<td><input type="radio" name="amounttype" value="received"></td>
+		</tr><tr>
+			<td>Steuerfrei</td>
+			<td><input type="text" id="amount_taxfree" class="value"> HGC</td>
+			<td><input type="radio" name="amounttype" value="taxfree"></td>
+		</tr><tr>
+			<td id="converter" colspan="4">
+				<input type="text" id="euro"> EUR = <input type="text" id="hgc"> HGC
+			</td>
+		</tr><tr>
+			<td colspan="4"><div id="exrate">
+				1 HGC = <span id="exrate_value">Nicht geladen</span> EUR
+			</div></td>
+		</tr>
+	</table>
+
+	<div id="comment_container">
+		<div id="comment_heading">Kommentar</div>
+		<textarea id="comment"></textarea>
+	</div>
+	<input type="button" value="Hinzufügen" id="add_transaction">
+
+	</div> <!-- infotable_container -->
+
+	<div id="transactions_container">
+		<table id="transactions"></table>
+	</div>
+
+	<div id="bottombox_container">
+	<div id="bottombox">
+		<div id="bottombox_buttons">
+			<input type="button" id="start" value="Transaktionen starten">
+			<input type="button" id="download" value="Liste herunterladen">
+			<input type="button" id="upload" value="Liste hochladen">
+			<input type="button" id="make_pending" value="Alle &quot;ausstehend&quot; machen">
+		</div>
+		<div id="stats_heading">Statistiken</div>
+		<table id="stats">
+			<tr><td>Anzahl</td><td id="total_number"></td></tr>
+			<tr><td>Gesamt Brutto</td><td id="total_sent"></td></tr>
+			<tr><td>Gesamt Netto</td><td id="total_received"></td></tr>
+			<tr><td>Gesamt Steuern</td><td id="total_tax"></td></tr>
+			<tr><td>Durschnitt Brutto</td><td id="average_sent"></td></tr>
+			<tr><td>Durschnitt Netto</td><td id="average_received"></td></tr>
+			<tr><td>Durschnitt Steuern</td><td id="average_tax"></td></tr>
+		</table>
+	</div> <!-- bottombox -->
+	</div> <!-- bottombox_container -->
+	</div> <!-- content -->
+
+	<!-- Taxfree-certificate (registration_cert) -->
+	<div id="taxfree_cert_container">
+		Steuerfrei-Zertifikat: <input type="file" id="taxfree_cert_input">
+	</div>
+
+	<!-- QR Scanner Popup -->
+	<div id="qr_popup" hidden>
+		<div id="qr_popup_heading">QR Scan</div>
+		<video autoplay="true" id="qr_webcam"></video>
+		<input type="button" value="Abbrechen" id="qr_popup_abort">
+	</div>
+</body>
+</html>

@@ -14,5 +14,6 @@ echo -ne "$PUBKEY" > $ROOT/client/entrycheck/www/pubkey.pem
 echo -ne "$PUBKEY" > $ROOT/client/registration/site/pubkey.pem
 echo -ne "$PUBKEY" > $ROOT/client/userterminal/site/pubkey.pem
 echo -ne "$PUBKEY" > $ROOT/client/genrequest/site/pubkey.pem
+echo -ne "$PUBKEY" > $ROOT/client/business/site/pubkey.pem
 echo -ne "$PUBKEY" > $ROOT/testing/api/pubkey.pem
 echo -ne "$PUBKEY" > $ROOT/testing/autotest/pubkey.pem

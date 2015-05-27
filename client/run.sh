@@ -10,9 +10,11 @@ fi
 CWD="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 tmux send-key "$CWD/registration/run.sh" C-m
-tmux split-window -v -p 75
+tmux split-window -v -p 80
 tmux send-key "$CWD/adminpanel/run.sh" C-m
-tmux split-window -v -p 67
+tmux split-window -v -p 75
 tmux send-key "$CWD/entrycheck/run.sh" C-m
-tmux split-window -v
+tmux split-window -v -p 67
 tmux send-key "$CWD/genrequest/run.sh" C-m
+tmux split-window -v
+tmux send-key "$CWD/business/run.sh" C-m

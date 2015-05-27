@@ -45,11 +45,15 @@ a {
 	border-radius:4px;
 	text-decoration:none;
 	color:#fff;
-	transition:background 0.5s;
+	transition:background 0.1s;
 }
 
 a:hover {
-	transition:background 0.5s;
-	box-shadow:0 0 4px #fff;
-	background-color:rgba(0, 0, 0, 0.9);
+	transition:background 0.1s;
+	background-color:rgba(255, 255, 255, 0.1);
+}
+
+a:active {
+	transition:background 0.1s;
+	background-color:rgba(255, 255, 255, 0.3);
 }

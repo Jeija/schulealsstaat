@@ -1,12 +1,13 @@
 {
-	"hgc_tr_decimal_places" : 2,
-	"hgc_decimal_places" : 5,
+	"hgc_tr_decimal_places" : "2",
+	"hgc_decimal_places" : "5",
 	"taxinc_qrid" : "taxinc",
-	"update_config_interval" : 30000,
-	"transaction_tax_percent" : 10,
-	"tr_comment_maxlen" : 300,
+	"update_config_interval" : "30000",
+	"transaction_tax_percent" : "10",
+	"tr_comment_maxlen" : "300",
 	"magic_account" : "Zentralbank",
-	"poll_timeout" : 40000,
-	"poll_max" : 50,
-	"pending_timeout" : 180
+	"poll_timeout" : "40000",
+	"poll_max" : "50",
+	"pending_timeout" : "180",
+	"hgc_per_euro" : "0.8"
 }

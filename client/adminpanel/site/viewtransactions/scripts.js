@@ -39,7 +39,7 @@ function render_transactions (trlist) {
 		.append($("<th>").text("Empfänger"))
 		.append($("<th>").text("Brutto"))
 		.append($("<th>").text("Netto"))
-		.append($("<th>").text("Steuersatz"))
+		.append($("<th>").text("Steuer %"))
 		.append($("<th>").text("Steuer"))
 		.append($("<th>").text("Aktionen"))
 	);

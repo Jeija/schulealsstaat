@@ -26,6 +26,7 @@ ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/.."
 ( cd $ROOT/client/registration/site ; bower install )
 ( cd $ROOT/client/userterminal/site ; bower install )
 ( cd $ROOT/client/genrequest/site ; bower install )
+( cd $ROOT/client/business/site ; bower install )
 
 # Install networking dependencies
 ( cd $ROOT/network/dns ; npm install )

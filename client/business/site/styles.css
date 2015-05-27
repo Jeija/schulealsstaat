@@ -1,0 +1,371 @@
+@font-face {
+    font-family: "FiraSans-Light";
+    src: url(FiraSans-Light.ttf) format("truetype");
+}
+
+body {
+	margin:0;
+	font-family:"FiraSans-Light", "Helvetica Neue", Arial, sans-serif;
+	background:#222;
+}
+
+#header {
+	padding:10px;
+	line-height:50px;
+	font-size:30px;
+	text-align:center;
+	margin-bottom:10px;
+	color:#fff;
+	border-bottom:3px solid #aaa;
+	background:rgb(16, 143, 16);
+}
+
+#header img {
+	height:50px;
+	float:left;
+}
+
+#content {
+	width:900px;
+	background:#333;
+	margin:0 auto;
+	margin-bottom:100px;
+}
+
+#infotable_container {
+	position:relative;
+	height:320px;
+	background:#333;
+	color:#fff;
+	box-shadow:0 0 10px #000;
+	margin-bottom:10px;
+}
+
+#infotable_container input[type="text"], input[type="password"], textarea {
+	background:transparent;
+	border:1px solid #ccc;
+	padding:3px;
+	color:#fff;
+	font-size:16px;
+	width:100%;
+	transition:background 0.1s;
+}
+
+#infotable_container input[type="text"]:hover, input[type="password"]:hover, textarea:hover {
+	background:rgba(255, 255, 255, 0.15);
+}
+
+#infotable_container #transaction_info input[type="text"] {
+	width:80px;
+	margin-right:8px;
+	text-align:right;
+}
+
+input[type="button"] {
+	background:transparent;
+	border-radius:40px;
+	color:#fff;
+	border:1px solid #ccc;
+	transition:background 0.1s;
+	cursor:pointer;
+}
+
+input[type="button"]:hover {
+	background:rgba(255, 255, 255, 0.2);
+}
+
+input[type="button"]:active {
+	background:rgba(255, 255, 255, 0.5);
+}
+
+#accounts {
+	width:400px;
+	position:absolute;
+	top:10px;
+	left:30px;
+}
+
+#transaction_info {
+	width:300px;
+	position:absolute;
+	top:10px;
+	right:30px;
+}
+
+.infotable th {
+	text-align:center;
+	font-size:22px;
+	padding-bottom:5px;
+	font-weight:normal;
+	font-style:bold;
+}
+
+.infotable select, #n_transactions {
+	width:128px;
+	padding:1px;
+	font-size:13px;
+	padding:3px;
+	border:1px solid #000;
+	background:#fff;
+}
+
+.infotable input[type="checkbox"], input[type="radio"] {
+	transform: scale(1.2);
+	-webkit-transform: scale(1.5);
+	margin-top:8px;
+}
+
+.infotable td {
+	padding:1px 5px;
+	white-space:nowrap;
+}
+
+.infotable td.or {
+	font-style:italic;
+	text-align:center;
+	padding:10px 0;
+}
+
+#comment_heading {
+	text-align:center;
+	font-weight:bold;
+}
+
+#comment_container {
+	width:420px;
+	position:absolute;
+	left:30px;
+	bottom:20px;
+}
+
+#comment {
+	display:inline-block;
+	height:80px;
+	padding:8px;
+	resize:none;
+}
+
+#converter {
+	padding-top:20px;
+}
+
+#exrate {
+	border:2px solid #ccc;
+	padding:6px;
+	text-align:center;
+	margin-top:5px;
+	border-radius:3px;
+	background:#222;
+	cursor:pointer;
+	-webkit-user-select:none;
+	-moz-user-select:none;
+	user-select:none;
+}
+
+.infotable .qrid_scan {
+	font-size:16px;
+	padding:3px 15px;
+	margin-left:10px;
+}
+
+#add_transaction {
+	position:absolute;
+	right:30px;
+	margin:0 auto;
+	bottom:15px;
+	padding:5px 15px;
+	font-size:16px;
+}
+
+/*** Transactions ***/
+#transactions_container {
+	text-align:center;
+}
+
+#transactions {
+	display:inline-block;
+	border-collapse:collapse;
+	max-width:1350px;
+	overflow:auto;
+	font-size:16px;
+	padding-left:30px;
+	padding-right:30px;
+}
+
+#transactions th {
+	color:#fff;
+	background:transparent;
+	padding:3px 10px;
+	border:1px solid #666;
+}
+
+#transactions td {
+	padding:3px 5px;
+	border:1px solid #666;
+	color:#fff;
+}
+
+#transactions td.num {
+	text-align:right;
+	padding-right:5px;
+	font-family:Monospace;
+	font-size:15px;
+}
+
+#transactions td.transaction_delete {
+	font-weight:bold;
+	color:#191;
+	cursor:pointer;
+	user-select:none;
+	-moz-user-select:none;
+	-webkit-user-select:none;
+}
+
+#transactions td.transaction_delete:hover {
+	color:#3f3;
+}
+
+#transactions tr.state_pending {
+	background:rgba(255, 255, 0, 0.1);
+}
+
+#transactions tr.state_nonsense {
+	background:rgba(255, 100, 0, 0.1);
+}
+
+#transactions tr.state_error {
+	background:rgba(255, 0, 0, 0.1);
+}
+
+#transactions tr.state_complete {
+	background:rgba(0, 255, 0, 0.1);
+}
+
+/*** Bottom Box ***/
+
+#bottombox_container {
+	text-align:center;
+	box-shadow:0 0 10px #000;
+	margin-top:40px;
+}
+
+#bottombox {
+	padding:20px;
+	display:inline-block;
+	width:80%;
+	height:235px;
+	background:transparent;
+	text-align:left;
+	color:#fff;
+}
+
+#bottombox_buttons {
+	width:240px;
+	float:right;
+}
+
+#bottombox input[type="button"] {
+	margin-right:20px;
+	margin-top:10px;
+	float:right;
+	width:100%;
+	font-size:16px;
+	padding:6px 15px;
+}
+
+/*** Master certificate bar ***/
+#taxfree_cert_container {
+	position:fixed;
+	bottom:0;
+	left:0;
+	height:40px;
+	width:100%;
+	background:rgba(16, 143, 16, 0.2);
+	text-align:center;
+	color:#fff;
+	padding-top:5px;
+	font-size:17px;
+	font-weight:bold;
+}
+
+#taxfree_cert_input {
+	font-size:17px;
+	border: 1px dashed #ccc;
+	background:rgba(16, 143, 16, 0.2);
+	padding:3px;
+}
+
+/*** Stats Table ***/
+#stats_heading {
+	font-size:20px;
+	font-weight:bold;
+}
+
+#stats {
+	border-collapse:collapse;
+	border:1px solid #666;
+	margin-top:10px;
+}
+
+#stats tr td:first-child {
+	font-weight:bold;
+}
+
+#stats tr td:nth-child(2) {
+	font-family:Monospace;
+	text-align:right;
+	font-size:16px;
+}
+
+#stats tr td {
+	padding:5px 10px;
+	font-size:16px;
+	border-bottom:1px dashed #666;
+}
+
+/* QR Scanner Popup */
+#qr_popup {
+	border:1px solid #666;
+	padding:5px;
+	position:relative;
+	position:absolute;
+	box-shadow:0 0 5px #000;
+	width:400px;
+	height:400px;
+	top:calc(50% - 200px);
+	left:calc(50% - 200px);
+	background:#fff;
+	text-align:center;
+}
+
+#qr_popup_heading {
+	font-size:30px;
+	margin-bottom:10px;
+}
+
+#qr_webcam {
+	min-height:300px;
+	max-height:400px;
+	width:400px;
+	background:#000;
+}
+
+#qr_popup_abort {
+	width:150px;
+	position:absolute;
+	bottom:10px;
+	right:0;
+	margin:auto;
+	left:0;
+	font-size:18px;
+	padding:4px;
+	color:#000;
+}
+
+#qr_popup_abort:hover {
+	background:rgba(0, 0, 0, 0.1);
+}
+
+#qr_popup_abort:active {
+	background:rgba(0, 0, 0, 0.2);
+}

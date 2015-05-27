@@ -1,4 +1,4 @@
-var FEE_TARGET_ACCOUNT="centralbank";
+var FEE_TARGET_ACCOUNT="cb-fees";
 var current_profile = null;
 var studentlist = {};
 
@@ -39,6 +39,11 @@ function downloadData(filename, data) {
 }
 
 function render_list() {
+	if (typeof studentlist !== "object") {
+		alert(JSON.stringify(studentlist));
+		return;
+	}
+
 	$("#studentlist").html("");
 	$("#studentlist").append($("<tr>")
 		.append($("<th>")
@@ -252,12 +257,22 @@ $(function() {
 				tc[crit] = condition[crit];
 				cond.$or.push(tc);
 			}
+
+			if (cond.$or.length == 0) {
+				alert("Fehler: Kein Kriterium angegeben!");
+				return;
+			}
 		} else if (operator == "nor") {
 			cond.$nor = [];
 			for (crit in condition) {
 				tc = {};
 				tc[crit] = condition[crit];
 				cond.$nor.push(tc);
+			}
+
+			if (cond.$nor.length == 0) {
+				alert("Fehler: Kein Kriterium angegeben!");
+				return;
 			}
 		}
 

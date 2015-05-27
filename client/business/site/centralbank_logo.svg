@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.1"
+   width="470"
+   height="470"
+   id="svg3355"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="saeu_centralbank_logo.svg">
+  <metadata
+     id="metadata3396">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1920"
+     inkscape:window-height="1016"
+     id="namedview3394"
+     showgrid="false"
+     inkscape:zoom="1"
+     inkscape:cx="423.559"
+     inkscape:cy="273.57664"
+     inkscape:window-x="0"
+     inkscape:window-y="27"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg3355"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0">
+    <inkscape:grid
+       type="xygrid"
+       id="grid4293"
+       originx="-170.0039"
+       originy="-37.85937" />
+  </sodipodi:namedview>
+  <desc
+     id="desc3357">European flag</desc>
+  <defs
+     id="defs3359">
+    <g
+       id="s">
+      <g
+         id="c">
+        <path
+           id="t"
+           d="M 0,0 0,1 0.5,1 Z"
+           transform="matrix(0.95105652,0.30901699,-0.30901699,0.95105652,0,-1)"
+           inkscape:connector-curvature="0" />
+        <use
+           xlink:href="#t"
+           transform="scale(-1,1)"
+           id="use3364"
+           x="0"
+           y="0"
+           width="100%"
+           height="100%" />
+      </g>
+      <g
+         id="a">
+        <use
+           xlink:href="#c"
+           transform="matrix(0.30901699,0.95105652,-0.95105652,0.30901699,0,0)"
+           id="use3367"
+           x="0"
+           y="0"
+           width="100%"
+           height="100%" />
+        <use
+           xlink:href="#c"
+           transform="matrix(-0.80901699,0.58778525,-0.58778525,-0.80901699,0,0)"
+           id="use3369"
+           x="0"
+           y="0"
+           width="100%"
+           height="100%" />
+      </g>
+      <use
+         xlink:href="#a"
+         transform="scale(-1,1)"
+         id="use3371"
+         x="0"
+         y="0"
+         width="100%"
+         height="100%" />
+    </g>
+  </defs>
+  <g
+     transform="matrix(30,0,0,30,234.9961,237.85938)"
+     id="g3375"
+     style="fill:#ffcc00">
+    <circle
+       style="fill:#109010;fill-opacity:1;image-rendering:auto"
+       id="path3404"
+       cx="0.00013020834"
+       cy="-0.095312499"
+       r="7.8333335" />
+    <use
+       xlink:href="#s"
+       y="-6"
+       id="use3377"
+       x="0"
+       width="100%"
+       height="100%" />
+    <use
+       xlink:href="#s"
+       y="6"
+       id="use3379"
+       x="0"
+       width="100%"
+       height="100%" />
+    <g
+       id="l">
+      <use
+         xlink:href="#s"
+         x="-6"
+         id="use3382"
+         y="0"
+         width="100%"
+         height="100%" />
+      <use
+         xlink:href="#s"
+         transform="matrix(-0.80901699,-0.58778525,0.58778525,-0.80901699,-3,-5.1961524)"
+         id="use3384"
+         x="0"
+         y="0"
+         width="100%"
+         height="100%" />
+      <use
+         xlink:href="#s"
+         transform="matrix(-0.80901699,0.58778525,-0.58778525,-0.80901699,-5.1961524,-3)"
+         id="use3386"
+         x="0"
+         y="0"
+         width="100%"
+         height="100%" />
+      <use
+         xlink:href="#s"
+         transform="matrix(0.30901699,0.95105652,-0.95105652,0.30901699,-5.1961524,3)"
+         id="use3388"
+         x="0"
+         y="0"
+         width="100%"
+         height="100%" />
+      <use
+         xlink:href="#s"
+         transform="matrix(0.30901699,0.95105652,-0.95105652,0.30901699,-3,5.1961524)"
+         id="use3390"
+         x="0"
+         y="0"
+         width="100%"
+         height="100%" />
+    </g>
+    <use
+       xlink:href="#l"
+       transform="scale(-1,1)"
+       id="use3392"
+       x="0"
+       y="0"
+       width="100%"
+       height="100%" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:1.33333325px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="-3.9184306"
+       y="2.1989088"
+       id="text4271"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4273"
+         x="-3.9184306"
+         y="2.1989088"
+         style="font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:6.66666651px;font-family:'Fira Sans';-inkscape-font-specification:'Fira Sans Bold Italic';fill:#e2e3db">CB</tspan></text>
+  </g>
+</svg>

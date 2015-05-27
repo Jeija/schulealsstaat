@@ -1,0 +1,12 @@
+{
+  "name": "HöGyCoin Business",
+  "version": "0.0.1",
+  "homepage": "https://github.com/Jeija/schulealsstaat",
+  "description": "HöGyCoin Business Client",
+  "license": "GPLv3",
+  "dependencies": {
+    "jquery": "~2.1.3",
+    "jsencrypt": "~2.1.0",
+    "gibberish-aes": "*"
+  }
+}
