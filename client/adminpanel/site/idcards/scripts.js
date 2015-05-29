@@ -188,6 +188,14 @@ function render_students(pdf, list) {
 
 function makepdf(list) {
 	var pdf = new jsPDF();
+
+	// Sort list by type
+	list.sort(function (a, b) {
+		if (a.type < b.type) return -1;
+		if (a.type > b.type) return 1;
+		return 0;
+	});
+
 	render_students(pdf, list);
 
 	// Wait for async passport picture requests to complete
