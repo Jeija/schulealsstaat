@@ -12,11 +12,10 @@ bower_components/
 node_modules/
 
 # Ignored working / output directories
-/client/app/build
-/client/app/hooks
 /client/app/platforms
-/client/app/plugins/*.json
-/client/app/.cordova
+/client/app/plugins
+/client/entrycheck/platforms
+/client/entrycheck/plugins
 
 # Terminal ISO: Publish PKGBUILDs and build scripts, no prebuilt packages and binaries
 /client/terminaliso/iso/work

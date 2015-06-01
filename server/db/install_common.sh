@@ -26,7 +26,7 @@ Description=Make SaEU database snapshots every 5 minutes
 
 [Timer]
 OnBootSec=5min
-OnCalendar=*:0/5
+OnCalendar=*:0/20
 Unit=sasdb_snapshot.service
 
 [Install]

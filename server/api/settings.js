@@ -18,7 +18,7 @@ var log = require("./logging.js");
 var settings = {};
 
 // Timeout after which the connection to the MongoDB database will be reset (milliseconds).
-settings.config_load_timeout = 3000;
+settings.config_load_timeout = 5000;
 
 // Inteval in which the API will try to re-connect to the MongoDB server after a connection failure
 settings.reconnect_interval = 3000;

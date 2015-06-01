@@ -1,8 +1,8 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="org.schulealsstaat.hoegycoin" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>HöGyCoin</name>
+<widget id="org.schulealsstaat.entrycheck" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>Zugangskontrolle</name>
     <description>
-		Die offizielle HöGyCoin-App
+		Zugangskontrolle
 	</description>
     <author email="-" href="hoegy.de">
 		HöGyCoin Zentralbank
@@ -10,7 +10,7 @@
     <preference name="orientation" value="portrait" />
     <content src="index.html" />
     <access origin="*" />
-    <icon src="icon128.png" />
+    <icon src="icon.png" />
     <plugin name="cordova-plugin-crosswalk-webview" spec="^1.2.0" />
     <plugin name="cordova-plugin-whitelist" spec="^1.0.0" />
     <plugin name="com.phonegap.plugins.barcodescanner" spec="https://github.com/Jeija/BarcodeScanner" />
