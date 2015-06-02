@@ -92,6 +92,13 @@ RestartSec=1
 WantedBy=multi-user.target
 EOF
 
+### systemd-timesyncd NTP setup
+cat << EOF > /etc/systemd/timesyncd.conf
+[Time]
+NTP=0.arch.pool.ntp.org 1.arch.pool.ntp.org 2.arch.pool.ntp.org 3.arch.pool.ntp.org
+FallbackNTP=0.pool.ntp.org 1.pool.ntp.org 0.fr.pool.ntp.org
+EOF
+
 # Enable systemd services
 systemctl disable dhcpcd -q || true
 systemctl disable NetworkManager -q || true
@@ -99,6 +106,7 @@ systemctl enable systemd-networkd
 systemctl enable sas_api
 systemctl enable sas_patchroute
 systemctl enable systemd-networkd-wait-online
+timedatectl set-ntp true
 
 if [ -n "$GATEWAY_ADDR" ]; then
 	systemctl enable sas_gateway

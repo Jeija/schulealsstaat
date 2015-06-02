@@ -73,7 +73,7 @@ module.exports = function (error) { return {
 
 		pt.save(function (err) {
 			if (err) {
-				error("trdb.add", answer, err);
+				error("trdb.intent", answer, err);
 			} else {
 				cb(pt._id);
 			}
