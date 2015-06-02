@@ -57,6 +57,7 @@ echo $TXPOWER > /tmp/wifi/txpower
 
 # Only allow (any) wired connections or DHCP broadcasts as input
 ebtables -A INPUT -i $WIFI_IFACE -p IPv4 --ip-dst 255.255.255.255 -j ACCEPT
+ebtables -A INPUT -i ! $WIFI_IFACE -p IPv4 --ip-dst 255.255.255.255 -j DROP
 ebtables -A INPUT -i ! $WIFI_IFACE -j ACCEPT
 
 # Allow any output to WiFi (DHCP)
