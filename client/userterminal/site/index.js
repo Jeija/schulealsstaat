@@ -1,4 +1,5 @@
 var PWD_REQUIRED = "";
+var PLAYER_RESTART_MINUTES = 30;
 var childp = null;
 var mplayer = null;
 
@@ -57,8 +58,11 @@ function startRadio() {
 	mplayer = childp.spawn("mplayer", [ "-cache", "200", "-cache-min", "50", "-slave", "-softvol",
 		"-quiet", "-volume", "50", RADIO_STREAMURL ]);
 	mplayer.on('close', function () {
-		setTimeout(startRadio, 2000);
+		setTimeout(startRadio, 200);
 	});
+	setInterval(function () {
+		mplayer.kill();
+	}, 1000 * 60 * PLAYER_RESTART_MINUTES);
 	//mplayer.stdout.on("data", function (data) {
 	//	console.log("[mp] " + data);
 	//});
