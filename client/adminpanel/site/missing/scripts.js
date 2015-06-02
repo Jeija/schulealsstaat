@@ -5,6 +5,13 @@ function datetime_readable (datestring) {
 }
 
 function render_students(list) {
+	// Sort list by lastname
+	list.sort(function (a, b) {
+		if (a.lastname < b.lastname) return -1;
+		if (a.lastname > b.lastname) return 1;
+		return 0;
+	});
+
 	$("#studentlist").html("");
 	$("#studentlist").append($("<tr>")
 		.append($("<th>")
