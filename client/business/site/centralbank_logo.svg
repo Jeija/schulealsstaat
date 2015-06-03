@@ -6,14 +6,10 @@
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:xlink="http://www.w3.org/1999/xlink"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   version="1.1"
-   width="470"
-   height="470"
    id="svg3355"
-   inkscape:version="0.91 r13725"
-   sodipodi:docname="saeu_centralbank_logo.svg">
+   height="470"
+   width="470"
+   version="1.1">
   <metadata
      id="metadata3396">
     <rdf:RDF>
@@ -26,36 +22,6 @@
       </cc:Work>
     </rdf:RDF>
   </metadata>
-  <sodipodi:namedview
-     pagecolor="#ffffff"
-     bordercolor="#666666"
-     borderopacity="1"
-     objecttolerance="10"
-     gridtolerance="10"
-     guidetolerance="10"
-     inkscape:pageopacity="0"
-     inkscape:pageshadow="2"
-     inkscape:window-width="1920"
-     inkscape:window-height="1016"
-     id="namedview3394"
-     showgrid="false"
-     inkscape:zoom="1"
-     inkscape:cx="423.559"
-     inkscape:cy="273.57664"
-     inkscape:window-x="0"
-     inkscape:window-y="27"
-     inkscape:window-maximized="1"
-     inkscape:current-layer="svg3355"
-     fit-margin-top="0"
-     fit-margin-left="0"
-     fit-margin-right="0"
-     fit-margin-bottom="0">
-    <inkscape:grid
-       type="xygrid"
-       id="grid4293"
-       originx="-170.0039"
-       originy="-37.85937" />
-  </sodipodi:namedview>
   <desc
      id="desc3357">European flag</desc>
   <defs
@@ -65,133 +31,130 @@
       <g
          id="c">
         <path
-           id="t"
-           d="M 0,0 0,1 0.5,1 Z"
            transform="matrix(0.95105652,0.30901699,-0.30901699,0.95105652,0,-1)"
-           inkscape:connector-curvature="0" />
+           d="M 0,0 0,1 0.5,1 Z"
+           id="t" />
         <use
-           xlink:href="#t"
-           transform="scale(-1,1)"
-           id="use3364"
-           x="0"
-           y="0"
+           height="100%"
            width="100%"
-           height="100%" />
+           y="0"
+           x="0"
+           id="use3364"
+           transform="scale(-1,1)"
+           xlink:href="#t" />
       </g>
       <g
          id="a">
         <use
-           xlink:href="#c"
-           transform="matrix(0.30901699,0.95105652,-0.95105652,0.30901699,0,0)"
+           height="100%"
+           width="100%"
+           y="0"
+           x="0"
            id="use3367"
-           x="0"
-           y="0"
-           width="100%"
-           height="100%" />
+           transform="matrix(0.30901699,0.95105652,-0.95105652,0.30901699,0,0)"
+           xlink:href="#c" />
         <use
-           xlink:href="#c"
-           transform="matrix(-0.80901699,0.58778525,-0.58778525,-0.80901699,0,0)"
-           id="use3369"
-           x="0"
-           y="0"
+           height="100%"
            width="100%"
-           height="100%" />
+           y="0"
+           x="0"
+           id="use3369"
+           transform="matrix(-0.80901699,0.58778525,-0.58778525,-0.80901699,0,0)"
+           xlink:href="#c" />
       </g>
       <use
-         xlink:href="#a"
-         transform="scale(-1,1)"
-         id="use3371"
-         x="0"
-         y="0"
+         height="100%"
          width="100%"
-         height="100%" />
+         y="0"
+         x="0"
+         id="use3371"
+         transform="scale(-1,1)"
+         xlink:href="#a" />
     </g>
   </defs>
   <g
-     transform="matrix(30,0,0,30,234.9961,237.85938)"
+     style="fill:#ffcc00"
      id="g3375"
-     style="fill:#ffcc00">
+     transform="matrix(30,0,0,30,234.9961,237.85938)">
     <circle
-       style="fill:#109010;fill-opacity:1;image-rendering:auto"
-       id="path3404"
-       cx="0.00013020834"
+       r="7.8333335"
        cy="-0.095312499"
-       r="7.8333335" />
+       cx="0.00013020834"
+       id="path3404"
+       style="fill:#109010;fill-opacity:1;image-rendering:auto" />
     <use
-       xlink:href="#s"
-       y="-6"
+       height="100%"
+       width="100%"
+       x="0"
        id="use3377"
-       x="0"
-       width="100%"
-       height="100%" />
+       y="-6"
+       xlink:href="#s" />
     <use
-       xlink:href="#s"
-       y="6"
-       id="use3379"
-       x="0"
+       height="100%"
        width="100%"
-       height="100%" />
+       x="0"
+       id="use3379"
+       y="6"
+       xlink:href="#s" />
     <g
        id="l">
       <use
-         xlink:href="#s"
-         x="-6"
+         height="100%"
+         width="100%"
+         y="0"
          id="use3382"
-         y="0"
-         width="100%"
-         height="100%" />
+         x="-6"
+         xlink:href="#s" />
       <use
-         xlink:href="#s"
-         transform="matrix(-0.80901699,-0.58778525,0.58778525,-0.80901699,-3,-5.1961524)"
+         height="100%"
+         width="100%"
+         y="0"
+         x="0"
          id="use3384"
-         x="0"
-         y="0"
-         width="100%"
-         height="100%" />
+         transform="matrix(-0.80901699,-0.58778525,0.58778525,-0.80901699,-3,-5.1961524)"
+         xlink:href="#s" />
       <use
-         xlink:href="#s"
-         transform="matrix(-0.80901699,0.58778525,-0.58778525,-0.80901699,-5.1961524,-3)"
+         height="100%"
+         width="100%"
+         y="0"
+         x="0"
          id="use3386"
-         x="0"
-         y="0"
-         width="100%"
-         height="100%" />
+         transform="matrix(-0.80901699,0.58778525,-0.58778525,-0.80901699,-5.1961524,-3)"
+         xlink:href="#s" />
       <use
-         xlink:href="#s"
-         transform="matrix(0.30901699,0.95105652,-0.95105652,0.30901699,-5.1961524,3)"
+         height="100%"
+         width="100%"
+         y="0"
+         x="0"
          id="use3388"
-         x="0"
-         y="0"
-         width="100%"
-         height="100%" />
+         transform="matrix(0.30901699,0.95105652,-0.95105652,0.30901699,-5.1961524,3)"
+         xlink:href="#s" />
       <use
-         xlink:href="#s"
-         transform="matrix(0.30901699,0.95105652,-0.95105652,0.30901699,-3,5.1961524)"
-         id="use3390"
-         x="0"
-         y="0"
+         height="100%"
          width="100%"
-         height="100%" />
+         y="0"
+         x="0"
+         id="use3390"
+         transform="matrix(0.30901699,0.95105652,-0.95105652,0.30901699,-3,5.1961524)"
+         xlink:href="#s" />
     </g>
     <use
-       xlink:href="#l"
-       transform="scale(-1,1)"
-       id="use3392"
-       x="0"
-       y="0"
+       height="100%"
        width="100%"
-       height="100%" />
+       y="0"
+       x="0"
+       id="use3392"
+       transform="scale(-1,1)"
+       xlink:href="#l" />
     <text
-       xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:1.33333325px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="-3.9184306"
-       y="2.1989088"
        id="text4271"
-       sodipodi:linespacing="125%"><tspan
-         sodipodi:role="line"
-         id="tspan4273"
-         x="-3.9184306"
-         y="2.1989088"
-         style="font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:6.66666651px;font-family:'Fira Sans';-inkscape-font-specification:'Fira Sans Bold Italic';fill:#e2e3db">CB</tspan></text>
+       y="1.9742837"
+       x="-4.5694985"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:6px;line-height:125%;font-family:'Liberation Sans',Arial;-inkscape-font-specification:'Arial, Normal';text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       xml:space="preserve"><tspan
+         style="font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:6px;line-height:125%;font-family:'Liberation Sans',Arial;-inkscape-font-specification:'Liberation Sans Bold Italic';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#e2e3db"
+         y="1.9742837"
+         x="-4.5694985"
+         id="tspan4273">CB</tspan></text>
   </g>
 </svg>
