@@ -26,7 +26,9 @@ var transactionSchema = new Schema({
 	 */
 	sender : commonProfileSchema,
 	recipient : commonProfileSchema,
-	tax_recipient : Schema.Types.ObjectId,
+
+	/* Tax income account at the time of the transaction */
+	tax_recipient : { type : Schema.Types.ObjectId, index : true },
 
 	/* Timestamp */
 	time : { type : Date, index : true },
@@ -36,9 +38,6 @@ var transactionSchema = new Schema({
 	amount_received : Number,	// Amount added to recipient's account
 	amount_tax : Number,		// Amount added to tax income account
 	percent_tax : Number,		// Stores tax percentage value at transaction time
-
-	/* Tax income account at the time of the transaction */
-	recipient_tax : Schema.Types.ObjectId,
 
 	/* Comment is an arbitrary String, up to <tr_comment_maxlen> (in config) characters,
 		can be entered by sender or is generated programmatically */
@@ -137,6 +136,17 @@ module.exports = function (error) { return {
 	},
 
 	getBalance : function (id, answer, cb) {
+		/**
+		 * Aggregate income, payments and tax income (this may be a tax income account)
+		 * All three aggregation tasks are launched synchronously.
+		 */
+		var income = null, payments = null, taxincome = null;
+
+		function aggregationComplete() {
+			if (income === null || payments === null || taxincome === null) return;
+			cb(income + taxincome - payments);
+		}
+
 		// Aggregate income
 		Transaction.aggregate([
 			{ $match : { "recipient.reference" : id }},
@@ -150,38 +160,42 @@ module.exports = function (error) { return {
 				return;
 			}
 
-			var income = aggr_i[0] ? aggr_i[0].income : 0;
+			income = aggr_i[0] ? aggr_i[0].income : 0;
+			aggregationComplete();
+		});
 
-			// Aggregate payments
-			Transaction.aggregate([
-				{ $match : { "sender.reference" : id }},
-				{ $group : {
-					_id : null,
-					payments : { $sum : "$amount_sent" }
-				}},
-			], function (err, aggr_p) {
-				if (err) {
-					error("trdb.getBalance (2)", answer, err);
-					return;
-				}
-				var payments = aggr_p[0] ? aggr_p[0].payments : 0;
+		// Aggregate payments
+		Transaction.aggregate([
+			{ $match : { "sender.reference" : id }},
+			{ $group : {
+				_id : null,
+				payments : { $sum : "$amount_sent" }
+			}},
+		], function (err, aggr_p) {
+			if (err) {
+				error("trdb.getBalance (2)", answer, err);
+				return;
+			}
 
-				// Aggregate tax income (this may be a tax income account)
-				Transaction.aggregate([
-					{ $match : { "tax_recipient" : id }},
-					{ $group : {
-						_id : null,
-						taxincome : { $sum : "$amount_tax" }
-					}},
-				], function (err, aggr_ti) {
-					if (err) {
-						error("trdb.getBalance (3)", answer, err);
-						return;
-					}
-					var taxincome = aggr_ti[0] ? aggr_ti[0].taxincome : 0;
-					cb(income + taxincome - payments);
-				});
-			});
+			payments = aggr_p[0] ? aggr_p[0].payments : 0;
+			aggregationComplete();
+		});
+
+		// Aggregate tax income (this may be a tax income account)
+		Transaction.aggregate([
+			{ $match : { "tax_recipient" : id }},
+			{ $group : {
+				_id : null,
+				taxincome : { $sum : "$amount_tax" }
+			}},
+		], function (err, aggr_ti) {
+			if (err) {
+				error("trdb.getBalance (3)", answer, err);
+				return;
+			}
+
+			taxincome = aggr_ti[0] ? aggr_ti[0].taxincome : 0;
+			aggregationComplete();
 		});
 	}
 }; };

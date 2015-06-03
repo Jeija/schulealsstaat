@@ -29,6 +29,8 @@ var n_req = 0;
 if (cluster.isMaster) {
 	module.exports = function (worker) {
 		worker.on("message", function (msg) {
+			if (!perfdata[msg.id] && msg.type !== "req_begin") return;
+
 			if (msg.type == "req_begin") {
 				n_req++;
 				perfdata[msg.id] = { begin : Date.now() };
