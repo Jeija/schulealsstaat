@@ -1,8 +1,6 @@
 var polling_active = false;
 
 $(function () {
-	storage.set("polling", false);
-
 	if (!storage.get("qrid")) {
 		$("#content_frame").attr("src", "authenticate.html");
 	} else {
@@ -16,10 +14,11 @@ $(function () {
 
 	setInterval(function () {
 		if (polling_active) return;
+		polling_active = true;
+
 		if (!storage.get("qrid")) return;
 		if (storage.get("password") === undefined) return;
 
-		polling_active = true;
 		var last_sync = storage.get("last_sync");
 		if (!last_sync) last_sync = 0;
 
@@ -28,8 +27,6 @@ $(function () {
 			password : storage.get("password"),
 			date : last_sync
 		}, function (res) {
-			polling_active = false;
-
 			// No visible reporting here, this is a background process
 			if (typeof res !== "object") {
 				console.log("polling error: " + res);
@@ -48,6 +45,8 @@ $(function () {
 						icon : "res/icon128.png"
 					});
 			});
+
+			polling_active = false;
 		});
 	}, 3000);
 	// (interval of 3000ms so that the app doesn't DoS the server in case it happens to close
