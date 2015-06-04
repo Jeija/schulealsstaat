@@ -1,6 +1,6 @@
 @font-face {
-    font-family: "FiraSans-Light";
-    src: url(../res/FiraSans-Light.ttf) format("truetype");
+	font-family: "FiraSans-Light";
+	src: url(../res/FiraSans-Light.ttf) format("truetype");
 }
 
 html {
