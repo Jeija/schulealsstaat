@@ -27,6 +27,10 @@ $(function () {
 			password : storage.get("password"),
 			date : last_sync
 		}, function (res) {
+			setTimeout(function () {
+				polling_active = false;
+			}, 300);
+
 			// No visible reporting here, this is a background process
 			if (typeof res !== "object") {
 				console.log("polling error: " + res);
@@ -45,8 +49,6 @@ $(function () {
 						icon : "res/icon128.png"
 					});
 			});
-
-			polling_active = false;
 		});
 	}, 3000);
 	// (interval of 3000ms so that the app doesn't DoS the server in case it happens to close
