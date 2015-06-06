@@ -1,0 +1,10 @@
+#!/usr/bin/env xdg-open
+[Desktop Entry]
+Encoding=UTF-8
+Version=1.0
+Type=Application
+Terminal=false
+Exec=bash -c "export PATH=$PATH:`dirname %k`; run_nwjs.sh"
+Name=Business
+Icon=/usr/share/icons/hicolor/scalable/apps/libreoffice-base.svg
+Categories=Utility

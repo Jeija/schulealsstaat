@@ -12,20 +12,19 @@ var query = {
 };
 
 function preload(qrid, i, maxlen) {
-	api.action_cert("spawn_money", {
-		amount : PRELOAD_AMOUNT,
-		recipient : qrid,
-		comment : "Startguthaben"
+	api.action_cert("password_change_master", {
+		password : "asdf",
+		qrid : qrid
 	}, "master_cert", function (res) {
 		if (res == "ok") {
-			console.log("Preload of", qrid, "completed, number", i);
+			console.log("Password change of", qrid, "completed, number", i);
 			completed++;
 		} else {
-			console.log("WARNING: Error preloading", qrid, "number", i, res);
+			console.log("WARNING: Error password changing", qrid, "number", i, res);
 		}
 
 		if (completed == maxlen) {
-			console.log("All accounts successfully preloaded!");
+			console.log("All accounts successfully password-changed!");
 			process.exit(0);
 		}
 	});
