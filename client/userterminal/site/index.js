@@ -1,5 +1,4 @@
 var PWD_REQUIRED = "";
-var PLAYER_RESTART_MINUTES = 30;
 var childp = null;
 var mplayer = null;
 
@@ -55,17 +54,16 @@ function load_subdir (dir) {
 // Start audio playback or resume if internet is lost
 function startRadio() {
 	if (!childp) return;
-	mplayer = childp.spawn("mplayer", [ "-cache", "200", "-cache-min", "50", "-slave", "-softvol",
-		"-quiet", "-volume", "50", RADIO_STREAMURL ]);
+	mplayer = childp.spawn("mplayer", [ "-cache", "100", "-cache-min", "50", "-slave", "-softvol",
+		"-quiet", "-volume", $("#volume").val(), RADIO_STREAMURL ]);
+
 	mplayer.on('close', function () {
 		setTimeout(startRadio, 200);
 	});
-	setInterval(function () {
-		mplayer.kill();
-	}, 1000 * 60 * PLAYER_RESTART_MINUTES);
-	//mplayer.stdout.on("data", function (data) {
-	//	console.log("[mp] " + data);
-	//});
+
+	mplayer.stdout.on("data", function (data) {
+		console.log("[mp] " + data);
+	});
 }
 
 // Radio Metadata
@@ -90,7 +88,6 @@ $(function () {
 
 	$("#volume").on("input change", function () {
 		if (!mplayer) return;
-		console.log("volume " + this.value + " 1\n");
 		mplayer.stdin.write("volume " + this.value + " 1\n");
 	});
 
@@ -102,6 +99,11 @@ $(function () {
 		setTimeout(function () {
 			clicknum = 0;
 		}, 1000);
+	});
+
+	// Restart stream by double-clicking volume icon
+	$("#volume_icon").dblclick(function () {
+		if (mplayer) mplayer.kill();
 	});
 
 	$("#settings_exit").click(function () {
