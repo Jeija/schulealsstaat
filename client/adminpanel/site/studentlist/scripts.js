@@ -30,14 +30,6 @@ function date_readable (birth) {
 	return bdate.getDate() + "." + (bdate.getMonth() + 1) + "." + bdate.getFullYear();
 }
 
-function downloadData(filename, data) {
-	var dl = $("<a>").attr("href", "data:text/plain;charset=utf-8," + encodeURIComponent(data));
-	dl.attr("download", filename);
-	$(document.body).append(dl);
-	dl[0].click();
-	dl.remove();
-}
-
 function render_list() {
 	if (typeof studentlist !== "object") {
 		alert(JSON.stringify(studentlist));

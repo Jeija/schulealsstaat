@@ -90,14 +90,6 @@ function amount_sent_readable(tr) {
 	return "error";
 }
 
-function downloadData(filename, data) {
-	var dl = $("<a>").attr("href", "data:text/plain;charset=utf-8," + encodeURIComponent(data));
-	dl.attr("download", filename);
-	$(document.body).append(dl);
-	dl[0].click();
-	dl.remove();
-}
-
 function render_transactions () {
 	$("#transactions").html("");
 	$("#transactions").append($("<tr>")

@@ -73,11 +73,23 @@ function amount_sent_readable(tr) {
 }
 
 function downloadData(filename, data) {
-	var dl = $("<a>").attr("href", "data:text/plain;charset=utf-8," + encodeURIComponent(data));
-	dl.attr("download", filename);
-	$(document.body).append(dl);
-	dl[0].click();
-	dl.remove();
+	// nw.js
+	if (typeof require !== "undefined") {
+		var file = $("<input>").attr("type", "file").attr("nwsaveas", filename);
+		file.change(function (e) {
+			var fs = require("fs");
+			fs.writeFileSync($(this).val(), data);
+		});
+		file.click();
+
+	// Normal Browser
+	} else {
+		var dl = $("<a>").attr("href", "data:text/plain;charset=utf-8," + encodeURIComponent	(data));
+		dl.attr("download", filename);
+		$(document.body).append(dl);
+		dl[0].click();
+		dl.remove();
+	}
 }
 
 function render_transactions () {
