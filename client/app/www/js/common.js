@@ -59,6 +59,7 @@ function QridScan(cb) {
 		// Use native barcodeScanner (e.g. android)
 		cordova.plugins.barcodeScanner.scan(
 			function (result) {
+				if (result.cancelled) return;
 				if (result.format != "QR_CODE") {
 					errorMessage("Ungültiger Code!");
 					return;
