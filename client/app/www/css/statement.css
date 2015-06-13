@@ -28,6 +28,7 @@
 }
 
 #statement .entry {
+	cursor:pointer;
 	border:1px solid #222;
 	padding:3vw;
 	border-radius:5px;
