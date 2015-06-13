@@ -84,8 +84,8 @@ function handleDbPollAnswer(trgroup, idx) {
 setInterval(function () {
 	if (polls.length == 0) return;
 
-	// One database query for every polling client on this worker
-	var qrid_to_index = {};
+	// One database query for all polling clients on this worker
+	var qrid_to_indices = {};
 	var query = { $or : [] };
 
 	polls.forEach(function (p, idx) {
@@ -93,7 +93,12 @@ setInterval(function () {
 			time : { $gt : new Date(p.date) },
 			"recipient.qrid" : p.qrid
 		});
-		qrid_to_index[p.qrid] = idx;
+
+		// One QR-ID may get polled by multiple clients; if that is the case,
+		// the server just answers the same information to all of them and uses
+		// the oldest of the time values sent by a polling client
+		if (!qrid_to_indices[p.qrid]) qrid_to_indices[p.qrid] = [];
+		qrid_to_indices[p.qrid].push(idx);
 	});
 
 	// DB connection currently closed
@@ -111,7 +116,9 @@ setInterval(function () {
 		});
 
 		for (qrid in groups) {
-			handleDbPollAnswer(groups[qrid], qrid_to_index[qrid]);
+			qrid_to_indices[qrid].forEach(function (index) {
+				handleDbPollAnswer(groups[qrid], index);
+			});
 		};
 	});
 }, settings.poll_db_update_interval);
