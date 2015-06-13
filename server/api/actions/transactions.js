@@ -111,6 +111,7 @@ register("get_last_transactions", function (payload, answer, info) {
 		}, payload.amount, answer, function (tr) {
 			// Little hack: If account described by qrid has received tax income,
 			// transform these tax income transactions into normal ones and display them
+			// indicated to client by setting transformed_taxinc to true
 			db.transactions.getByProperties({
 				"tax_recipient" : st._id
 			}, payload.amount, answer, function (tr_tax) {
@@ -124,6 +125,7 @@ register("get_last_transactions", function (payload, answer, info) {
 							amount_received : tr_tax[i].amount_tax,
 							amount_tax : 0,
 							percent_tax : 0,
+							transformed_taxinc : true,
 							comment : "!!! Transformed tax income transaction !!!"
 						});
 					}

@@ -38,6 +38,11 @@ $(function () {
 			$("#complete").fadeIn();
 			var trans = res[i];
 			var is_sender = (trans.sender.qrid === storage.get("qrid"));
+
+			// Corner case: Tax income account makes non-taxfree transaction and
+			// receives tax income from itself
+			if (trans.transformed_taxinc && is_sender) is_sender = false;
+
 			var amount = is_sender ? -trans.amount_sent : trans.amount_received;
 			var typeclass = is_sender ? "outgoing" : "incoming";
 			statement.prepend($('<div class="entry ' + typeclass + '" data-listid="' + i + '">')

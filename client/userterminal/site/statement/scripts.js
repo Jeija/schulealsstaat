@@ -25,6 +25,10 @@ function render_transactions (tr, balance) {
 		if (t.comment)
 			comment = t.comment.replace(/\n/g, "<br/>");
 
+		// Corner case: Tax income account makes non-taxfree transaction and
+		// receives tax income from itself
+		if (t.transformed_taxinc && is_sender) is_sender = false;
+
 		/* Also handle transactions to yourself - even though that doesn't event
 			make any sense */
 		if (is_sender) bal_now -= t.amount_sent;
