@@ -1,9 +1,4 @@
 $(function () {
-	function onDeviceReady() {
-		navigator.splashscreen.hide();
-	}
-	document.addEventListener("deviceready", onDeviceReady, false);
-
 	$("#scan_card").click(function () {
 		QridScan(function (qrid) {
 			$("#qrid").val(qrid);

@@ -1,8 +1,6 @@
 $(function () {
 	$("#confirm").click(function () {
-		storage.set("qrid", null);
-		storage.set("password", null);
-		storage.set("balance", null);
+		localStorage.clear();
 		window.location = "authenticate.html";
 	});
 });

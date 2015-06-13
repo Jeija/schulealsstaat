@@ -2,16 +2,16 @@
 <widget id="org.schulealsstaat.hoegycoin" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>HöGyCoin</name>
     <description>
-		Die offizielle HöGyCoin-App
-	</description>
+        Die offizielle HöGyCoin-App
+    </description>
     <author email="-" href="hoegy.de">
-		HöGyCoin Zentralbank
-	</author>
+        HöGyCoin Zentralbank
+    </author>
     <preference name="orientation" value="portrait" />
     <content src="index.html" />
     <access origin="*" />
     <icon src="icon128.png" />
     <plugin name="cordova-plugin-crosswalk-webview" spec="^1.2.0" />
     <plugin name="cordova-plugin-whitelist" spec="^1.0.0" />
-    <plugin name="com.phonegap.plugins.barcodescanner" spec="https://github.com/Jeija/BarcodeScanner" />
+    <plugin name="phonegap-plugin-barcodescanner" spec="^3.1.2" />
 </widget>

@@ -3,8 +3,13 @@ function HGC_readable(val) {
 }
 
 $(function () {
+	var balance_updated = false;
+
 	// Wait for PubKey to be downloaded + processed
 	setTimeout(function () {
+	update_balance(function () {
+		balance_updated = true;
+	});
 	action_app("get_last_transactions", {
 		qrid : storage.get("qrid"),
 		password : storage.get("password"),
@@ -45,8 +50,13 @@ $(function () {
 			);
 		}
 
-		var balance_string = HGC_readable(storage.get("balance"));
-		$("#balance_number").text(balance_string);
+		// Display balance value once loaded
+		var balint = setInterval(function () {
+			if (!balance_updated) return;
+			var balance_string = HGC_readable(storage.get("balance"));
+			$("#balance_number").text(balance_string);
+			clearInterval(balint);
+		}, 100);
 
 		/** Comment previews **/
 		$(".entry").click(function () {

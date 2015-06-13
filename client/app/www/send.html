@@ -3,6 +3,7 @@
 <html>
 <head>
 	<meta charset="UTF-8">
+	<meta http-equiv="Content-Security-Policy" content="default-src *; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval'">
 	<link rel="stylesheet" href="css/common.css" type="text/css">
 	<link rel="stylesheet" href="css/transactions_common.css" type="text/css">
 	<script src="cordova.js"></script>
@@ -34,36 +35,39 @@
 				</div>
 			</div>
 
-			<div class="subsection hidden">
-				<div class="subsection_heading">Kontonummer eingeben</div>
-				<div class="hiddenpart" hidden>
-					<input type="text" id="qrid_rec" placeholder="Kontonummer">
+			<form class="losefocus">
+				<div class="subsection hidden">
+					<div class="subsection_heading">Kontonummer eingeben</div>
+					<div class="hiddenpart" hidden>
+						<input type="text" id="qrid_rec" placeholder="Kontonummer">
+					</div>
+				</div>
+
+				<div class="subsection hidden">
+					<div class="subsection_heading">Name eingeben</div>
+					<div class="hiddenpart" hidden>
+						<input type="text" id="firstname" placeholder="Vorname">
+						<input type="text" id="lastname" placeholder="Nachname">
+						<input type="text" id="type" placeholder="Klasse">
+					</div>
+				</div>
+			</form>
+		</div>
+
+		<form class="losefocus">
+			<div class="section amount_section">
+				<div class="section_heading">Betrag</div>
+				<div class="amount_container">
+					<input type="number" pattern="\d+(\.\d*)?" min="0" step="0.01" id="amount">
+					<img src="res/icon.png" class="hgc">
 				</div>
 			</div>
 
-			<div class="subsection hidden">
-				<div class="subsection_heading">Name eingeben</div>
-				<div class="hiddenpart" hidden>
-					<input type="text" id="firstname" placeholder="Vorname">
-					<input type="text" id="lastname" placeholder="Nachname">
-					<input type="text" id="type" placeholder="Klasse">
-				</div>
+			<div class="section">
+				<div class="section_heading">Kommentar</div>
+				<textarea id="comment" placeholder="max. 300 Zeichen" maxlength="300"></textarea>
 			</div>
-
-		</div>
-
-		<div class="section amount_section">
-			<div class="section_heading">Betrag</div>
-			<div class="amount_container">
-				<input type="number" min="0" step="0.01" id="amount">
-				<img src="res/icon.png" class="hgc">
-			</div>
-		</div>
-
-		<div class="section">
-			<div class="section_heading">Kommentar</div>
-			<textarea id="comment" placeholder="max. 300 Zeichen" maxlength="300"></textarea>
-		</div>
+		</form>
 
 		<div class="bottombuttons">
 			<a href="transaction.html" class="button left">Zurück</a>
@@ -93,6 +97,7 @@
 			<a class="button full mainmenu" href="mainmenu.html" id="success_mainmenu">Hauptmenü</a>
 			<a class="button full mainmenu" href="transaction.html" id="success_transaction">Überweisung</a>
 		</div>
-	</div>
+	</form> <!-- losefocus -->
+	</div> <!-- content -->
 </body>
 </html>

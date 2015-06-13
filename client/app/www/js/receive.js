@@ -85,7 +85,6 @@ $(function() {
 
 	function onSubmitClick () {
 		var password = $("#password").val();
-		console.log(password);
 		var data = {
 			amount_sent : amount,
 			sender : current_sender.qrid,

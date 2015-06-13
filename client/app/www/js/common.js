@@ -87,7 +87,7 @@ function QridScan(cb) {
 	}
 }
 
-function update_balance() {
+function update_balance(cb) {
 	var req = {
 		password : storage.get("password"),
 		qrid : storage.get("qrid")
@@ -97,6 +97,7 @@ function update_balance() {
 		var balance = parseFloat(res);
 		if (isNaN(balance) || !balance) return;
 		storage.set("balance", res);
+		if (cb) cb();
 	});
 }
 
@@ -109,6 +110,58 @@ function errorMessage(message) {
 	error_ok.click(function () {
 		error_dialog.remove();
 	});	
+}
+
+function longpolling() {
+	// Long-poll for new transactions
+	Notification.requestPermission();
+	var polling_active = false;
+
+	setInterval(function () {
+		if (polling_active) return;
+		polling_active = true;
+
+		if (!storage.get("qrid")) return;
+		if (storage.get("password") === undefined) return;
+
+		var last_sync = storage.get("last_sync");
+		if (!last_sync) last_sync = 0;
+
+		action_poll("transactions_poll", {
+			qrid : storage.get("qrid"),
+			password : storage.get("password"),
+			date : last_sync
+		}, function (res) {
+			setTimeout(function () {
+				polling_active = false;
+			}, 300);
+
+			// No visible reporting here, this is a background process
+			if (typeof res !== "object") {
+				console.log("polling error: " + res);
+				return;
+			}
+			if (!res || res.length <= 0 || !res[0]) return;
+
+			var new_sync = Date.parse(res[0].time);
+			storage.set("last_sync", new_sync);
+			update_balance();
+
+			// Push notification
+			res.forEach(function (tr) {
+				new Notification("Du hast " + tr.amount_received.toFixed(2)
+					+ " HGC von '" + student2readable(tr.sender)
+					+ "' erhalten.", {
+						icon : "res/icon128.png"
+					});
+			});
+		});
+	}, 3000);
+	// (interval of 3000ms so that the app doesn't DoS the server in case it happens to close
+	// the connection instantly)
+	// Also, only start polling after having been on the page for 3000 ms, otherwise the app
+	// would constantly create new polling requests when navigating
+
 }
 
 $(function () {
@@ -126,4 +179,17 @@ $(function () {
 			if (showbuttons) $(".bottombuttons").show();
 		}, 500);
 	});
+
+	// On forms, when press the Go / Enter button on the keyboard, lose focus on the
+	// text field to show buttons at bottom
+	$(".losefocus").keypress(function (e) {
+		if (e.which == 13) {
+			$(".losefocus input").blur();
+			$(".losefocus textarea").blur();
+			return false;
+		}
+	});
+
+	// Restart longpolling session since page has been changed
+	longpolling();
 });
