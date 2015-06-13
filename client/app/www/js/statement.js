@@ -4,7 +4,7 @@ function HGC_readable(val) {
 
 function date_readable(datestring) {
 	var d = new Date(datestring);
-	return d.getDate() + "." + (d.getMonth() + 1);
+	return d.getDate() + "." + (d.getMonth() + 1) + ".";
 }
 
 function time_readable(datestring) {

@@ -6,7 +6,7 @@ handleIdentifyAnswer = function(sectionref, st) {
 
 function datetime_readable (datestring) {
 	var d = new Date(datestring);
-	return d.getDate() + "." + (d.getMonth() + 1) + " " +
+	return d.getDate() + "." + (d.getMonth() + 1) + ". " +
 		("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2);
 }
 
