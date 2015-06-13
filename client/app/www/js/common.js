@@ -152,7 +152,7 @@ function longpolling() {
 				new Notification("Du hast " + tr.amount_received.toFixed(2)
 					+ " HGC von '" + student2readable(tr.sender)
 					+ "' erhalten.", {
-						icon : "res/icon128.png"
+						icon : window.location.origin + "/www/res/icon128.png"
 					});
 			});
 		});
