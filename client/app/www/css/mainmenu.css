@@ -6,6 +6,14 @@
 	top:0;
 }
 
+.mainheadline {
+	padding:2.5vw 4vw;
+}
+
+.mainheadline .mmlink {
+	display:none;
+}
+
 #saeu {
 	display:block;
 	width:20vw;
