@@ -13,13 +13,19 @@
 	<script src="js/api.js"></script>
 	<script src="js/storage.js"></script>
 	<script src="js/common.js"></script>
+	<script type="text/javascript">
+	$(function () {
+		if (cordova.platformId == 'ios')
+			$('#radiobutton').hide();
+	});
+	</script>
 	<title>Zusatzfunktionen</title>
 </head>
 
 <body class="bottommargin">
 	<div class="mainheadline"><a class="mmlink" href="mainmenu.html"></a>Zusatzfunktionen</div>
 	<a href="taxcalc.html" class="button full mainmenu margin">Steuerrechner</a>
-	<a href="radio.html" class="button full mainmenu">HöGy on Air</a>
+	<a href="radio.html" class="button full mainmenu" id="radiobutton">HöGy on Air</a>
 	<a href="about.html" class="button full mainmenu">Über</a>
 
 	<div class="bottombuttons">

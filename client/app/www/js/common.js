@@ -191,5 +191,6 @@ $(function () {
 	});
 
 	// Restart longpolling session since page has been changed
-	longpolling();
+	if ("Notification" in window)
+		longpolling();
 });
