@@ -2,6 +2,16 @@ function HGC_readable(val) {
 	return (Math.round(val * 100) / 100).toFixed(2);
 }
 
+function date_readable(datestring) {
+	var d = new Date(datestring);
+	return d.getDate() + "." + (d.getMonth() + 1);
+}
+
+function time_readable(datestring) {
+	var d = new Date(datestring);
+	return ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2);
+}
+
 $(function () {
 	var balance_updated = false;
 
@@ -66,15 +76,17 @@ $(function () {
 		/** Comment previews **/
 		$(".entry").click(function () {
 			var tr = res[$(this).data("listid")];
-			$("#comment_preview_content").text(tr.comment);
+			$("#entry_details_comment").text(tr.comment);
 			if (tr.comment.length <= 0) {
-				$("#comment_preview_content").html("<i>(Kein Kommentar)</i>");
+				$("#entry_details_comment").html("<i>(Kein Kommentar)</i>");
 			}
-			$("#comment_preview").fadeIn(100);
+			$("#entry_details_time").text("Transaktion vom " + date_readable(tr.time) +
+				" um " + time_readable(tr.time) + " Uhr");
+			$("#entry_details").show();
 		});
 
-		$("#comment_preview").click(function () {
-			$(this).fadeOut(100);
+		$("#entry_details").click(function () {
+			$(this).hide();
 		});
 	}, function () {
 		$("#loading").hide();

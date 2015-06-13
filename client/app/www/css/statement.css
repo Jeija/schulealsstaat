@@ -99,8 +99,8 @@ h3 {
 	font-size:7vw;
 }
 
-/** Comment Preview **/
-#comment_preview {
+/** Statement Entry Details / Comment Preview **/
+#entry_details {
 	width:80vw;
 	height:60vw;
 	position:fixed;
@@ -113,15 +113,27 @@ h3 {
 	border:2px solid #000;
 	border-radius:3vw;
 	cursor:pointer;
-	padding:5vw;
+	overflow:hidden;
 }
 
-#comment_preview_heading {
-	text-align:center;
+#entry_details:active {
+	background:rgba(80, 80, 80, 0.9);
+}
+
+.entry_details_heading {
 	font-size:8vw;
 }
 
-#comment_preview_content {
+.entry_details_content {
 	text-align:center;
 	font-size:4vw;
+	margin:1vw 5vw;
+}
+
+#entry_details_time {
+	background:rgba(0, 0, 0, 0.5);
+	width:100%;
+	line-height:7vw;
+	font-size:4vw;
+	text-align:center;
 }
