@@ -14,4 +14,5 @@
     <plugin name="cordova-plugin-crosswalk-webview" spec="^1.2.0" />
     <plugin name="cordova-plugin-whitelist" spec="^1.0.0" />
     <plugin name="phonegap-plugin-barcodescanner" spec="^3.1.2" />
+    <plugin name="cordova-plugin-inappbrowser" spec="^1.0.0" />
 </widget>

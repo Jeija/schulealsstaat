@@ -24,7 +24,7 @@ function startRadio() {
 }
 
 setInterval(function () {
-	isPlaying = player ? !player.paused && !player.ended && player.currentTime > 0 : false;
+	isPlaying = player ? !player.paused && !player.ended : false;
 	if (isPlaying) {
 		$("#playpause").prop("src", "res/pause.svg");
 	} else {

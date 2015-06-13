@@ -6,10 +6,14 @@
 	<meta http-equiv="Content-Security-Policy" content="default-src *; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval'">
 	<link rel="stylesheet" href="css/common.css" type="text/css">
 	<link rel="stylesheet" href="css/about.css" type="text/css">
+	<script src="cordova.js"></script>
+	<script src="bower_components/jsencrypt/bin/jsencrypt.min.js"></script>
 	<script src="bower_components/jquery/dist/jquery.js"></script>
+	<script src="bower_components/gibberish-aes/dist/gibberish-aes-1.0.0.min.js"></script>
 	<script src="js/api.js"></script>
 	<script src="js/storage.js"></script>
 	<script src="js/common.js"></script>
+	<script src="js/about.js"></script>
 	<title>Über</title>
 </head>
 <body class="bottommargin">
@@ -22,13 +26,13 @@
 	Bei Fragen, Fehlern oder sonstigen Problemen während des Projekts stehen dir unsere
 	Supportmitarbeiter auf der Empore in der Mensa bereit. Informationen zur Zentralbank
 	findest du auch auf unserer Website unter
-	<a target="_blank" href="http://centralbank.eu">centralbank.eu</a>
+	<a class="external_url" data-location="http://centralbank.eu">centralbank.eu</a>
 	</div>
 
 	<div class="section">
 	<div class="section_heading">Software</div>
 	Alle verwendete Software ist quelloffen und kann unter
-	<a target="_blank" href="https://github.com/Jeija/schulealsstaat">github.com/Jeija/schulealsstaat</a>
+	<a class="external_url" data-location="https://github.com/Jeija/schulealsstaat">github.com/Jeija/schulealsstaat</a>
 	heruntergeladen werden.
 	</div>
 
@@ -56,11 +60,11 @@
 	<div class="section_heading">Kontakt</div>
 	Während des Projekts findest du uns und die Servertechnik auf der Empore in der Mensa,
 	vorher und hinterher per E-Mail unter
-	<a target="_blank" href="mailto:florian.euchner+saeu@gmail.com">florian.euchner@gmail.com</a>
+	<a class="external_url" data-location="mailto:centralbank@mesecons.net">centralbank@mesecons.net</a>
 	</div>
 
 	<div class="bottombuttons">
-		<a target="_blank" href="features.html" class="button full">Abbrechen</a>
+		<a href="features.html" class="button full">Abbrechen</a>
 	</div>
 </body>
 </html>

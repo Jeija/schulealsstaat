@@ -5,10 +5,6 @@ setInterval(function () {
 }, 200);
 
 $(function () {
-	$(document).on("deviceready", function () {
-		navigator.splashscreen.hide();
-	});
-
 	if (!storage.get("qrid")) {
 		window.location = "authenticate.html";
 	}

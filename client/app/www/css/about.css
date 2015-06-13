@@ -31,3 +31,7 @@
 	display:block;
 	text-align:center;
 }
+
+.external_url {
+	cursor:pointer;
+}
