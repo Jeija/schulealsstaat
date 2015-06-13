@@ -11,6 +11,8 @@
     <content src="index.html" />
     <access origin="*" />
     <icon src="icon128.png" />
+    <preference name="BackupWebStorage" value="local"/>
+
     <plugin name="cordova-plugin-crosswalk-webview" spec="^1.2.0" />
     <plugin name="cordova-plugin-whitelist" spec="^1.0.0" />
     <plugin name="phonegap-plugin-barcodescanner" spec="^3.1.2" />
