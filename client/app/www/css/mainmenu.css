@@ -22,7 +22,6 @@
 
 #infocontainer {
 	text-align:center;
-	cursor:pointer;
 }
 
 #balance {
@@ -39,6 +38,7 @@
 	text-align:left;
 	border:2px solid #aaa;
 	border-radius:2vw;
+	cursor:pointer;
 }
 
 #balance .loadbalance {

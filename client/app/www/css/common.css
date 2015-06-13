@@ -3,6 +3,10 @@
 	src: url(../res/FiraSans-Light.ttf) format("truetype");
 }
 
+* {
+	-webkit-tap-highlight-color:transparent;
+}
+
 html {
 	font-family:"FiraSans-Light", Arial;
 	background-color:#3a3f3a;

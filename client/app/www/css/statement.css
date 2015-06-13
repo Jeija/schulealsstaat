@@ -48,6 +48,15 @@
 	background:rgba(0, 200, 50, 0.3);
 }
 
+#statement .entry.outgoing:active {
+	background:rgba(200, 50, 0, 0.5);
+}
+
+#statement .entry.incoming:active {
+	background:rgba(0, 200, 50, 0.5);
+}
+
+
 #statement .entry .qrid {
 	font-family:Monospace;
 	position:absolute;
