@@ -17,9 +17,6 @@ $(function () {
 
 	// Wait for PubKey to be downloaded + processed
 	setTimeout(function () {
-	update_balance(function () {
-		balance_updated = true;
-	});
 	action_app("get_last_transactions", {
 		qrid : storage.get("qrid"),
 		password : storage.get("password"),
@@ -32,6 +29,10 @@ $(function () {
 			$("#complete").show();
 			return;
 		}
+
+		update_balance(function () {
+			balance_updated = true;
+		});
 
 		var statement = $("#statement");
 		statement.html("");

@@ -112,10 +112,10 @@ function errorMessage(message) {
 	});	
 }
 
+var polling_active = false;
 function longpolling() {
 	// Long-poll for new transactions
 	Notification.requestPermission();
-	var polling_active = false;
 
 	setInterval(function () {
 		if (polling_active) return;
