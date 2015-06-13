@@ -13,7 +13,7 @@ $(function () {
 	action_app("get_last_transactions", {
 		qrid : storage.get("qrid"),
 		password : storage.get("password"),
-		amount : 5
+		amount : 10
 	}, function (res) {
 		if (typeof res != "object") {
 			errorMessage("Error: " + res);
