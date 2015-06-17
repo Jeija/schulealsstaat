@@ -24,6 +24,14 @@
         <splash src="res/screen/ios/Default-568h@2x.png" width="640" height="1136"/>
         <splash src="res/screen/ios/Default-667h@2x.png" width="750" height="1334"/>
         <splash src="res/screen/ios/Default-Portrait-736h@3x.png" width="1242" height="2208"/>
+        <icon src="res/icon/appicon.png" width="57" height="57" />
+        <icon src="res/icon/appicon@2x.png" width="114" height="114" />
+        <icon src="res/icon/appicon-72.png" width="72" height="72" />
+        <icon src="res/icon/appicon-72@2x.png" width="144" height="144" />
+        <icon src="res/icon/appicon-60.png" width="60" height="60" />
+        <icon src="res/icon/appicon-60@2x.png" width="120" height="120" />
+        <icon src="res/icon/appicon-76.png" width="76" height="76" />
+        <icon src="res/icon/appicon-76@2x.png" width="152" height="152" />
     </platform>
 
     <plugin name="cordova-plugin-crosswalk-webview" spec="^1.2.0" />
