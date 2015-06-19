@@ -28,8 +28,14 @@ rm -f /dev/video$LOOPBACK_VIDEO
 sleep 1
 modprobe v4l2loopback video_nr="$LOOPBACK_VIDEO"
 
+### Set scale of webcam picture fed to zbarcam
+PRESCALE="640:-1"
+if [ -e /tmp/prescale ]; then
+	PRESCALE="320:-1"
+fi
+
 echo "Using webcam device $FEED"
 while true; do
-	ffmpeg -f v4l2 -i "$FEED" -f v4l2 "/dev/video$LOOPBACK_VIDEO"
+	ffmpeg -f v4l2 -i "$FEED" -vf scale=$PRESCALE -f v4l2 "/dev/video$LOOPBACK_VIDEO"
 	sleep 3
 done

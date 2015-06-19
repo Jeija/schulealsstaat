@@ -34,3 +34,15 @@ while [ -z "$FEED" ]; do
 done
 
 echo "$FEED" > /tmp/webcam
+
+# Determine whether a dedicated wooden QR Code scanner box is used
+# If so, special camera settings are applied by the userterminal 
+if [ "$FEED" != "ignore" ]; then
+	dialog --title "Webcam prescale" --yesno "QR Code Scanner Box?" 7 40
+ 
+	if [ $? == 0 ]; then
+		touch /tmp/prescale
+	else
+		rm -f /tmp/prescale
+	fi
+fi

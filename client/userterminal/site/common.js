@@ -1,9 +1,10 @@
 var ZBARCAM = "zbarcam";
 var WEBCAM = "/dev/video20";
-var ZBC_FLAGS = "--prescale=640x480";
+var WEBCAM_PRESCALE = "/tmp/prescale";
 
 var childp = null;
 var fs = null;
+var qrreader_hardware = false;
 
 // Only in node.js (nwjs) environment
 if (typeof require !== "undefined") {
@@ -103,7 +104,7 @@ function load_common_events() {
 			if (!childp) return;
 			var sectionref = this;
 			childp.exec("killall " + ZBARCAM, function () {
-				var zbar = childp.exec(ZBARCAM + " " + WEBCAM + " " + ZBC_FLAGS);
+				var zbar = childp.exec(ZBARCAM + " " + WEBCAM);
 
 				zbar.stdout.on("data", function (read) {
 					zbar.kill();
