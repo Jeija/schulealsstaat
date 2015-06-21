@@ -3,6 +3,9 @@ var WEBCAM_HEIGHT = 600;
 
 $(function() {
 
+// Select visitor by default (most used)
+$("#class").val("visitor");
+
 var webcam = document.querySelector("#webcam");
 var webcam_shot = document.querySelector("#webcam_shot");
 
@@ -101,38 +104,33 @@ $(".qrid_scan").click(function () {
 	});
 });
 
-function preload_money() {
-	if ($("#class").val() != "visitor") return;
-
-	// Load settings: Account to transfer money from
-	var settings;
-	try {
-		settings = JSON.parse(localStorage.getItem("saeu-settings"));
-	} catch (e) {
-		alert("Konnte Geld nicht aufladen: Einstellungen fehlen!");
-		return;
-	}
-
-	var hgc_value = $("#hgc_preload_value").val();
-	if (hgc_value == "enter_value")
-		hgc_value = $("#hgc_preload_enter_value").val().replace(",", ".");
-	var hgc_num = parseFloat(hgc_value);
+function preload_money(hgc_num, qrid, settings) {
+	console.log("PRELOAD_MONEY");
 
 	var transaction = {
 		sender : settings.qrid,
 		sender_password : settings.password,
-		recipient : $("#qrid").val(),
+		recipient : qrid,
 		amount_sent : hgc_num,
 		comment : "Besucher - Aufladung"
 	};
-	action_cert("transaction_taxfree", transaction, "registration_cert",
-			function (res) {
-		if (res == "ok") alert(hgc_num + " HGC aufgeladen!");
-		else alert("Aufladung schlug fehl, error: " + res);
+
+	console.log("action_cert");
+	action_cert("transaction_taxfree", transaction, "registration_cert", function (res) {
+		var msg = "";
+		if (res == "ok") msg = hgc_num + " HGC aufgeladen!";
+		else msg = "Aufladung schlug fehl, error: " + res;
+		alert(msg);
+		window.location.reload();
 	});
 }
 
 $("#settings_show").click(function () {
+	try {
+		var settings = JSON.parse(localStorage.getItem("saeu-settings"));
+		$("#settings_qrid").val(settings.qrid);
+		$("#settings_password").val(settings.password);
+	} catch(e) {}
 	$("#settings_popup").fadeIn();
 });
 
@@ -158,6 +156,29 @@ $("#send").click(function() {
 			alert("Wert für Aufladung ist keine gültige Zahl, abgebrochen!");
 			return;
 		}
+	}
+
+	// Load amount of value to preload
+	var hgc_value = $("#hgc_preload_value").val();
+	if (hgc_value == "enter_value")
+		hgc_value = $("#hgc_preload_enter_value").val().replace(",", ".");
+	var hgc_num = parseFloat(hgc_value);
+
+	// Load settings: Account to transfer money from
+	var settings = null;
+	try {
+		settings = JSON.parse(localStorage.getItem("saeu-settings"));
+	} catch (e) {
+		if (hgc_num > 0) {
+			alert("Keine Geldaufladung möglich, keine Registrierung erfolgt: Einstellungen fehlen!");
+			return;
+		}
+	}
+
+	// Preloading requires a preset QRID
+	if (hgc_num > 0 && !$("#qrid").val()) {
+		alert("Aufladung nur möglich, wenn eine Besucherkarte gescannt wird!");
+		return;
 	}
 
 	// Retrieve & Check password before sending anything
@@ -186,13 +207,7 @@ $("#send").click(function() {
 		qrid : $("#qrid").val()
 	};
 
-	// Send Picture, then API registration, then (optionally) preload money
-	webcamserv_upload(picname, pictureData, function (photores) {
-		if  (photores !== "ok") {
-			alert("Passfoto-Upload-Error: " + photores);
-			return;
-		}
-
+	function register_api() {
 		action_cert("register_student", rgdat, "registration_cert", function (apires) {
 			if (apires !== "ok") {
 				alert("Registrierung fehlgeschlagen, API-Fehler: " +
@@ -201,13 +216,31 @@ $("#send").click(function() {
 			}
 
 			alert("Registrierung erfolgreich!");
-			preload_money();
+			console.log("HGC_NUM", hgc_num);
 			$("#main_form")[0].reset();
 			webcam_shot.getContext("2d").clearRect(0, 0,
 				webcam_shot.width, webcam_shot.height);
 			window.scrollTo(0, 0);
+			if (hgc_num > 0 && rgdat.sclass === "visitor") {
+				preload_money(hgc_num, rgdat.qrid, settings);
+			} else {
+				window.location.reload();
+			}
 		});
-	});
+	}
+
+	// Send Picture, then API registration, then (optionally) preload money
+	if ($("#class").val() !== "visitor" && $("#class").val() !== "legalentity") {
+		webcamserv_upload(picname, pictureData, function (photores) {
+			if  (photores !== "ok") {
+				alert("Passfoto-Upload-Error: " + photores);
+				return;
+			}
+			register_api();
+		});
+	} else {
+		register_api();
+	}
 });
 
 });
