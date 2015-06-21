@@ -7,7 +7,7 @@ var CARD_H = 50.8;
 var CARD_MARGIN_X = 0;
 var CARD_MARGIN_Y = 0;
 var PAGE_OFFSET_X = 0;
-var PAGE_OFFSET_Y = 21;
+var PAGE_OFFSET_Y = 23;
 
 // QR Code
 var QRCODE_OFFSET_X = 4;
@@ -210,11 +210,13 @@ function render_student_card(pdf, student, page, xpos, ypos) {
 	} else if (student.type == "visitor") {
 		pdf.addImage(passpic_visitors, "JPEG", xpos + PASSPIC_OFFSET_X,
 			ypos + PASSPIC_OFFSET_Y, PASSPIC_W, PASSPIC_H);
-	} else if (student.type == "legalentity") {
-		pdf.addImage(passpic_legalentity, "JPEG", xpos + PASSPIC_OFFSET_X,
-			ypos + PASSPIC_OFFSET_Y, PASSPIC_W, PASSPIC_H);
 	} else if (student.type == "replacement") {
 		pdf.addImage(passpic_replacement, "JPEG", xpos + PASSPIC_OFFSET_X,
+			ypos + PASSPIC_OFFSET_Y, PASSPIC_W, PASSPIC_H);
+	}
+
+	if (student.type == "legalentity") {
+		pdf.addImage(passpic_legalentity, "JPEG", xpos + PASSPIC_OFFSET_X,
 			ypos + PASSPIC_OFFSET_Y, PASSPIC_W, PASSPIC_H);
 	}
 
