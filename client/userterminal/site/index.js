@@ -83,7 +83,9 @@ $(function () {
 	load_subdir("transaction_simple");
 
 	$(".mainlink").click(function () {
-		load_subdir($(this).data("subdir"));
+		var subdir = $(this).data("subdir");
+		if (subdir == "transaction_simple") window.location.reload();
+		else load_subdir(subdir);
 	});
 
 	$("#volume").on("input change", function () {
