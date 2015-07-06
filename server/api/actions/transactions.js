@@ -389,9 +389,10 @@ function transaction(sender_qrid, recipient_qrid,
  * too_many_decplaces	--> Amount has more decimal places than hgc_tr_decimal_places allows
  * error:<something>	--> Some other error, e.g. with JSON parsing
  */
-function nDecimals(number) {
-	var decimals = number.toString().split(".")[1];
-	return decimals ? decimals.length : 0;
+function nDecimals(num) {
+	var match = (''+num).match(/(?:\.(\d+))?(?:[eE]([+-]?\d+))?$/);
+	if (!match) { return 0; }
+	return Math.max(0, (match[1] ? match[1].length : 0) - (match[2] ? +match[2] : 0));
 }
 
 function transaction_normal(payload, answer, info, tax) {
