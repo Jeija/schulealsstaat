@@ -3,11 +3,11 @@ var childp = null;
 var mplayer = null;
 
 if (typeof require !== "undefined") {
-	PWD_REQUIRED = require("fs").readFileSync("/tmp/password");
 	var childp = require("child_process");
 }
 
 var QRID_PRESETS = {};
+
 var RADIO_STREAMURL = "http://radio.saeu:8000/stream.ogg";
 var RADIO_METAURL = "http://radio.saeu:8000/status-json.xsl";
 
@@ -84,8 +84,21 @@ $(function () {
 
 	$(".mainlink").click(function () {
 		var subdir = $(this).data("subdir");
-		if (subdir == "transaction_simple") window.location.reload();
-		else load_subdir(subdir);
+		load_subdir(subdir);
+	});
+
+	// 5x click on menu item reloads page
+	var clicknum_reset = 0;
+	$("#volume").click(function () {
+		console.log("click");
+		clicknum_reset++;
+		if (clicknum_reset >= 5) {
+			mplayer.kill();
+			window.location.reload();
+		}
+		setTimeout(function () {
+			clicknum_reset = 0;
+		}, 1000);
 	});
 
 	$("#volume").on("input change", function () {
@@ -110,14 +123,10 @@ $(function () {
 
 	$("#settings_exit").click(function () {
 		$("#settings").hide();
-		var password = $("#settings_password").val();
-		$("#settings_password").val("");
-		if (password == PWD_REQUIRED) {
-			try {
-				QRID_PRESETS = JSON.parse($("#qrid_presets").val());
-			} catch(e) {
-				alert(e);
-			}
+		try {
+			QRID_PRESETS = JSON.parse($("#qrid_presets").val());
+		} catch(e) {
+			alert(e);
 		}
 	});
 
