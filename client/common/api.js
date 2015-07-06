@@ -135,6 +135,7 @@ function send_query(name, query, cb, polling) {
 		$.ajax({
 			type : "POST",
 			url : URL + "action/" + name,
+			contentType : "application/json",
 			data : post,
 			timeout : polling ? TIMEOUT_POLLING : TIMEOUT_QUERY,
 			success : function (res) {
