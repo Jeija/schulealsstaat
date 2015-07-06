@@ -1,8 +1,9 @@
-var log = require("../logging.js");
+RegExp.quote = require("regexp-quote");
 var common = require("./common.js");
-var db = require("../db");
-var cert = require("../cert");
+var log = require("../logging.js");
 var crypto = require("crypto");
+var cert = require("../cert");
+var db = require("../db");
 
 // Generate Salt / Hash combination from password
 function generate_pwdhash(pwd) {
@@ -131,13 +132,13 @@ register("student_identify", function (payload, answer, info) {
 	}
 
 	if (payload.special_name)
-		payload.special_name = new RegExp("^" + payload.special_name + "$", "i");
+		payload.special_name = new RegExp("^" + RegExp.quote(payload.special_name) + "$", "i");
 	if (payload.firstname)
-		payload.firstname = new RegExp("^" + payload.firstname + "$", "i");
+		payload.firstname = new RegExp("^" + RegExp.quote(payload.firstname) + "$", "i");
 	if (payload.lastname)
-		payload.lastname = new RegExp("^" + payload.lastname + "$", "i");
+		payload.lastname = new RegExp("^" + RegExp.quote(payload.lastname) + "$", "i");
 	if (payload.type)
-		payload.type = new RegExp("^" + payload.type + "$", "i");
+		payload.type = new RegExp("^" + RegExp.quote(payload.type) + "$", "i");
 
 	db.students.getByProperties(payload, common.student_public_fields, null,
 			answer, function (st) {
